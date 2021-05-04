@@ -15,13 +15,13 @@ A Svelte IDE like no other. Embrace the storm.
 3.
 
 **Prerequisites**
-- 
--
+- something
+- something
 
 ## 🔥 Key Features  
-**something** - Something, something...
-**something** - Something, something...
-**something** - Something, something...
+1.
+2.
+3.
 
 ## 💻 Installing locally
 1.
