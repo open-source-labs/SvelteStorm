@@ -9,7 +9,7 @@
 </script>
 
 <script>
-  import { onMount } from 'svelte';
+  import { afterUpdate, onMount } from 'svelte';
 
   let monaco;
   let container;
@@ -20,6 +20,7 @@
   console.log(language)
 
   onMount(() => {
+    console.log(language)
 		if (_monaco) {
       monaco = _monaco;
       editor = monaco.editor.create(
@@ -47,6 +48,10 @@
 			destroyed = true;
 		}
   });
+
+  afterUpdate(() => {
+    console.log('update');
+	})
 </script>
 
 <div class="monaco-container" bind:this={container} style="height: 500px; text-align: left">

@@ -1,33 +1,38 @@
 <script>
     import Monaco from './components/monaco/monaco-editor.svelte';
     import SplitPane from './SplitPlane.svelte';
-    const {ipcRenderer} = require('electron'); 
+    const { ipcRenderer } = require('electron'); 
 
     export let name;
     export let orientation = 'columns';
     export let fixed = false;
     export let fixedPos = 50;
-    export let monacoValue = ''
-    export let monacoLanguage = ''
+    export let monacoValue = '';
+    export let monacoLanguage = '';
 
-    const onClick = () => {ipcRenderer.invoke('getFileFromUser',).then(() => {
+    const onClick = () => { ipcRenderer.invoke('getFileFromUser',).then(() => {
+
     ipcRenderer.on('file-opened', (event, file, content) => {
-         
+        if (monacoValue.length > 1 && monacoLanguage.length > 1) {
+            monacoLanguage = '';
+            monacoValue = '';
+        }
          monacoLanguage = file.split('.').pop();
-         monacoValue = content.split(/\r?\n/)
-         console.log(monacoValue)
-         console.log(typeof monacoValue)
+         monacoValue = content.split(/\r?\n/);
+         console.log(monacoValue);
+
         })
     })}
 
     let monaco;
     window['monaco'] = monaco;
 
-    name = "World"
+    name = "World";
   
   </script>
 
 <style>
+
     main {
         text-align: center;
         padding: 1em;
@@ -35,6 +40,7 @@
         margin: 0 auto;
         height: 100%;
     }
+
     h1 {
         color: #ff3e00;
         text-transform: uppercase;
@@ -95,7 +101,14 @@
             </div>
         </div>
     </section>
-	</SplitPane>
+    <section  slot=c style='height: 100%;'>
+        <div>
+            <div>
+                <h1>Hello {name}!</h1>
+            </div>
+        </div>
+    </section>
+    </SplitPane>
 </main>
 </body>
   

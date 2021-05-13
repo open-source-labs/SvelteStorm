@@ -10,9 +10,9 @@ A Svelte IDE like no other. Embrace the storm.
 
 ## 👩‍💻 How to use it 
 
-1.
-2.
-3.
+1. npm install
+2. npm start
+
 
 **Prerequisites**
 - something

@@ -197,6 +197,11 @@
 		<slot name="b"></slot>
 	</div>
 
+	<div class="pane" style="{dimension}: {100 - (pos)}%;">
+		<slot name="c"></slot>
+	</div>
+
+
 	{#if !fixed}
 		<div class="{type} divider" style="{side}: calc({pos}% - 8px)" use:drag={setPos} use:touchDrag={setTouchPos}></div>
 	{/if}

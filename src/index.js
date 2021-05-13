@@ -1,6 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const path = require('path');
-const fs = require('fs')
+const fs = require('fs');
 
 require('electron-reload')(__dirname, {
   electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
@@ -13,7 +13,7 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-let mainWindow = ''
+let mainWindow = '';
 
 const createWindow = () => {
   // Create the browser window.
@@ -27,7 +27,7 @@ const createWindow = () => {
 
   mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
-  mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools();
 
 }
 
@@ -45,7 +45,7 @@ ipcMain.handle('getFileFromUser', async () => {
   const files = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile'],
   });
-
+  console.log('ipcMain');
   if(files) {
     const content = fs.readFileSync(files.filePaths[0]).toString();
     mainWindow.webContents.send('file-opened', files.filePaths[0], content);
