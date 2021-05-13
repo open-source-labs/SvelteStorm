@@ -77,7 +77,7 @@
   .directory {
       height: 100vh;
       width: 100%;
-      min-width: 500px;
+      min-width: 300px;
       border: 1px solid black
   }
 </style>
