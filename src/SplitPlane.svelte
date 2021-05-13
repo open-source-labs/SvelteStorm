@@ -189,6 +189,9 @@
 </style>
 
 <div class="container" bind:this={refs.container} bind:clientWidth={w} bind:clientHeight={h}>
+	<div class="pane" style="{dimension}: {100 - (pos)}%;">
+		<slot name="c"></slot>
+	</div>
 	<div class="pane" style="{dimension}: {pos}%;">
 		<slot name="a"></slot>
 	</div>
@@ -197,10 +200,14 @@
 		<slot name="b"></slot>
 	</div>
 
+<<<<<<< HEAD
 	<div class="pane" style="{dimension}: {100 - (pos)}%;">
 		<slot name="c"></slot>
 	</div>
 
+=======
+	
+>>>>>>> 011d189f7ab812bf25e6d08c8d7cad5c654040d4
 
 	{#if !fixed}
 		<div class="{type} divider" style="{side}: calc({pos}% - 8px)" use:drag={setPos} use:touchDrag={setTouchPos}></div>
