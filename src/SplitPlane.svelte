@@ -189,12 +189,16 @@
 </style>
 
 <div class="container" bind:this={refs.container} bind:clientWidth={w} bind:clientHeight={h}>
+	
 	<div class="pane" style="{dimension}: {pos}%;">
 		<slot name="a"></slot>
 	</div>
 
 	<div class="pane" style="{dimension}: {100 - (pos)}%;">
 		<slot name="b"></slot>
+	</div>
+	<div class="pane" style="{dimension}: {100 - (pos)}%;">
+		<slot name="c"></slot>
 	</div>
 
 	{#if !fixed}

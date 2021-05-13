@@ -463,7 +463,7 @@ function create_fragment$4(ctx) {
 
 let monaco_promise;
 let _monaco;
-monaco_promise = import('./monaco-e767dbb7.js').then(function (n) { return n.m; });
+monaco_promise = import('./monaco-033b02c4.js').then(function (n) { return n.m; });
 
 monaco_promise.then(mod => {
 	_monaco = mod.default;
@@ -547,7 +547,7 @@ const get_b_slot_context = ctx => ({});
 const get_a_slot_changes = dirty => ({});
 const get_a_slot_context = ctx => ({});
 
-// (200:1) {#if !fixed}
+// (206:1) {#if !fixed}
 function create_if_block_1$1(ctx) {
 	let div;
 	let div_class_value;
@@ -590,7 +590,7 @@ function create_if_block_1$1(ctx) {
 	};
 }
 
-// (205:0) {#if dragging}
+// (211:0) {#if dragging}
 function create_if_block$2(ctx) {
 	let div;
 
@@ -1393,7 +1393,7 @@ function create_else_block(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Get A File";
-			attr(p, "class", "svelte-102phyy");
+			attr(p, "class", "svelte-1uz57lu");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -1472,7 +1472,7 @@ function create_a_slot(ctx) {
 			section = element("section");
 			if_block.c();
 			attr(section, "slot", "a");
-			attr(section, "class", "svelte-102phyy");
+			attr(section, "class", "svelte-1uz57lu");
 		},
 		m(target, anchor) {
 			insert(target, section, anchor);
@@ -1541,11 +1541,11 @@ function create_b_slot(ctx) {
 			t0 = text("Hello ");
 			t1 = text(/*name*/ ctx[0]);
 			t2 = text("!");
-			attr(h1, "class", "svelte-102phyy");
-			attr(div1, "class", "svelte-102phyy");
+			attr(h1, "class", "svelte-1uz57lu");
+			attr(div1, "class", "svelte-1uz57lu");
 			attr(section, "slot", "b");
 			set_style(section, "height", "100%");
-			attr(section, "class", "svelte-102phyy");
+			attr(section, "class", "svelte-1uz57lu");
 		},
 		m(target, anchor) {
 			insert(target, section, anchor);
@@ -1578,10 +1578,10 @@ function create_c_slot(ctx) {
 			section = element("section");
 			div = element("div");
 			create_component(filedir.$$.fragment);
-			attr(div, "class", "directory svelte-102phyy");
+			attr(div, "class", "directory svelte-1uz57lu");
 			attr(section, "slot", "c");
 			set_style(section, "height", "100%");
-			attr(section, "class", "svelte-102phyy");
+			attr(section, "class", "svelte-1uz57lu");
 		},
 		m(target, anchor) {
 			insert(target, section, anchor);
@@ -1641,8 +1641,8 @@ function create_fragment(ctx) {
 			button.textContent = "Get File";
 			t1 = space();
 			create_component(splitpane.$$.fragment);
-			attr(main, "class", "svelte-102phyy");
-			attr(body, "class", "container svelte-102phyy");
+			attr(main, "class", "svelte-1uz57lu");
+			attr(body, "class", "container svelte-1uz57lu");
 			toggle_class(body, "orientation", /*orientation*/ ctx[3]);
 		},
 		m(target, anchor) {
