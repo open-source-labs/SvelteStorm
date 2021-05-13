@@ -1,12 +1,8 @@
 <script>
     import Monaco from './components/monaco/monaco-editor.svelte';
     import SplitPane from './SplitPlane.svelte';
-<<<<<<< HEAD
-    const { ipcRenderer } = require('electron'); 
-=======
     import FileDir from './Directory/FileDir.svelte';
     const {ipcRenderer} = require('electron'); 
->>>>>>> 011d189f7ab812bf25e6d08c8d7cad5c654040d4
 
     export let name;
     export let orientation = 'columns';
@@ -120,23 +116,12 @@
             </div>
         </div>
     </section>
-<<<<<<< HEAD
-    <section  slot=c style='height: 100%;'>
-        <div>
-            <div>
-                <h1>Hello {name}!</h1>
-            </div>
-        </div>
-    </section>
-    </SplitPane>
-=======
     <section slot=c style='height: 100%;'>
         <div class="directory">
         <FileDir />
        </div>
     </section>
 	</SplitPane>
->>>>>>> 011d189f7ab812bf25e6d08c8d7cad5c654040d4
 </main>
 </body>
   
