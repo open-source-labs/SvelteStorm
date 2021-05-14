@@ -14,10 +14,6 @@
     const onClick = () => { ipcRenderer.invoke('getFileFromUser',).then(() => {
 
     ipcRenderer.on('file-opened', (event, file, content) => {
-        if (monacoValue.length > 1 && monacoLanguage.length > 1) {
-            monacoLanguage = '';
-            monacoValue = '';
-        }
          monacoLanguage = file.split('.').pop();
          monacoValue = content.split(/\r?\n/);
          console.log(monacoValue);
