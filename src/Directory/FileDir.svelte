@@ -2,8 +2,35 @@
     var remote = window.require('electron').remote;
     var electronFs = remote.require('fs');
     var {dialog} = remote;
+    import { onMount, onDestroy} from 'svelte';
+    import { dataset_dev } from 'svelte/internal';
+    import DirectoryData from '../Utilities/DirectoryStore';
     import FileTest from './FileTest.svelte';
     let savedTree = [];
+
+const unsub = DirectoryData.subscribe(data =>{
+    // console.log('File Directory Store Subscription');
+    // console.log('data',data);
+});
+
+// store 
+onMount (()=>{
+    // console.log('Directory mounted')
+});
+
+onDestroy(()=>{
+    unsub();
+    // console.log('component destroyed');
+});
+
+
+// Directory.update(current => {
+//     return [data ... data];
+// })
+
+
+
+
 const handleOpenFolder = () => {
         //console.log('saved Tree', savedTree)
         let dialogOption =  {properties: ['openDirectory']};
@@ -15,13 +42,16 @@ const handleOpenFolder = () => {
         if (directory && directory[0]){        
             var fileTree = new FileTree(directory[0]);        
             fileTree.build();
-            //this.setState({fileTree});
-            savedTree = fileTree.items;
-            savedTree.sort((a,b) => {
+            fileTree.items.sort((a,b) => {
                 return b.items.length - a.items.length;
             })
-            //console.log(Array.isArray(savedTree))
-            console.log('fileTree',savedTree);
+            savedTree = fileTree.items;
+            // console.log('file tree:',fileTree);
+            const updateTree = {fileTree: fileTree.items};
+            console.log('updateTree:', updateTree);
+            DirectoryData.update(currentData =>{
+                return updateTree;
+            })
         }
         })
     }
@@ -41,20 +71,17 @@ class FileTree {
         }
 
 
-        
-        //this.handleToggle = this.handleToggle.bind(this);
-        //console.log(this.state.isOpen)
     }
 
     //method to build file tree
     build () {
-        this.items = FileTree.readDir(this.path);
+        this.items = FileTree.readDir(this.path,'',0);
     }
     static readDir(path) {
         var fileArray = [];        
         
         electronFs.readdirSync(path).forEach(file => {
-            var fileInfo = new FileTree(`${path}/${file}`,file);
+            var fileInfo = new FileTree(`${path}/${file}`, file);
             var stat = electronFs.statSync(fileInfo.path);
 
             if (stat.isDirectory()){
@@ -74,7 +101,7 @@ class FileTree {
 
 <div class=directoryContainer>
     <button class=directoryButton on:click={handleOpenFolder}>Get Files</button>
-    <FileTest fileTree={savedTree} />
+    <FileTest fileTreeTest={savedTree}/>
 </div>
 
 <style>
