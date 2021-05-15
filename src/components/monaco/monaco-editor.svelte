@@ -49,5 +49,5 @@
   });
 </script>
 
-<div class="monaco-container" bind:this={container} style="height: 500px; text-align: left">
+<div class="monaco-container" bind:this={container} style="height: 100%; text-align: left">
 </div>

@@ -1,12 +1,6 @@
 
 (function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
 function noop() { }
-function assign(tar, src) {
-    // @ts-ignore
-    for (const k in src)
-        tar[k] = src[k];
-    return tar;
-}
 function run(fn) {
     return fn();
 }
@@ -25,47 +19,8 @@ function safe_not_equal(a, b) {
 function is_empty(obj) {
     return Object.keys(obj).length === 0;
 }
-function create_slot(definition, ctx, $$scope, fn) {
-    if (definition) {
-        const slot_ctx = get_slot_context(definition, ctx, $$scope, fn);
-        return definition[0](slot_ctx);
-    }
-}
-function get_slot_context(definition, ctx, $$scope, fn) {
-    return definition[1] && fn
-        ? assign($$scope.ctx.slice(), definition[1](fn(ctx)))
-        : $$scope.ctx;
-}
-function get_slot_changes(definition, $$scope, dirty, fn) {
-    if (definition[2] && fn) {
-        const lets = definition[2](fn(dirty));
-        if ($$scope.dirty === undefined) {
-            return lets;
-        }
-        if (typeof lets === 'object') {
-            const merged = [];
-            const len = Math.max($$scope.dirty.length, lets.length);
-            for (let i = 0; i < len; i += 1) {
-                merged[i] = $$scope.dirty[i] | lets[i];
-            }
-            return merged;
-        }
-        return $$scope.dirty | lets;
-    }
-    return $$scope.dirty;
-}
-function update_slot(slot, slot_definition, ctx, $$scope, dirty, get_slot_changes_fn, get_slot_context_fn) {
-    const slot_changes = get_slot_changes(slot_definition, $$scope, dirty, get_slot_changes_fn);
-    if (slot_changes) {
-        const slot_context = get_slot_context(slot_definition, ctx, $$scope, get_slot_context_fn);
-        slot.p(slot_context, slot_changes);
-    }
-}
 function null_to_empty(value) {
     return value == null ? '' : value;
-}
-function action_destroyer(action_result) {
-    return action_result && is_function(action_result.destroy) ? action_result.destroy : noop;
 }
 
 function append(target, node) {
@@ -92,9 +47,6 @@ function text(data) {
 function space() {
     return text(' ');
 }
-function empty() {
-    return text('');
-}
 function listen(node, event, handler, options) {
     node.addEventListener(event, handler, options);
     return () => node.removeEventListener(event, handler, options);
@@ -116,66 +68,8 @@ function set_data(text, data) {
 function set_style(node, key, value, important) {
     node.style.setProperty(key, value, important ? 'important' : '');
 }
-// unfortunately this can't be a constant as that wouldn't be tree-shakeable
-// so we cache the result instead
-let crossorigin;
-function is_crossorigin() {
-    if (crossorigin === undefined) {
-        crossorigin = false;
-        try {
-            if (typeof window !== 'undefined' && window.parent) {
-                void window.parent.document;
-            }
-        }
-        catch (error) {
-            crossorigin = true;
-        }
-    }
-    return crossorigin;
-}
-function add_resize_listener(node, fn) {
-    const computed_style = getComputedStyle(node);
-    if (computed_style.position === 'static') {
-        node.style.position = 'relative';
-    }
-    const iframe = element('iframe');
-    iframe.setAttribute('style', 'display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; ' +
-        'overflow: hidden; border: 0; opacity: 0; pointer-events: none; z-index: -1;');
-    iframe.setAttribute('aria-hidden', 'true');
-    iframe.tabIndex = -1;
-    const crossorigin = is_crossorigin();
-    let unsubscribe;
-    if (crossorigin) {
-        iframe.src = "data:text/html,<script>onresize=function(){parent.postMessage(0,'*')}</script>";
-        unsubscribe = listen(window, 'message', (event) => {
-            if (event.source === iframe.contentWindow)
-                fn();
-        });
-    }
-    else {
-        iframe.src = 'about:blank';
-        iframe.onload = () => {
-            unsubscribe = listen(iframe.contentWindow, 'resize', fn);
-        };
-    }
-    append(node, iframe);
-    return () => {
-        if (crossorigin) {
-            unsubscribe();
-        }
-        else if (unsubscribe && iframe.contentWindow) {
-            unsubscribe();
-        }
-        detach(iframe);
-    };
-}
 function toggle_class(element, name, toggle) {
     element.classList[toggle ? 'add' : 'remove'](name);
-}
-function custom_event(type, detail) {
-    const e = document.createEvent('CustomEvent');
-    e.initCustomEvent(type, false, false, detail);
-    return e;
 }
 
 let current_component;
@@ -189,20 +83,6 @@ function get_current_component() {
 }
 function onMount(fn) {
     get_current_component().$$.on_mount.push(fn);
-}
-function createEventDispatcher() {
-    const component = get_current_component();
-    return (type, detail) => {
-        const callbacks = component.$$.callbacks[type];
-        if (callbacks) {
-            // TODO are there situations where events could be dispatched
-            // in a server (non-DOM) environment?
-            const event = custom_event(type, detail);
-            callbacks.slice().forEach(fn => {
-                fn.call(component, event);
-            });
-        }
-    };
 }
 
 const dirty_components = [];
@@ -432,16 +312,16 @@ class SvelteComponent {
     }
 }
 
-/* src/components/monaco/monaco-editor.svelte generated by Svelte v3.38.2 */
+/* src\components\monaco\monaco-editor.svelte generated by Svelte v3.38.2 */
 
-function create_fragment$4(ctx) {
+function create_fragment$3(ctx) {
 	let div;
 
 	return {
 		c() {
 			div = element("div");
 			attr(div, "class", "monaco-container");
-			set_style(div, "height", "500px");
+			set_style(div, "height", "100%");
 			set_style(div, "text-align", "left");
 		},
 		m(target, anchor) {
@@ -460,13 +340,13 @@ function create_fragment$4(ctx) {
 
 let monaco_promise;
 let _monaco;
-monaco_promise = import('./monaco-9e9b0354.js').then(function (n) { return n.m; });
+monaco_promise = import('./monaco-19fcec36.js').then(function (n) { return n.m; });
 
 monaco_promise.then(mod => {
 	_monaco = mod.default;
 });
 
-function instance$4($$self, $$props, $$invalidate) {
+function instance$3($$self, $$props, $$invalidate) {
 	let monaco;
 	let container;
 	let { value } = $$props;
@@ -518,432 +398,11 @@ function instance$4($$self, $$props, $$invalidate) {
 class Monaco_editor extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance$4, create_fragment$4, safe_not_equal, { value: 1, language: 2 });
+		init(this, options, instance$3, create_fragment$3, safe_not_equal, { value: 1, language: 2 });
 	}
 }
 
-/**
- * Clamp `num` to the range `[min, max]`
- * @param {number} num
- * @param {number} min
- * @param {number} max
- */
-function clamp(num, min, max) {
-	return num < min ? min : num > max ? max : num;
-}
-
-/* src/SplitPlane.svelte generated by Svelte v3.38.2 */
-const get_c_slot_changes = dirty => ({});
-const get_c_slot_context = ctx => ({});
-const get_b_slot_changes = dirty => ({});
-const get_b_slot_context = ctx => ({});
-const get_a_slot_changes = dirty => ({});
-const get_a_slot_context = ctx => ({});
-
-// (206:1) {#if !fixed}
-function create_if_block_1$1(ctx) {
-	let div;
-	let div_class_value;
-	let div_style_value;
-	let mounted;
-	let dispose;
-
-	return {
-		c() {
-			div = element("div");
-			attr(div, "class", div_class_value = "" + (/*type*/ ctx[1] + " divider" + " svelte-1k0d9r4"));
-			attr(div, "style", div_style_value = "" + (/*side*/ ctx[7] + ": calc(" + /*pos*/ ctx[0] + "% - 8px)"));
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-
-			if (!mounted) {
-				dispose = [
-					action_destroyer(/*drag*/ ctx[11].call(null, div, /*setPos*/ ctx[9])),
-					action_destroyer(/*touchDrag*/ ctx[12].call(null, div, /*setTouchPos*/ ctx[10]))
-				];
-
-				mounted = true;
-			}
-		},
-		p(ctx, dirty) {
-			if (dirty & /*type*/ 2 && div_class_value !== (div_class_value = "" + (/*type*/ ctx[1] + " divider" + " svelte-1k0d9r4"))) {
-				attr(div, "class", div_class_value);
-			}
-
-			if (dirty & /*side, pos*/ 129 && div_style_value !== (div_style_value = "" + (/*side*/ ctx[7] + ": calc(" + /*pos*/ ctx[0] + "% - 8px)"))) {
-				attr(div, "style", div_style_value);
-			}
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-			mounted = false;
-			run_all(dispose);
-		}
-	};
-}
-
-// (211:0) {#if dragging}
-function create_if_block$2(ctx) {
-	let div;
-
-	return {
-		c() {
-			div = element("div");
-			attr(div, "class", "mousecatcher svelte-1k0d9r4");
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-		}
-	};
-}
-
-function create_fragment$3(ctx) {
-	let div3;
-	let div0;
-	let div0_style_value;
-	let t0;
-	let div1;
-	let div1_style_value;
-	let t1;
-	let div2;
-	let div2_style_value;
-	let t2;
-	let div3_resize_listener;
-	let t3;
-	let if_block1_anchor;
-	let current;
-	const a_slot_template = /*#slots*/ ctx[18].a;
-	const a_slot = create_slot(a_slot_template, ctx, /*$$scope*/ ctx[17], get_a_slot_context);
-	const b_slot_template = /*#slots*/ ctx[18].b;
-	const b_slot = create_slot(b_slot_template, ctx, /*$$scope*/ ctx[17], get_b_slot_context);
-	const c_slot_template = /*#slots*/ ctx[18].c;
-	const c_slot = create_slot(c_slot_template, ctx, /*$$scope*/ ctx[17], get_c_slot_context);
-	let if_block0 = !/*fixed*/ ctx[2] && create_if_block_1$1(ctx);
-	let if_block1 = /*dragging*/ ctx[6] && create_if_block$2();
-
-	return {
-		c() {
-			div3 = element("div");
-			div0 = element("div");
-			if (a_slot) a_slot.c();
-			t0 = space();
-			div1 = element("div");
-			if (b_slot) b_slot.c();
-			t1 = space();
-			div2 = element("div");
-			if (c_slot) c_slot.c();
-			t2 = space();
-			if (if_block0) if_block0.c();
-			t3 = space();
-			if (if_block1) if_block1.c();
-			if_block1_anchor = empty();
-			attr(div0, "class", "pane svelte-1k0d9r4");
-			attr(div0, "style", div0_style_value = "" + (/*dimension*/ ctx[8] + ": " + /*pos*/ ctx[0] + "%;"));
-			attr(div1, "class", "pane svelte-1k0d9r4");
-			attr(div1, "style", div1_style_value = "" + (/*dimension*/ ctx[8] + ": " + (100 - /*pos*/ ctx[0]) + "%;"));
-			attr(div2, "class", "pane svelte-1k0d9r4");
-			attr(div2, "style", div2_style_value = "" + (/*dimension*/ ctx[8] + ": " + (100 - /*pos*/ ctx[0]) + "%;"));
-			attr(div3, "class", "container svelte-1k0d9r4");
-			add_render_callback(() => /*div3_elementresize_handler*/ ctx[20].call(div3));
-		},
-		m(target, anchor) {
-			insert(target, div3, anchor);
-			append(div3, div0);
-
-			if (a_slot) {
-				a_slot.m(div0, null);
-			}
-
-			append(div3, t0);
-			append(div3, div1);
-
-			if (b_slot) {
-				b_slot.m(div1, null);
-			}
-
-			append(div3, t1);
-			append(div3, div2);
-
-			if (c_slot) {
-				c_slot.m(div2, null);
-			}
-
-			append(div3, t2);
-			if (if_block0) if_block0.m(div3, null);
-			/*div3_binding*/ ctx[19](div3);
-			div3_resize_listener = add_resize_listener(div3, /*div3_elementresize_handler*/ ctx[20].bind(div3));
-			insert(target, t3, anchor);
-			if (if_block1) if_block1.m(target, anchor);
-			insert(target, if_block1_anchor, anchor);
-			current = true;
-		},
-		p(ctx, [dirty]) {
-			if (a_slot) {
-				if (a_slot.p && (!current || dirty & /*$$scope*/ 131072)) {
-					update_slot(a_slot, a_slot_template, ctx, /*$$scope*/ ctx[17], dirty, get_a_slot_changes, get_a_slot_context);
-				}
-			}
-
-			if (!current || dirty & /*dimension, pos*/ 257 && div0_style_value !== (div0_style_value = "" + (/*dimension*/ ctx[8] + ": " + /*pos*/ ctx[0] + "%;"))) {
-				attr(div0, "style", div0_style_value);
-			}
-
-			if (b_slot) {
-				if (b_slot.p && (!current || dirty & /*$$scope*/ 131072)) {
-					update_slot(b_slot, b_slot_template, ctx, /*$$scope*/ ctx[17], dirty, get_b_slot_changes, get_b_slot_context);
-				}
-			}
-
-			if (!current || dirty & /*dimension, pos*/ 257 && div1_style_value !== (div1_style_value = "" + (/*dimension*/ ctx[8] + ": " + (100 - /*pos*/ ctx[0]) + "%;"))) {
-				attr(div1, "style", div1_style_value);
-			}
-
-			if (c_slot) {
-				if (c_slot.p && (!current || dirty & /*$$scope*/ 131072)) {
-					update_slot(c_slot, c_slot_template, ctx, /*$$scope*/ ctx[17], dirty, get_c_slot_changes, get_c_slot_context);
-				}
-			}
-
-			if (!current || dirty & /*dimension, pos*/ 257 && div2_style_value !== (div2_style_value = "" + (/*dimension*/ ctx[8] + ": " + (100 - /*pos*/ ctx[0]) + "%;"))) {
-				attr(div2, "style", div2_style_value);
-			}
-
-			if (!/*fixed*/ ctx[2]) {
-				if (if_block0) {
-					if_block0.p(ctx, dirty);
-				} else {
-					if_block0 = create_if_block_1$1(ctx);
-					if_block0.c();
-					if_block0.m(div3, null);
-				}
-			} else if (if_block0) {
-				if_block0.d(1);
-				if_block0 = null;
-			}
-
-			if (/*dragging*/ ctx[6]) {
-				if (if_block1) ; else {
-					if_block1 = create_if_block$2();
-					if_block1.c();
-					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
-				}
-			} else if (if_block1) {
-				if_block1.d(1);
-				if_block1 = null;
-			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(a_slot, local);
-			transition_in(b_slot, local);
-			transition_in(c_slot, local);
-			current = true;
-		},
-		o(local) {
-			transition_out(a_slot, local);
-			transition_out(b_slot, local);
-			transition_out(c_slot, local);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(div3);
-			if (a_slot) a_slot.d(detaching);
-			if (b_slot) b_slot.d(detaching);
-			if (c_slot) c_slot.d(detaching);
-			if (if_block0) if_block0.d();
-			/*div3_binding*/ ctx[19](null);
-			div3_resize_listener();
-			if (detaching) detach(t3);
-			if (if_block1) if_block1.d(detaching);
-			if (detaching) detach(if_block1_anchor);
-		}
-	};
-}
-
-function instance$3($$self, $$props, $$invalidate) {
-	let size;
-	let side;
-	let dimension;
-	let { $$slots: slots = {}, $$scope } = $$props;
-	const dispatch = createEventDispatcher();
-	let { type } = $$props;
-	let { pos = 50 } = $$props;
-	let { fixed = false } = $$props;
-	let { buffer = 42 } = $$props;
-	let { min } = $$props;
-	let { max } = $$props;
-	let w;
-	let h;
-	const refs = {};
-	let dragging = false;
-
-	function setPos(event) {
-		const { top, left } = refs.container.getBoundingClientRect();
-
-		const px = type === "vertical"
-		? event.clientY - top
-		: event.clientX - left;
-
-		$$invalidate(0, pos = 100 * px / size);
-		dispatch("change");
-	}
-
-	function setTouchPos(event) {
-		const { top, left } = refs.container.getBoundingClientRect();
-
-		const px = type === "vertical"
-		? event.touches[0].clientY - top
-		: event.touches[0].clientX - left;
-
-		$$invalidate(0, pos = 100 * px / size);
-		dispatch("change");
-	}
-
-	function drag(node, callback) {
-		const mousedown = event => {
-			if (event.which !== 1) return;
-			event.preventDefault();
-			$$invalidate(6, dragging = true);
-
-			const onmouseup = () => {
-				$$invalidate(6, dragging = false);
-				window.removeEventListener("mousemove", callback, false);
-				window.removeEventListener("mouseup", onmouseup, false);
-			};
-
-			window.addEventListener("mousemove", callback, false);
-			window.addEventListener("mouseup", onmouseup, false);
-		};
-
-		node.addEventListener("mousedown", mousedown, false);
-
-		return {
-			destroy() {
-				node.removeEventListener("mousedown", mousedown, false);
-			}
-		};
-	}
-
-	function touchDrag(node, callback) {
-		const touchdown = event => {
-			if (event.targetTouches.length > 1) return;
-			event.preventDefault();
-			$$invalidate(6, dragging = true);
-
-			const ontouchend = () => {
-				$$invalidate(6, dragging = false);
-				window.removeEventListener("touchmove", callback, false);
-				window.removeEventListener("touchend", ontouchend, false);
-			};
-
-			window.addEventListener("touchmove", callback, false);
-			window.addEventListener("touchend", ontouchend, false);
-		};
-
-		node.addEventListener("touchstart", touchdown, false);
-
-		return {
-			destroy() {
-				node.removeEventListener("touchstart", touchdown, false);
-			}
-		};
-	}
-
-	function div3_binding($$value) {
-		binding_callbacks[$$value ? "unshift" : "push"](() => {
-			refs.container = $$value;
-			$$invalidate(5, refs);
-		});
-	}
-
-	function div3_elementresize_handler() {
-		w = this.clientWidth;
-		h = this.clientHeight;
-		$$invalidate(3, w);
-		$$invalidate(4, h);
-	}
-
-	$$self.$$set = $$props => {
-		if ("type" in $$props) $$invalidate(1, type = $$props.type);
-		if ("pos" in $$props) $$invalidate(0, pos = $$props.pos);
-		if ("fixed" in $$props) $$invalidate(2, fixed = $$props.fixed);
-		if ("buffer" in $$props) $$invalidate(15, buffer = $$props.buffer);
-		if ("min" in $$props) $$invalidate(13, min = $$props.min);
-		if ("max" in $$props) $$invalidate(14, max = $$props.max);
-		if ("$$scope" in $$props) $$invalidate(17, $$scope = $$props.$$scope);
-	};
-
-	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*type, h, w*/ 26) {
-			$$invalidate(16, size = type === "vertical" ? h : w);
-		}
-
-		if ($$self.$$.dirty & /*buffer, size*/ 98304) {
-			$$invalidate(13, min = 100 * (buffer / size));
-		}
-
-		if ($$self.$$.dirty & /*min*/ 8192) {
-			$$invalidate(14, max = 100 - min);
-		}
-
-		if ($$self.$$.dirty & /*pos, min, max*/ 24577) {
-			$$invalidate(0, pos = clamp(pos, min, max));
-		}
-
-		if ($$self.$$.dirty & /*type*/ 2) {
-			$$invalidate(7, side = type === "horizontal" ? "left" : "top");
-		}
-
-		if ($$self.$$.dirty & /*type*/ 2) {
-			$$invalidate(8, dimension = type === "horizontal" ? "width" : "height");
-		}
-	};
-
-	return [
-		pos,
-		type,
-		fixed,
-		w,
-		h,
-		refs,
-		dragging,
-		side,
-		dimension,
-		setPos,
-		setTouchPos,
-		drag,
-		touchDrag,
-		min,
-		max,
-		buffer,
-		size,
-		$$scope,
-		slots,
-		div3_binding,
-		div3_elementresize_handler
-	];
-}
-
-class SplitPlane extends SvelteComponent {
-	constructor(options) {
-		super();
-
-		init(this, options, instance$3, create_fragment$3, safe_not_equal, {
-			type: 1,
-			pos: 0,
-			fixed: 2,
-			buffer: 15,
-			min: 13,
-			max: 14
-		});
-	}
-}
-
-/* src/Directory/FileTest.svelte generated by Svelte v3.38.2 */
+/* src\Directory\FileTest.svelte generated by Svelte v3.38.2 */
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
@@ -965,7 +424,7 @@ function create_else_block$1(ctx) {
 		c() {
 			li = element("li");
 			t = text(t_value);
-			attr(li, "class", "liFiles svelte-1f5zsql");
+			attr(li, "class", "liFiles svelte-5tamfx");
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -1007,7 +466,7 @@ function create_if_block_1(ctx) {
 
 			attr(li, "class", li_class_value = "" + (null_to_empty(!/*fileState*/ ctx[1][/*path*/ ctx[3]]
 			? "liFolderClosed"
-			: "liFolderOpen") + " svelte-1f5zsql"));
+			: "liFolderOpen") + " svelte-5tamfx"));
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -1027,7 +486,7 @@ function create_if_block_1(ctx) {
 
 			if (dirty & /*fileState, fileTree*/ 3 && li_class_value !== (li_class_value = "" + (null_to_empty(!/*fileState*/ ctx[1][/*path*/ ctx[3]]
 			? "liFolderClosed"
-			: "liFolderOpen") + " svelte-1f5zsql"))) {
+			: "liFolderOpen") + " svelte-5tamfx"))) {
 				attr(li, "class", li_class_value);
 			}
 		},
@@ -1183,7 +642,7 @@ function create_fragment$2(ctx) {
 				each_blocks[i].c();
 			}
 
-			attr(div, "class", "directory svelte-1f5zsql");
+			attr(div, "class", "directory svelte-5tamfx");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -1259,6 +718,8 @@ function instance$2($$self, $$props, $$invalidate) {
 		if (!fileState[path]) $$invalidate(1, fileState[path] = true, fileState); else $$invalidate(1, fileState[path] = false, fileState);
 	};
 
+	console.log(fileTree);
+
 	$$self.$$set = $$props => {
 		if ("fileTree" in $$props) $$invalidate(0, fileTree = $$props.fileTree);
 	};
@@ -1273,16 +734,12 @@ class FileTest extends SvelteComponent {
 	}
 }
 
-/* src/Directory/FileDir.svelte generated by Svelte v3.38.2 */
+/* src\Directory\FileDir.svelte generated by Svelte v3.38.2 */
 
 function create_fragment$1(ctx) {
 	let div;
-	let button;
-	let t1;
 	let filetest;
 	let current;
-	let mounted;
-	let dispose;
 
 	filetest = new FileTest({
 			props: { fileTree: /*savedTree*/ ctx[0] }
@@ -1291,24 +748,13 @@ function create_fragment$1(ctx) {
 	return {
 		c() {
 			div = element("div");
-			button = element("button");
-			button.textContent = "Get Files";
-			t1 = space();
 			create_component(filetest.$$.fragment);
-			attr(button, "class", "directoryButton svelte-1b6lq6o");
-			attr(div, "class", "directoryContainer svelte-1b6lq6o");
+			attr(div, "class", "directoryContainer svelte-jjeu0z");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
-			append(div, button);
-			append(div, t1);
 			mount_component(filetest, div, null);
 			current = true;
-
-			if (!mounted) {
-				dispose = listen(button, "click", /*handleOpenFolder*/ ctx[1]);
-				mounted = true;
-			}
 		},
 		p(ctx, [dirty]) {
 			const filetest_changes = {};
@@ -1327,8 +773,6 @@ function create_fragment$1(ctx) {
 		d(detaching) {
 			if (detaching) detach(div);
 			destroy_component(filetest);
-			mounted = false;
-			dispose();
 		}
 	};
 }
@@ -1336,33 +780,29 @@ function create_fragment$1(ctx) {
 function instance$1($$self, $$props, $$invalidate) {
 	var remote = window.require("electron").remote;
 	var electronFs = remote.require("fs");
-	var { dialog } = remote;
+	const { ipcRenderer } = require("electron");
 	let savedTree = [];
+	let directory;
 
-	const handleOpenFolder = () => {
-		//console.log('saved Tree', savedTree)
-		let dialogOption = { properties: ["openDirectory"] };
+	ipcRenderer.on("folder-opened", function (evt, file, content) {
+		console.log(content);
+		directory = content;
 
-		//console.log(dialog)
-		dialog.showOpenDialog(dialogOption).then(filenames => {
-			var directory = filenames.filePaths;
+		if (directory && directory[0]) {
+			var fileTree = new FileTree(directory[0]);
+			fileTree.build();
 
-			if (directory && directory[0]) {
-				var fileTree = new FileTree(directory[0]);
-				fileTree.build();
+			//this.setState({fileTree});
+			$$invalidate(0, savedTree = fileTree.items);
 
-				//this.setState({fileTree});
-				$$invalidate(0, savedTree = fileTree.items);
+			savedTree.sort((a, b) => {
+				return b.items.length - a.items.length;
+			});
 
-				savedTree.sort((a, b) => {
-					return b.items.length - a.items.length;
-				});
-
-				//console.log(Array.isArray(savedTree))
-				console.log("fileTree", savedTree);
-			}
-		});
-	};
+			//console.log(Array.isArray(savedTree))
+			console.log("fileTree", savedTree);
+		}
+	});
 
 	class FileTree {
 		constructor(path, name = null) {
@@ -1402,7 +842,7 @@ function instance$1($$self, $$props, $$invalidate) {
 		}
 	}
 
-	return [savedTree, handleOpenFolder];
+	return [savedTree];
 }
 
 class FileDir extends SvelteComponent {
@@ -1412,7 +852,7 @@ class FileDir extends SvelteComponent {
 	}
 }
 
-/* src/App.svelte generated by Svelte v3.38.2 */
+/* src\App.svelte generated by Svelte v3.38.2 */
 
 function create_else_block(ctx) {
 	let p;
@@ -1421,7 +861,6 @@ function create_else_block(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Get A File";
-			attr(p, "class", "svelte-1gqrd14");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -1435,18 +874,18 @@ function create_else_block(ctx) {
 	};
 }
 
-// (100:8) {#if monacoValue !== ''}
+// (77:12) {#if monacoValue !== ''}
 function create_if_block(ctx) {
 	let monaco_1;
 	let current;
 
 	let monaco_1_props = {
 		value: /*monacoValue*/ ctx[1],
-		language: /*monacoLanguage*/ ctx[2]
+		language: /*monacoLanguage*/ ctx[3]
 	};
 
 	monaco_1 = new Monaco_editor({ props: monaco_1_props });
-	/*monaco_1_binding*/ ctx[8](monaco_1);
+	/*monaco_1_binding*/ ctx[7](monaco_1);
 
 	return {
 		c() {
@@ -1459,7 +898,7 @@ function create_if_block(ctx) {
 		p(ctx, dirty) {
 			const monaco_1_changes = {};
 			if (dirty & /*monacoValue*/ 2) monaco_1_changes.value = /*monacoValue*/ ctx[1];
-			if (dirty & /*monacoLanguage*/ 4) monaco_1_changes.language = /*monacoLanguage*/ ctx[2];
+			if (dirty & /*monacoLanguage*/ 8) monaco_1_changes.language = /*monacoLanguage*/ ctx[3];
 			monaco_1.$set(monaco_1_changes);
 		},
 		i(local) {
@@ -1472,18 +911,35 @@ function create_if_block(ctx) {
 			current = false;
 		},
 		d(detaching) {
-			/*monaco_1_binding*/ ctx[8](null);
+			/*monaco_1_binding*/ ctx[7](null);
 			destroy_component(monaco_1, detaching);
 		}
 	};
 }
 
-// (99:4) 
-function create_a_slot(ctx) {
-	let section;
+function create_fragment(ctx) {
+	let body;
+	let main;
+	let div0;
+	let filedir;
+	let t0;
+	let div1;
 	let current_block_type_index;
 	let if_block;
+	let t1;
+	let div2;
+	let t3;
+	let div5;
+	let div4;
+	let div3;
+	let h11;
+	let t4;
+	let t5;
+	let t6;
+	let t7;
+	let div7;
 	let current;
+	filedir = new FileDir({});
 	const if_block_creators = [create_if_block, create_else_block];
 	const if_blocks = [];
 
@@ -1497,17 +953,59 @@ function create_a_slot(ctx) {
 
 	return {
 		c() {
-			section = element("section");
+			body = element("body");
+			main = element("main");
+			div0 = element("div");
+			create_component(filedir.$$.fragment);
+			t0 = space();
+			div1 = element("div");
 			if_block.c();
-			attr(section, "slot", "a");
-			attr(section, "class", "svelte-1gqrd14");
+			t1 = space();
+			div2 = element("div");
+			div2.innerHTML = `<h1>State Manager</h1>`;
+			t3 = space();
+			div5 = element("div");
+			div4 = element("div");
+			div3 = element("div");
+			h11 = element("h1");
+			t4 = text("Hello ");
+			t5 = text(/*name*/ ctx[0]);
+			t6 = text("!");
+			t7 = space();
+			div7 = element("div");
+			div7.innerHTML = `<div><h1>Terminal</h1></div>`;
+			attr(div0, "class", "box a svelte-wr2qwc");
+			attr(div1, "class", "box b svelte-wr2qwc");
+			attr(div2, "class", "box c svelte-wr2qwc");
+			attr(div5, "class", "box d svelte-wr2qwc");
+			attr(div7, "class", "box e svelte-wr2qwc");
+			attr(main, "class", "wrapper svelte-wr2qwc");
+			attr(body, "class", "svelte-wr2qwc");
+			toggle_class(body, "orientation", /*orientation*/ ctx[2]);
 		},
 		m(target, anchor) {
-			insert(target, section, anchor);
-			if_blocks[current_block_type_index].m(section, null);
+			insert(target, body, anchor);
+			append(body, main);
+			append(main, div0);
+			mount_component(filedir, div0, null);
+			append(main, t0);
+			append(main, div1);
+			if_blocks[current_block_type_index].m(div1, null);
+			append(main, t1);
+			append(main, div2);
+			append(main, t3);
+			append(main, div5);
+			append(div5, div4);
+			append(div4, div3);
+			append(div3, h11);
+			append(h11, t4);
+			append(h11, t5);
+			append(h11, t6);
+			append(main, t7);
+			append(main, div7);
 			current = true;
 		},
-		p(ctx, dirty) {
+		p(ctx, [dirty]) {
 			let previous_block_index = current_block_type_index;
 			current_block_type_index = select_block_type(ctx);
 
@@ -1531,198 +1029,30 @@ function create_a_slot(ctx) {
 				}
 
 				transition_in(if_block, 1);
-				if_block.m(section, null);
+				if_block.m(div1, null);
 			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(if_block);
-			current = true;
-		},
-		o(local) {
-			transition_out(if_block);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(section);
-			if_blocks[current_block_type_index].d();
-		}
-	};
-}
 
-// (106:4) 
-function create_b_slot(ctx) {
-	let section;
-	let div1;
-	let div0;
-	let h1;
-	let t0;
-	let t1;
-	let t2;
+			if (!current || dirty & /*name*/ 1) set_data(t5, /*name*/ ctx[0]);
 
-	return {
-		c() {
-			section = element("section");
-			div1 = element("div");
-			div0 = element("div");
-			h1 = element("h1");
-			t0 = text("Hello ");
-			t1 = text(/*name*/ ctx[0]);
-			t2 = text("!");
-			attr(h1, "class", "svelte-1gqrd14");
-			attr(div1, "class", "svelte-1gqrd14");
-			attr(section, "slot", "b");
-			set_style(section, "height", "100%");
-			attr(section, "class", "svelte-1gqrd14");
-		},
-		m(target, anchor) {
-			insert(target, section, anchor);
-			append(section, div1);
-			append(div1, div0);
-			append(div0, h1);
-			append(h1, t0);
-			append(h1, t1);
-			append(h1, t2);
-		},
-		p(ctx, dirty) {
-			if (dirty & /*name*/ 1) set_data(t1, /*name*/ ctx[0]);
-		},
-		d(detaching) {
-			if (detaching) detach(section);
-		}
-	};
-}
-
-// (113:4) 
-function create_c_slot(ctx) {
-	let section;
-	let div;
-	let filedir;
-	let current;
-	filedir = new FileDir({});
-
-	return {
-		c() {
-			section = element("section");
-			div = element("div");
-			create_component(filedir.$$.fragment);
-			attr(div, "class", "directory svelte-1gqrd14");
-			attr(section, "slot", "c");
-			set_style(section, "height", "100%");
-			attr(section, "class", "svelte-1gqrd14");
-		},
-		m(target, anchor) {
-			insert(target, section, anchor);
-			append(section, div);
-			mount_component(filedir, div, null);
-			current = true;
+			if (dirty & /*orientation*/ 4) {
+				toggle_class(body, "orientation", /*orientation*/ ctx[2]);
+			}
 		},
 		i(local) {
 			if (current) return;
 			transition_in(filedir.$$.fragment, local);
+			transition_in(if_block);
 			current = true;
 		},
 		o(local) {
 			transition_out(filedir.$$.fragment, local);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(section);
-			destroy_component(filedir);
-		}
-	};
-}
-
-function create_fragment(ctx) {
-	let body;
-	let main;
-	let button;
-	let t1;
-	let splitpane;
-	let current;
-	let mounted;
-	let dispose;
-
-	splitpane = new SplitPlane({
-			props: {
-				type: /*orientation*/ ctx[3] === "rows"
-				? "vertical"
-				: "horizontal",
-				pos: /*fixed*/ ctx[4]
-				? /*fixedPos*/ ctx[5]
-				: /*orientation*/ ctx[3] === "rows" ? 50 : 60,
-				fixed: /*fixed*/ ctx[4],
-				$$slots: {
-					c: [create_c_slot],
-					b: [create_b_slot],
-					a: [create_a_slot]
-				},
-				$$scope: { ctx }
-			}
-		});
-
-	return {
-		c() {
-			body = element("body");
-			main = element("main");
-			button = element("button");
-			button.textContent = "Get File";
-			t1 = space();
-			create_component(splitpane.$$.fragment);
-			attr(main, "class", "svelte-1gqrd14");
-			attr(body, "class", "container svelte-1gqrd14");
-			toggle_class(body, "orientation", /*orientation*/ ctx[3]);
-		},
-		m(target, anchor) {
-			insert(target, body, anchor);
-			append(body, main);
-			append(main, button);
-			append(main, t1);
-			mount_component(splitpane, main, null);
-			current = true;
-
-			if (!mounted) {
-				dispose = listen(button, "click", /*onClick*/ ctx[7]);
-				mounted = true;
-			}
-		},
-		p(ctx, [dirty]) {
-			const splitpane_changes = {};
-
-			if (dirty & /*orientation*/ 8) splitpane_changes.type = /*orientation*/ ctx[3] === "rows"
-			? "vertical"
-			: "horizontal";
-
-			if (dirty & /*fixed, fixedPos, orientation*/ 56) splitpane_changes.pos = /*fixed*/ ctx[4]
-			? /*fixedPos*/ ctx[5]
-			: /*orientation*/ ctx[3] === "rows" ? 50 : 60;
-
-			if (dirty & /*fixed*/ 16) splitpane_changes.fixed = /*fixed*/ ctx[4];
-
-			if (dirty & /*$$scope, name, monacoValue, monacoLanguage, monaco*/ 1095) {
-				splitpane_changes.$$scope = { dirty, ctx };
-			}
-
-			splitpane.$set(splitpane_changes);
-
-			if (dirty & /*orientation*/ 8) {
-				toggle_class(body, "orientation", /*orientation*/ ctx[3]);
-			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(splitpane.$$.fragment, local);
-			current = true;
-		},
-		o(local) {
-			transition_out(splitpane.$$.fragment, local);
+			transition_out(if_block);
 			current = false;
 		},
 		d(detaching) {
 			if (detaching) detach(body);
-			destroy_component(splitpane);
-			mounted = false;
-			dispose();
+			destroy_component(filedir);
+			if_blocks[current_block_type_index].d();
 		}
 	};
 }
@@ -1736,16 +1066,9 @@ function instance($$self, $$props, $$invalidate) {
 	let { monacoValue = "" } = $$props;
 	let { monacoLanguage = "" } = $$props;
 
-	const onClick = () => {
-		ipcRenderer.invoke("getFileFromUser").then(() => {
-			ipcRenderer.on("file-opened", (event, file, content) => {
-				$$invalidate(2, monacoLanguage = file.split(".").pop());
-				$$invalidate(1, monacoValue = content.split(/\r?\n/));
-				console.log(monacoValue);
-				console.log(typeof monacoValue);
-			});
-		});
-	};
+	ipcRenderer.on("file-opened", function (evt, file, content) {
+		$$invalidate(1, monacoValue = content.split(/\r?\n/));
+	});
 
 	let monaco;
 	window["monaco"] = monaco;
@@ -1754,28 +1077,27 @@ function instance($$self, $$props, $$invalidate) {
 	function monaco_1_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			monaco = $$value;
-			$$invalidate(6, monaco);
+			$$invalidate(4, monaco);
 		});
 	}
 
 	$$self.$$set = $$props => {
 		if ("name" in $$props) $$invalidate(0, name = $$props.name);
-		if ("orientation" in $$props) $$invalidate(3, orientation = $$props.orientation);
-		if ("fixed" in $$props) $$invalidate(4, fixed = $$props.fixed);
-		if ("fixedPos" in $$props) $$invalidate(5, fixedPos = $$props.fixedPos);
+		if ("orientation" in $$props) $$invalidate(2, orientation = $$props.orientation);
+		if ("fixed" in $$props) $$invalidate(5, fixed = $$props.fixed);
+		if ("fixedPos" in $$props) $$invalidate(6, fixedPos = $$props.fixedPos);
 		if ("monacoValue" in $$props) $$invalidate(1, monacoValue = $$props.monacoValue);
-		if ("monacoLanguage" in $$props) $$invalidate(2, monacoLanguage = $$props.monacoLanguage);
+		if ("monacoLanguage" in $$props) $$invalidate(3, monacoLanguage = $$props.monacoLanguage);
 	};
 
 	return [
 		name,
 		monacoValue,
-		monacoLanguage,
 		orientation,
+		monacoLanguage,
+		monaco,
 		fixed,
 		fixedPos,
-		monaco,
-		onClick,
 		monaco_1_binding
 	];
 }
@@ -1786,11 +1108,11 @@ class App extends SvelteComponent {
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
 			name: 0,
-			orientation: 3,
-			fixed: 4,
-			fixedPos: 5,
+			orientation: 2,
+			fixed: 5,
+			fixedPos: 6,
 			monacoValue: 1,
-			monacoLanguage: 2
+			monacoLanguage: 3
 		});
 	}
 }

@@ -5,10 +5,10 @@
         if(!fileState[path]) fileState[path]= true;
         else fileState[path] = false;
     }
+    console.log(fileTree)
 
-    // console.log()
- 
 </script>
+
 <div class=directory>
 {#each fileTree as {path,name, items}}
 <ul>
@@ -31,18 +31,18 @@
     .liFolderClosed {
         padding: 0px 0 5px 25px;
         list-style: none;
-        background-image: url("/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/folderClosed.svg");
+        background-image: url("../../public/img/folderClosed.png");
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
-        border: 1px solid red;
+        border: 1px solid black;
     }
     .liFolderOpen {
         display: flex;
         justify-content: flex-start;
         padding: 10px 0 5px 25px;
         list-style: none;
-        background-image: url('/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/folderOpen.svg');
+        background-image: url('../../public/img/folderOpen.png');
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
@@ -55,7 +55,7 @@
         margin-left: 20px;
         margin-top: 3px;
         list-style: none;
-        background-image: url('/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/document.png');
+        background-image: url('../../public/img/document.png');
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
