@@ -78,7 +78,7 @@
       height: 100vh;
       width: 100%;
       min-width: 300px;
-      border: 1px solid black
+      /* border: 1px solid black */
   }
 </style>
 
