@@ -24,9 +24,9 @@ export default {
 			dev: !production,
 			// we'll extract any component CSS out into
 			// a separate file — better for performance
-			css: css => {
-				css.write('public/bundle.css');
-			},
+			// css: css => {
+			// 	css.write('public/bundle.css');
+			// },
 			emitCss: true
 		}),
 
@@ -54,7 +54,7 @@ export default {
 		monaco(),
 		commonjs(),
 
-        !production && serve(),
+    !production && serve(),
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
 		!production && livereload('public'),

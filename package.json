@@ -61,7 +61,7 @@
     "@rollup/plugin-node-resolve": "^7.0.0",
     "autoprefixer": "^9.0.0",
     "concurrently": "^5.1.0",
-    "electron": "8.0.2",
+    "electron": "^12.0.7",
     "rollup": "^2.26.10",
     "rollup-plugin-import-css": "^2.0.1",
     "rollup-plugin-json": "^4.0.0",
