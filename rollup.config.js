@@ -12,7 +12,7 @@ export default {
 	input: 'src/svelte.js',
 	output: {
 		sourcemap: true,
-		format: 'esm',
+		format: 'iife',
 		name: 'app',
 		dir: 'public/',
 	},

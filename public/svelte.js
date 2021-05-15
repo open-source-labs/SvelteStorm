@@ -390,7 +390,7 @@ function create_fragment$4(ctx) {
 
 let monaco_promise;
 let _monaco;
-monaco_promise = import('./monaco-622488e1.js').then(function (n) { return n.m; });
+monaco_promise = import('./monaco-7c325c45.js').then(function (n) { return n.m; });
 
 monaco_promise.then(mod => {
 	_monaco = mod.default;
@@ -876,7 +876,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (15:4) {:else}
+// (17:4) {:else}
 function create_else_block$1(ctx) {
 	let li;
 	let t_value = ctx.name + "";
@@ -887,7 +887,7 @@ function create_else_block$1(ctx) {
 		c() {
 			li = element("li");
 			t = text(t_value);
-			attr(li, "class", "liFiles svelte-1ov1meg");
+			attr(li, "class", "liFiles svelte-1f5zsql");
 			dispose = listen(li, "click", ctx.toggleVisibility(ctx.path));
 		},
 		m(target, anchor) {
@@ -905,7 +905,7 @@ function create_else_block$1(ctx) {
 	};
 }
 
-// (13:4) {#if items.length > 0}
+// (15:4) {#if items.length > 0}
 function create_if_block_1(ctx) {
 	let li;
 	let t_value = ctx.name + "";
@@ -920,7 +920,7 @@ function create_if_block_1(ctx) {
 
 			attr(li, "class", li_class_value = "" + (null_to_empty(!ctx.fileState[ctx.path]
 			? "liFolderClosed"
-			: "liFolderOpen") + " svelte-1ov1meg"));
+			: "liFolderOpen") + " svelte-1f5zsql"));
 
 			dispose = listen(li, "click", ctx.toggleVisibility(ctx.path));
 		},
@@ -934,7 +934,7 @@ function create_if_block_1(ctx) {
 
 			if ((changed.fileState || changed.fileTree) && li_class_value !== (li_class_value = "" + (null_to_empty(!ctx.fileState[ctx.path]
 			? "liFolderClosed"
-			: "liFolderOpen") + " svelte-1ov1meg"))) {
+			: "liFolderOpen") + " svelte-1f5zsql"))) {
 				attr(li, "class", li_class_value);
 			}
 		},
@@ -945,7 +945,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (18:4) {#if fileState[path] && items.length > 0}
+// (20:4) {#if fileState[path] && items.length > 0}
 function create_if_block$1(ctx) {
 	let current;
 
@@ -981,7 +981,7 @@ function create_if_block$1(ctx) {
 	};
 }
 
-// (11:0) {#each fileTree as {path,name, items}}
+// (13:0) {#each fileTree as {path,name, items}}
 function create_each_block(ctx) {
 	let ul;
 	let t0;
@@ -1064,7 +1064,7 @@ function create_each_block(ctx) {
 }
 
 function create_fragment$2(ctx) {
-	let each_1_anchor;
+	let div;
 	let current;
 	let each_value = ctx.fileTree;
 	let each_blocks = [];
@@ -1079,18 +1079,21 @@ function create_fragment$2(ctx) {
 
 	return {
 		c() {
+			div = element("div");
+
 			for (let i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
 
-			each_1_anchor = empty();
+			attr(div, "class", "directory svelte-1f5zsql");
 		},
 		m(target, anchor) {
+			insert(target, div, anchor);
+
 			for (let i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].m(target, anchor);
+				each_blocks[i].m(div, null);
 			}
 
-			insert(target, each_1_anchor, anchor);
 			current = true;
 		},
 		p(changed, ctx) {
@@ -1108,7 +1111,7 @@ function create_fragment$2(ctx) {
 						each_blocks[i] = create_each_block(child_ctx);
 						each_blocks[i].c();
 						transition_in(each_blocks[i], 1);
-						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+						each_blocks[i].m(div, null);
 					}
 				}
 
@@ -1140,8 +1143,8 @@ function create_fragment$2(ctx) {
 			current = false;
 		},
 		d(detaching) {
+			if (detaching) detach(div);
 			destroy_each(each_blocks, detaching);
-			if (detaching) detach(each_1_anchor);
 		}
 	};
 }
@@ -1189,6 +1192,8 @@ function create_fragment$1(ctx) {
 			button.textContent = "Get Files";
 			t1 = space();
 			create_component(filetest.$$.fragment);
+			attr(button, "class", "directoryButton svelte-1b6lq6o");
+			attr(div, "class", "directoryContainer svelte-1b6lq6o");
 			dispose = listen(button, "click", ctx.handleOpenFolder);
 		},
 		m(target, anchor) {
@@ -1379,7 +1384,7 @@ function create_a_slot(ctx) {
 			section = element("section");
 			if_block.c();
 			attr(section, "slot", "a");
-			attr(section, "class", "svelte-xnwdf4");
+			attr(section, "class", "svelte-1vf0yfa");
 		},
 		m(target, anchor) {
 			insert(target, section, anchor);
@@ -1446,10 +1451,10 @@ function create_b_slot(ctx) {
 			t0 = text("Hello ");
 			t1 = text(ctx.name);
 			t2 = text("!");
-			attr(h1, "class", "svelte-xnwdf4");
+			attr(h1, "class", "svelte-1vf0yfa");
 			attr(section, "slot", "b");
 			set_style(section, "height", "100%");
-			attr(section, "class", "svelte-xnwdf4");
+			attr(section, "class", "svelte-1vf0yfa");
 		},
 		m(target, anchor) {
 			insert(target, section, anchor);
@@ -1481,10 +1486,10 @@ function create_c_slot(ctx) {
 			section = element("section");
 			div = element("div");
 			create_component(filedir.$$.fragment);
-			attr(div, "class", "directory svelte-xnwdf4");
+			attr(div, "class", "directory svelte-1vf0yfa");
 			attr(section, "slot", "c");
 			set_style(section, "height", "100%");
-			attr(section, "class", "svelte-xnwdf4");
+			attr(section, "class", "svelte-1vf0yfa");
 		},
 		m(target, anchor) {
 			insert(target, section, anchor);
@@ -1565,8 +1570,8 @@ function create_fragment(ctx) {
 			button.textContent = "Get File";
 			t1 = space();
 			create_component(splitpane.$$.fragment);
-			attr(main, "class", "svelte-xnwdf4");
-			attr(body, "class", "container svelte-xnwdf4");
+			attr(main, "class", "svelte-1vf0yfa");
+			attr(body, "class", "container svelte-1vf0yfa");
 			toggle_class(body, "orientation", ctx.orientation);
 			dispose = listen(button, "click", ctx.onClick);
 		},

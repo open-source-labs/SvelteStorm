@@ -1,13 +1,15 @@
 <script>
-
     export let fileTree;
     const fileState = {};
     const toggleVisibility = (path) => {
         if(!fileState[path]) fileState[path]= true;
         else fileState[path] = false;
     }
+
+    // console.log()
  
 </script>
+<div class=directory>
 {#each fileTree as {path,name, items}}
 <ul>
     {#if items.length > 0}
@@ -23,32 +25,47 @@
     {/if}
 </ul>
 {/each}
+</div>
 
 <style>
     .liFolderClosed {
-        margin: 0;
-        padding: 10px 0 10px 25px;
+        padding: 0px 0 5px 25px;
         list-style: none;
-        background-image: url('../img/folder.png');
+        background-image: url("/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/folderClosed.svg");
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
+        border: 1px solid red;
     }
     .liFolderOpen {
-        margin: 0;
-        padding: 10px 0 10px 25px;
+        display: flex;
+        justify-content: flex-start;
+        padding: 10px 0 5px 25px;
         list-style: none;
-        background-image: url('../img/folder.png');
+        background-image: url('/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/folderOpen.svg');
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
-        border: 1px solid black;
+        /* border: 1px solid black; */
     }
 
 
     .liFiles {
-        margin-left: 10px;
+        padding-left: 25px;
+        margin-left: 20px;
+        margin-top: 3px;
         list-style: none;
+        background-image: url('/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/document.png');
+        background-repeat: no-repeat;
+        background-position: left;
+        background-size: 20px;
+        /* border: 1px solid blue; */
     }
     
+    .directory{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        /* border:1px solid black; */
+    }
 </style>
