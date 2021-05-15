@@ -1,7 +1,8 @@
 import svelte from 'rollup-plugin-svelte';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
+import monaco from 'rollup-plugin-monaco-editor';
 import { terser } from 'rollup-plugin-terser';
 
 import postcss from 'rollup-plugin-postcss';
@@ -14,7 +15,8 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		dir: 'public/',
+		dir: 'public/build',
+		inlineDynamicImports: true,
 	},
 	plugins: [
 		svelte({
@@ -38,7 +40,6 @@ export default {
 			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/'),
 			preferBuiltins: false
 		}),
-		commonjs(),
 		postcss({
 			extract: true,
 			minimize: true,
@@ -50,12 +51,13 @@ export default {
 				}]
 			]
 		}),
+		monaco(),
+		commonjs(),
 
-    !production && serve(),
+        !production && serve(),
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
 		!production && livereload('public'),
-
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
 		production && terser()

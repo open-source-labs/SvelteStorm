@@ -2,7 +2,7 @@
     import Monaco from './components/monaco/monaco-editor.svelte';
     import SplitPane from './SplitPlane.svelte';
     import FileDir from './Directory/FileDir.svelte';
-    const {ipcRenderer} = require('electron'); 
+    const {ipcRenderer} = window.require('electron'); 
 
     export let name;
     export let orientation = 'columns';
