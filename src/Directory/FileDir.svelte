@@ -9,17 +9,17 @@
     ipcRenderer.on('folder-opened', function (evt, file, content) {
         directory = content;
         if (directory && directory[0]){        
-                var fileTree = new FileTree(directory[0]);        
-                fileTree.build();
-                //this.setState({fileTree});
-                savedTree = fileTree.items;
-                savedTree.sort((a,b) => {
-                    return b.items.length - a.items.length;
-                })
-                //console.log(Array.isArray(savedTree))
-                console.log('fileTree',savedTree);
-            }
-        })
+            var fileTree = new FileTree(directory[0]);        
+            fileTree.build();
+            //this.setState({fileTree});
+            savedTree = fileTree.items;
+            savedTree.sort((a,b) => {
+                return b.items.length - a.items.length;
+            })
+            //console.log(Array.isArray(savedTree))
+            console.log('fileTree',savedTree);
+        }
+    })
 
 class FileTree {
     constructor(path, name = null){

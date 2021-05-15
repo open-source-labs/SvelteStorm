@@ -1,13 +1,31 @@
 <script>
     import Monaco from './components/monaco/monaco-editor.svelte';
-    import SplitPane from './SplitPlane.svelte';
     import FileDir from './Directory/FileDir.svelte'
+    import { onMount } from 'svelte';
+    import './xterm.css'
     const {ipcRenderer} = require('electron');
+    const Terminal = require('xterm').Terminal
+    import { FitAddon } from 'xterm-addon-fit'
+    const fitAddon = new FitAddon();
+    const term = new Terminal({cursorBlink: true});
+    onMount(() => {
+		console.log('the component has mounted');
+		 // get dom element by id
+		//intervals functions
+        // Open the terminal in #terminal-container
+        term.loadAddon(fitAddon);
+        term.open(document.getElementById('xterm'));
+        fitAddon.fit();
+        term.onData(e => {
+            ipcRenderer.send("terminal-into", e);
+        } );
+        ipcRenderer.on('terminal-incData', (event, data) => {
+            term.write(data);
+        })
+    });
 
     export let name;
     export let orientation = 'columns';
-    export let fixed = false;
-    export let fixedPos = 50;
     export let monacoValue = ''
     export let monacoLanguage = ''
 
@@ -31,8 +49,8 @@ body {
     height: 100%;
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     background-color: #fff;
     color: #444;
   }
@@ -46,7 +64,7 @@ body {
   }
 
   .a {
-    grid-column: 1 / 2;
+    grid-column: 1 ;
     grid-row: 1 / 3;
   }
   .b {
@@ -54,16 +72,16 @@ body {
     grid-row: 1 / 3;
   }
   .c {
-    grid-column: 1 / 2 ;
+    grid-column: 1 / 3 ;
     grid-row: 3 ;
   }
 
   .d {
-    grid-column: 4 / 5;
+    grid-column: 4 / 6;
     grid-row: 1 / 3;
   }
   .e {
-    grid-column: 2 / 5;
+    grid-column: 3 / 6;
     grid-row: 3;
   }
 </style>
@@ -84,15 +102,11 @@ body {
             <h1>State Manager</h1>
         </div>
         <div class="box d"> 
-            <div>
-                <div>
-                    <h1>Hello {name}!</h1>
-                </div>
-            </div>
+            <webview src="http://localhost:3000/" nodeintegration></webview>
         </div>
-        <div class="box e"> 
-            <div>
-                <h1>Terminal</h1>
+        <div class="box e" > 
+            <div id="xterm">
+                
             </div>
         </div>
     </main>
