@@ -69,9 +69,25 @@ class FileTree {
 
 }
 </script>
-<div>
-<button on:click={handleOpenFolder}>Get Files</button>
-<FileTest fileTree={savedTree} />
 
+<!-- HTML -->
+
+<div class=directoryContainer>
+    <button class=directoryButton on:click={handleOpenFolder}>Get Files</button>
+    <FileTest fileTree={savedTree} />
 </div>
 
+<style>
+    .directoryContainer{
+        /* border: 1px solid red; */
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        align-content: flex-start;
+    }
+
+    .directoryButton{
+        width:25%;
+        margin:2px;
+    }
+</style>
