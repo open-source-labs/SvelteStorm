@@ -1,30 +1,25 @@
 <script>  
+    import FileTest from './FileTest.svelte';
     var remote = window.require('electron').remote;
     var electronFs = remote.require('fs');
-    var {dialog} = remote;
-    import FileTest from './FileTest.svelte';
+    const {ipcRenderer} = require('electron');
+
     let savedTree = [];
-const handleOpenFolder = () => {
-        //console.log('saved Tree', savedTree)
-        let dialogOption =  {properties: ['openDirectory']};
-        //console.log(dialog)
-        dialog.showOpenDialog(dialogOption)
-        .then( filenames => {
-        var directory = filenames.filePaths;
-        
+    let directory;
+    ipcRenderer.on('folder-opened', function (evt, file, content) {
+        directory = content;
         if (directory && directory[0]){        
-            var fileTree = new FileTree(directory[0]);        
-            fileTree.build();
-            //this.setState({fileTree});
-            savedTree = fileTree.items;
-            savedTree.sort((a,b) => {
-                return b.items.length - a.items.length;
-            })
-            //console.log(Array.isArray(savedTree))
-            console.log('fileTree',savedTree);
-        }
+                var fileTree = new FileTree(directory[0]);        
+                fileTree.build();
+                //this.setState({fileTree});
+                savedTree = fileTree.items;
+                savedTree.sort((a,b) => {
+                    return b.items.length - a.items.length;
+                })
+                //console.log(Array.isArray(savedTree))
+                console.log('fileTree',savedTree);
+            }
         })
-    }
 
 class FileTree {
     constructor(path, name = null){
@@ -38,10 +33,7 @@ class FileTree {
             items: [],
             color : 'white',
             isOpen : false
-        }
-
-
-        
+        }   
         //this.handleToggle = this.handleToggle.bind(this);
         //console.log(this.state.isOpen)
     }
@@ -62,32 +54,24 @@ class FileTree {
             }
 
             fileArray.push(fileInfo);
-        })
-        
+        })   
         return fileArray;
     }
-
 }
+
 </script>
 
 <!-- HTML -->
 
 <div class=directoryContainer>
-    <button class=directoryButton on:click={handleOpenFolder}>Get Files</button>
     <FileTest fileTree={savedTree} />
 </div>
 
 <style>
     .directoryContainer{
-        /* border: 1px solid red; */
         overflow: auto;
         display: flex;
         flex-direction: column;
         align-content: flex-start;
-    }
-
-    .directoryButton{
-        width:25%;
-        margin:2px;
     }
 </style>

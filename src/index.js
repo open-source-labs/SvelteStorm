@@ -1,4 +1,5 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const createApplicationMenu = require('./application-menu');
 const path = require('path');
 const fs = require('fs')
 
@@ -13,42 +14,117 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-let mainWindow = ''
+const windows = new Set();
+const openFiles = new Map();
 
-const createWindow = () => {
-  // Create the browser window.
-   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
+app.on('ready', () => {
+  createApplicationMenu();
+  createWindow();
+});
 
-  mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
-
-  mainWindow.webContents.openDevTools()
-
-}
-
-app.on('ready', createWindow);
-
-app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+app.on('window-all-closed', () => {
+  if (process.platform === 'darwin') {
+    return false;
   }
 });
 
-ipcMain.handle('getFileFromUser', async () => {
-  const files = await dialog.showOpenDialog(mainWindow, {
+app.on('activate', (event, hasVisibleWindows) => {
+  if (!hasVisibleWindows) { createWindow(); }
+});
+
+const createWindow = exports.createWindow = () => {
+  let x, y;
+
+  const currentWindow = BrowserWindow.getFocusedWindow();
+
+  if (currentWindow) {
+    const [currentWindowX, currentWindowY] = currentWindow.getPosition();
+    x = currentWindowX + 10;
+    y = currentWindowY + 10;
+  }
+
+  let newWindow = new BrowserWindow({ x, y, show: false, webPreferences: {
+    nodeIntegration: true,
+    contextIsolation: false,
+  }});
+
+  newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
+  newWindow.webContents.openDevTools();
+
+  newWindow.once('ready-to-show', () => {
+    newWindow.show();
+  });
+
+  newWindow.on('focus', createApplicationMenu);
+
+  newWindow.on('close', (event) => {
+    if (newWindow.isDocumentEdited()) {
+      event.preventDefault();
+
+      const result = dialog.showMessageBox(newWindow, {
+        type: 'warning',
+        title: 'Quit with Unsaved Changes?',
+        message: 'Your changes will be lost permanently if you do not save.',
+        buttons: [
+          'Quit Anyway',
+          'Cancel',
+        ],
+        cancelId: 1,
+        defaultId: 0
+      });
+
+      if (result === 0) newWindow.destroy();
+    }
+  });
+
+  newWindow.on('closed', () => {
+    windows.delete(newWindow);
+    createApplicationMenu();
+    newWindow = null;
+  });
+
+  windows.add(newWindow);
+  return newWindow;
+};
+
+const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
+  const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
+  });
+  
+  if(files) {
+    if (files) { openFile(targetWindow, files.filePaths[0]); }
+  }
+}
+
+const openFile = exports.openFile = (targetWindow, file) => {
+  const content = fs.readFileSync(file).toString();
+  app.addRecentDocument(file);
+  //targetWindow.setRepresentedFilename(file);
+  targetWindow.webContents.send('file-opened', file, content);
+  createApplicationMenu();
+};
+
+const getFolderFromUser = exports.getFolderFromUser = async (targetWindow) => {
+  const files = await dialog.showOpenDialog(targetWindow, {
+    properties: ['openDirectory'],
   });
 
   if(files) {
-    const content = fs.readFileSync(files.filePaths[0]).toString();
-    mainWindow.webContents.send('file-opened', files.filePaths[0], content);
+    console.log(files.filePaths)
+    if (files) { openFolder(targetWindow, files.filePaths); }
   }
-})
+}
+
+const openFolder = exports.openFolder = (targetWindow, folder) => {
+  const content = folder
+  //app.addRecentDocument(folder);
+  //targetWindow.setRepresentedFilename(file);
+  targetWindow.webContents.send('folder-opened', folder, content);
+  createApplicationMenu();
+};
+
+ipcMain.handle('getFileFromUser', getFileFromUser)
+
+ipcMain.handle('getFolderFromUser', getFolderFromUser)
 
