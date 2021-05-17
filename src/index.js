@@ -32,6 +32,10 @@ app.on('activate', (event, hasVisibleWindows) => {
 });
 
 const createWindow = exports.createWindow = () => {
+
+  process.env.NODE_ENV = 'development';
+  
+
   let x, y;
 
   const currentWindow = BrowserWindow.getFocusedWindow();
@@ -48,7 +52,6 @@ const createWindow = exports.createWindow = () => {
   }});
 
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
-  newWindow.webContents.openDevTools();
 
   newWindow.once('ready-to-show', () => {
     newWindow.show();
@@ -76,11 +79,24 @@ const createWindow = exports.createWindow = () => {
     }
   });
 
+  let watcher;
+  if (process.env.NODE_ENV === 'development') {
+  watcher = require('chokidar').watch(path.join(__dirname, '../public'), { ignoreInitial: true });
+  watcher.on('change', () => {
+  newWindow.reload();
+  });
+  }
+
   newWindow.on('closed', () => {
+    if (watcher) {
+      watcher.close();
+     }
     windows.delete(newWindow);
     createApplicationMenu();
     newWindow = null;
   });
+
+  
 
   var shell = os.platform() === "win32" ? "powershell.exe" : "bash";
   var ptyProcess = pty.spawn(shell, [], {
