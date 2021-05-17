@@ -1,11 +1,11 @@
 import svelte from 'rollup-plugin-svelte';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import livereload from 'rollup-plugin-livereload';
-import monaco from 'rollup-plugin-monaco-editor';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
+//import livereload from 'rollup-plugin-livereload';
+//import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
-
 import postcss from 'rollup-plugin-postcss';
+//import replace from 'rollup-plugin-replace';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -13,10 +13,19 @@ export default {
 	input: 'src/svelte.js',
 	output: {
 		sourcemap: true,
-		format: 'esm',
+		format: 'iife',
 		name: 'app',
-		dir: 'public/build',
-		inlineDynamicImports: true,
+		dir: 'public',
+		inlineDynamicImports : true
+	},
+	onwarn: function(warning) {
+		// Skip certain warnings
+	
+		// should intercept ... but doesn't in some rollup versions
+		if ( warning.code === 'THIS_IS_UNDEFINED' ) { return; }
+	
+		// console.warn everything else
+		console.warn( warning.message );
 	},
 	plugins: [
 		svelte({
@@ -24,12 +33,11 @@ export default {
 			dev: !production,
 			// we'll extract any component CSS out into
 			// a separate file — better for performance
-			// css: css => {
-			// 	css.write('public/bundle.css');
-			// },
+			css: css => {
+				css.write('bundle.css');
+			},
 			emitCss: true
 		}),
-
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
 		// some cases you'll need additional configuration —
@@ -54,10 +62,13 @@ export default {
 		monaco(),
 		commonjs(),
 
-    !production && serve(),
+        !production & serve(),
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('public'),
+		// livereload({
+		// 		watch: 'public',
+		// }),
+
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
 		production && terser()

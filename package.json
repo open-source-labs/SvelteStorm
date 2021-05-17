@@ -47,8 +47,10 @@
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "estree-walker": "^1.0.1",
-    "monaco-editor": "^0.21.2",
-    "rollup-plugin-monaco-editor": "0.0.7",
+    "monaco-editor": "^0.23.0",
+    "node-pty": "^0.10.1",
+    "xterm": "^4.12.0",
+    "xterm-addon-fit": "^0.5.0",
     "yootils": "^0.2.0"
   },
   "devDependencies": {
@@ -60,14 +62,19 @@
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "autoprefixer": "^9.0.0",
+    "babel": "^6.23.0",
+    "chokidar": "^3.5.1",
     "concurrently": "^5.1.0",
     "electron": "^12.0.7",
     "rollup": "^2.26.10",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-import-css": "^2.0.1",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-postcss-modules": "^2.0.2",
-    "rollup-plugin-svelte": "^7.1.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-svelte": "^6.0.0",
     "rollup-plugin-terser": "^5.3.0",
     "svelte": "^3.38.2"
   }
