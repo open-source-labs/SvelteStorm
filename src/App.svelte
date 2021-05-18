@@ -4,15 +4,34 @@
     import Monaco from './Monaco.svelte'
     import { FitAddon } from 'xterm-addon-fit'
     import { onMount } from 'svelte';
-    import './xterm.css'
+    import './xterm.css';
+    import DirectoryData from './Utilities/DirectoryStore';
+    const fs = require('fs');
+
     const {ipcRenderer} = require('electron');
     const Terminal = require('xterm').Terminal
 
     const fitAddon = new FitAddon();
     const term = new Terminal({cursorBlink: true});
+    let counter =0;
 
     export let orientation = 'columns';
     export let monacoValue;
+
+
+    let readData = '';
+    const unsub = DirectoryData.subscribe(data =>{
+        console.log('File Directory Store Subscription');
+        console.log('data here',data)
+        if(data.fileRead){
+          readData = fs.readFileSync(data.openFilePath).toString();
+          monacoValue = readData.split(/\r?\n/);
+          console.log(readData);
+          counter++;
+        }
+    });
+
+
 
     onMount(() => {
 		console.log('the component has mounted');
@@ -29,7 +48,12 @@
 
     ipcRenderer.on('file-opened', function (evt, file, content) {
         monacoValue = content.split(/\r?\n/);
+        counter++;
     });
+
+
+    
+    
   
     
 
