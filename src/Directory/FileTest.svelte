@@ -36,7 +36,7 @@
         cursor: pointer;
         padding: 0px 0 5px 25px;
         list-style: none;
-        background-image: url("/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/folderClosed.svg");
+        background-image: url("./img/folderClosed.svg");
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
@@ -48,7 +48,7 @@
         justify-content: flex-start;
         padding: 10px 0 5px 25px;
         list-style: none;
-        background-image: url('/home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/folderOpen.svg');
+        background-image: url('./img/folderOpen.svg');
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
@@ -62,7 +62,7 @@
         margin-left: 20px;
         margin-top: 3px;
         list-style: none;
-        background-image: url('./home/svrchi/Desktop/Svelte Project/SvelteStorm/public/img/document.png');
+        background-image: url('./img/document.png');
         background-repeat: no-repeat;
         background-position: left;
         background-size: 20px;
