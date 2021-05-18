@@ -40,7 +40,7 @@
   .wrapper {
       height: 100%;
       display: grid;
-      grid-gap: 10px;
+      grid-gap: 1px;
       grid-template-columns: repeat(5, 1fr);
       grid-template-rows: repeat(5, 1fr);
       background-color: #fff;
@@ -85,7 +85,7 @@
     }
 </style>
 
-    <body  class:orientation>
+    <body class:orientation>
     <main class="wrapper" >
         <div class="box a">
             <FileDir />

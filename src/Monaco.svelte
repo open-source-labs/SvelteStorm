@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import { onMount } from 'svelte'
     import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
     export let value;
@@ -7,20 +7,20 @@
       monaco.editor.create(containerElt, {
         value: value.join('\n'),
         language: 'html',
-        theme:"vs"
+        theme:"vs",
       })
     })
-  </script>
+</script>
   
-  <style>
-    .monaco {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+<style>
+  .monaco {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+</style>
   
-  <svelte:head />
- <div class="monaco" bind:this={containerElt} />
+<svelte:head />
+<div class="monaco" bind:this={containerElt} />
 
   

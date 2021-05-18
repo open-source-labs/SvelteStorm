@@ -1,5 +1,5 @@
 import svelte from 'rollup-plugin-svelte';
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 //import livereload from 'rollup-plugin-livereload';
 //import babel from 'rollup-plugin-babel';
@@ -59,7 +59,6 @@ export default {
 				}]
 			]
 		}),
-		monaco(),
 		commonjs(),
 
         !production & serve(),
