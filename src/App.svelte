@@ -1,36 +1,59 @@
 <script>
-  //import Monaco from './components/monaco/monaco-editor.svelte';
-  import FileDir from './Directory/FileDir.svelte'
-  import Monaco from './Monaco.svelte'
-  import { FitAddon } from 'xterm-addon-fit'
-  import { onMount } from 'svelte';
-  import './xterm.css'
-  const {ipcRenderer} = require('electron');
-  const Terminal = require('xterm').Terminal
+    //import Monaco from './components/monaco/monaco-editor.svelte';
+    import FileDir from './Directory/FileDir.svelte'
+    import Monaco from './Monaco.svelte'
+    import { FitAddon } from 'xterm-addon-fit'
+    import { onMount } from 'svelte';
+    import './xterm.css';
+    import DirectoryData from './Utilities/DirectoryStore';
+    const fs = require('fs');
 
-  const fitAddon = new FitAddon();
-  const term = new Terminal({cursorBlink: true});
+    const {ipcRenderer} = require('electron');
+    const Terminal = require('xterm').Terminal
+
+    const fitAddon = new FitAddon();
+    const term = new Terminal({cursorBlink: true});
+    let counter =0;
 
   export let orientation = 'columns';
   export let monacoValue;
 
-  onMount(() => {
-  console.log('the component has mounted');
-      term.loadAddon(fitAddon);
-      term.open(document.getElementById('xterm'));
-      fitAddon.fit();
-      term.onData(e => {
-          ipcRenderer.send("terminal-into", e);
-      } );
-      ipcRenderer.on('terminal-incData', (event, data) => {
-          term.write(data);
-      })
-  });
 
-  ipcRenderer.on('file-opened', function (evt, file, content) {
-      monacoValue = content.split(/\r?\n/);
-  });
+    let readData = '';
+    const unsub = DirectoryData.subscribe(data =>{
+        console.log('File Directory Store Subscription');
+        console.log('data here',data)
+        if(data.fileRead){
+          readData = fs.readFileSync(data.openFilePath).toString();
+          monacoValue = readData.split(/\r?\n/);
+          console.log(readData);
+          counter++;
+        }
+    });
 
+
+
+    onMount(() => {
+		console.log('the component has mounted');
+        term.loadAddon(fitAddon);
+        term.open(document.getElementById('xterm'));
+        fitAddon.fit();
+        term.onData(e => {
+            ipcRenderer.send("terminal-into", e);
+        } );
+        ipcRenderer.on('terminal-incData', (event, data) => {
+            term.write(data);
+        })
+    });
+
+    ipcRenderer.on('file-opened', function (evt, file, content) {
+        monacoValue = content.split(/\r?\n/);
+        counter++;
+    });
+
+
+    
+    
   
 
 </script>

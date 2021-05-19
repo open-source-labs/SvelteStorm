@@ -4,6 +4,7 @@
     export let value;
     let containerElt;
     onMount(() => {
+      console.log('inside monaco',value)
       monaco.editor.create(containerElt, {
         value: value.join('\n'),
         language: 'html',
