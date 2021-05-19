@@ -1,11 +1,9 @@
 <script>  
     import FileTest from './FileTest.svelte';    
     import { onMount, onDestroy} from 'svelte';
-    // import { dataset_dev } from 'svelte/internal';
     import DirectoryData from '../Utilities/DirectoryStore';
     let savedTree = [];
     var remote = window.require('electron').remote;
-    // var {dialog} = remote;
     var electronFs = remote.require('fs');
     const {ipcRenderer} = require('electron');
 
