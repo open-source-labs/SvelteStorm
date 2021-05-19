@@ -15,8 +15,8 @@
     const term = new Terminal({cursorBlink: true});
     let counter =0;
 
-    export let orientation = 'columns';
-    export let monacoValue;
+  export let orientation = 'columns';
+  export let monacoValue;
 
 
     let readData = '';
@@ -55,86 +55,85 @@
     
     
   
-    
 
-  </script>
+</script>
 
 <style>
-  body {
+body {
+  height: 50vh;
+  width: 100vw;
+}
+.wrapper {
     height: 100%;
-    width: 100%
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    background-color: #fff;
+    color: #444;
   }
-  .wrapper {
-      height: 100%;
-      display: grid;
-      grid-gap: 10px;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(5, 1fr);
-      background-color: #fff;
-      color: #444;
-    }
 
-    .box {
-      background-color: rgb(233, 217, 186);
-      color: rgb(226, 142, 45);
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 150%;
-    }
+  .box {
+    background-color: rgb(233, 217, 186);
+    color: rgb(226, 142, 45);
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 150%;
+  }
 
-    .a {
-      grid-column: 1 ;
-      grid-row: 1 / 5;
-    }
-    .b {
-      grid-column: 2 / 4 ;
-      grid-row: 1 / 5;
-    }
-    .c {
-      grid-column: 1 / 3 ;
-      grid-row: 5 ;
-    }
+  .a {
+    grid-column: 1 ;
+    grid-row: 1 / 5;
+  }
+  .b {
+    grid-column: 2 / 4 ;
+    grid-row: 1 / 5;
+  }
+  .c {
+    grid-column: 1 / 3 ;
+    grid-row: 5 ;
+  }
 
-    .d {
-      grid-column: 4 / 6;
-      grid-row: 1 / 5;
-    }
-    .e {
-      grid-column: 3 / 6;
-      grid-row: 5;
-    }
-    .webpage {
-      height: 100%;
-      width: 100%;
-    }
-    iframe:focus {
-      outline: none;
-    }
+  .d {
+    grid-column: 4 / 6;
+    grid-row: 1 / 5;
+  }
+  .e {
+    grid-column: 3 / 6;
+    grid-row: 5;
+  }
+  .webpage {
+    height: 100%;
+    width: 100%;
+  }
+  iframe:focus {
+    outline: none;
+  }
 </style>
 
-    <body  class:orientation>
-    <main class="wrapper" >
-        <div class="box a">
-            <FileDir />
-        </div>
-        <div class="box b">
-          {#if monacoValue}
-            <Monaco bind:value={monacoValue}/>
-          {:else}
-              <Monaco value={[]}/>
-          {/if}
-        </div>
-        <div class="box c">
-            <h1>State Manager</h1>
-        </div>
-        <div class="box d"> 
-            <iframe class="webpage" title="local host" src="http://localhost:5000/"></iframe>
-        </div>
-        <div class="box e" > 
-            <div id="xterm">
-                
-            </div>
-        </div>
-    </main>
-    </body>
-  
+  <body  class:orientation>
+  <main class="wrapper" >
+      <div class="box a">
+          <FileDir />
+      </div>
+      <div class="box b">
+        {#if monacoValue}
+          <Monaco bind:value={monacoValue}/>
+        {:else}
+            <Monaco value={[]}/>
+        {/if}
+      </div>
+      <div class="box c">
+          <h1>State Manager</h1>
+      </div>
+      <div class="box d"> 
+          <iframe class="webpage" title="local host" src="http://localhost:5000/"></iframe>
+      </div>
+      <div class="box e" > 
+          <div id="xterm">
+              
+          </div>
+      </div>
+  </main>
+  </body>
+
