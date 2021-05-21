@@ -1,7 +1,7 @@
 <script>
     //import Monaco from './components/monaco/monaco-editor.svelte';
     import FileDir from './Directory/FileDir.svelte'
-    import Monaco from './Monaco.svelte'
+    import Monaco from './MonacoComponents/Monaco.svelte'
     import { FitAddon } from 'xterm-addon-fit'
     import { onMount } from 'svelte';
     import './xterm.css';
@@ -13,16 +13,16 @@
 
     const fitAddon = new FitAddon();
     const term = new Terminal({cursorBlink: true});
-    let counter =0;
+    let counter = 0;
 
-  export let orientation = 'columns';
-  export let monacoValue;
-
+    export let orientation = 'columns';
+    export let monacoValue;
+    export let monacoLang;
 
     let readData = '';
     const unsub = DirectoryData.subscribe(data =>{
-        console.log('File Directory Store Subscription');
-        console.log('data here',data)
+        // console.log('File Directory Store Subscription');
+        // console.log('data here',data)
         if(data.fileRead){
           readData = fs.readFileSync(data.openFilePath).toString();
           monacoValue = readData.split(/\r?\n/);
@@ -31,10 +31,8 @@
         }
     });
 
-
-
     onMount(() => {
-		console.log('the component has mounted');
+		  console.log('the component has mounted');
         term.loadAddon(fitAddon);
         term.open(document.getElementById('xterm'));
         fitAddon.fit();
@@ -48,30 +46,28 @@
 
     ipcRenderer.on('file-opened', function (evt, file, content) {
         monacoValue = content.split(/\r?\n/);
+        console.log(monacoValue);
+        console.log(file);
+        monacoLang = file.split('.').pop()
         counter++;
     });
-
-
-    
-    
-  
 
 </script>
 
 <style>
 body {
-  height: 50vh;
+  height: 100vh;
   width: 100vw;
 }
 .wrapper {
     height: 100%;
     display: grid;
-    grid-gap: 10px;
+    grid-gap: 1px;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
     background-color: #fff;
     color: #444;
-  }
+}
 
   .box {
     background-color: rgb(233, 217, 186);
@@ -118,7 +114,7 @@ body {
       </div>
       <div class="box b">
         {#if monacoValue}
-          <Monaco bind:value={monacoValue}/>
+          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
         {:else}
             <Monaco value={[]}/>
         {/if}

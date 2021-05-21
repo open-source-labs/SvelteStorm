@@ -5,8 +5,6 @@ const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
 
-
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -32,7 +30,7 @@ app.on('activate', (event, hasVisibleWindows) => {
 });
 
 const createWindow = exports.createWindow = () => {
-
+  
   process.env.NODE_ENV = 'development';
   
 
@@ -81,10 +79,10 @@ const createWindow = exports.createWindow = () => {
 
   let watcher;
   if (process.env.NODE_ENV === 'development') {
-  watcher = require('chokidar').watch(path.join(__dirname, '../public'), { ignoreInitial: true });
-  watcher.on('change', () => {
-  newWindow.reload();
-  });
+    watcher = require('chokidar').watch(path.join(__dirname, '../public'), { ignoreInitial: true });
+    watcher.on('change', () => {
+      newWindow.reload();
+    });
   }
 
   newWindow.on('closed', () => {
