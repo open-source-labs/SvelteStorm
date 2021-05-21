@@ -2,28 +2,28 @@
     import { afterUpdate, onMount } from 'svelte'
     import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
     import * as monacoEditor from 'monaco-editor';
-    const path = window.require('path');
-    const fs = window.require('fs');
+    // const path = window.require('path');
+    // const fs = window.require('fs');
     
     export let value;
     let containerElt;
 
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-        noSemanticValidation: true,
-        noSyntaxValidation: true
-    });
-  const compilerOptions = {
-    allowJs: true,
-    allowSyntheticDefaultImports: true,
-    alwaysStrict: true,
-    jsx: 'React',
-    jsxFactory: 'React.createElement',
-  };
+    // monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+    //     noSemanticValidation: true,
+    //     noSyntaxValidation: true
+    // });
+  // const compilerOptions = {
+  //   allowJs: true,
+  //   allowSyntheticDefaultImports: true,
+  //   alwaysStrict: true,
+  //   jsx: 'React',
+  //   jsxFactory: 'React.createElement',
+  // };
 
-  monacoEditor.languages.typescript.typescriptDefaults.setEagerModelSync(true);
-  monacoEditor.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-  monacoEditor.languages.typescript.typescriptDefaults.setCompilerOptions(compilerOptions);
-  monacoEditor.languages.typescript.javascriptDefaults.setCompilerOptions(compilerOptions);
+  // monacoEditor.languages.typescript.typescriptDefaults.setEagerModelSync(true);
+  // monacoEditor.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+  // monacoEditor.languages.typescript.typescriptDefaults.setCompilerOptions(compilerOptions);
+  // monacoEditor.languages.typescript.javascriptDefaults.setCompilerOptions(compilerOptions);
  
 
   // const getLanguage = (path) => {
@@ -51,14 +51,13 @@
     onMount(() => {
       monacoEditor.editor.create(containerElt, {
         value: value.join('\n'),
-        language: 'html',
-        theme:"vs",
+        language: 'javascript',
+        theme: 'vs',
+        model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
+        wordWrap: 'on',
       })
     })
 
-    // afterUpdate(() => {
-    //   monacoEditor.editor.dispose()
-    // })
 </script>
   
 <style>
