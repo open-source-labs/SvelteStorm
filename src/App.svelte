@@ -6,9 +6,12 @@
     import { onMount } from 'svelte';
     import './xterm.css';
     import DirectoryData from './Utilities/DirectoryStore';
-    const fs = require('fs');
+    const { remote, ipcRenderer } = require('electron');
+    const currentWindow = remote.getCurrentWindow();
 
-    const {ipcRenderer} = require('electron');
+    const fs = require('fs');
+    const path = require('path')
+
     const Terminal = require('xterm').Terminal
 
     const fitAddon = new FitAddon();
@@ -25,13 +28,15 @@
         console.log('data here',data)
         if(data.fileRead){
           readData = fs.readFileSync(data.openFilePath).toString();
+          console.log('PATH HERE', path.basename(data.openFilePath))
           monacoValue = readData.split(/\r?\n/);
+          let title = 'Svelte Storm';
+          if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+          currentWindow.setTitle(title);
           console.log(readData);
           counter++;
         }
     });
-
-
 
     onMount(() => {
 		console.log('the component has mounted');
@@ -49,13 +54,11 @@
     ipcRenderer.on('file-opened', function (evt, file, content) {
         monacoValue = content.split(/\r?\n/);
         counter++;
+        console.log(file)
+        let title = 'Svelte Storm';
+        if (file) { title = `${path.basename(file)} - ${title}`; }
+        currentWindow.setTitle(title);
     });
-
-
-    
-    
-  
-    
 
   </script>
 
