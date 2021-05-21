@@ -12,7 +12,7 @@
     const Terminal = require('xterm').Terminal
 
     const fitAddon = new FitAddon();
-    const term = new Terminal({cursorBlink: true});
+    const term = new Terminal();
     let counter = 0;
 
     export let orientation = 'columns';
@@ -33,9 +33,16 @@
 
     onMount(() => {
 		  console.log('the component has mounted');
-        term.loadAddon(fitAddon);
+       term.setOption('cursorStyle', 'block');
+       term.setOption('cursorBlink', true);
+       term.setOption('fontSize', 14);
+       
+       term.loadAddon(fitAddon);
         term.open(document.getElementById('xterm'));
         fitAddon.fit();
+
+        term.write('\x1b[32mWelcome to Svelte Storm!\x1b[m\r\n');
+
         term.onData(e => {
             ipcRenderer.send("terminal-into", e);
         } );
