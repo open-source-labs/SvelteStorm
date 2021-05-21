@@ -36,11 +36,13 @@
        term.setOption('cursorStyle', 'block');
        term.setOption('cursorBlink', true);
        term.setOption('fontSize', 14);
+       
        term.loadAddon(fitAddon);
         term.open(document.getElementById('xterm'));
         fitAddon.fit();
+
         term.write('\x1b[32mWelcome to Svelte Storm!\x1b[m\r\n');
-        
+
         term.onData(e => {
             ipcRenderer.send("terminal-into", e);
         } );
