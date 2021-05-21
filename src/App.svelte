@@ -17,6 +17,7 @@
 
     export let orientation = 'columns';
     export let monacoValue;
+    export let monacoLang;
 
     let readData = '';
     const unsub = DirectoryData.subscribe(data =>{
@@ -46,6 +47,8 @@
     ipcRenderer.on('file-opened', function (evt, file, content) {
         monacoValue = content.split(/\r?\n/);
         console.log(monacoValue);
+        console.log(file);
+        monacoLang = file.split('.').pop()
         counter++;
     });
 
@@ -111,7 +114,7 @@ body {
       </div>
       <div class="box b">
         {#if monacoValue}
-          <Monaco bind:value={monacoValue} />
+          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
         {:else}
             <Monaco value={[]}/>
         {/if}
