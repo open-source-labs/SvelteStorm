@@ -5,35 +5,22 @@
     import { FitAddon } from 'xterm-addon-fit'
     import { onMount } from 'svelte';
     import './xterm.css';
-    import DirectoryData from './Utilities/DirectoryStore';
+    
     export let orientation = 'columns';
-    export let monacoValue;
-    export let monacoLang;
 
+    let localhost = "http://localhost:5000/"
+    let refreshed = false
     const { remote, ipcRenderer } = require('electron');
-    const currentWindow = remote.getCurrentWindow();
-
-    const fs = require('fs');
-    const path = require('path')
 
     const Terminal = require('xterm').Terminal
 
     const fitAddon = new FitAddon();
     const term = new Terminal();
-    let counter = 0;
-
-    let readData = '';
-    const unsub = DirectoryData.subscribe(data =>{
-        if(data.fileRead){
-          readData = fs.readFileSync(data.openFilePath).toString();
-          monacoValue = readData.split(/\r?\n/);
-          monacoLang = path.basename(data.openFilePath).split('.').pop()
-          let title = 'Svelte Storm';
-          if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
-          currentWindow.setTitle(title);
-          counter++;
-        }
-    });
+    
+    function onClick() {
+      refreshed = true
+      localhost = "http://localhost:5000/"
+    }
 
     onMount(() => {
 		  console.log('the component has mounted');
@@ -139,9 +126,13 @@
       <div class="box c">
           <h1>State Manager</h1>
       </div>
-      <div class="box d"> 
-          <iframe class="webpage" title="local host" src="http://localhost:5000/"></iframe>
-      </div>
+      <div on:click={onClick}  class="box d"> 
+        {#if refreshed}
+        <iframe class="webpage" title="local host" src={localhost}></iframe>
+        {:else}
+        <iframe class="webpage" title="local host" src={localhost}></iframe>
+        {/if}
+        </div>
       <div class="box e" > 
           <div id="xterm">
               
