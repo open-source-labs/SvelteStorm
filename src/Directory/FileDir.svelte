@@ -1,6 +1,6 @@
 <script>  
     import FileTest from './FileTest.svelte';    
-    import { onMount, onDestroy} from 'svelte';
+    import { onMount, onDestroy, afterUpdate} from 'svelte';
     import DirectoryData from '../Utilities/DirectoryStore';
     const fs = require('fs');
     let savedTree = [];
@@ -10,10 +10,13 @@
 
     
     let directory;
+    let rename;
+    let counter = 0;
 
     const unsub = DirectoryData.subscribe(data =>{
         // console.log('File Directory Store Subscription');
         // console.log('data',data);
+        rename = data.rename;
     });
 
     // store 
@@ -21,6 +24,33 @@
         // console.log('Directory mounted')
     });
 
+    afterUpdate(() => {0
+        if(directory) {
+        // console.log('directory', directory);
+        fs.watch(directory[0], (eventType, filename) => {
+            console.log("eventType", eventType)
+            if(eventType === 'rename'){
+                counter ++;
+                if(counter < 2) {
+                console.log(' IN RUN BUILD');
+                var fileTree = new FileTree(directory[0]);        
+                fileTree.build();
+                
+                savedTree = fileTree.items;
+                savedTree.sort((a,b) => {
+                    return b.items.length - a.items.length;
+                })
+                DirectoryData.update(currentData =>{
+                    return savedTree;
+                })
+                counter = 0;
+                }
+
+            }
+        })
+        }
+    });
+ 
     onDestroy(()=>{
         unsub();
         // console.log('component destroyed');
@@ -46,15 +76,15 @@
 
 
 
-    // if(directory) {
-    //     console.log('directory', directory);
-    //     fs.watch(directory, (eventType, filename) => {
-    //         console.log("eventType", eventType)
-    //         if(eventType === 'rename'){
-    //             console.log('file name was change!')
-    //         }
-    //     })
-    // }
+    if(directory) {
+        console.log('directory', directory);
+        fs.watch(directory[0], (eventType, filename) => {
+            console.log("eventType", eventType)
+            if(eventType === 'rename'){
+                console.log('file name was change!')
+            }
+        })
+    }
 
     
     class FileTree {
@@ -101,7 +131,7 @@
 
 <div class=directoryContainer>
     {#if directory} 
-    <FileTest directory={directory} fileTree={savedTree} />
+    <FileTest directory={directory[0]} fileTree={savedTree} />
     {/if}
 </div>
 <!-- CSS -->

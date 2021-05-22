@@ -8,7 +8,7 @@
     const fileState = {};
     let rename = false;
 
-    console.log('first console for directory', directory)
+    // console.log('first console for directory', directory)
         
     let rightClickStatus = false;
     let activeFile = '';
@@ -26,7 +26,6 @@
     //         }
     //     })
     // }
-
     // });
 
     // afterUpdate(() => {
@@ -39,20 +38,10 @@
     //         }
     //     })
     // }
-
     // });
 
-    if(directory) {
-        console.log('directory', directory);
-        // fs.watch(directory, (eventType, filename) => {
-        //     console.log("eventType", eventType)
-        //     if(eventType === 'rename'){
-        //         console.log('file name was change!')
-        //     }
-        // })
-    }
 
-    
+    // move into OnMount for all subs
     const unsub = DirectoryData.subscribe(data =>{
         // console.log('File Test Store Subscription');
         activeFile = data.activeFile;
@@ -79,7 +68,8 @@
         const openFilePath = path;      
         DirectoryData.update(currentData =>{
             return {...currentData, activeFile: openFilePath, rename: false};
-        })   
+        })  
+
     }
 
     const renameHandler = (e,path) => {
@@ -92,11 +82,21 @@
         //  console.log('just the path', fullPath);
         //  console.log('just the path', fullPath+'/'+newName);
          fs.renameSync(path, fullPath+'/'+newName);
-         rename = false;
-         activeFile = '';
+         DirectoryData.update( currentData => {
+            return {...currentData, rename:false, activeFile: ''};
+        })
+        // e.currentTarget.value = "";
+        //  rename = false;
+        //  activeFile = '';
          }
     }
 
+    const resetRename = () => {
+        console.log('In resetRename handler')
+        DirectoryData.update( currentData => {
+            return {...currentData, rename: false, activeFile: ''};
+        })
+    }
     // a = "www.example.com/hi/test/home.html";
     // b = a.substr(0, a.lastIndexOf('/'));
  
@@ -104,7 +104,7 @@
 
 </script>
 
-<div class=directory>
+<div class=directory >
 {#if fileTree}
 {#each fileTree as {path,name, items}}
 <ul>
@@ -122,7 +122,7 @@
                 type="text"/>
             </span>
         {:else}
-    <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles">{name}</li>
+    <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={resetRename}>{name} </li>
         {#if activeFile === path}
         <CreateMenu filePath={path} />
         {/if}
