@@ -40,6 +40,7 @@
       theme: 'vs-dark',
       // model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
       wordWrap: 'on',
+      fontSize: "16px",
     })
   })
 

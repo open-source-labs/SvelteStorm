@@ -29,6 +29,15 @@ app.on('activate', (event, hasVisibleWindows) => {
   if (!hasVisibleWindows) { createWindow(); }
 });
 
+const increaseFontSize = exports.increaseFontSize = () => {
+
+
+}  
+
+const decreaseFontSize = exports.decreaseFontSize = () => {
+
+
+} 
 const createWindow = exports.createWindow = () => {
   
   process.env.NODE_ENV = 'development';
@@ -93,8 +102,6 @@ const createWindow = exports.createWindow = () => {
     createApplicationMenu();
     newWindow = null;
   });
-
-  
 
   var shell = os.platform() === "win32" ? "powershell.exe" : "bash";
   var ptyProcess = pty.spawn(shell, [], {
