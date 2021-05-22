@@ -61,9 +61,8 @@ const createApplicationMenu = () => {
               );
             } else {
               console.log("Hello")
-              console.log(filePath)
-              //mainProcess.saveMarkdown(focusedWindow, filePath, markdownView.value);
               focusedWindow.webContents.send('save-markdown');
+              mainProcess.saveFile(focusedWindow);
             }
           },
         },

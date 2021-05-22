@@ -1,12 +1,14 @@
 <script>
-  import {  onMount } from 'svelte'
+  import {  onMount, beforeUpdate, afterUpdate } from 'svelte'
   // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
   import * as monaco from 'monaco-editor';
+  const { ipcRenderer } = require('electron');
   // const path = window.require('path');
   // const fs = window.require('fs');
   
   export let value;
   export let language;
+  let monEditor;
   let containerElt;
  
 
@@ -32,30 +34,35 @@
         default:
           return undefined;
       }
-  };
-<<<<<<< HEAD
-    onMount(() => {
-      
-      monaco.editor.create(containerElt, {
+
+    };
+
+    const createEditor = () => {
+
+      monEditor = monaco.editor.create(containerElt, {
         value: value.join('\n'),
         language: getLanguage(language),
         theme: 'vs-dark',
-        // model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
         wordWrap: 'on',
       })
-=======
 
-  onMount(() => {
-    monaco.editor.create(containerElt, {
-      value: value.join('\n'),
-      language: getLanguage(language),
-      theme: 'vs-dark',
-      // model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
-      wordWrap: 'on',
->>>>>>> afc91f269f64bd4b698d3400fe9c92e51a2c7512
+    }
+
+    onMount(() => {
+        createEditor()
     })
-  })
+        
+	afterUpdate(() => {
+    if(monEditor) {
+          monEditor.onDidChangeModelContent(() => {
+          console.log(monEditor.getValue())
+        })
+      }
+	});
 
+  ipcRenderer.on('save-markdown',  function (file, content) {
+      ipcRenderer.send('synchronous-message', monEditor.getValue())
+    });
 </script>
   
 <style>

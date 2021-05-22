@@ -5,8 +5,7 @@ const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
 
-const userFile = ''
-
+let userFile = ''
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -134,17 +133,20 @@ const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
     properties: ['openFile'],
   });
 
+  userFile = files
+
   if(files) {
     if (files) { openFile(targetWindow, files.filePaths[0]); }
   }
 }
 
 const openFile = exports.openFile = (targetWindow, file) => {
-  userFile = file
-  const content = fs.readFileSync(userFile).toString();
-  app.addRecentDocument(userFile);
+  
+  const content = fs.readFileSync(file).toString();
+  //console.log(fileContent)
+  app.addRecentDocument(file);
   //targetWindow.setRepresentedFilename(file);
-  targetWindow.webContents.send('file-opened', userFile, content);
+  targetWindow.webContents.send('file-opened', file, content);
   createApplicationMenu();
 };
 
@@ -167,19 +169,19 @@ const openFolder = exports.openFolder = (targetWindow, folder) => {
   createApplicationMenu();
 };
 
-const saveMarkdown = exports.saveMarkdown = (targetWindow, userFile, content) => {
-  if (!userFile) {
-    userFile = dialog.showSaveDialog(targetWindow, {
-      title: 'Save Markdown',
-      defaultPath: app.getPath('documents'),
-   });
-  }
-  if (!userFile) return;
-    console.log(userFile, content);
-    openFile(targetWindow, userFile);
+const saveFile = exports.saveFile = (targetWindow) => {
+
+
+  ipcMain.on('synchronous-message', (event, arg) => {
+    //console.log(arg) // prints "ping"
+    fs.writeFileSync(userFile.filePaths[0], arg)
+  })
+
+  openFile(targetWindow, userFile.filePaths[0]);
+  
  };
 
-ipcMain.handle('saveFileFromUser', saveMarkdown)
+ipcMain.handle('saveFileFromUser', saveFile)
 
 ipcMain.handle('getFileFromUser', getFileFromUser)
 
