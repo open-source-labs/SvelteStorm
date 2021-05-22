@@ -59,8 +59,12 @@ const createApplicationMenu = () => {
                 'Cannot Save or Export',
                 'There is currently no active document to save or export.'
               );
+            } else {
+              console.log("Hello")
+              console.log(filePath)
+              //mainProcess.saveMarkdown(focusedWindow, filePath, markdownView.value);
+              focusedWindow.webContents.send('save-markdown');
             }
-            focusedWindow.webContents.send('save-markdown');
           },
         },
         { type: 'separator' },

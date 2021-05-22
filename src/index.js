@@ -5,6 +5,8 @@ const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
 
+const userFile = ''
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -126,6 +128,7 @@ require('electron-reload')(__dirname, {
   return newWindow;
 };
 
+
 const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
@@ -137,10 +140,11 @@ const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
 }
 
 const openFile = exports.openFile = (targetWindow, file) => {
-  const content = fs.readFileSync(file).toString();
-  app.addRecentDocument(file);
+  userFile = file
+  const content = fs.readFileSync(userFile).toString();
+  app.addRecentDocument(userFile);
   //targetWindow.setRepresentedFilename(file);
-  targetWindow.webContents.send('file-opened', file, content);
+  targetWindow.webContents.send('file-opened', userFile, content);
   createApplicationMenu();
 };
 
@@ -162,6 +166,20 @@ const openFolder = exports.openFolder = (targetWindow, folder) => {
   targetWindow.webContents.send('folder-opened', folder, content);
   createApplicationMenu();
 };
+
+const saveMarkdown = exports.saveMarkdown = (targetWindow, userFile, content) => {
+  if (!userFile) {
+    userFile = dialog.showSaveDialog(targetWindow, {
+      title: 'Save Markdown',
+      defaultPath: app.getPath('documents'),
+   });
+  }
+  if (!userFile) return;
+    console.log(userFile, content);
+    openFile(targetWindow, userFile);
+ };
+
+ipcMain.handle('saveFileFromUser', saveMarkdown)
 
 ipcMain.handle('getFileFromUser', getFileFromUser)
 
