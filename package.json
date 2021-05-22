@@ -44,6 +44,7 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.14.3",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "estree-walker": "^1.0.1",
@@ -70,7 +71,7 @@
     "babel": "^6.23.0",
     "chokidar": "^3.5.1",
     "concurrently": "^5.1.0",
-    "electron": "8.0.2",
+    "electron": "^8.0.2",
     "rollup": "^2.26.10",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",

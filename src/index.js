@@ -1,11 +1,9 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, nativeTheme } = require('electron');
 const createApplicationMenu = require('./application-menu');
 const path = require('path');
 const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
-
-
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -17,6 +15,7 @@ const windows = new Set();
 const openFiles = new Map();
 
 app.on('ready', () => {
+  
   createApplicationMenu();
   createWindow();
 });
@@ -32,7 +31,7 @@ app.on('activate', (event, hasVisibleWindows) => {
 });
 
 const createWindow = exports.createWindow = () => {
-
+  
   process.env.NODE_ENV = 'development';
   
 
@@ -49,7 +48,10 @@ const createWindow = exports.createWindow = () => {
   let newWindow = new BrowserWindow({ x, y, show: false, webPreferences: {
     nodeIntegration: true,
     contextIsolation: false,
+    
   }});
+
+  nativeTheme.themeSource = 'dark'
 
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
@@ -81,10 +83,10 @@ const createWindow = exports.createWindow = () => {
 
   let watcher;
   if (process.env.NODE_ENV === 'development') {
-  watcher = require('chokidar').watch(path.join(__dirname, '../public'), { ignoreInitial: true });
-  watcher.on('change', () => {
-  newWindow.reload();
-  });
+    watcher = require('chokidar').watch(path.join(__dirname, '../public'), { ignoreInitial: true });
+    watcher.on('change', () => {
+      newWindow.reload();
+    });
   }
 
   newWindow.on('closed', () => {

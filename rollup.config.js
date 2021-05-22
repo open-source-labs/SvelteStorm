@@ -33,8 +33,6 @@ export default {
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
-			// we'll extract any component CSS out into
-			// a separate file — better for performance
 			css: css => {
 				css.write('bundle.css');
 			},
@@ -53,7 +51,6 @@ export default {
 			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/'),
 			preferBuiltins: false
 		}),
-		commonjs(),
 		postcss({
 			extract: true,
 			minimize: true,
@@ -65,6 +62,10 @@ export default {
 				}]
 			]
 		}),
+		// monaco({
+    //   languages: ['json'],
+    // }),
+		commonjs(),
 
         !production & serve(),
 		// Watch the `public` directory and refresh the

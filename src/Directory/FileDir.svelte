@@ -92,9 +92,26 @@
 <!-- CSS -->
 <style>
     .directoryContainer{
-        overflow: auto;
+        max-height: 50vh;
+        overflow-y: scroll;
         display: flex;
         flex-direction: column;
         align-content: flex-start;
     }
+    .directoryContainer::-webkit-scrollbar {
+    width: 12px;
+}
+
+.directoryContainer::-webkit-scrollbar-track:hover {
+    -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3); 
+    /* border-radius: 0px; */
+}
+
+.directoryContainer::-webkit-scrollbar-thumb:hover {
+    /* border-radius: 10px; */
+    background-color: #e28e2d;
+    transition: background-color 2s ease-in-out;
+    /* animation: fadeIn 5s; */
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);  */
+}
 </style>
