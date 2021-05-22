@@ -1,20 +1,17 @@
 <script>
-  import {  afterUpdate, onMount } from 'svelte'
-  // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+  import {  afterUpdate, onMount } from 'svelte';
   import * as monaco from 'monaco-editor';
-  const {ipcRenderer} = require('electron');
-  
-  // export const value;
-  // export const language;
-  let containerElt;
-  export let monacoValue;
-  export let monacoLang;
+  const { remote, ipcRenderer } = require('electron');
+  const currentWindow = remote.getCurrentWindow();
+  const fs = require('fs');
+  const path = require('path')
 
-  ipcRenderer.on('file-opened', function (evt, file, content) {
-      monacoValue = content.split(/\r?\n/);
-      monacoLang = file.split('.').pop();
-      console.log(monacoValue, monacoLang)
-  });
+  export let value;
+  export let language;
+  let monEditor;
+  let containerElt;
+  // export let monacoValue;
+  // export let monacoLang;
  
   const getLanguage = (lang) => {
       switch (lang) {
@@ -37,27 +34,46 @@
         default:
           return undefined;
       }
-  };
+  }
+  ipcRenderer.on('file-opened', function (evt, file, content) {
+      value = content.split(/\r?\n/);
+      language = file.split('.').pop();
+      let title = 'Svelte Storm';
+      if (file) { title = `${path.basename(file)} - ${title}`; }
+      currentWindow.setTitle(title);
+      monEditor.setValue(value.join('\n'))
+      monaco.editor.setModelLanguage(monEditor.getModel(),getLanguage(language))
+  });
 
-  afterUpdate(() => {
-    monaco.editor.create(containerElt, {
-      value: monacoValue ? monacoValue.join('\n') : '[]',
-      language: monacoLang ? getLanguage(monacoLang) : 'html',
+  const createEditor = () => {
+    monEditor = monaco.editor.create(containerElt, {
+      value: value.join('\n'),
+      language: getLanguage(language),
       theme: 'vs-dark',
-      // model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
       wordWrap: 'on',
+      automaticLayout: true,
     })
+  }
+
+  onMount(() => {
+     createEditor()
   })
+        
+	afterUpdate(() => {
+    if(monEditor) {
+          monEditor.onDidChangeModelContent(() => {
+          // console.log(monEditor.getValue())
+        })
+      }
+	});
+
+  ipcRenderer.on('save-markdown',  function (file, content) {
+    ipcRenderer.send('synchronous-message', monEditor.getValue())
+  });
 
 </script>
-  
-<style>
-  .monaco {
-    position: relative;
-    width: 100%;
-    height: auto;
-  }
-</style>
 
 <svelte:head />
-<div class="monaco" bind:this={containerElt} />
+<div class={$$props.class} bind:this={containerElt} />
+
+  

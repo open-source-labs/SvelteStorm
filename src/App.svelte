@@ -5,20 +5,22 @@
     import { afterUpdate, onMount } from 'svelte';
     import './xterm.css';
     import DirectoryData from './Utilities/DirectoryStore';
-    import { Tabs, TabList, TabPanel, Tab } from './MonacoComponents/Tabs/tabs';
-    const fs = require('fs');
+    import { Tabs, TabList, Tab, TabPanel } from './MonacoComponents/Tabs/tabs';
+    export let orientation = 'columns';
+    export let monacoValue;
+    export let monacoLang;
 
-    const {ipcRenderer} = require('electron');
+    const { remote, ipcRenderer } = require('electron');
+    const currentWindow = remote.getCurrentWindow();
+
+    const fs = require('fs');
+    const path = require('path')
+
     const Terminal = require('xterm').Terminal
 
     const fitAddon = new FitAddon();
     const term = new Terminal();
     let counter = 0;
-
-    export let orientation = 'columns';
-    export let monacoValue = [];
-    export let monacoLang = 'html';
-    let fileName;
 
     let readData = '';
     const unsub = DirectoryData.subscribe(data =>{
@@ -26,6 +28,11 @@
           readData = fs.readFileSync(data.openFilePath).toString();
           monacoValue = readData.split(/\r?\n/);
           monacoLang = data.openFilePath.split('.').pop();
+
+          monacoLang = path.basename(data.openFilePath).split('.').pop()
+          let title = 'Svelte Storm';
+          if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+          currentWindow.setTitle(title);
           counter++;
         }
     });
@@ -44,18 +51,14 @@
 
         term.onData(e => {
             ipcRenderer.send("terminal-into", e);
-        } );
+        });
         ipcRenderer.on('terminal-incData', (event, data) => {
             term.write(data);
         })
     });
 
-    
-      
-
-</script>
-
-<style>
+  </script>
+  <style>
 
   body {
     height: 100vh;
@@ -72,13 +75,13 @@
       color: #444;
   }
 
-  .box {
-    background-color: rgb(233, 217, 186);
-    color: rgb(226, 142, 45);
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 150%;
-  }
+      .box {
+        background-color: rgb(233, 217, 186);
+        color: rgb(226, 142, 45);
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 150%;
+      }
 
   .a {
     grid-column: 1 ;
@@ -86,6 +89,7 @@
   }
 
   .b {
+    overflow: scroll; 
     grid-column: 2 / 4 ;
     grid-row: 1 / 5;
   }
@@ -110,11 +114,16 @@
     width: 100%;
   }
 
+  .b :global(.childClass) {
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
   iframe:focus {
     outline: none;
   }
-  
-  
+
 </style>
 
   <body class:orientation>
@@ -125,22 +134,24 @@
       <div class="box b">
         <Tabs class="tabs">
           <TabList>
-            <Tab>{monacoLang}</Tab>
-            <!-- <Tab>two</Tab>
-            <Tab>three</Tab> -->
+            <Tab>{Monaco.value}</Tab>
+            <Tab>two</Tab>
+            <Tab>three</Tab>
           </TabList>
         
           <TabPanel>
-            <Monaco bind:value={monacoValue} bind:language={monacoLang} />
-          </TabPanel>
-        
-          <!-- <TabPanel>
-            <h2>Second panel</h2>
+            <Monaco class="childClass" value={[]}/>
           </TabPanel>
         
           <TabPanel>
-            <h2>Third panel</h2>
-          </TabPanel> -->
+            <Monaco class="childClass" value={[]}/>
+          </TabPanel>
+        
+          <TabPanel>
+            <Monaco class="childClass" value={[]}/>
+          </TabPanel>
+
+          
         
         </Tabs>
         <!-- {#if monacoValue} -->
@@ -148,7 +159,10 @@
         <!-- {:else}
             <Monaco value={[]}/>
         {/if} -->
-        </div>
+        <!-- {#if monacoValue}
+          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
+        {:else} -->
+      </div>
       <div class="box c">
           <h1>State Manager</h1>
       </div>

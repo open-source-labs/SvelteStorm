@@ -45,6 +45,12 @@
 	});
 </script>
 
+<style>
+.tabs {
+    height: 100%;
+}
+</style>
+
 <div class="tabs">
 	<slot></slot>
 </div>
