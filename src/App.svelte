@@ -17,16 +17,14 @@
 
     export let orientation = 'columns';
     export let monacoValue;
-    export let monacoLang;
+    export let monacoLang = 'html';
 
     let readData = '';
     const unsub = DirectoryData.subscribe(data =>{
-        // console.log('File Directory Store Subscription');
-        // console.log('data here',data)
         if(data.fileRead){
           readData = fs.readFileSync(data.openFilePath).toString();
           monacoValue = readData.split(/\r?\n/);
-          console.log(readData);
+          monacoLang = data.openFilePath.split('.').pop()
           counter++;
         }
     });
@@ -53,28 +51,28 @@
 
     ipcRenderer.on('file-opened', function (evt, file, content) {
         monacoValue = content.split(/\r?\n/);
-        console.log(monacoValue);
-        console.log(file);
-        monacoLang = file.split('.').pop()
+        monacoLang = file.split('.').pop();
         counter++;
     });
 
 </script>
 
 <style>
-body {
-  height: 100vh;
-  width: 100vw;
-}
-.wrapper {
-    height: 100%;
-    display: grid;
-    grid-gap: 1px;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    background-color: #fff;
-    color: #444;
-}
+
+  body {
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .wrapper {
+      height: 100%;
+      display: grid;
+      grid-gap: 1px;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      background-color: #fff;
+      color: #444;
+  }
 
   .box {
     background-color: rgb(233, 217, 186);
@@ -88,10 +86,12 @@ body {
     grid-column: 1 ;
     grid-row: 1 / 5;
   }
+
   .b {
     grid-column: 2 / 4 ;
     grid-row: 1 / 5;
   }
+
   .c {
     grid-column: 1 / 3 ;
     grid-row: 5 ;
@@ -101,20 +101,24 @@ body {
     grid-column: 4 / 6;
     grid-row: 1 / 5;
   }
+
   .e {
     grid-column: 3 / 6;
     grid-row: 5;
   }
+
   .webpage {
     height: 100%;
     width: 100%;
   }
+
   iframe:focus {
     outline: none;
   }
+
 </style>
 
-  <body  class:orientation>
+  <body class:orientation>
   <main class="wrapper" >
       <div class="box a">
           <FileDir />

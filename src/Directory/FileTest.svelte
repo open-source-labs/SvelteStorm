@@ -22,8 +22,6 @@
         DirectoryData.update(currentData =>{
                     return {...currentData,openFilePath,fileRead:true};
                 })        
-        
-        
     }
 
 </script>
@@ -49,6 +47,7 @@
 </div>
 
 <style>
+    
     .liFolderClosed {
         font-size: 15px;
         cursor: pointer;
@@ -60,6 +59,7 @@
         background-size: 15px;
         /* border: 1px solid black; */
     }
+
     .liFolderOpen {
         font-size: 15px;
         cursor: pointer;
@@ -73,6 +73,7 @@
         background-size: 15px;
         /* border: 1px solid black; */
     }
+
     .liFiles {
         font-size: 15px;
         cursor: pointer;
