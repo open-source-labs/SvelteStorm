@@ -175,9 +175,10 @@ const saveFile = exports.saveFile = (targetWindow) => {
   ipcMain.on('synchronous-message', (event, arg) => {
     //console.log(arg) // prints "ping"
     fs.writeFileSync(userFile.filePaths[0], arg)
+    openFile(targetWindow, userFile.filePaths[0]);
   })
 
-  openFile(targetWindow, userFile.filePaths[0]);
+  
   
  };
 

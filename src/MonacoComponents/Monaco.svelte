@@ -2,12 +2,13 @@
   import {  onMount, beforeUpdate, afterUpdate } from 'svelte'
   // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
   import * as monaco from 'monaco-editor';
-  const { ipcRenderer } = require('electron');
-  // const path = window.require('path');
-  // const fs = window.require('fs');
-  
+  const { remote, ipcRenderer } = require('electron');
+  const currentWindow = remote.getCurrentWindow();
+  const fs = require('fs');
+  const path = require('path')
+
   export let value;
-  export let language;
+  let language;
   let monEditor;
   let containerElt;
  
@@ -37,20 +38,32 @@
 
     };
 
-    const createEditor = () => {
+  ipcRenderer.on('file-opened', function (evt, file, content) {
+      console.log(content)
+      value = content.split(/\r?\n/);
+      language = file.split('.').pop();
+      let title = 'Svelte Storm';
+      if (file) { title = `${path.basename(file)} - ${title}`; }
+      currentWindow.setTitle(title);
+      console.log(value)
+      monEditor.setValue(value.join('\n'))
+      monaco.editor.setModelLanguage(monEditor.getModel(),getLanguage(language))
+      console.log(monEditor.getValue())
+  });
 
-      monEditor = monaco.editor.create(containerElt, {
-        value: value.join('\n'),
-        language: getLanguage(language),
-        theme: 'vs-dark',
-        wordWrap: 'on',
-      })
-
-    }
-
-    onMount(() => {
-        createEditor()
+  const createEditor = () => {
+    monEditor = monaco.editor.create(containerElt, {
+      value: value.join('\n'),
+      language: getLanguage(language),
+      theme: 'vs-dark',
+      wordWrap: 'on',
+      automaticLayout: true,
     })
+
+  }
+  onMount(() => {
+     createEditor()
+  })
         
 	afterUpdate(() => {
     if(monEditor) {
@@ -64,16 +77,8 @@
       ipcRenderer.send('synchronous-message', monEditor.getValue())
     });
 </script>
-  
-<style>
-  .monaco {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-</style>
 
 <svelte:head />
-<div class="monaco" bind:this={containerElt} />
+<div class={$$props.class} bind:this={containerElt} />
 
   
