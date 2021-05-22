@@ -6,25 +6,31 @@
     import { onMount } from 'svelte';
     import './xterm.css';
     import DirectoryData from './Utilities/DirectoryStore';
-    const fs = require('fs');
+    export let orientation = 'columns';
+    export let monacoValue;
+    export let monacoLang;
 
-    const {ipcRenderer} = require('electron');
+    const { remote, ipcRenderer } = require('electron');
+    const currentWindow = remote.getCurrentWindow();
+
+    const fs = require('fs');
+    const path = require('path')
+
     const Terminal = require('xterm').Terminal
 
     const fitAddon = new FitAddon();
     const term = new Terminal();
     let counter = 0;
 
-    export let orientation = 'columns';
-    export let monacoValue;
-    export let monacoLang = 'html';
-
     let readData = '';
     const unsub = DirectoryData.subscribe(data =>{
         if(data.fileRead){
           readData = fs.readFileSync(data.openFilePath).toString();
           monacoValue = readData.split(/\r?\n/);
-          monacoLang = data.openFilePath.split('.').pop()
+          monacoLang = path.basename(data.openFilePath).split('.').pop()
+          let title = 'Svelte Storm';
+          if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+          currentWindow.setTitle(title);
           counter++;
         }
     });
@@ -43,7 +49,7 @@
 
         term.onData(e => {
             ipcRenderer.send("terminal-into", e);
-        } );
+        });
         ipcRenderer.on('terminal-incData', (event, data) => {
             term.write(data);
         })
@@ -53,11 +59,13 @@
         monacoValue = content.split(/\r?\n/);
         monacoLang = file.split('.').pop();
         counter++;
+        let title = 'Svelte Storm';
+        if (file) { title = `${path.basename(file)} - ${title}`; }
+        currentWindow.setTitle(title);
     });
 
-</script>
-
-<style>
+  </script>
+  <style>
 
   body {
     height: 100vh;
@@ -74,13 +82,13 @@
       color: #444;
   }
 
-  .box {
-    background-color: rgb(233, 217, 186);
-    color: rgb(226, 142, 45);
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 150%;
-  }
+      .box {
+        background-color: rgb(233, 217, 186);
+        color: rgb(226, 142, 45);
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 150%;
+      }
 
   .a {
     grid-column: 1 ;
