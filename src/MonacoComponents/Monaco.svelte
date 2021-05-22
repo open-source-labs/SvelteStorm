@@ -1,30 +1,13 @@
 <script>
-    import {  onMount } from 'svelte'
-    // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-    import * as monaco from 'monaco-editor';
-    // const path = window.require('path');
-    // const fs = window.require('fs');
-    
-    export let value;
-    export let language;
-    let containerElt;
-
-    // monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-    //     noSemanticValidation: true,
-    //     noSyntaxValidation: true
-    // });
-  // const compilerOptions = {
-  //   allowJs: true,
-  //   allowSyntheticDefaultImports: true,
-  //   alwaysStrict: true,
-  //   jsx: 'React',
-  //   jsxFactory: 'React.createElement',
-  // };
-
-  // monacoEditor.languages.typescript.typescriptDefaults.setEagerModelSync(true);
-  // monacoEditor.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-  // monacoEditor.languages.typescript.typescriptDefaults.setCompilerOptions(compilerOptions);
-  // monacoEditor.languages.typescript.javascriptDefaults.setCompilerOptions(compilerOptions);
+  import {  onMount } from 'svelte'
+  // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+  import * as monaco from 'monaco-editor';
+  // const path = window.require('path');
+  // const fs = window.require('fs');
+  
+  export let value;
+  export let language;
+  let containerElt;
  
 
   const getLanguage = (lang) => {
@@ -50,6 +33,7 @@
           return undefined;
       }
   };
+<<<<<<< HEAD
     onMount(() => {
       
       monaco.editor.create(containerElt, {
@@ -59,7 +43,18 @@
         // model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
         wordWrap: 'on',
       })
+=======
+
+  onMount(() => {
+    monaco.editor.create(containerElt, {
+      value: value.join('\n'),
+      language: getLanguage(language),
+      theme: 'vs-dark',
+      // model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
+      wordWrap: 'on',
+>>>>>>> afc91f269f64bd4b698d3400fe9c92e51a2c7512
     })
+  })
 
 </script>
   
@@ -70,7 +65,7 @@
     height: 100%;
   }
 </style>
-  
+
 <svelte:head />
 <div class="monaco" bind:this={containerElt} />
 

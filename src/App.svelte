@@ -19,7 +19,7 @@
     const Terminal = require('xterm').Terminal
 
     const fitAddon = new FitAddon();
-    const term = new Terminal({cursorBlink: true});
+    const term = new Terminal();
     let counter = 0;
 
     let readData = '';
@@ -36,9 +36,17 @@
     });
 
     onMount(() => {
-        term.loadAddon(fitAddon);
+		  console.log('the component has mounted');
+       term.setOption('cursorStyle', 'block');
+       term.setOption('cursorBlink', true);
+       term.setOption('fontSize', 14);
+       
+       term.loadAddon(fitAddon);
         term.open(document.getElementById('xterm'));
         fitAddon.fit();
+
+        term.write('\x1b[32mWelcome to Svelte Storm!\x1b[m\r\n');
+
         term.onData(e => {
             ipcRenderer.send("terminal-into", e);
         });
@@ -49,7 +57,7 @@
 
     ipcRenderer.on('file-opened', function (evt, file, content) {
         monacoValue = content.split(/\r?\n/);
-        monacoLang = file.split('.').pop()
+        monacoLang = file.split('.').pop();
         counter++;
         let title = 'Svelte Storm';
         if (file) { title = `${path.basename(file)} - ${title}`; }
@@ -59,19 +67,20 @@
   </script>
   <style>
 
-    body {
-      height: 100vh;
-      width: 100vw;
-    }
-    .wrapper {
-        height: 100%;
-        display: grid;
-        grid-gap: 10px;
-        grid-template-columns: repeat(5, 1fr);
-        grid-template-rows: repeat(5, 1fr);
-        background-color: #fff;
-        color: #444;
-    }
+  body {
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .wrapper {
+      height: 100%;
+      display: grid;
+      grid-gap: 1px;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      background-color: #fff;
+      color: #444;
+  }
 
       .box {
         background-color: rgb(233, 217, 186);
@@ -81,37 +90,43 @@
         font-size: 150%;
       }
 
-      .a {
-        grid-column: 1 ;
-        grid-row: 1 / 5;
-      }
-      .b {
-        grid-column: 2 / 4 ;
-        grid-row: 1 / 5;
-      }
-      .c {
-        grid-column: 1 / 3 ;
-        grid-row: 5 ;
-      }
+  .a {
+    grid-column: 1 ;
+    grid-row: 1 / 5;
+  }
 
-      .d {
-        grid-column: 4 / 6;
-        grid-row: 1 / 5;
-      }
-      .e {
-        grid-column: 3 / 6;
-        grid-row: 5;
-      }
-      .webpage {
-        height: 100%;
-        width: 100%;
-      }
-      iframe:focus {
-        outline: none;
-      }
+  .b {
+    grid-column: 2 / 4 ;
+    grid-row: 1 / 5;
+  }
+
+  .c {
+    grid-column: 1 / 3 ;
+    grid-row: 5 ;
+  }
+
+  .d {
+    grid-column: 4 / 6;
+    grid-row: 1 / 5;
+  }
+
+  .e {
+    grid-column: 3 / 6;
+    grid-row: 5;
+  }
+
+  .webpage {
+    height: 100%;
+    width: 100%;
+  }
+
+  iframe:focus {
+    outline: none;
+  }
+
 </style>
 
-  <body  class:orientation>
+  <body class:orientation>
   <main class="wrapper" >
       <div class="box a">
           <FileDir />
