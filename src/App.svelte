@@ -1,5 +1,4 @@
 <script>
-    //import Monaco from './components/monaco/monaco-editor.svelte';
     import FileDir from './Directory/FileDir.svelte'
     import Monaco from './Monaco.svelte'
     import { FitAddon } from 'xterm-addon-fit'
@@ -21,8 +20,8 @@
 
     let readData = '';
     const unsub = DirectoryData.subscribe(data =>{
-        console.log('File Directory Store Subscription');
-        console.log('data here',data)
+        // console.log('File Directory Store Subscription');
+        // console.log('data here',data)
         if(data.fileRead){
           readData = fs.readFileSync(data.openFilePath).toString();
           monacoValue = readData.split(/\r?\n/);
@@ -49,7 +48,7 @@
     ipcRenderer.on('file-opened', function (evt, file, content) {
         monacoValue = content.split(/\r?\n/);
         counter++;
-    });
+    }); 
 
 
     

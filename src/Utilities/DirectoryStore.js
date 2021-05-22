@@ -4,6 +4,8 @@ const DirectoryData = writable({
     fileTree: [],
     openFilePath :'',
     fileRead: false,
+    activeFile: '',
+    rename: false,
 });
 
 

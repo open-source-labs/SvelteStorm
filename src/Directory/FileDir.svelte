@@ -2,6 +2,7 @@
     import FileTest from './FileTest.svelte';    
     import { onMount, onDestroy} from 'svelte';
     import DirectoryData from '../Utilities/DirectoryStore';
+    const fs = require('fs');
     let savedTree = [];
     var remote = window.require('electron').remote;
     var electronFs = remote.require('fs');
@@ -11,8 +12,8 @@
     let directory;
 
     const unsub = DirectoryData.subscribe(data =>{
-        console.log('File Directory Store Subscription');
-        console.log('data',data);
+        // console.log('File Directory Store Subscription');
+        // console.log('data',data);
     });
 
     // store 
@@ -39,9 +40,21 @@
                     return savedTree;
                 })
                 //console.log(Array.isArray(savedTree))
-                console.log('fileTree',savedTree);
+                // console.log('fileTree',savedTree);
             }
     })
+
+
+
+    // if(directory) {
+    //     console.log('directory', directory);
+    //     fs.watch(directory, (eventType, filename) => {
+    //         console.log("eventType", eventType)
+    //         if(eventType === 'rename'){
+    //             console.log('file name was change!')
+    //         }
+    //     })
+    // }
 
     
     class FileTree {
@@ -87,7 +100,9 @@
 <!-- HTML -->
 
 <div class=directoryContainer>
-    <FileTest fileTree={savedTree} />
+    {#if directory} 
+    <FileTest directory={directory} fileTree={savedTree} />
+    {/if}
 </div>
 <!-- CSS -->
 <style>
