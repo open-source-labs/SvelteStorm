@@ -3,7 +3,6 @@
     import DirectoryData from '../Utilities/DirectoryStore';
     const fs = require('fs');
     const unsub = DirectoryData.subscribe(data =>{
-        // console.log('Create Menu Store Subscription');
     });
 
     const renameHandler = () => {
@@ -15,7 +14,13 @@
     }
 
     const deleteHandler = () => {
-        console.log('Delete Handler is clicked!')
+        console.log('Delete Handler is clicked!');
+        fs.unlinkSync(filePath);
+        DirectoryData.update( currentData => {
+            return {...currentData, deleteFile:true};
+            
+        })
+
     }
 
 </script>
@@ -41,20 +46,20 @@
     height: 100px;
 }
 .create-button {
-  width: 90%;
-  height: 20px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-top: 5px;
+    width: 90%;
+    height: 20px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 5px;
   /* border-radius: 10px; */
 }
 
 .create-button:hover {
-  background-color: rgb(33, 37, 43);
-  color: white;
-  font-weight: 550;
+    background-color: rgb(33, 37, 43);
+    color: white;
+    font-weight: 550;
 }
 </style>
 

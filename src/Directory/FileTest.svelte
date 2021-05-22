@@ -7,6 +7,7 @@
     const fs = require('fs');
     const fileState = {};
     let rename = false;
+    let deleteFile = false;
 
     // console.log('first console for directory', directory)
         
@@ -16,29 +17,10 @@
     // console.log('newName', newName) 
 
 
-    // onMount(() => {
-    //     if(directory) {
-    //     console.log('directory', directory);
-    //     fs.watch(directory, (eventType, filename) => {
-    //         console.log("eventType", eventType)
-    //         if(eventType === 'rename'){
-    //             console.log('file name was change!')
-    //         }
-    //     })
-    // }
-    // });
+    onMount(() => {
+        console.log('mounting in Test')
+    });
 
-    // afterUpdate(() => {
-    //     if(directory) {
-    //     console.log('directory', directory);
-    //     fs.watch(directory, (eventType, filename) => {
-    //         console.log("eventType", eventType)
-    //         if(eventType === 'rename'){
-    //             console.log('file name was change!')
-    //         }
-    //     })
-    // }
-    // });
 
 
     // move into OnMount for all subs
@@ -53,7 +35,7 @@
         else fileState[path] = false;
         // console.log('fileState',fileState);
     }
-    // console.log(fileTree)
+
 
     const dblClickHandler = (path) => {
         // console.log(`clicking now on ${path}`);  
@@ -88,7 +70,7 @@
         // e.currentTarget.value = "";
         //  rename = false;
         //  activeFile = '';
-         }
+     }
     }
 
     const resetRename = () => {
@@ -97,9 +79,12 @@
             return {...currentData, rename: false, activeFile: ''};
         })
     }
-    // a = "www.example.com/hi/test/home.html";
-    // b = a.substr(0, a.lastIndexOf('/'));
- 
+    
+
+    const deleteHandler = () => {
+        console.log('In delete handler');
+        
+    }
  
 
 </script>
@@ -109,7 +94,19 @@
 {#each fileTree as {path,name, items}}
 <ul>
     {#if items.length > 0}
-    <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"}>{name}</li>
+        {#if rename && activeFile === path}
+                <span>
+                    <input 
+                    on:keypress={(e) => renameHandler(e,path)} 
+                    value={newName}
+                    type="text"/>
+                </span>
+        {:else}
+        <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={resetRename}>{name}</li>
+            {#if activeFile === path}
+            <CreateMenu filePath={path} />
+            {/if}
+        {/if}
     {:else}
     <!-- if rename:true <input> 
     

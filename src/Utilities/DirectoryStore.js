@@ -6,6 +6,7 @@ const DirectoryData = writable({
     fileRead: false,
     activeFile: '',
     rename: false,
+    deleteFile: false,
 });
 
 

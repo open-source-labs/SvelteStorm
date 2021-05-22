@@ -11,7 +11,7 @@
     
     let directory;
     let rename;
-    let counter = 0;
+    
 
     const unsub = DirectoryData.subscribe(data =>{
         // console.log('File Directory Store Subscription');
@@ -24,28 +24,14 @@
         // console.log('Directory mounted')
     });
 
-    afterUpdate(() => {0
+    afterUpdate(() => {
         if(directory) {
         // console.log('directory', directory);
         fs.watch(directory[0], (eventType, filename) => {
             console.log("eventType", eventType)
-            if(eventType === 'rename'){
-                counter ++;
-                if(counter < 2) {
+            if(eventType === 'rename'){  
                 console.log(' IN RUN BUILD');
-                var fileTree = new FileTree(directory[0]);        
-                fileTree.build();
-                
-                savedTree = fileTree.items;
-                savedTree.sort((a,b) => {
-                    return b.items.length - a.items.length;
-                })
-                DirectoryData.update(currentData =>{
-                    return savedTree;
-                })
-                counter = 0;
-                }
-
+                readFileNames(directory);              
             }
         })
         }
@@ -58,34 +44,29 @@
 
     ipcRenderer.on('folder-opened', function (evt, file, content) {
         directory = content;
-        if (directory && directory[0]){        
-                var fileTree = new FileTree(directory[0]);        
-                fileTree.build();
-                
-                savedTree = fileTree.items;
-                savedTree.sort((a,b) => {
-                    return b.items.length - a.items.length;
-                })
-                DirectoryData.update(currentData =>{
-                    return savedTree;
-                })
-                //console.log(Array.isArray(savedTree))
-                // console.log('fileTree',savedTree);
-            }
+        if (directory && directory[0]){           
+            readFileNames(directory);
+        }
     })
 
 
 
-    if(directory) {
-        console.log('directory', directory);
-        fs.watch(directory[0], (eventType, filename) => {
-            console.log("eventType", eventType)
-            if(eventType === 'rename'){
-                console.log('file name was change!')
-            }
+    
+
+
+    //method to read all the files inside the directory
+    const readFileNames = (directory) => {
+        var fileTree = new FileTree(directory[0]);        
+        fileTree.build();
+        
+        savedTree = fileTree.items;
+        savedTree.sort((a,b) => {
+            return b.items.length - a.items.length;
+        })
+        DirectoryData.update(currentData =>{
+            return savedTree;
         })
     }
-
     
     class FileTree {
         constructor(path, name = null){
@@ -153,10 +134,7 @@
 }
 
 .directoryContainer::-webkit-scrollbar-thumb:hover {
-    /* border-radius: 10px; */
     background-color: #e28e2d;
     transition: background-color 2s ease-in-out;
-    /* animation: fadeIn 5s; */
-    /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);  */
 }
 </style>
