@@ -55,15 +55,6 @@
         })
     });
 
-    ipcRenderer.on('file-opened', function (evt, file, content) {
-        monacoValue = content.split(/\r?\n/);
-        monacoLang = file.split('.').pop();
-        counter++;
-        let title = 'Svelte Storm';
-        if (file) { title = `${path.basename(file)} - ${title}`; }
-        currentWindow.setTitle(title);
-    });
-
   </script>
   <style>
 
@@ -96,6 +87,7 @@
   }
 
   .b {
+    overflow: scroll; 
     grid-column: 2 / 4 ;
     grid-row: 1 / 5;
   }
@@ -120,6 +112,12 @@
     width: 100%;
   }
 
+  .b :global(.childClass) {
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
   iframe:focus {
     outline: none;
   }
@@ -132,11 +130,11 @@
           <FileDir />
       </div>
       <div class="box b">
-        {#if monacoValue}
+        <!-- {#if monacoValue}
           <Monaco bind:value={monacoValue} bind:language={monacoLang} />
-        {:else}
-            <Monaco value={[]}/>
-        {/if}
+        {:else} -->
+            <Monaco class="childClass" value={[]}/>
+
       </div>
       <div class="box c">
           <h1>State Manager</h1>
