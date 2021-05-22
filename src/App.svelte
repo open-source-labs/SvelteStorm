@@ -1,11 +1,11 @@
 <script>
-    //import Monaco from './components/monaco/monaco-editor.svelte';
     import FileDir from './Directory/FileDir.svelte'
     import Monaco from './MonacoComponents/Monaco.svelte'
     import { FitAddon } from 'xterm-addon-fit'
-    import { onMount } from 'svelte';
+    import { afterUpdate, onMount } from 'svelte';
     import './xterm.css';
     import DirectoryData from './Utilities/DirectoryStore';
+    import { Tabs, TabList, TabPanel, Tab } from './MonacoComponents/Tabs/tabs';
     const fs = require('fs');
 
     const {ipcRenderer} = require('electron');
@@ -16,15 +16,16 @@
     let counter = 0;
 
     export let orientation = 'columns';
-    export let monacoValue;
+    export let monacoValue = [];
     export let monacoLang = 'html';
+    let fileName;
 
     let readData = '';
     const unsub = DirectoryData.subscribe(data =>{
         if(data.fileRead){
           readData = fs.readFileSync(data.openFilePath).toString();
           monacoValue = readData.split(/\r?\n/);
-          monacoLang = data.openFilePath.split('.').pop()
+          monacoLang = data.openFilePath.split('.').pop();
           counter++;
         }
     });
@@ -49,11 +50,8 @@
         })
     });
 
-    ipcRenderer.on('file-opened', function (evt, file, content) {
-        monacoValue = content.split(/\r?\n/);
-        monacoLang = file.split('.').pop();
-        counter++;
-    });
+    
+      
 
 </script>
 
@@ -115,7 +113,8 @@
   iframe:focus {
     outline: none;
   }
-
+  
+  
 </style>
 
   <body class:orientation>
@@ -124,12 +123,32 @@
           <FileDir />
       </div>
       <div class="box b">
-        {#if monacoValue}
-          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
-        {:else}
+        <Tabs class="tabs">
+          <TabList>
+            <Tab>{monacoLang}</Tab>
+            <!-- <Tab>two</Tab>
+            <Tab>three</Tab> -->
+          </TabList>
+        
+          <TabPanel>
+            <Monaco bind:value={monacoValue} bind:language={monacoLang} />
+          </TabPanel>
+        
+          <!-- <TabPanel>
+            <h2>Second panel</h2>
+          </TabPanel>
+        
+          <TabPanel>
+            <h2>Third panel</h2>
+          </TabPanel> -->
+        
+        </Tabs>
+        <!-- {#if monacoValue} -->
+          <!-- <Monaco bind:value={monacoValue} bind:language={monacoLang} /> -->
+        <!-- {:else}
             <Monaco value={[]}/>
-        {/if}
-      </div>
+        {/if} -->
+        </div>
       <div class="box c">
           <h1>State Manager</h1>
       </div>

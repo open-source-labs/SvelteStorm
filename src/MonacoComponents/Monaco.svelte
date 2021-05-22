@@ -1,15 +1,21 @@
 <script>
-  import {  onMount } from 'svelte'
+  import {  afterUpdate, onMount } from 'svelte'
   // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
   import * as monaco from 'monaco-editor';
-  // const path = window.require('path');
-  // const fs = window.require('fs');
+  const {ipcRenderer} = require('electron');
   
-  export let value;
-  export let language;
+  // export const value;
+  // export const language;
   let containerElt;
- 
+  export let monacoValue;
+  export let monacoLang;
 
+  ipcRenderer.on('file-opened', function (evt, file, content) {
+      monacoValue = content.split(/\r?\n/);
+      monacoLang = file.split('.').pop();
+      console.log(monacoValue, monacoLang)
+  });
+ 
   const getLanguage = (lang) => {
       switch (lang) {
         case 'js':
@@ -33,10 +39,10 @@
       }
   };
 
-  onMount(() => {
+  afterUpdate(() => {
     monaco.editor.create(containerElt, {
-      value: value.join('\n'),
-      language: getLanguage(language),
+      value: monacoValue ? monacoValue.join('\n') : '[]',
+      language: monacoLang ? getLanguage(monacoLang) : 'html',
       theme: 'vs-dark',
       // model: monaco.editor.createModel(this.getAttribute("value"), this.getAttribute("language")),
       wordWrap: 'on',
@@ -49,11 +55,9 @@
   .monaco {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: auto;
   }
 </style>
 
 <svelte:head />
 <div class="monaco" bind:this={containerElt} />
-
-  
