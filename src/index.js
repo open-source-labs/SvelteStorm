@@ -1,10 +1,11 @@
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, nativeTheme } = require('electron');
 const createApplicationMenu = require('./application-menu');
 const path = require('path');
 const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
 
+let userFile = ''
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -15,6 +16,7 @@ const windows = new Set();
 const openFiles = new Map();
 
 app.on('ready', () => {
+  
   createApplicationMenu();
   createWindow();
 });
@@ -30,13 +32,11 @@ app.on('activate', (event, hasVisibleWindows) => {
 });
 
 const increaseFontSize = exports.increaseFontSize = () => {
-
-
+  console.log("increase font");
 }  
 
 const decreaseFontSize = exports.decreaseFontSize = () => {
-
-
+  console.log("decreas font");
 } 
 const createWindow = exports.createWindow = () => {
   
@@ -56,7 +56,10 @@ const createWindow = exports.createWindow = () => {
   let newWindow = new BrowserWindow({ x, y, show: false, webPreferences: {
     nodeIntegration: true,
     contextIsolation: false,
+    
   }});
+
+  nativeTheme.themeSource = 'dark'
 
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
@@ -129,10 +132,13 @@ require('electron-reload')(__dirname, {
   return newWindow;
 };
 
+
 const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
   });
+
+  userFile = files
 
   if(files) {
     if (files) { openFile(targetWindow, files.filePaths[0]); }
@@ -140,7 +146,9 @@ const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
 }
 
 const openFile = exports.openFile = (targetWindow, file) => {
+  
   const content = fs.readFileSync(file).toString();
+  //console.log(fileContent)
   app.addRecentDocument(file);
   //targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
@@ -166,7 +174,23 @@ const openFolder = exports.openFolder = (targetWindow, folder) => {
   createApplicationMenu();
 };
 
+const saveFile = exports.saveFile = (targetWindow) => {
+
+
+  ipcMain.on('synchronous-message', (event, arg) => {
+    //console.log(arg) // prints "ping"
+    fs.writeFileSync(userFile.filePaths[0], arg)
+    openFile(targetWindow, userFile.filePaths[0]);
+  })
+
+ };
+
+ipcMain.handle('saveFileFromUser', saveFile)
+
 ipcMain.handle('getFileFromUser', getFileFromUser)
 
 ipcMain.handle('getFolderFromUser', getFolderFromUser)
 
+ipcMain.handle('increaseFontSize', increaseFontSize)
+
+ipcMain.handle('decreaseFontSize', decreaseFontSize)

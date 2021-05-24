@@ -3,3 +3,8 @@
 public/monaco**
 public/javascript**
 public/html**
+
+public/bundle.css
+public/svelte.css
+public/svelte.js
+public/svelte.js.map
