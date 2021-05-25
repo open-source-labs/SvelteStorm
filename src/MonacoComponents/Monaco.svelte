@@ -2,6 +2,7 @@
   import {  onMount, beforeUpdate, afterUpdate } from 'svelte'
   // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
   import * as monaco from 'monaco-editor';
+  import DirectoryData from '../Utilities/DirectoryStore';
   const { remote, ipcRenderer } = require('electron');
   const currentWindow = remote.getCurrentWindow();
   const fs = require('fs');
@@ -11,7 +12,23 @@
   let language;
   let monEditor;
   let containerElt;
- 
+  let file;
+  let messageObj; 
+
+  let readData = '';
+  const unsub = DirectoryData.subscribe(data =>{
+      file = data.openFilePath
+      if(data.fileRead){
+        readData = fs.readFileSync(data.openFilePath).toString();
+        value = readData.split(/\r?\n/);
+        language = path.basename(data.openFilePath).split('.').pop()
+        let title = 'Svelte Storm';
+        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+        currentWindow.setTitle(title);
+        monEditor.setValue(value.join('\n'))
+        monaco.editor.setModelLanguage(monEditor.getModel(),getLanguage(language))
+      }
+  });
 
   const getLanguage = (lang) => {
     console.log(lang)
@@ -60,6 +77,8 @@
       fontSize: "16px",
     })
 
+    
+
   }
   onMount(() => {
      createEditor()
@@ -72,9 +91,10 @@
         })
       }
 	});
-
-  ipcRenderer.on('save-markdown',  function (file, content) {
-      ipcRenderer.send('synchronous-message', monEditor.getValue())
+  
+  ipcRenderer.on('save-markdown',  function () {
+      messageObj = {content : monEditor.getValue(), file : file }
+      ipcRenderer.send('synchronous-message', messageObj)
     });
 </script>
 

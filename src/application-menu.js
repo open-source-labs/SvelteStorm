@@ -60,7 +60,6 @@ const createApplicationMenu = () => {
                 'There is currently no active document to save or export.'
               );
             } else {
-              console.log("Hello")
               focusedWindow.webContents.send('save-markdown');
               mainProcess.saveFile(focusedWindow);
             }
