@@ -1,17 +1,23 @@
 <script>
-  import {  onMount, beforeUpdate, afterUpdate } from 'svelte'
-  // import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+  import {  afterUpdate, onMount } from 'svelte';
   import * as monaco from 'monaco-editor';
+<<<<<<< HEAD
   import DirectoryData from '../Utilities/DirectoryStore';
   const { remote, ipcRenderer } = require('electron');
   const currentWindow = remote.getCurrentWindow();
+=======
+>>>>>>> tabbedBrowsing
   const fs = require('fs');
-  const path = require('path')
 
+  const { remote, ipcRenderer } = require('electron');
+  
   export let value;
-  let language;
+  export let language;
+  export let filePath;
+
   let monEditor;
   let containerElt;
+<<<<<<< HEAD
   let file;
   let messageObj; 
 
@@ -67,35 +73,59 @@
       monaco.editor.setModelLanguage(monEditor.getModel(),getLanguage(language))
       console.log(monEditor.getValue())
   });
+=======
+>>>>>>> tabbedBrowsing
 
-  const createEditor = () => {
+  onMount(() => {
+    // monaco.editor.setModelLanguage(monEditor.getModel(), language)
+    // createEditor();
+    // model = monaco.editor.createModel(
+    //   value,
+    // )
     monEditor = monaco.editor.create(containerElt, {
       value: value.join('\n'),
-      language: getLanguage(language),
+      language: language,
       theme: 'vs-dark',
       wordWrap: 'on',
       fontSize: "16px",
     })
+<<<<<<< HEAD
 
     
 
   }
   onMount(() => {
      createEditor()
+=======
+>>>>>>> tabbedBrowsing
   })
-        
+
 	afterUpdate(() => {
+    console.log(value)
     if(monEditor) {
-          monEditor.onDidChangeModelContent(() => {
+        fs.readFile(filePath, 'utf8', (err, res) => {
+          if (!err) {
+            monEditor.setModel(monaco.editor.createModel(res, language));
+          }
+        })
+        monEditor.onDidChangeModelContent(() => {
           console.log(monEditor.getValue())
         })
       }
 	});
+<<<<<<< HEAD
   
   ipcRenderer.on('save-markdown',  function () {
       messageObj = {content : monEditor.getValue(), file : file }
       ipcRenderer.send('synchronous-message', messageObj)
     });
+=======
+
+  ipcRenderer.on('save-markdown',  function (file, content) {
+    ipcRenderer.send('synchronous-message', monEditor.getValue())
+  });
+
+>>>>>>> tabbedBrowsing
 </script>
 
 <svelte:head />

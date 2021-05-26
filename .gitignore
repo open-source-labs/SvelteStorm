@@ -1,6 +1,11 @@
 **/node_modules
 **/package-lock.json
+<<<<<<< HEAD
 public/monaco**
 public/javascript**
 public/html**
 
+=======
+public/bundle.**
+public/svelte.**
+>>>>>>> tabbedBrowsing

@@ -1,6 +1,6 @@
 <script>
-    //import Monaco from './components/monaco/monaco-editor.svelte';
     import FileDir from './Directory/FileDir.svelte'
+<<<<<<< HEAD
     import Monaco from './MonacoComponents/Monaco.svelte'
     import { FitAddon } from 'xterm-addon-fit'
     import { onMount } from 'svelte';
@@ -41,8 +41,17 @@
             term.write(data);
         })
     });
+=======
+    import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
+    import XTerm from './XTerm.svelte';
+    
+    export let orientation = 'columns';
+>>>>>>> tabbedBrowsing
 
+    let tabs = [];
+ 
   </script>
+
   <style>
 
   body {
@@ -74,7 +83,7 @@
   }
 
   .b {
-    overflow: scroll; 
+    overflow: scroll;
     grid-column: 2 / 4 ;
     grid-row: 1 / 5;
   }
@@ -100,6 +109,7 @@
   }
 
   .b :global(.childClass) {
+    overflow: scroll;
     display: flex;
     height: 100%;
     width: 100%;
@@ -119,11 +129,7 @@
           <FileDir />
       </div>
       <div class="box b">
-        <!-- {#if monacoValue}
-          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
-        {:else} -->
-            <Monaco class="childClass" value={[]}/>
-
+          <NewTabs class="childClass" {tabs} />
       </div>
       <div class="box c">
           <h1>State Manager</h1>
@@ -136,9 +142,7 @@
         {/if}
         </div>
       <div class="box e" > 
-          <div id="xterm">
-              
-          </div>
+          <XTerm />
       </div>
   </main>
   </body>
