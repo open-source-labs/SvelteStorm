@@ -1,25 +1,21 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'
-    import Monaco from './MonacoComponents/Monaco.svelte'
-    import { FitAddon } from 'xterm-addon-fit'
-    import { afterUpdate, onMount } from 'svelte';
     import './xterm.css';
     import DirectoryData from './Utilities/DirectoryStore';
-    import { Tabs, TabList, Tab, TabPanel } from './MonacoComponents/Tabs/tabs';
+    import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
+    import XTerm from './XTerm.svelte';
+
     export let orientation = 'columns';
     export let monacoValue;
-    export let monacoLang;
+    export let monacoLang = 'html';
 
+    let tabs = [];
     const { remote, ipcRenderer } = require('electron');
     const currentWindow = remote.getCurrentWindow();
 
     const fs = require('fs');
     const path = require('path')
 
-    const Terminal = require('xterm').Terminal
-
-    const fitAddon = new FitAddon();
-    const term = new Terminal();
     let counter = 0;
 
     let readData = '';
@@ -28,7 +24,6 @@
           readData = fs.readFileSync(data.openFilePath).toString();
           monacoValue = readData.split(/\r?\n/);
           monacoLang = data.openFilePath.split('.').pop();
-
           monacoLang = path.basename(data.openFilePath).split('.').pop()
           let title = 'Svelte Storm';
           if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
@@ -37,27 +32,8 @@
         }
     });
 
-    onMount(() => {
-		  console.log('the component has mounted');
-       term.setOption('cursorStyle', 'block');
-       term.setOption('cursorBlink', true);
-       term.setOption('fontSize', 14);
-       
-       term.loadAddon(fitAddon);
-        term.open(document.getElementById('xterm'));
-        fitAddon.fit();
-
-        term.write('\x1b[32mWelcome to Svelte Storm!\x1b[m\r\n');
-
-        term.onData(e => {
-            ipcRenderer.send("terminal-into", e);
-        });
-        ipcRenderer.on('terminal-incData', (event, data) => {
-            term.write(data);
-        })
-    });
-
   </script>
+
   <style>
 
   body {
@@ -89,7 +65,7 @@
   }
 
   .b {
-    overflow: scroll; 
+    overflow: scroll;
     grid-column: 2 / 4 ;
     grid-row: 1 / 5;
   }
@@ -115,6 +91,7 @@
   }
 
   .b :global(.childClass) {
+    overflow: scroll;
     display: flex;
     height: 100%;
     width: 100%;
@@ -132,36 +109,7 @@
           <FileDir />
       </div>
       <div class="box b">
-        <Tabs class="tabs">
-          <TabList>
-            <Tab>{Monaco.value}</Tab>
-            <Tab>two</Tab>
-            <Tab>three</Tab>
-          </TabList>
-        
-          <TabPanel>
-            <Monaco class="childClass" value={[]}/>
-          </TabPanel>
-        
-          <TabPanel>
-            <Monaco class="childClass" value={[]}/>
-          </TabPanel>
-        
-          <TabPanel>
-            <Monaco class="childClass" value={[]}/>
-          </TabPanel>
-
-          
-        
-        </Tabs>
-        <!-- {#if monacoValue} -->
-          <!-- <Monaco bind:value={monacoValue} bind:language={monacoLang} /> -->
-        <!-- {:else}
-            <Monaco value={[]}/>
-        {/if} -->
-        <!-- {#if monacoValue}
-          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
-        {:else} -->
+          <NewTabs class="childClass" {tabs} />
       </div>
       <div class="box c">
           <h1>State Manager</h1>
@@ -170,9 +118,7 @@
           <iframe class="webpage" title="local host" src="http://localhost:5000/"></iframe>
       </div>
       <div class="box e" > 
-          <div id="xterm">
-              
-          </div>
+          <XTerm />
       </div>
   </main>
   </body>

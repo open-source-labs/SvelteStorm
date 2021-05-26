@@ -5,6 +5,7 @@ import commonjs from 'rollup-plugin-commonjs';
 //import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
+// import monaco from 'rollup-plugin-monaco-editor';
 // import ts from '@rollup/plugin-typescript';
 // import typescript from 'typescript'
 //import replace from 'rollup-plugin-replace';
@@ -62,9 +63,7 @@ export default {
 				}]
 			]
 		}),
-		// monaco({
-    //   languages: ['json'],
-    // }),
+		// monaco(),
 		commonjs(),
 
         !production & serve(),
