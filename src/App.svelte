@@ -1,48 +1,23 @@
 <script>
-    //import Monaco from './components/monaco/monaco-editor.svelte';
     import FileDir from './Directory/FileDir.svelte'
-    import Monaco from './MonacoComponents/Monaco.svelte'
-    import { FitAddon } from 'xterm-addon-fit'
-    import { onMount } from 'svelte';
-    import './xterm.css';
+    import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
+    import XTerm from './XTerm.svelte';
     
     export let orientation = 'columns';
 
     let localhost = "http://localhost:5000/"
-    let refreshed = false
+    let refreshed = false;
     const { remote, ipcRenderer } = require('electron');
 
-    const Terminal = require('xterm').Terminal
-
-    const fitAddon = new FitAddon();
-    const term = new Terminal();
-    
     function onClick() {
       refreshed = true
       localhost = "http://localhost:5000/"
     }
 
-    onMount(() => {
-		  console.log('the component has mounted');
-       term.setOption('cursorStyle', 'block');
-       term.setOption('cursorBlink', true);
-       term.setOption('fontSize', 14);
-       
-       term.loadAddon(fitAddon);
-        term.open(document.getElementById('xterm'));
-        fitAddon.fit();
-
-        term.write('\x1b[32mWelcome to Svelte Storm!\x1b[m\r\n');
-
-        term.onData(e => {
-            ipcRenderer.send("terminal-into", e);
-        });
-        ipcRenderer.on('terminal-incData', (event, data) => {
-            term.write(data);
-        })
-    });
-
+    let tabs = [];
+ 
   </script>
+
   <style>
 
   body {
@@ -74,7 +49,7 @@
   }
 
   .b {
-    overflow: scroll; 
+    overflow: scroll;
     grid-column: 2 / 4 ;
     grid-row: 1 / 5;
   }
@@ -100,6 +75,7 @@
   }
 
   .b :global(.childClass) {
+    overflow: scroll;
     display: flex;
     height: 100%;
     width: 100%;
@@ -119,11 +95,7 @@
           <FileDir />
       </div>
       <div class="box b">
-        <!-- {#if monacoValue}
-          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
-        {:else} -->
-            <Monaco class="childClass" value={[]}/>
-
+          <NewTabs class="childClass" {tabs} />
       </div>
       <div class="box c">
           <h1>State Manager</h1>
@@ -136,9 +108,7 @@
         {/if}
         </div>
       <div class="box e" > 
-          <div id="xterm">
-              
-          </div>
+          <XTerm />
       </div>
   </main>
   </body>
