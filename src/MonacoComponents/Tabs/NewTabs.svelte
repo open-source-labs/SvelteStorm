@@ -1,8 +1,5 @@
 <script>
-import { onMount } from 'svelte';
-
-  // import { afterUpdate, onMount } from "svelte";
-  // import { addTab } from '../EditorStore';
+  // import { onMount } from 'svelte';
   import Monaco from '../Monaco.svelte';
   const { remote, ipcRenderer } = require('electron');
   const fs = require('fs');
@@ -19,7 +16,7 @@ import { onMount } from 'svelte';
   function addTab(value = [''], editorLang = 'html', fileName='NewTab.html') {
     
     count = count + 1;
-    tabs = [ ...tabs, { editorValue: value, editorLang: editorLang, fileName: fileName, count: count }];
+    tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count }];
     // console.log('addTab', tabs)
   };
 
@@ -55,7 +52,7 @@ import { onMount } from 'svelte';
 
   ipcRenderer.on('file-opened', function (evt, file, content) {
       value = content.split(/\r?\n/);
-      filePath = path.basename(file);
+      filePath = (file);
       let fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
       let title = 'Svelte Storm';
@@ -65,11 +62,9 @@ import { onMount } from 'svelte';
       // monEditor.setValue(value.join('\n'))
   });
 
-  onMount(() => {
-    addTab(['welcome', 'to', 'sveltestorm'], 'html', 'svelte.html');
-    addTab(['//', 'welcome', 'to', 'sveltestorm'], 'js', 'svelte.js');
-    addTab([,'welcome', 'to', 'sveltestorm'], 'css', 'svelte.css');
-  });
+  // onMount(() => {
+  //   addTab(['welcome', 'to', 'sveltestorm'], 'html', 'svelte.html');
+  // });
 
 </script>
 
@@ -84,16 +79,14 @@ import { onMount } from 'svelte';
   </ul>
   
   {#if activeEditor}
-  <!-- {#each tabs as tab} -->
     <div class="editor-body">
-      <!-- {console.log(tab)} -->
-      <!-- {#if activeTabValue == tab.count} -->
-        <Monaco class="childClass current" bind:value={tabs[activeEditor - 1].editorValue} bind:language={tabs[activeEditor-1].editorLang} />
-      <!-- {:else}
-        <Monaco style={{display: 'none'}} bind:value={tab.value} bind:language={tab.editorLang} id={tab.count}/>
-      {/if} -->
+        <Monaco 
+          class="childClass current" 
+          bind:value={tabs[activeEditor - 1].editorValue} 
+          bind:language={tabs[activeEditor-1].editorLang}
+          bind:filePath={tabs[activeEditor-1].filePath} 
+        />
     </div>
-  <!-- {/each} -->
   {/if}
 
 <style>

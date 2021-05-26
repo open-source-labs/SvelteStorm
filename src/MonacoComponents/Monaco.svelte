@@ -1,29 +1,16 @@
 <script>
   import {  afterUpdate, onMount } from 'svelte';
   import * as monaco from 'monaco-editor';
-
+  const fs = require('fs');
 
   const { remote, ipcRenderer } = require('electron');
   
   export let value;
   export let language;
-  // export let fileName;
+  export let filePath;
 
   let monEditor;
   let containerElt;
-  
-  
-  // const createEditor = () => {
-  //   console.log(value, language)
-  //   monEditor = monaco.editor.create(containerElt, {
-  //     value: value.join('\n'),
-  //     language: language,
-  //     theme: 'vs-dark',
-  //     wordWrap: 'on',
-  //     automaticLayout: true,
-  //   })
-   
-  // }
 
   onMount(() => {
     // monaco.editor.setModelLanguage(monEditor.getModel(), language)
@@ -41,19 +28,16 @@
   })
 
 	afterUpdate(() => {
-    
     console.log(value)
     if(monEditor) {
-          monEditor.onDidChangeModelContent(() => {
-          // console.log(monEditor.getValue())
+        fs.readFile(filePath, 'utf8', (err, res) => {
+          if (!err) {
+            monEditor.setModel(monaco.editor.createModel(res, language));
+          }
         })
-        monEditor.setValue(value.join('\n'));
-        console.log(monEditor);
-        // let model = monEditor.getModel();
-        // console.log(model)
-        monEditor.updateOptions({
-          language: language,
-        });
+        monEditor.onDidChangeModelContent(() => {
+          console.log(monEditor.getValue())
+        })
       }
 	});
 
