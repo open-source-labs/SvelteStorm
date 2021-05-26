@@ -1,37 +1,12 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'
-    import './xterm.css';
-    import DirectoryData from './Utilities/DirectoryStore';
     import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
     import XTerm from './XTerm.svelte';
-
+    
     export let orientation = 'columns';
-    export let monacoValue;
-    export let monacoLang = 'html';
 
     let tabs = [];
-    const { remote, ipcRenderer } = require('electron');
-    const currentWindow = remote.getCurrentWindow();
-
-    const fs = require('fs');
-    const path = require('path')
-
-    let counter = 0;
-
-    let readData = '';
-    const unsub = DirectoryData.subscribe(data =>{
-        if(data.fileRead){
-          readData = fs.readFileSync(data.openFilePath).toString();
-          monacoValue = readData.split(/\r?\n/);
-          monacoLang = data.openFilePath.split('.').pop();
-          monacoLang = path.basename(data.openFilePath).split('.').pop()
-          let title = 'Svelte Storm';
-          if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
-          currentWindow.setTitle(title);
-          counter++;
-        }
-    });
-
+ 
   </script>
 
   <style>

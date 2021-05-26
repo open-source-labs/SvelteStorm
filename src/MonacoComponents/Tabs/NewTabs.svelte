@@ -1,27 +1,32 @@
 <script>
-  // import { onMount } from 'svelte';
   import Monaco from '../Monaco.svelte';
+  import DirectoryData from '../../Utilities/DirectoryStore';
+
   const { remote, ipcRenderer } = require('electron');
   const fs = require('fs');
   const path = require('path')
   const currentWindow = remote.getCurrentWindow();
+  
   export let tabs = [];
   export let activeTabValue = 0;
   let activeEditor = 0;
 
+
   let value = ['This', 'is', 'SvelteStorm'];
   let language = 'html';
   let filePath;
+
   let count = 0;
-  function addTab(value = [''], editorLang = 'html', fileName='NewTab.html') {
+  let counter = 0;
+
+  function addTab(value = [''], editorLang = 'html', fileName='NewTab.html', filePath) {
     
     count = count + 1;
     tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count }];
-    // console.log('addTab', tabs)
+    console.log('addTab', tabs)
   };
 
   const handleClick = (tabValue) => () => { 
-   
     activeTabValue = tabValue;
     activeEditor = tabValue;
     console.log('handleClick', tabValue, activeEditor);
@@ -55,16 +60,27 @@
       filePath = (file);
       let fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
-      let title = 'Svelte Storm';
-      addTab(value, language, fileName)
-      if (file) { title = `${path.basename(file)} - ${title}`; }
+      // let title = 'Svelte Storm';
+      addTab(value, language, fileName, filePath)
+      // if (file) { title = `${path.basename(file)} - ${title}`; }
       currentWindow.setTitle(title);
       // monEditor.setValue(value.join('\n'))
   });
 
-  // onMount(() => {
-  //   addTab(['welcome', 'to', 'sveltestorm'], 'html', 'svelte.html');
-  // });
+    let readData = '';
+    const unsub = DirectoryData.subscribe(data => {
+        if (data.fileRead) {
+          readData = fs.readFileSync(data.openFilePath).toString();
+          value = readData.split(/\r?\n/);
+          let fileName = data.openFilePath.slice().split('/').pop();
+          language = path.basename(data.openFilePath).split('.').pop()
+          let title = 'Svelte Storm';
+          if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+          currentWindow.setTitle(title);
+          counter++;
+          addTab(value, language, fileName, data.openFilePath)
+        }
+    });
 
 </script>
 

@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { FitAddon } from 'xterm-addon-fit'
+    import './xterm.css';
     const { remote, ipcRenderer } = require('electron');
     const Terminal = require('xterm').Terminal
 
