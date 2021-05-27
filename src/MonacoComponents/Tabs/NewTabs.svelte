@@ -14,22 +14,19 @@
 
   let value = ['This', 'is', 'SvelteStorm'];
   let language = 'html';
-  let filePath;
-
+  let [filePath, fileName, readData] = ['', '', ''];
+  let title = 'Svelte Storm';
   let count = 0;
   let counter = 0;
 
   function addTab(value = [''], editorLang = 'html', fileName='NewTab.html', filePath) {
-    
     count = count + 1;
     tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count }];
-    console.log('addTab', tabs)
   };
 
   const handleClick = (tabValue) => () => { 
     activeTabValue = tabValue;
     activeEditor = tabValue;
-    console.log('handleClick', tabValue, activeEditor);
   }
   
   const getLanguage = (lang) => {
@@ -58,34 +55,29 @@
   ipcRenderer.on('file-opened', function (evt, file, content) {
       value = content.split(/\r?\n/);
       filePath = (file);
-      let fileName = file.slice().split('/').pop();
+      fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
-      // let title = 'Svelte Storm';
-      addTab(value, language, fileName, filePath)
-      // if (file) { title = `${path.basename(file)} - ${title}`; }
+      addTab(value, language, fileName, filePath);
+      if (file) { title = `${path.basename(file)} - ${title}`; }
       currentWindow.setTitle(title);
-      // monEditor.setValue(value.join('\n'))
   });
 
-    let readData = '';
-    const unsub = DirectoryData.subscribe(data => {
-        if (data.fileRead) {
-          readData = fs.readFileSync(data.openFilePath).toString();
-          value = readData.split(/\r?\n/);
-          let fileName = data.openFilePath.slice().split('/').pop();
-          language = path.basename(data.openFilePath).split('.').pop()
-          let title = 'Svelte Storm';
-          if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
-          currentWindow.setTitle(title);
-          counter++;
-          addTab(value, language, fileName, data.openFilePath)
-        }
-    });
+  
+  const unsub = DirectoryData.subscribe(data => {
+      if (data.fileRead) {
+        readData = fs.readFileSync(data.openFilePath).toString();
+        value = readData.split(/\r?\n/);
+        fileName = data.openFilePath.slice().split('/').pop();
+        language = path.basename(data.openFilePath).split('.').pop();
+        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+        currentWindow.setTitle(title);
+        counter++;
+        addTab(value, language, fileName, data.openFilePath);
+      }
+  });
 
 </script>
 
-
-  
   <ul>
     {#each tabs as tab}
     <li class={activeTabValue === tab.count ? 'active' : ''}>
@@ -113,25 +105,16 @@
     height: 100vh;
     overflow: scroll;
   }
-  /* .tab-list {
-    display: inline-block;
-    flex-wrap: wrap;
-    padding-left: 0;
-    background-color: white;
-    margin-bottom: 0;
-    list-style: none;
-    border: 5px solid #dee2e6;
-  } */
   ul {
     display: flex;
     flex-direction: row;
     overflow: scroll;
-    /* flex-wrap: wrap; */
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
     border-bottom: 1px solid #dee2e6;
   }
+
 	li {
 		margin-bottom: -1px;
 	}
