@@ -98,13 +98,13 @@
   {/if}
 
 <style>
+
   .editor-body {
-    /* display: flex; */
-    /* height: 100%; */
-    /* width: 100%; */
+    width: 100%;
     height: 100vh;
     overflow: scroll;
   }
+
   ul {
     display: flex;
     flex-direction: row;
@@ -139,8 +139,5 @@
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
   }
-
-  /* .hidden {
-    display: none;
-  } */
+  
 </style>
