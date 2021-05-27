@@ -131,6 +131,25 @@ const createApplicationMenu = () => {
       ],
     },
     {
+      label: 'Editor',
+      submenu: [
+        {
+          label: 'Increase Font Size',
+          accelerator: 'CommandOrControl+]',
+          click() {
+            mainProcess.increaseFontSize();
+          },
+        },
+        {
+          label: 'Decrease Font Size',
+          accelerator: 'CommandOrControl+[',
+          click() {
+            mainProcess.decreaseFontSize();
+          },
+        },
+      ]
+    },
+    {
       label: 'Window',
       submenu: [
         {

@@ -31,6 +31,13 @@ app.on('activate', (event, hasVisibleWindows) => {
   if (!hasVisibleWindows) { createWindow(); }
 });
 
+const increaseFontSize = exports.increaseFontSize = () => {
+  console.log("increase font");
+}  
+
+const decreaseFontSize = exports.decreaseFontSize = () => {
+  console.log("decreas font");
+} 
 const createWindow = exports.createWindow = () => {
   
   process.env.NODE_ENV = 'development';
@@ -98,8 +105,6 @@ const createWindow = exports.createWindow = () => {
     createApplicationMenu();
     newWindow = null;
   });
-
-  
 
   var shell = os.platform() === "win32" ? "powershell.exe" : "bash";
   var ptyProcess = pty.spawn(shell, [], {
@@ -183,5 +188,15 @@ const saveFile = exports.saveFile = (targetWindow) => {
     }
     
   })
+
  };
 
+ipcMain.handle('saveFileFromUser', saveFile)
+
+ipcMain.handle('getFileFromUser', getFileFromUser)
+
+ipcMain.handle('getFolderFromUser', getFolderFromUser)
+
+ipcMain.handle('increaseFontSize', increaseFontSize)
+
+ipcMain.handle('decreaseFontSize', decreaseFontSize)
