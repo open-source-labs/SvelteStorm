@@ -10,7 +10,7 @@
 
     let localhost = "http://localhost:5000/"
     let refreshed = false
-    const { remote, ipcRenderer } = require('electron');
+    const { ipcRenderer } = require('electron');
 
     const Terminal = require('xterm').Terminal
 
@@ -60,13 +60,13 @@
       color: #444;
   }
 
-      .box {
-        background-color: rgb(233, 217, 186);
-        color: rgb(226, 142, 45);
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 150%;
-      }
+  .box {
+    background-color: rgb(233, 217, 186);
+    color: rgb(226, 142, 45);
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 150%;
+  }
 
   .a {
     grid-column: 1 ;
