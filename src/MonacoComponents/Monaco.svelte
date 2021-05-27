@@ -8,6 +8,7 @@
   export let value;
   export let language;
   export let filePath;
+  let messageObj;
 
   let monEditor;
   let containerElt;
@@ -38,7 +39,8 @@
 	});
   
   ipcRenderer.on('save-markdown',  function () {
-      messageObj = {content : monEditor.getValue(), file : file }
+      console.log('HELLO SAVING')
+      messageObj = {content : monEditor.getValue(), file : filePath }
       ipcRenderer.send('synchronous-message', messageObj)
     });
 </script>
