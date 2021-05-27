@@ -110,9 +110,11 @@
     flex-direction: row;
     overflow: scroll;
     padding-left: 0;
+    margin-top: 0;
     margin-bottom: 0;
     list-style: none;
     border-bottom: 1px solid #dee2e6;
+    border-radius: 5px;
   }
 
 	li {
