@@ -21,6 +21,7 @@
         term.onData(e => {
             ipcRenderer.send("terminal-into", e);
         });
+        
         ipcRenderer.on('terminal-incData', (event, data) => {
             term.write(data);
         });

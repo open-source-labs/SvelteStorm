@@ -7,8 +7,6 @@
   
     let localhost = "http://localhost:5000/"
     let refreshed = false
-
-    const { remote, ipcRenderer } = require('electron');
   
     function onClick() {
       refreshed = true
@@ -94,6 +92,7 @@
           <FileDir />
       </div>
       <div class="box b">
+          <!-- svelte-ignore missing-declaration -->
           <NewTabs class="childClass" {tabs}/>
       </div>
       <div class="box c root">

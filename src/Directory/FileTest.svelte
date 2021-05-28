@@ -1,42 +1,117 @@
 <script>
     export let fileTree;
+    // export let directory;
+    import { onMount , afterUpdate} from 'svelte';
     import DirectoryData from '../Utilities/DirectoryStore';
+    import CreateMenu from './CreateMenu.svelte';
+    const fs = require('fs');
     const fileState = {};
+    let rename = false;
+    let deleteFile = false;
     
+        
+    let rightClickStatus = false;
+    let activeFile = '';
+    let newName = '';
     
+
+    onMount(() => {
+        console.log('mounting in Test')
+    });
+
+
+
+    // move into OnMount for all subs
     const unsub = DirectoryData.subscribe(data =>{
-        console.log('File Directory Store Subscription');
-        console.log('data',data);
+        activeFile = data.activeFile;
+        rename = data.rename;
     });
 
     const toggleVisibility = (path) => {
         if(!fileState[path]) fileState[path]= true;
         else fileState[path] = false;
-        console.log('fileState',fileState);
     }
-    console.log(fileTree)
+
 
     const dblClickHandler = (path) => {
-        console.log(`clicking now on ${path}`);  
         const openFilePath = path;      
         DirectoryData.update(currentData =>{
-                    return {...currentData,openFilePath,fileRead:true};
-                })        
+            return {...currentData,openFilePath,fileRead:true};
+        })      
     }
+
+    const rightClickHandler = (path) => {
+        const openFilePath = path;      
+        DirectoryData.update(currentData =>{
+            return {...currentData, activeFile: openFilePath, rename: false};
+        })  
+
+    }
+
+    const renameHandler = (e,path) => {
+        console.log('key', e.key);
+         if(e.key === 'Enter') {
+         newName = e.target.value;
+        const fullPath = path.substring(0, path.lastIndexOf('/'));
+        fs.renameSync(path, fullPath+'/'+newName);
+         DirectoryData.update( currentData => {
+            return {...currentData, rename:false, activeFile: ''};
+        })
+        
+     }
+    }
+
+    const resetRename = () => {
+        console.log('In resetRename handler')
+        DirectoryData.update( currentData => {
+            return {...currentData, rename: false, activeFile: ''};
+        })
+    }
+    
+
+    const deleteHandler = () => {
+        console.log('In delete handler');
+        
+    }
+ 
 
 </script>
 
-<div class=directory>
+<div class=directory >
 {#if fileTree}
 {#each fileTree as {path,name, items}}
 <ul>
     {#if items.length > 0}
-    <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"}>{name}</li>
+        {#if rename && activeFile === path}
+                <span>
+                    <input 
+                    on:keypress={(e) => renameHandler(e,path)} 
+                    value={newName}
+                    type="text"/>
+                </span>
+        {:else}
+        <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={resetRename}>{name}</li>
+            {#if activeFile === path}
+            <CreateMenu filePath={path} />
+            {/if}
+        {/if}
     {:else}
-    <li on:dblclick={dblClickHandler(path)} class="liFiles">{name}</li>
+        {#if rename && activeFile === path}
+            <span>
+                <input 
+                on:keypress={(e) => renameHandler(e,path)} 
+                value={newName}
+                type="text"/>
+            </span>
+        {:else}
+            <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={resetRename}>{name} </li>
+            {#if activeFile === path}
+                <CreateMenu filePath={path} />
+            {/if}
+        {/if}
     {/if}
-    {#if fileState[path] && items.length > 0}
-      
+    
+    {#if fileState[path] && items.length > 0}      
       <svelte:self fileTree={items.sort((a,b) => {
         return b.items.length - a.items.length
     })} />
@@ -99,4 +174,9 @@
         padding-left: 10px;
         margin: 5px;
     }
+
+input{
+    background-color: white;
+}
+
 </style>
