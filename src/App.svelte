@@ -10,6 +10,7 @@
 
     let localhost = "http://localhost:5000/"
     let refreshed = false
+
     const { remote, ipcRenderer } = require('electron');
 
     const Terminal = require('xterm').Terminal
@@ -22,8 +23,12 @@
       localhost = "http://localhost:5000/"
     }
 
-    onMount(() => {
-		  console.log('the component has mounted');
+
+  onMount(() => {
+
+      
+
+       console.log('the component has mounted');
        term.setOption('cursorStyle', 'block');
        term.setOption('cursorBlink', true);
        term.setOption('fontSize', 14);
@@ -37,6 +42,7 @@
         term.onData(e => {
             ipcRenderer.send("terminal-into", e);
         });
+
         ipcRenderer.on('terminal-incData', (event, data) => {
             term.write(data);
         })
@@ -115,7 +121,7 @@
 
   <body class:orientation>
   <main class="wrapper" >
-      <div class="box a">
+      <div class="box a target">
           <FileDir />
       </div>
       <div class="box b">
@@ -125,10 +131,10 @@
             <Monaco class="childClass" value={[]}/>
 
       </div>
-      <div class="box c">
+      <div class="box c root">
           <h1>State Manager</h1>
       </div>
-      <div on:click={onClick}  class="box d"> 
+      <div on:click={onClick}  class="box d root"> 
         {#if refreshed}
         <iframe class="webpage" title="local host" src={localhost}></iframe>
         {:else}
@@ -140,6 +146,7 @@
               
           </div>
       </div>
+
   </main>
   </body>
 
