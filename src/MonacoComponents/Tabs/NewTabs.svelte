@@ -11,7 +11,11 @@
   export let activeTabValue = 0;
   let activeEditor = 0;
 
-
+  // tab { editorValue: value, 
+  //       editorLang: getLanguage(editorLang), 
+  //       fileName: fileName, 
+  //       filePath: filePath, 
+  //       count: count }
   let value = ['This', 'is', 'SvelteStorm'];
   let language = 'html';
   let [filePath, fileName, readData] = ['', '', ''];
@@ -19,10 +23,14 @@
   let count = 0;
   let counter = 0;
 
-  function addTab(value = [''], editorLang = 'html', fileName='NewTab.html', filePath) {
+  function addTab(value = [''], editorLang = 'html', fileName='NewTab.html', filePath, language) {
     count = count + 1;
-    tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count }];
+    tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count, ext: language }];
   };
+
+  function deleteTabsForArron() {
+    
+  }
 
   const handleClick = (tabValue) => () => { 
     activeTabValue = tabValue;
@@ -57,7 +65,7 @@
       filePath = (file);
       fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
-      addTab(value, language, fileName, filePath);
+      addTab(value, language, fileName, filePath, language);
       if (file) { title = `${path.basename(file)} - ${title}`; }
       currentWindow.setTitle(title);
   });
@@ -72,7 +80,7 @@
         if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
         currentWindow.setTitle(title);
         counter++;
-        addTab(value, language, fileName, data.openFilePath);
+        addTab(value, language, fileName, data.openFilePath, language);
       }
   });
 
@@ -81,7 +89,14 @@
   <ul>
     {#each tabs as tab}
     <li class={activeTabValue === tab.count ? 'active' : ''}>
-      <span on:click={handleClick(tab.count)}>{tab.fileName}</span>
+      <span 
+        on:click={handleClick(tab.count)}
+      >
+        <img src="/Users/samuelfilip/keepItSvelte/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
+          alt={''}
+        />
+        {tab.fileName}<button class="delete button">x</span>
+      </span>
     </li>
     {/each}
   </ul>
@@ -125,9 +140,11 @@
     border: 1px solid transparent;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
-    display: block;
+    display: flex;
+    flex-direction: row;
     padding: 0 1rem;
     cursor: pointer;
+    font-size: 1em;
   }
 
   span:hover {
@@ -139,5 +156,12 @@
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
   }
-  
+
+  img {
+    height: 1em;
+    background-color: inherit;
+    margin-top: 3px;
+    /* margin-bottom: 0; */
+  }
+
 </style>
