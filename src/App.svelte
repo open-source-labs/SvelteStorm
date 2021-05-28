@@ -1,23 +1,15 @@
 <script>
-    //import Monaco from './components/monaco/monaco-editor.svelte';
     import FileDir from './Directory/FileDir.svelte'
-    import Monaco from './MonacoComponents/Monaco.svelte'
-    import { FitAddon } from 'xterm-addon-fit'
-    import { onMount } from 'svelte';
-    import './xterm.css';
+    import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
+    import XTerm from './XTerm.svelte';
     
     export let orientation = 'columns';
-
+  
     let localhost = "http://localhost:5000/"
     let refreshed = false
 
     const { remote, ipcRenderer } = require('electron');
-
-    const Terminal = require('xterm').Terminal
-
-    const fitAddon = new FitAddon();
-    const term = new Terminal();
-    
+  
     function onClick() {
       refreshed = true
       localhost = "http://localhost:5000/"
@@ -49,8 +41,9 @@
     });
 
   </script>
+  
   <style>
-
+  
   body {
     height: 100vh;
     width: 100vw;
@@ -65,22 +58,22 @@
       background-color: #fff;
       color: #444;
   }
-
-      .box {
-        background-color: rgb(233, 217, 186);
-        color: rgb(226, 142, 45);
-        border-radius: 5px;
-        padding: 10px;
-        font-size: 150%;
-      }
+  
+  .box {
+    background-color: rgb(233, 217, 186);
+    color: rgb(226, 142, 45);
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 150%;
+  }
 
   .a {
     grid-column: 1 ;
     grid-row: 1 / 5;
   }
-
+  
   .b {
-    overflow: scroll; 
+    overflow: scroll;
     grid-column: 2 / 4 ;
     grid-row: 1 / 5;
   }
@@ -89,23 +82,24 @@
     grid-column: 1 / 3 ;
     grid-row: 5 ;
   }
-
+  
   .d {
     grid-column: 4 / 6;
     grid-row: 1 / 5;
   }
-
+  
   .e {
     grid-column: 3 / 6;
     grid-row: 5;
   }
-
+  
   .webpage {
     height: 100%;
     width: 100%;
   }
 
   .b :global(.childClass) {
+    overflow: scroll;
     display: flex;
     height: 100%;
     width: 100%;
@@ -125,11 +119,7 @@
           <FileDir />
       </div>
       <div class="box b">
-        <!-- {#if monacoValue}
-          <Monaco bind:value={monacoValue} bind:language={monacoLang} />
-        {:else} -->
-            <Monaco class="childClass" value={[]}/>
-
+          <NewTabs class="childClass" {tabs} />
       </div>
       <div class="box c root">
           <h1>State Manager</h1>
@@ -142,9 +132,7 @@
         {/if}
         </div>
       <div class="box e" > 
-          <div id="xterm">
-              
-          </div>
+          <XTerm />
       </div>
 
   </main>
