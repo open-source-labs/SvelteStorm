@@ -6,16 +6,17 @@
     export let orientation = 'columns';
   
     let localhost = "http://localhost:5000/"
-    let refreshed = false;
+    let refreshed = false
+
     const { remote, ipcRenderer } = require('electron');
   
     function onClick() {
       refreshed = true
       localhost = "http://localhost:5000/"
     }
-  
-    let tabs = [];
-  
+
+    let tabs = []
+
   </script>
   
   <style>
@@ -85,22 +86,20 @@
     outline: none;
   }
 
-
-
 </style>
 
   <body class:orientation>
   <main class="wrapper" >
-      <div class="box a">
+      <div class="box a target">
           <FileDir />
       </div>
       <div class="box b">
-          <NewTabs class="childClass" {tabs} />
+          <NewTabs class="childClass" {tabs}/>
       </div>
-      <div class="box c">
+      <div class="box c root">
           <h1>State Manager</h1>
       </div>
-      <div on:click={onClick}  class="box d"> 
+      <div on:click={onClick}  class="box d root"> 
         {#if refreshed}
         <iframe class="webpage" title="local host" src={localhost}></iframe>
         {:else}
@@ -110,6 +109,7 @@
       <div class="box e" > 
           <XTerm />
       </div>
+
   </main>
   </body>
 
