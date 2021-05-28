@@ -14,17 +14,15 @@
     
 
     const unsub = DirectoryData.subscribe(data =>{
-        // console.log('File Directory Store Subscription');
-        // console.log('data',data);
         rename = data.rename;
     });
 
     // store 
     onMount (()=>{
-        // console.log('Directory mounted')
     });
 
     afterUpdate(() => {
+        console.log(directory)
         if(directory) {
         // console.log('directory', directory);
         fs.watch(directory[0], (eventType, filename) => {
@@ -39,7 +37,6 @@
  
     onDestroy(()=>{
         unsub();
-        // console.log('component destroyed');
     });
 
     ipcRenderer.on('folder-opened', function (evt, file, content) {
@@ -105,7 +102,6 @@
             return fileArray;
         }
     }
-
 </script>
 
 <!-- HTML -->
@@ -128,10 +124,10 @@
     width: 12px;
 }
 
-.directoryContainer::-webkit-scrollbar-track:hover {
+/* .directoryContainer::-webkit-scrollbar-track:hover {
     -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3); 
-    /* border-radius: 0px; */
-}
+    border-radius: 0px;
+} */
 
 .directoryContainer::-webkit-scrollbar-thumb:hover {
     background-color: #e28e2d;
