@@ -59,10 +59,11 @@
       value = content.split(/\r?\n/);
       filePath = (file);
       let fileName = file.slice().split('/').pop();
+      console.log(fileName)
       language = file.slice().split('.').pop();
-      // let title = 'Svelte Storm';
+      let title = 'Svelte Storm';
       addTab(value, language, fileName, filePath)
-      // if (file) { title = `${path.basename(file)} - ${title}`; }
+      if (file) { title = `${path.basename(file)} - ${title}`; }
       currentWindow.setTitle(title);
       // monEditor.setValue(value.join('\n'))
   });
