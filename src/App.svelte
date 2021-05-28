@@ -16,29 +16,9 @@
     }
 
 
-  onMount(() => {
 
-      
+ let tabs = [];
 
-       console.log('the component has mounted');
-       term.setOption('cursorStyle', 'block');
-       term.setOption('cursorBlink', true);
-       term.setOption('fontSize', 14);
-       
-       term.loadAddon(fitAddon);
-        term.open(document.getElementById('xterm'));
-        fitAddon.fit();
-
-        term.write('\x1b[32mWelcome to Svelte Storm!\x1b[m\r\n');
-
-        term.onData(e => {
-            ipcRenderer.send("terminal-into", e);
-        });
-
-        ipcRenderer.on('terminal-incData', (event, data) => {
-            term.write(data);
-        })
-    });
 
   </script>
   
@@ -119,7 +99,8 @@
           <FileDir />
       </div>
       <div class="box b">
-          <NewTabs class="childClass" {tabs} />
+          <!-- svelte-ignore missing-declaration -->
+          <NewTabs class="childClass" {tabs}/>
       </div>
       <div class="box c root">
           <h1>State Manager</h1>
