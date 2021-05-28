@@ -95,7 +95,7 @@
         <img src="/Users/samuelfilip/keepItSvelte/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
           alt={''}
         />
-        {tab.fileName}<button class="delete button">x</span>
+        {tab.fileName}<span class="delete button">x</span>
       </span>
     </li>
     {/each}
