@@ -37,7 +37,7 @@
         const openFilePath = path;      
         DirectoryData.update(currentData =>{
             return {...currentData,openFilePath,fileRead:true};
-        })      
+        })
     }
 
     const rightClickHandler = (path) => {
@@ -104,7 +104,7 @@
                 type="text"/>
             </span>
         {:else}
-            <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={resetRename}>{name} </li>
+            <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={dblClickHandler(path)} class="liFiles" on:dblclick={resetRename}>{name} </li>
             {#if activeFile === path}
                 <CreateMenu filePath={path} />
             {/if}

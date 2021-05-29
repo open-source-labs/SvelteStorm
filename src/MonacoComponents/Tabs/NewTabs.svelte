@@ -11,25 +11,28 @@
   export let activeTabValue = 0;
   let activeEditor = 0;
 
-  // tab { editorValue: value, 
-  //       editorLang: getLanguage(editorLang), 
-  //       fileName: fileName, 
-  //       filePath: filePath, 
-  //       count: count }
   let value = ['This', 'is', 'SvelteStorm'];
   let language = 'html';
   let [filePath, fileName, readData] = ['', '', ''];
   let title = 'Svelte Storm';
   let count = 0;
-  let counter = 0;
 
-  function addTab(value = [''], editorLang = 'html', fileName='NewTab.html', filePath, language) {
+  function addTab(value = [''], editorLang = 'html', fileName='NewTab.html', filePath, language='html') {
     count = count + 1;
-    tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count, ext: language }];
+    let duplicate = false;
+    tabs.map((tab) => {
+      if (tab.filePath === filePath) {
+        duplicate = true;
+        count = count-1;
+      }
+    })
+    if (!duplicate) {
+      tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, tabId: count, ext: language }];
+    }
   };
 
-  function deleteTabsForArron() {
-    
+  function deleteTab(index) {
+    tabs = tabs.filter((t) => t.tabId != index)
   }
 
   const handleClick = (tabValue) => () => { 
@@ -79,7 +82,6 @@
         language = path.basename(data.openFilePath).split('.').pop();
         if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
         currentWindow.setTitle(title);
-        counter++;
         addTab(value, language, fileName, data.openFilePath, language);
       }
   });
@@ -88,26 +90,33 @@
 
   <ul>
     {#each tabs as tab}
-    <li class={activeTabValue === tab.count ? 'active' : ''}>
-      <span 
-        on:click={handleClick(tab.count)}
+    <li class={activeTabValue === tab.tabId ? 'active' : ''}>
+      <span class="tab-span"
+        on:click={handleClick(tab.tabId)}
       >
         <img src="/Users/samuelfilip/keepItSvelte/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
           alt={''}
         />
-        {tab.fileName}<span class="delete button">x</span>
+        {tab.fileName}
+        <span
+          class="delete-button" 
+          value={tab.tabId}
+          on:click|self={() => deleteTab(tab.tabId)}
+        >
+          &times
+        </span>
       </span>
     </li>
     {/each}
   </ul>
   
-  {#if activeEditor}
+  {#if activeEditor && tabs.length}
     <div class="editor-body">
         <Monaco 
-          class="childClass current" 
-          bind:value={tabs[activeEditor - 1].editorValue} 
-          bind:language={tabs[activeEditor-1].editorLang}
-          bind:filePath={tabs[activeEditor-1].filePath} 
+          class="childClass current"
+          bind:value={tabs[(activeEditor - 1) || 0].editorValue}
+          bind:language={tabs[(activeEditor-1) || 0].editorLang}
+          bind:filePath={tabs[(activeEditor-1) || 0].filePath} 
         />
     </div>
   {/if}
@@ -134,9 +143,11 @@
 
 	li {
 		margin-bottom: -1px;
+    background-color: black;
+    color: #fff;
 	}
 
-  span {
+  .tab-span {
     border: 1px solid transparent;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
@@ -147,7 +158,7 @@
     font-size: 1em;
   }
 
-  span:hover {
+  .tab-span:hover {
     border-color: #e9ecef #e9ecef #dee2e6;
   }
 
@@ -162,6 +173,11 @@
     background-color: inherit;
     margin-top: 3px;
     /* margin-bottom: 0; */
+  }
+  .delete-button {
+    margin-left: 5px;
+    border-right: black;
+    border-left: black;
   }
 
 </style>
