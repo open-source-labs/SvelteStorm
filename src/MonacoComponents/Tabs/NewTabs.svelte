@@ -11,11 +11,6 @@
   export let activeTabValue = 0;
   let activeEditor = 0;
 
-  // tab { editorValue: value, 
-  //       editorLang: getLanguage(editorLang), 
-  //       fileName: fileName, 
-  //       filePath: filePath, 
-  //       count: count }
   let value = ['This', 'is', 'SvelteStorm'];
   let language = 'html';
   let [filePath, fileName, readData] = ['', '', ''];
@@ -25,7 +20,16 @@
 
   function addTab(value = [''], editorLang = 'html', fileName='NewTab.html', filePath, language) {
     count = count + 1;
-    tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count, ext: language }];
+    let duplicate = false;
+    tabs.map((tab) => {
+      if (tab.filePath === filePath) {
+        duplicate = true;
+        count = count-1;
+      }
+    })
+    if (!duplicate) {
+      tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, count: count, ext: language }];
+    }
   };
 
   function deleteTabsForArron() {
@@ -61,6 +65,7 @@
   }
 
   ipcRenderer.on('file-opened', function (evt, file, content) {
+    console.log('ipcRenderer')
       value = content.split(/\r?\n/);
       filePath = (file);
       fileName = file.slice().split('/').pop();
@@ -72,14 +77,15 @@
 
   
   const unsub = DirectoryData.subscribe(data => {
+      console.log('Directory Opened')
       if (data.fileRead) {
         readData = fs.readFileSync(data.openFilePath).toString();
         value = readData.split(/\r?\n/);
         fileName = data.openFilePath.slice().split('/').pop();
         language = path.basename(data.openFilePath).split('.').pop();
-        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${'Svelte Storm'}`; }
         currentWindow.setTitle(title);
-        counter++;
+        //counter++;
         addTab(value, language, fileName, data.openFilePath, language);
       }
   });
@@ -96,7 +102,6 @@
           alt={''}
         />
         {tab.fileName}<button class="delete button">x</span>
-      </span>
     </li>
     {/each}
   </ul>

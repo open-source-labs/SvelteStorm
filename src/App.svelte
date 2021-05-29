@@ -2,7 +2,7 @@
     import FileDir from './Directory/FileDir.svelte'
     import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
     import XTerm from './XTerm.svelte';
-    
+    import StateManager from './StateManager/StateManager.svelte'
     export let orientation = 'columns';
   
     let localhost = "http://localhost:5000/"
@@ -96,8 +96,8 @@
           <NewTabs class="childClass" {tabs}/>
       </div>
       <div class="box c root">
-          <h1>State Manager</h1>
-      </div>
+        <StateManager />
+    </div>
       <div on:click={onClick}  class="box d root"> 
         {#if refreshed}
         <iframe class="webpage" title="local host" src={localhost}></iframe>

@@ -57,16 +57,15 @@
          DirectoryData.update( currentData => {
             return {...currentData, rename:false, activeFile: ''};
         })
-        
      }
     }
 
-    const resetRename = () => {
-        console.log('In resetRename handler')
-        DirectoryData.update( currentData => {
-            return {...currentData, rename: false, activeFile: ''};
-        })
-    }
+     const resetRename = () => {
+         console.log('In resetRename handler')
+         DirectoryData.update( currentData => {
+             return {...currentData, rename: false, activeFile: ''};
+         })
+     }
     
 
     const deleteHandler = () => {
