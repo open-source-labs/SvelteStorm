@@ -37,7 +37,7 @@
         const openFilePath = path;      
         DirectoryData.update(currentData =>{
             return {...currentData,openFilePath,fileRead:true};
-        })      
+        })
     }
 
     const rightClickHandler = (path) => {
