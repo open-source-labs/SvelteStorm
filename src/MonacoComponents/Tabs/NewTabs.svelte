@@ -4,11 +4,11 @@
 
   const { remote, ipcRenderer } = require('electron');
   const fs = require('fs');
-  const path = require('path')
+  const path = require('path');
   const currentWindow = remote.getCurrentWindow();
   
   export let tabs = [];
-  export let activeTabValue = 0;
+  let activeTabValue = 0;
   let activeEditor = 0;
 
   let value = ['This', 'is', 'SvelteStorm'];
@@ -31,13 +31,31 @@
     }
   };
 
-  function deleteTab(index) {
-    tabs = tabs.filter((t) => t.tabId != index)
+  function deleteTab(targetId) {
+    console.log('deleteTab input: ', targetId);
+    tabs = tabs.filter((t) => t.tabId != targetId)
+    activeTabValue = (tabs[0].tabId);
+    activeEditor = activeTabValue;
+
   }
 
-  const handleClick = (tabValue) => () => { 
-    activeTabValue = tabValue;
-    activeEditor = tabValue;
+  const getIndex = (tab) => {
+    let ind; 
+    tabs.forEach((el, i) => { 
+      console.log(el.tabId, i, tab)
+      if (el.tabId === tab) {
+        ind = i;
+      }
+    });
+    return ind
+  }
+
+  const handleClick = (tabId) => () => {
+    console.log('handleClick input', tabId)
+    console.log('tabs: ', tabs)
+    activeTabValue = tabId;
+    activeEditor = activeTabValue;
+    console.log('handletab activeeditor:', activeEditor)
   }
   
   const getLanguage = (lang) => {
@@ -73,7 +91,6 @@
       currentWindow.setTitle(title);
   });
 
-  
   const unsub = DirectoryData.subscribe(data => {
       if (data.fileRead) {
         readData = fs.readFileSync(data.openFilePath).toString();
@@ -101,7 +118,7 @@
         <span
           class="delete-button" 
           value={tab.tabId}
-          on:click|self={() => deleteTab(tab.tabId)}
+          on:click={(value) => deleteTab(tab.tabId)}
         >
           &times
         </span>
@@ -110,13 +127,14 @@
     {/each}
   </ul>
   
-  {#if activeEditor && tabs.length}
+  {#if activeEditor >= 0 && tabs.length}
     <div class="editor-body">
-        <Monaco 
+      {console.log(tabs[activeEditor], activeEditor)}
+        <Monaco
           class="childClass current"
-          bind:value={tabs[(activeEditor - 1) || 0].editorValue}
-          bind:language={tabs[(activeEditor-1) || 0].editorLang}
-          bind:filePath={tabs[(activeEditor-1) || 0].filePath} 
+          bind:value={tabs[(activeEditor-1)].editorValue}
+          bind:language={tabs[(activeEditor-1)].editorLang}
+          bind:filePath={tabs[(activeEditor-1)].filePath} 
         />
     </div>
   {/if}

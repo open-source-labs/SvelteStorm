@@ -9,7 +9,6 @@
     let rename = false;
     let deleteFile = false;
     
-        
     let rightClickStatus = false;
     let activeFile = '';
     let newName = '';
