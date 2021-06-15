@@ -23,7 +23,7 @@
     // move into OnMount for all subs
     const unsub = DirectoryData.subscribe(data =>{
         activeFile = data.activeFile;
-        rename = data.rename;
+        rename = data.rename;             
     });
 
     const toggleVisibility = (path) => {
@@ -48,23 +48,23 @@
     }
 
     const renameHandler = (e,path) => {
-        console.log('key', e.key);
-         if(e.key === 'Enter') {
-         newName = e.target.value;
-        const fullPath = path.substring(0, path.lastIndexOf('/'));
-        fs.renameSync(path, fullPath+'/'+newName);
-         DirectoryData.update( currentData => {
-            return {...currentData, rename:false, activeFile: ''};
-        })
-        
-     }
+        if(e.key === 'Enter') {
+            newName = e.target.value;
+            const fullPath = path.substring(0, path.lastIndexOf('/'));
+            fs.renameSync(path, fullPath+'/'+newName);
+            DirectoryData.update( currentData => {
+                return {...currentData, rename:false, activeFile: ''};
+            })        
+        }
     }
 
     const resetRename = () => {
-        console.log('In resetRename handler')
-        DirectoryData.update( currentData => {
-            return {...currentData, rename: false, activeFile: ''};
-        })
+        if(activeFile) {
+            DirectoryData.update( currentData => {
+                return {...currentData, rename: false, activeFile: ''};
+            })
+        }
+        
     }
     
 
@@ -89,7 +89,7 @@
                     type="text"/>
                 </span>
         {:else}
-        <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={resetRename}>{name}</li>
+        <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={activeFile ? resetRename : undefined}>{name}</li>
             {#if activeFile === path}
             <CreateMenu filePath={path} />
             {/if}
@@ -103,7 +103,7 @@
                 type="text"/>
             </span>
         {:else}
-            <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={resetRename}>{name} </li>
+            <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={activeFile ? resetRename : undefined}>{name} </li>
             {#if activeFile === path}
                 <CreateMenu filePath={path} />
             {/if}

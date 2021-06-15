@@ -11,6 +11,7 @@
     
     let directory;
     let rename;
+    let fsTimeout;
     
 
     const unsub = DirectoryData.subscribe(data =>{
@@ -22,17 +23,21 @@
     });
 
     afterUpdate(() => {
-        console.log(directory)
         if(directory) {
         // console.log('directory', directory);
         fs.watch(directory[0], (eventType, filename) => {
-            console.log("eventType", eventType)
-            if(eventType === 'rename'){  
+            if(eventType === 'rename' && !fsTimeout){  
                 console.log(' IN RUN BUILD');
                 readFileNames(directory);              
             }
+
+            if(!fsTimeout){
+            fsTimeout = setTimeout(function() { fsTimeout=null }, 5000);
+        }
+            
         })
         }
+        
     });
  
     onDestroy(()=>{
