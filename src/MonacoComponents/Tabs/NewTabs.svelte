@@ -70,7 +70,7 @@
       fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
       addTab(value, language, fileName, filePath, language);
-      if (file) { title = `${path.basename(file)} - ${title}`; }
+      if (file) { title = `${path.basename(file)} - Svelte Storm`; }
       currentWindow.setTitle(title);
   });
 
@@ -82,7 +82,7 @@
         value = readData.split(/\r?\n/);
         fileName = data.openFilePath.slice().split('/').pop();
         language = path.basename(data.openFilePath).split('.').pop();
-        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${'Svelte Storm'}`; }
+        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
         currentWindow.setTitle(title);
         addTab(value, language, fileName, data.openFilePath, language);
       }
@@ -96,7 +96,7 @@
       <span class="tab-span"
         on:click={handleClick(tab.tabId)}
       >
-        <img src="/Users/samuelfilip/keepItSvelte/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
+        <img src="/Users/arron/OneDrive/Documents/GitHub/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
           alt={''}
         />
         {tab.fileName}

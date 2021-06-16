@@ -20,8 +20,8 @@
   <style>
   
   body {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
   }
 
   .wrapper {
@@ -30,14 +30,14 @@
       grid-gap: 1px;
       grid-template-columns: repeat(5, 1fr);
       grid-template-rows: repeat(5, 1fr);
-      background-color: #fff;
+      background-color: rgb(248, 246, 246);
       color: #444;
   }
   
   .box {
     background-color: rgb(233, 217, 186);
     color: rgb(226, 142, 45);
-    border-radius: 5px;
+    border-radius: 0px;
     padding: 10px;
     font-size: 150%;
   }

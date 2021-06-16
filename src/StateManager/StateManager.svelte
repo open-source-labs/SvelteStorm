@@ -15,13 +15,8 @@
     </style>
     
     <div class="state-container">
-        <h5>State Manager Component</h5>
+        <h5>State Manager</h5>
         <ul>
-            <!-- {#if stateObj && stateObj.length > 0}
-                {#each stateObj as state}
-                <li>{state.file} : {state.state}</li>
-                {/each}
-            {/if} -->
             {#each Object.entries(stateObj) as [file,state]}
                 <li>{file} : {state}</li>
             {/each}
