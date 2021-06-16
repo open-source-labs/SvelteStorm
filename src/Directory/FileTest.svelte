@@ -24,7 +24,7 @@
     // move into OnMount for all subs
     const unsub = DirectoryData.subscribe(data =>{
         activeFile = data.activeFile;
-        rename = data.rename;
+        rename = data.rename;             
     });
 
     const toggleVisibility = (path) => {
@@ -89,7 +89,7 @@
                     type="text"/>
                 </span>
         {:else}
-        <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={resetRename}>{name}</li>
+        <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={activeFile ? resetRename : undefined}>{name}</li>
             {#if activeFile === path}
             <CreateMenu filePath={path} />
             {/if}
@@ -103,7 +103,7 @@
                 type="text"/>
             </span>
         {:else}
-            <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={resetRename}>{name} </li>
+            <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={activeFile ? resetRename : undefined}>{name} </li>
             {#if activeFile === path}
                 <CreateMenu filePath={path} />
             {/if}
