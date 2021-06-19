@@ -96,7 +96,7 @@
       <span class="tab-span"
         on:click={handleClick(tab.tabId)}
       >
-        <img src="/Users/arron/OneDrive/Documents/GitHub/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
+        <img src="../src/icons/file_type_{tab.ext}.svg" 
           alt={''}
         />
         {tab.fileName}
