@@ -2,31 +2,26 @@
     import FileDir from './Directory/FileDir.svelte'
     import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
     import XTerm from './XTerm.svelte';
-    
+    import StateManager from './StateManager/StateManager.svelte'
     export let orientation = 'columns';
   
     let localhost = "http://localhost:5000/"
     let refreshed = false
-
-    const { remote, ipcRenderer } = require('electron');
   
     function onClick() {
       refreshed = true
       localhost = "http://localhost:5000/"
     }
 
-
-
- let tabs = [];
-
+    let tabs = []
 
   </script>
   
   <style>
   
   body {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
   }
 
   .wrapper {
@@ -35,14 +30,14 @@
       grid-gap: 1px;
       grid-template-columns: repeat(5, 1fr);
       grid-template-rows: repeat(5, 1fr);
-      background-color: #fff;
+      background-color: rgb(248, 246, 246);
       color: #444;
   }
   
   .box {
     background-color: rgb(233, 217, 186);
     color: rgb(226, 142, 45);
-    border-radius: 5px;
+    border-radius: 0px;
     padding: 10px;
     font-size: 150%;
   }
@@ -89,8 +84,6 @@
     outline: none;
   }
 
-
-
 </style>
 
   <body class:orientation>
@@ -103,8 +96,8 @@
           <NewTabs class="childClass" {tabs}/>
       </div>
       <div class="box c root">
-          <h1>State Manager</h1>
-      </div>
+        <StateManager />
+    </div>
       <div on:click={onClick}  class="box d root"> 
         {#if refreshed}
         <iframe class="webpage" title="local host" src={localhost}></iframe>
