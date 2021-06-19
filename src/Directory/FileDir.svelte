@@ -11,15 +11,19 @@
     
     let directory;
     let rename;
+    let stateObj;
+    let resultArr = [];
     let fsTimeout;
     
 
     const unsub = DirectoryData.subscribe(data =>{
         rename = data.rename;
+        stateObj = data.stateObj;
     });
 
     // store 
     onMount (()=>{
+    
     });
 
     afterUpdate(() => {
@@ -46,10 +50,25 @@
 
     ipcRenderer.on('folder-opened', function (evt, file, content) {
         directory = content;
-        if (directory && directory[0]){           
-            readFileNames(directory);
-        }
+        if (directory && directory[0]){        
+                var fileTree = new FileTree(directory[0]);        
+                fileTree.build();
+                
+                savedTree = fileTree.items;
+                savedTree.sort((a,b) => {
+                    return b.items.length - a.items.length;
+                })
+                DirectoryData.update(currentData =>{
+                    return {
+                        ...currentData,
+                        fileTree: savedTree
+                    }
+                })
+                //console.log(Array.isArray(savedTree))
+                // console.log('fileTree',savedTree);
+            }
     })
+
 
 
 
@@ -97,6 +116,43 @@
             electronFs.readdirSync(path).forEach(file => {
                 var fileInfo = new FileTree(`${path}/${file}`, file);
                 var stat = electronFs.statSync(fileInfo.path);
+
+                if (file.split('.').pop() === 'svelte'){
+                    console.log(`${path}/${file}`)
+                    if(path.includes('node_modules') !== true) {
+                        var content = fs.readFileSync(`${path}/${file}`).toString();
+                        console.log(content)
+                    var stateArr = [];
+                    var value = content.split(/\r?\n/);
+                    if(value !==[""]) {
+                        value.forEach( el => {
+                            if(el && el.includes('export')) {                       
+                                el = el.replace(/\s/g, '');
+                                if(el.includes('exportlet')) el = el.replace('exportlet','');
+                                if(el.includes('exportconst')) el = el.replace('exportconst','');
+                                stateArr.push(el.replace(';',''));
+                                console.log('Sucess finding export');
+                                console.log(stateArr)                                
+                                stateObj[file] = stateArr;                                 
+                            }
+
+                            DirectoryData.update(currentData =>{
+                                return {
+                                    ...currentData,
+                                       stateObj
+                                    };
+                            })
+                            
+                            
+                        })
+                    }
+
+                    console.log('file', file);
+                    }
+
+                    
+                    
+                }
 
                 if (stat.isDirectory()){
                     fileInfo.items = FileTree.readDir(fileInfo.path);

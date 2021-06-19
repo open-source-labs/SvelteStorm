@@ -64,23 +64,25 @@
   }
 
   ipcRenderer.on('file-opened', function (evt, file, content) {
+    console.log('ipcRenderer')
       value = content.split(/\r?\n/);
       filePath = (file);
       fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
       addTab(value, language, fileName, filePath, language);
-      if (file) { title = `${path.basename(file)} - ${title}`; }
+      if (file) { title = `${path.basename(file)} - Svelte Storm`; }
       currentWindow.setTitle(title);
   });
 
   
   const unsub = DirectoryData.subscribe(data => {
+      console.log('Directory Opened')
       if (data.fileRead) {
         readData = fs.readFileSync(data.openFilePath).toString();
         value = readData.split(/\r?\n/);
         fileName = data.openFilePath.slice().split('/').pop();
         language = path.basename(data.openFilePath).split('.').pop();
-        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - ${title}`; }
+        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
         currentWindow.setTitle(title);
         addTab(value, language, fileName, data.openFilePath, language);
       }
@@ -94,7 +96,7 @@
       <span class="tab-span"
         on:click={handleClick(tab.tabId)}
       >
-        <img src="/Users/samuelfilip/keepItSvelte/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
+        <img src="../src/icons/file_type_{tab.ext}.svg" 
           alt={''}
         />
         {tab.fileName}
