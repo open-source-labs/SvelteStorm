@@ -11,14 +11,16 @@
     
     let directory;
     let rename;
-    let stateObj;
+    let stateObj = {};
     let resultArr = [];
     let fsTimeout;
+    export let activeDir = '';
     
 
     const unsub = DirectoryData.subscribe(data =>{
       rename = data.rename;
-      stateObj = data.stateObj;
+      //stateObj = data.stateObj;
+      activeDir = data.activeDir;
     });
 
     // store 
@@ -27,9 +29,9 @@
     });
 
     afterUpdate(() => {
-      if(directory) {      
-        console.log('directory', directory)
-        fs.watch(directory[0], (eventType, filename) => {
+      if(activeDir) {      
+        console.log('active directory', activeDir)
+        fs.watch(activeDir, (eventType, filename) => {
           console.log(eventType)
           if(eventType === 'rename' && !fsTimeout){  
             console.log(' IN RUN BUILD');
@@ -37,7 +39,7 @@
           }
 
           if(!fsTimeout){
-            fsTimeout = setTimeout(function() { fsTimeout=null }, 5000);
+            fsTimeout = setTimeout(function() { fsTimeout=null }, 3000);
           }        
         });
       }    
@@ -59,7 +61,8 @@
           DirectoryData.update(currentData =>{
             return {
                 ...currentData,
-                fileTree: savedTree
+                fileTree: savedTree,
+                activeDir: directory[0]
             }
           })
         }
@@ -97,8 +100,6 @@
             color : 'white',
             isOpen : false
         }   
-        //this.handleToggle = this.handleToggle.bind(this);
-        //console.log(this.state.isOpen)
       }
 
     //method to build file tree
