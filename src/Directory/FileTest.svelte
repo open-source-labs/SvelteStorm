@@ -55,7 +55,12 @@
         const fullPath = path.substring(0, path.lastIndexOf('/'));
         fs.renameSync(path, fullPath+'/'+newName);
          DirectoryData.update( currentData => {
-            return {...currentData, rename:false, activeFile: ''};
+            return {
+                ...currentData, 
+                rename:false, 
+                activeFile: '',
+                activeDir: fullPath
+            };
         })
      }
     }
