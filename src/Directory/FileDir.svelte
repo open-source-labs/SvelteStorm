@@ -9,18 +9,17 @@
     const {ipcRenderer} = require('electron');
 
     
-    export let directory;
-    export let rename;
-    export let stateObj = {};
+    let directory;
+    let rename;
+    let stateObj = {};
     let resultArr = [];
-    export let fsTimeout;
+    let fsTimeout;
     export let activeDir = '';
    
     
 
     const unsub = DirectoryData.subscribe(data =>{
-      rename = data.rename;
-      //stateObj = data.stateObj;
+      rename = data.rename;      
       activeDir = data.activeDir;
       
     });
@@ -33,7 +32,7 @@
     afterUpdate(() => {
       if(activeDir) {              
         fs.watch(activeDir, (eventType, filename) => {
-          //console.log(activeDir,eventType, filename)
+          
           if(eventType === 'rename' && !fsTimeout){  
             console.log(' IN RUN BUILD');
             readFileNames(directory);              
