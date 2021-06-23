@@ -14,6 +14,7 @@
     let activeFile = '';
     let newName = '';
     
+    
 
     onMount(() => {
         console.log('mounting in Test')
@@ -24,7 +25,8 @@
     // move into OnMount for all subs
     const unsub = DirectoryData.subscribe(data =>{
         activeFile = data.activeFile;
-        rename = data.rename;             
+        rename = data.rename;
+                  
     });
 
     const toggleVisibility = (path) => {
@@ -41,28 +43,33 @@
     }
 
     const rightClickHandler = (path) => {
-        const openFilePath = path;      
+        const openFilePath = path;
+        const fullPath = path.substring(0, path.lastIndexOf('/'));      
         DirectoryData.update(currentData =>{
-            return {...currentData, activeFile: openFilePath, rename: false};
+            return {
+              ...currentData, 
+              activeFile: openFilePath, 
+              rename: false,
+              activeDir:fullPath
+            };
         })  
 
     }
 
     const renameHandler = (e,path) => {
-        console.log('key', e.key);
-         if(e.key === 'Enter') {
-         newName = e.target.value;
+      if(e.key === 'Enter') {
+        newName = e.target.value;
         const fullPath = path.substring(0, path.lastIndexOf('/'));
         fs.renameSync(path, fullPath+'/'+newName);
-         DirectoryData.update( currentData => {
+        DirectoryData.update( currentData => {
             return {
-                ...currentData, 
-                rename:false, 
-                activeFile: '',
-                activeDir: fullPath
-            };
+            ...currentData, 
+            rename:false, 
+            activeFile: '',
+            activeDir: fullPath
+          };
         })
-     }
+      }
     }
 
      const resetRename = () => {

@@ -5,7 +5,7 @@
         
         const unsub = DirectoryData.subscribe(data =>{
             stateObj = data.stateObj;
-            console.log('stateObj', stateObj)
+            //console.log('stateObj', stateObj)
         })
     
     </script>

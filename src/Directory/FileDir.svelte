@@ -9,18 +9,20 @@
     const {ipcRenderer} = require('electron');
 
     
-    let directory;
-    let rename;
-    let stateObj = {};
+    export let directory;
+    export let rename;
+    export let stateObj = {};
     let resultArr = [];
-    let fsTimeout;
+    export let fsTimeout;
     export let activeDir = '';
+   
     
 
     const unsub = DirectoryData.subscribe(data =>{
       rename = data.rename;
       //stateObj = data.stateObj;
       activeDir = data.activeDir;
+      
     });
 
     // store 
@@ -29,10 +31,9 @@
     });
 
     afterUpdate(() => {
-      if(activeDir) {      
-        console.log('active directory', activeDir)
+      if(activeDir) {              
         fs.watch(activeDir, (eventType, filename) => {
-          console.log(eventType)
+          //console.log(activeDir,eventType, filename)
           if(eventType === 'rename' && !fsTimeout){  
             console.log(' IN RUN BUILD');
             readFileNames(directory);              
@@ -115,7 +116,7 @@
           var stat = electronFs.statSync(fileInfo.path);
 
           if (file.split('.').pop() === 'svelte'){
-            console.log(`${path}/${file}`)
+            //console.log(`${path}/${file}`)
             if(path.includes('node_modules') !== true) {
               var content = fs.readFileSync(`${path}/${file}`).toString();                    
               var stateArr = [];
@@ -127,15 +128,14 @@
                     if(el.includes('exportlet')) el = el.replace('exportlet','');
                     if(el.includes('exportconst')) el = el.replace('exportconst','');
                     stateArr.push(el.replace(';',''));
-                    console.log('Sucess finding export');
-                    console.log(stateArr)                                
+                                 
                     stateObj[file] = stateArr;                                 
                   }
 
                   DirectoryData.update(currentData =>{
                     return {
                       ...currentData,
-                        stateObj
+                        stateObj: stateObj
                     };
                   })                        
                         
