@@ -1,6 +1,5 @@
 <script>
   export let fileTree;
-  import { onMount , afterUpdate} from 'svelte';
   import DirectoryData from '../Utilities/DirectoryStore';
   import CreateMenu from './CreateMenu.svelte';
   const fs = require('fs');
@@ -106,7 +105,7 @@
           {/if}
         {/if}
       {/if}
-            
+
       {#if fileState[path] && items.length > 0}      
         <svelte:self fileTree={items.sort((a,b) => {
           return b.items.length - a.items.length
