@@ -9,11 +9,15 @@
   let rightClickStatus = false;
   let activeFile = '';
   let newName = '';
+  let createFile= false;
+  let createFolder = false;
   
     
   const unsub = DirectoryData.subscribe(data =>{
     activeFile = data.activeFile;
-    rename = data.rename;                
+    rename = data.rename;
+    createFile = data.createFile;
+    createFolder = data.createFolder;            
   });
 
   const toggleVisibility = (path) => {
@@ -62,9 +66,76 @@
     }
   }
 
+  const createFileHandler = (e,path) => {
+    DirectoryData.update( currentData => {
+      return {
+      ...currentData, 
+      activeDir: path      
+      };
+     })
+    console.log(path)
+    if(e.key === 'Enter') {      
+      newName = e.target.value;
+      console.log(newName)
+      //const fullpath = path.substring(0, path.lastIndexOf('/'));
+      fs.writeFileSync(path+'/'+newName, '', (err) => {
+        if(err) throw err;        
+      })
+      DirectoryData.update( currentData => {
+        return {
+        ...currentData,         
+        createFile: false,
+        rename:false, 
+        activeFile: '',
+        };
+      })
+
+      fileState[path]= true;
+      
+    }
+  }
+
+  const createFolderHandler = (e,path) => {
+    DirectoryData.update( currentData => {
+      return {
+      ...currentData, 
+      activeDir: path      
+      };
+     })
+    console.log(path)
+    if(e.key === 'Enter') {      
+      newName = e.target.value;
+      console.log(newName)
+      //const fullpath = path.substring(0, path.lastIndexOf('/'));
+      try {
+      if (!fs.existsSync(path+'/'+newName)) {
+        fs.mkdirSync(path+'/'+newName)
+      }
+      } catch (err) {
+        console.error(err)
+      }
+      DirectoryData.update( currentData => {
+        return {
+        ...currentData,         
+        createFolder: false,
+        rename:false, 
+        activeFile: '',
+        };
+      })
+
+      fileState[path]= true;
+      
+    }
+  }
+
   const resetRename = () => {
     DirectoryData.update( currentData => {
-      return {...currentData, rename: false, activeFile: ''};
+      return {
+        ...currentData, 
+        rename: false, 
+        activeFile: '',
+        createFile: false,
+      };
     })
   }
 
@@ -76,24 +147,45 @@
   {#if fileTree}
     {#each fileTree as {path,name, items}}
     <ul>
-      {#if items.length > 0}
+      {#if items.length > 0} 
+        {#if createFile}
+          <span>
+            <input 
+            class='textBox'
+            on:keypress={(e) => createFileHandler(e,path)} 
+            value={newName}
+            type="text"/>
+          </span>
+        {/if}
+        {#if createFolder}
+          <span>
+            <input 
+            class='textBox'
+            on:keypress={(e) => createFolderHandler(e,path)} 
+            value={newName}
+            type="text"/>
+          </span>
+        {/if}
         {#if rename && activeFile === path}
           <span>
             <input 
+            class='textBox'
             on:keypress={(e) => renameHandler(e,path)} 
             value={newName}
             type="text"/>
           </span>
         {:else}
-          <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" on:click={activeFile ? resetRename : undefined}>{name}</li>
+          <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" 
+          on:click={activeFile || createFile || createFolder ? resetRename : undefined}>{name}</li>
           {#if activeFile === path}
           <CreateMenu filePath={path} />
           {/if}
-        {/if}
-      {:else}
+        {/if}             
+      {:else}        
         {#if rename && activeFile === path}
           <span>
             <input 
+            class="textBox"
             on:keypress={(e) => renameHandler(e,path)} 
             value={newName}
             type="text"/>
@@ -126,8 +218,7 @@
     background-image: url("./img/folderClosed.svg");
     background-repeat: no-repeat;
     background-position: left;
-    background-size: 15px;
-    /* border: 1px solid black; */
+    background-size: 15px;   
   }
 
   .liFolderOpen {
@@ -140,8 +231,7 @@
     background-image: url('./img/folderOpen.svg');
     background-repeat: no-repeat;
     background-position: left;
-    background-size: 15px;
-    /* border: 1px solid black; */
+    background-size: 15px;    
   }
 
   .liFiles {
@@ -155,14 +245,12 @@
     background-repeat: no-repeat;
     background-position: left;
     background-size: 15px;
-    /* border: 1px solid blue; */
   }
   
   .directory{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    /* border:1px solid black; */
+    align-items: flex-start;    
   }
 
   ul{
@@ -172,6 +260,14 @@
 
   input{
     background-color: white;
+  }
+
+  .textBox {
+    margin-left: 10px;
+    padding: 10px 10px 10px 10px;
+    font-size: 14px;
+    width: 150px;
+    
   }
 
 </style>

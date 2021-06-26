@@ -13,7 +13,8 @@ import postcss from 'rollup-plugin-postcss';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-	input: 'src/svelte.js',
+	input: 'src/svelte.js',   
+  
 	output: {
 		sourcemap: true,
 		format: 'iife',
