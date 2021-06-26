@@ -76,7 +76,7 @@
 
   
   const unsub = DirectoryData.subscribe(data => {
-      console.log('Directory Opened')
+      //console.log('Directory Opened')
       if (data.fileRead) {
         readData = fs.readFileSync(data.openFilePath).toString();
         value = readData.split(/\r?\n/);
@@ -96,7 +96,7 @@
       <span class="tab-span"
         on:click={handleClick(tab.tabId)}
       >
-        <img src="/Users/arron/OneDrive/Documents/GitHub/SvelteStorm/src/icons/file_type_{tab.ext}.svg" 
+        <img src="../src/icons/file_type_{tab.ext}.svg" 
           alt={''}
         />
         {tab.fileName}

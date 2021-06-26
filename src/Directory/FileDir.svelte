@@ -11,14 +11,17 @@
     
     let directory;
     let rename;
-    let stateObj;
+    let stateObj = {};
     let resultArr = [];
     let fsTimeout;
+    export let activeDir = '';
+   
     
 
     const unsub = DirectoryData.subscribe(data =>{
-        rename = data.rename;
-        stateObj = data.stateObj;
+      rename = data.rename;      
+      activeDir = data.activeDir;
+      
     });
 
     // store 
@@ -27,21 +30,19 @@
     });
 
     afterUpdate(() => {
-        if(directory) {
-        // console.log('directory', directory);
-        fs.watch(directory[0], (eventType, filename) => {
-            if(eventType === 'rename' && !fsTimeout){  
-                console.log(' IN RUN BUILD');
-                readFileNames(directory);              
-            }
+      if(activeDir) {              
+        fs.watch(activeDir, (eventType, filename) => {
+          
+          if(eventType === 'rename' && !fsTimeout){  
+            console.log(' IN RUN BUILD');
+            readFileNames(directory);              
+          }
 
-            if(!fsTimeout){
-            fsTimeout = setTimeout(function() { fsTimeout=null }, 5000);
-        }
-            
-        })
-        }
-        
+          if(!fsTimeout){
+            fsTimeout = setTimeout(function() { fsTimeout=null }, 3000);
+          }        
+        });
+      }    
     });
  
     onDestroy(()=>{
@@ -49,119 +50,107 @@
     });
 
     ipcRenderer.on('folder-opened', function (evt, file, content) {
-        directory = content;
-        if (directory && directory[0]){        
-                var fileTree = new FileTree(directory[0]);        
-                fileTree.build();
-                
-                savedTree = fileTree.items;
-                savedTree.sort((a,b) => {
-                    return b.items.length - a.items.length;
-                })
-                DirectoryData.update(currentData =>{
-                    return {
-                        ...currentData,
-                        fileTree: savedTree
-                    }
-                })
-                //console.log(Array.isArray(savedTree))
-                // console.log('fileTree',savedTree);
+      directory = content;
+      if (directory && directory[0]){        
+        var fileTree = new FileTree(directory[0]);        
+          fileTree.build();                
+          savedTree = fileTree.items;
+          savedTree.sort((a,b) => {
+              return b.items.length - a.items.length;
+          })
+          DirectoryData.update(currentData =>{
+            return {
+                ...currentData,
+                fileTree: savedTree,
+                activeDir: directory[0]
             }
-    })
-
-
-
-
+          })
+        }
+    });
+    
     
 
 
     //method to read all the files inside the directory
     const readFileNames = (directory) => {
-        var fileTree = new FileTree(directory[0]);        
-        fileTree.build();
-        
-        savedTree = fileTree.items;
-        savedTree.sort((a,b) => {
-            return b.items.length - a.items.length;
-        })
-        DirectoryData.update(currentData =>{
-            return savedTree;
-        })
+      var fileTree = new FileTree(directory[0]);        
+      fileTree.build();
+    
+      savedTree = fileTree.items;
+      savedTree.sort((a,b) => {
+        return b.items.length - a.items.length;
+      })
+      DirectoryData.update(currentData =>{
+        return {
+          ...currentData,
+          fileTree:savedTree
+          }
+      })
     }
     
     class FileTree {
-        constructor(path, name = null){
-            
-            this.path = path;
-            this.name = name;
-            this.items = [];
-            this.state = {
-                path : path,
-                name: name,
-                items: [],
-                color : 'white',
-                isOpen : false
-            }   
-            //this.handleToggle = this.handleToggle.bind(this);
-            //console.log(this.state.isOpen)
-        }
+      constructor(path, name = null){        
+        this.path = path;
+        this.name = name;
+        this.items = [];
+        this.state = {
+            path : path,
+            name: name,
+            items: [],
+            color : 'white',
+            isOpen : false
+        }   
+      }
 
-        //method to build file tree
-        build () {
-            this.items = FileTree.readDir(this.path,'',0);
-        }
-        static readDir(path) {
-            var fileArray = [];        
-            
-            electronFs.readdirSync(path).forEach(file => {
-                var fileInfo = new FileTree(`${path}/${file}`, file);
-                var stat = electronFs.statSync(fileInfo.path);
+    //method to build file tree
+      build () {
+        this.items = FileTree.readDir(this.path,'',0);
+      }
 
-                if (file.split('.').pop() === 'svelte'){
-                    console.log(`${path}/${file}`)
-                    if(path.includes('node_modules') !== true) {
-                        var content = fs.readFileSync(`${path}/${file}`).toString();
-                        console.log(content)
-                    var stateArr = [];
-                    var value = content.split(/\r?\n/);
-                    if(value !==[""]) {
-                        value.forEach( el => {
-                            if(el && el.includes('export')) {                       
-                                el = el.replace(/\s/g, '');
-                                if(el.includes('exportlet')) el = el.replace('exportlet','');
-                                if(el.includes('exportconst')) el = el.replace('exportconst','');
-                                stateArr.push(el.replace(';',''));
-                                console.log('Sucess finding export');
-                                console.log(stateArr)                                
-                                stateObj[file] = stateArr;                                 
-                            }
+      static readDir(path) {
+        var fileArray = [];        
+        
+        electronFs.readdirSync(path).forEach(file => {
+          var fileInfo = new FileTree(`${path}/${file}`, file);
+          var stat = electronFs.statSync(fileInfo.path);
 
-                            DirectoryData.update(currentData =>{
-                                return {
-                                    ...currentData,
-                                       stateObj
-                                    };
-                            })
-                            
-                            
-                        })
-                    }
+          if (file.split('.').pop() === 'svelte'){
+            //console.log(`${path}/${file}`)
+            if(path.includes('node_modules') !== true) {
+              var content = fs.readFileSync(`${path}/${file}`).toString();                    
+              var stateArr = [];
+              var value = content.split(/\r?\n/);
+              if(value !==[""]) {
+                value.forEach( el => {
+                  if(el && el.includes('export')) {                       
+                    el = el.replace(/\s/g, '');
+                    if(el.includes('exportlet')) el = el.replace('exportlet','');
+                    if(el.includes('exportconst')) el = el.replace('exportconst','');
+                    stateArr.push(el.replace(';',''));
+                                 
+                    stateObj[file] = stateArr;                                 
+                  }
 
-                    console.log('file', file);
-                    }
+                  DirectoryData.update(currentData =>{
+                    return {
+                      ...currentData,
+                        stateObj: stateObj
+                    };
+                  })                        
+                        
+                })
+              }                
+            }                
+          }
 
-                    
-                    
-                }
+          if (stat.isDirectory()){
+            fileInfo.items = FileTree.readDir(fileInfo.path);
+          }
 
-                if (stat.isDirectory()){
-                    fileInfo.items = FileTree.readDir(fileInfo.path);
-                }
-
-                fileArray.push(fileInfo);
-            })   
-            return fileArray;
-        }
+          fileArray.push(fileInfo);
+        })   
+      return fileArray;
+      }
     }
 </script>
 
