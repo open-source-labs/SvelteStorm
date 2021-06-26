@@ -4,9 +4,10 @@
     import XTerm from './XTerm.svelte';
     import StateManager from './StateManager/StateManager.svelte'
     export let orientation = 'columns';
+    export let localhost;
   
-    let localhost = "http://localhost:5000/"
-    let refreshed = false
+    localhost = "http://localhost:5000/"
+    refreshed = false
   
     function onClick() {
       refreshed = true

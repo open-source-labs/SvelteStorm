@@ -49,6 +49,22 @@ const createApplicationMenu = () => {
               });
             },
           },
+          {
+            label: 'Edit Localhost',
+            accelerator: 'CommandOrControl+l',
+            click(item, focusedWindow) {
+              
+              // if (focusedWindow) {
+              //   return mainProcess.getFolderFromUser(focusedWindow);
+              // }
+  
+              const newWindow = mainProcess.createWindow();
+  
+              newWindow.on('show', () => {
+                //mainProcess.getFolderFromUser(newWindow);
+              });
+            },
+          },
         {
           label: 'Save File',
           accelerator: 'CommandOrControl+S',
