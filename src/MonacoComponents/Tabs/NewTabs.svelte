@@ -93,7 +93,7 @@
   });
 
   const unsub = DirectoryData.subscribe(data => {
-      console.log('Directory Opened')
+      //console.log('Directory Opened')
       if (data.fileRead) {
         readData = fs.readFileSync(data.openFilePath).toString();
         value = readData.split(/\r?\n/);
