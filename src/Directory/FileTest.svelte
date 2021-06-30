@@ -12,6 +12,7 @@
   let createFile= false;
   let createFolder = false;
   
+  
     
   const unsub = DirectoryData.subscribe(data =>{
     activeFile = data.activeFile;
@@ -149,7 +150,7 @@
   {#if fileTree}
     {#each fileTree as {path,name, items}}
     <ul>
-      {#if items.length > 0}        
+      {#if fs.statSync(path).isDirectory()}        
         {#if rename && activeFile === path}
           <span>
             <input 
@@ -161,7 +162,7 @@
         {:else}
           <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" 
           on:click={activeFile || createFile || createFolder ? resetRename : undefined}>{name}</li>
-          {#if createFile}
+          {#if fileState[path] && createFile}
           <span>
             <input 
             class='textBox'
@@ -170,7 +171,7 @@
             type="text"/>
           </span>
         {/if}
-        {#if createFolder}
+        {#if fileState[path] && createFolder}
           <span>
             <input 
             class='textBox'
@@ -200,7 +201,7 @@
         {/if}
       {/if}
 
-      {#if fileState[path] && items.length > 0}      
+      {#if fileState[path] && fs.statSync(path).isDirectory()}      
         <svelte:self fileTree={items.sort((a,b) => {
           return b.items.length - a.items.length
       })} />

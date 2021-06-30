@@ -1,7 +1,10 @@
 <script>  
-    import FileTest from './FileTest.svelte';    
+    import FileTest from './FileTest.svelte';  
+    import DirTopMenu from './DirTopMenu.svelte'  
     import { onMount, onDestroy, afterUpdate} from 'svelte';
     import DirectoryData from '../Utilities/DirectoryStore';
+
+
     const fs = require('fs');
     let savedTree = [];
     var remote = window.require('electron').remote;
@@ -15,12 +18,16 @@
     let resultArr = [];
     let fsTimeout;
     export let activeDir = '';
+    let mainDir = '';
+    export let reload = false;
    
     
 
     const unsub = DirectoryData.subscribe(data =>{
       rename = data.rename;      
       activeDir = data.activeDir;
+      mainDir = data.mainDir;
+      reload = data.reload;
       
     });
 
@@ -30,12 +37,23 @@
     });
 
     afterUpdate(() => {
+      if(reload){
+        console.log('reloading now')
+        readFileNames(directory);
+        DirectoryData.update(currentData =>{
+          return {
+              ...currentData,
+              reload: false
+          }
+        })
+      }
+
       if(activeDir) {              
         fs.watch(activeDir, (eventType, filename) => {
-          
+          console.log('directory',directory)
           if(eventType === 'rename' && !fsTimeout){  
             console.log(' IN RUN BUILD');
-            readFileNames(directory);              
+            readFileNames(mainDir);              
           }
 
           if(!fsTimeout){
@@ -50,42 +68,64 @@
     });
 
     ipcRenderer.on('folder-opened', function (evt, file, content) {
-      directory = content;
-      if (directory && directory[0]){        
-        var fileTree = new FileTree(directory[0]);        
-          fileTree.build();                
-          savedTree = fileTree.items;
-          savedTree.sort((a,b) => {
-              return b.items.length - a.items.length;
-          })
-          DirectoryData.update(currentData =>{
-            return {
-                ...currentData,
-                fileTree: savedTree,
-                activeDir: directory[0]
-            }
-          })
-        }
+      directory = Array.isArray(content) ? content[0] : content;      
+      console.log('directory',directory)
+      if(directory) {       
+        fs.readdir(directory, (error,files) => {
+          console.log('files',files);
+          console.log('files.length',files.length)
+          if (files.length){
+            var fileTree = new FileTree(directory);        
+            fileTree.build();                
+            savedTree = fileTree.items;
+            savedTree.sort((a,b) => {
+                return b.items.length - a.items.length;
+            })
+            DirectoryData.update(currentData =>{
+              return {
+                  ...currentData,
+                  fileTree: savedTree,
+                  currentDir: directory,
+                  mainDir: directory              
+              }
+            })
+          }
+          else {
+            DirectoryData.update(currentData =>{
+              return {
+                  ...currentData,                  
+                  activeDir: directory,
+                  mainDir: directory
+              }
+            })
+          }
+        })
+        
+      }      
     });
     
     
 
 
     //method to read all the files inside the directory
-    const readFileNames = (directory) => {
-      var fileTree = new FileTree(directory[0]);        
-      fileTree.build();
-    
-      savedTree = fileTree.items;
-      savedTree.sort((a,b) => {
-        return b.items.length - a.items.length;
-      })
-      DirectoryData.update(currentData =>{
-        return {
-          ...currentData,
-          fileTree:savedTree
+    const readFileNames = (mainDir) => {
+      if(mainDir) {       
+        var fileTree = new FileTree(mainDir);        
+        fileTree.build();                
+        savedTree = fileTree.items;
+        savedTree.sort((a,b) => {
+            return b.items.length - a.items.length;
+        })
+        DirectoryData.update(currentData =>{
+          return {
+              ...currentData,
+              fileTree: savedTree,              
           }
-      })
+        })
+      }
+         
+      
+      
     }
     
     class FileTree {
@@ -157,30 +197,28 @@
 <!-- HTML -->
 
 <div class=directoryContainer>
-    {#if directory} 
-    <FileTest directory={directory[0]} fileTree={savedTree} />
+    <DirTopMenu></DirTopMenu>
+    {#if directory}     
+    <FileTest directory={mainDir} fileTree={savedTree} />
     {/if}
 </div>
 <!-- CSS -->
 <style>
-    .directoryContainer{
-        max-height: 50vh;
-        overflow-y: scroll;
-        display: flex;
-        flex-direction: column;
-        align-content: flex-start;
-    }
-    .directoryContainer::-webkit-scrollbar {
-    width: 12px;
-}
+  .directoryContainer{
+      max-height: 50vh;
+      overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+      align-content: flex-start;
+  }
+  .directoryContainer::-webkit-scrollbar {
+  width: 12px;
+  }
 
-/* .directoryContainer::-webkit-scrollbar-track:hover {
-    -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3); 
-    border-radius: 0px;
-} */
+  .directoryContainer::-webkit-scrollbar-thumb:hover {
+      background-color: #e28e2d;
+      transition: background-color 2s ease-in-out;
+  }
 
-.directoryContainer::-webkit-scrollbar-thumb:hover {
-    background-color: #e28e2d;
-    transition: background-color 2s ease-in-out;
-}
+  
 </style>

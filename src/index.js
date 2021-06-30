@@ -169,18 +169,27 @@ const getFolderFromUser = exports.getFolderFromUser = async (targetWindow) => {
 }
 
 const createProjectFromUser = exports.createProjectFromUser = async (targetWindow) => {
-  const files = await dialog.showOpenDialog(targetWindow, {
+  console.log('running createProject method')
+  const folderName = await dialog.showSaveDialog(targetWindow, {
+    title: 'Create Project',
     properties: ['createDirectory'],
   });
 
-  if(files) {
-    console.log(files.filePaths)
-    if (files) { openFolder(targetWindow, files.filePaths); }
+  // if(files) {
+  //   console.log(files.filePaths)
+  //   if (files) { openFolder(targetWindow, files.filePaths); }
+  // }
+  if(folderName.filePath && !fs.existsSync(folderName.filePath)){
+    await fs.mkdirSync(folderName.filePath);
+
+    openFolder(targetWindow, folderName.filePath);
+
   }
 }
 
 const openFolder = exports.openFolder = (targetWindow, folder) => {
   const content = folder
+  console.log('contents',content)
   //app.addRecentDocument(folder);
   //targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('folder-opened', folder, content);
@@ -213,3 +222,5 @@ ipcMain.handle('getFolderFromUser', getFolderFromUser)
 ipcMain.handle('increaseFontSize', increaseFontSize)
 
 ipcMain.handle('decreaseFontSize', decreaseFontSize)
+
+ipcMain.handle('createProjectFromUser', createProjectFromUser)
