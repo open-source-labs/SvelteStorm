@@ -223,15 +223,13 @@ const createApplicationMenu = () => {
 
     const windowMenu = template.find(item => item.label === 'Window');
     windowMenu.role = 'window';
-    windowMenu.submenu.push(
-      { type: 'separator' },
+    windowMenu.submenu.push({ 
+      type: 'separator' },
       {
         label: 'Bring All to Front',
         role: 'front',
-      }
-    );
+      });
   }
-
   return Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 };
 

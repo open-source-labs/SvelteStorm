@@ -3,17 +3,34 @@
     import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
     import XTerm from './XTerm.svelte';
     import StateManager from './StateManager/StateManager.svelte'
-    export let orientation = 'columns';
-  
-    let localhost = "http://localhost:5000/"
-    let refreshed = false
-  
-    function onClick() {
-      refreshed = true
-      localhost = "http://localhost:5000/"
-    }
 
-    let tabs = []
+    export let orientation = 'columns';
+    export let localhost;
+
+  let value = ""
+	let submit = false
+  
+	
+	const handleSubmit = () => {
+		submit = false
+    return false
+	}
+	
+	const handleKeyup = () => {
+		submit = false
+		
+		if (event.code == 'Enter') {
+			event.preventDefault()
+			event.target.value
+			value = event.target.value
+      localhost = `http://127.0.0.1:${value}/`
+			return false
+		}
+	}
+
+  let tabs = []
+
+  console.log(localhost)
 
   </script>
   
@@ -27,9 +44,10 @@
   .wrapper {
       height: 100%;
       display: grid;
+      border: 1px solid rgb(226, 142, 45);
       grid-gap: 1px;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(5, 1fr);
+      grid-template-columns: min-content;
+      grid-template-rows: 1fr;
       background-color: rgb(248, 246, 246);
       color: #444;
   }
@@ -43,34 +61,68 @@
   }
 
   .a {
+    overflow: auto;
+    resize: horizontal;
+    min-width: 15%;
+    max-width: 150%;
+    min-height: 10%;
+    max-height: 150%;
     grid-column: 1 ;
-    grid-row: 1 / 5;
+    grid-row: 1;
   }
   
   .b {
     overflow: scroll;
-    grid-column: 2 / 4 ;
-    grid-row: 1 / 5;
+    min-width: 10%;
+    max-width: 150%;
+    min-height: 10%;
+    max-height: 150%;
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .c {
-    grid-column: 1 / 3 ;
-    grid-row: 5 ;
+    overflow: auto;
+    min-width: 10%;
+    max-width: 150%;
+    min-height: 10%;
+    max-height: 150%;
+    grid-column: 1 ;
+    grid-row: 2 ;
   }
   
   .d {
-    grid-column: 4 / 6;
-    grid-row: 1 / 5;
+    overflow: auto;
+    resize: vertical;
+    min-width: 10%;
+    min-height: 10%;
+    max-height: 150%;
+    padding: 0px;
+    text-align: center;
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .d input {
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 20px;
+    font-size: 15px;
   }
   
   .e {
-    grid-column: 3 / 6;
-    grid-row: 5;
+    overflow: auto;
+    min-width: 10%;
+    max-width: 150%;
+    min-height: 100%;
+    grid-column: 2 / 4;
+    grid-row: 2;
   }
   
   .webpage {
-    height: 100%;
-    width: 100%;
+    height: 90%;
+    width: 95%;
   }
 
   .b :global(.childClass) {
@@ -85,9 +137,9 @@
   }
 
 </style>
-
   <body class:orientation>
   <main class="wrapper" >
+    
       <div class="box a target">
           <FileDir />
       </div>
@@ -97,18 +149,22 @@
       </div>
       <div class="box c root">
         <StateManager />
-    </div>
-      <div on:click={onClick}  class="box d root"> 
-        {#if refreshed}
-        <iframe class="webpage" title="local host" src={localhost}></iframe>
-        {:else}
-        <iframe class="webpage" title="local host" src={localhost}></iframe>
+      </div>
+      <div class="box d root"> 
+        <form on:submit|preventDefault={handleSubmit}>
+          <input placeholder="Local Host Port" type="text" on:keyup|preventDefault={handleKeyup}>
+        </form>
+        {#if submit === true} 
+          <iframe  class="webpage" title="local host" src={localhost}></iframe>
         {/if}
+          <iframe  class="webpage" title="local host" src={localhost}></iframe>
         </div>
-      <div class="box e" > 
+      <div class="box e"> 
           <XTerm />
       </div>
 
   </main>
   </body>
+
+
 
