@@ -70,7 +70,8 @@
     DirectoryData.update( currentData => {
       return {
       ...currentData, 
-      activeDir: path      
+      activeDir: path,
+      activeFile: '',   
       };
      })
     console.log(path)
@@ -99,7 +100,8 @@
     DirectoryData.update( currentData => {
       return {
       ...currentData, 
-      activeDir: path      
+      activeDir: path,
+      activeFile: '',   
       };
      })
     console.log(path)
@@ -122,7 +124,6 @@
         activeFile: '',
         };
       })
-
       fileState[path]= true;
       
     }
@@ -135,6 +136,7 @@
         rename: false, 
         activeFile: '',
         createFile: false,
+        createFolder:false
       };
     })
   }
@@ -147,8 +149,19 @@
   {#if fileTree}
     {#each fileTree as {path,name, items}}
     <ul>
-      {#if items.length > 0} 
-        {#if createFile}
+      {#if items.length > 0}        
+        {#if rename && activeFile === path}
+          <span>
+            <input 
+            class='textBox'
+            on:keypress={(e) => renameHandler(e,path)} 
+            value={newName}
+            type="text"/>
+          </span>
+        {:else}
+          <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" 
+          on:click={activeFile || createFile || createFolder ? resetRename : undefined}>{name}</li>
+          {#if createFile}
           <span>
             <input 
             class='textBox'
@@ -166,17 +179,6 @@
             type="text"/>
           </span>
         {/if}
-        {#if rename && activeFile === path}
-          <span>
-            <input 
-            class='textBox'
-            on:keypress={(e) => renameHandler(e,path)} 
-            value={newName}
-            type="text"/>
-          </span>
-        {:else}
-          <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" 
-          on:click={activeFile || createFile || createFolder ? resetRename : undefined}>{name}</li>
           {#if activeFile === path}
           <CreateMenu filePath={path} />
           {/if}

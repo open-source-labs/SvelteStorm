@@ -21,6 +21,8 @@ app.on('ready', () => {
   createWindow();
 });
 
+
+
 app.on('window-all-closed', () => {
   if (process.platform === 'darwin') {
     return false;
@@ -158,6 +160,17 @@ const openFile = exports.openFile = (targetWindow, file) => {
 const getFolderFromUser = exports.getFolderFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openDirectory'],
+  });
+
+  if(files) {
+    console.log(files.filePaths)
+    if (files) { openFolder(targetWindow, files.filePaths); }
+  }
+}
+
+const createProjectFromUser = exports.createProjectFromUser = async (targetWindow) => {
+  const files = await dialog.showOpenDialog(targetWindow, {
+    properties: ['createDirectory'],
   });
 
   if(files) {
