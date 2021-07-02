@@ -2,8 +2,5 @@
 **/package-lock.json
 public/bundle.**
 public/svelte.**
-<<<<<<< HEAD
 **/public
-=======
-**/public
->>>>>>> f282f33d9320fbeb8ed188cc8889b9e748d6dc74
+
