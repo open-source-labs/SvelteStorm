@@ -12,6 +12,7 @@
   let createFile= false;
   let createFolder = false;
   
+  
     
   const unsub = DirectoryData.subscribe(data =>{
     activeFile = data.activeFile;
@@ -70,7 +71,8 @@
     DirectoryData.update( currentData => {
       return {
       ...currentData, 
-      activeDir: path      
+      activeDir: path,
+      activeFile: '',   
       };
      })
     console.log(path)
@@ -99,7 +101,8 @@
     DirectoryData.update( currentData => {
       return {
       ...currentData, 
-      activeDir: path      
+      activeDir: path,
+      activeFile: '',   
       };
      })
     console.log(path)
@@ -122,7 +125,6 @@
         activeFile: '',
         };
       })
-
       fileState[path]= true;
       
     }
@@ -135,6 +137,7 @@
         rename: false, 
         activeFile: '',
         createFile: false,
+        createFolder:false
       };
     })
   }
@@ -147,25 +150,7 @@
   {#if fileTree}
     {#each fileTree as {path,name, items}}
     <ul>
-      {#if items.length > 0} 
-        {#if createFile}
-          <span>
-            <input 
-            class='textBox'
-            on:keypress={(e) => createFileHandler(e,path)} 
-            value={newName}
-            type="text"/>
-          </span>
-        {/if}
-        {#if createFolder}
-          <span>
-            <input 
-            class='textBox'
-            on:keypress={(e) => createFolderHandler(e,path)} 
-            value={newName}
-            type="text"/>
-          </span>
-        {/if}
+      {#if fs.statSync(path).isDirectory()}        
         {#if rename && activeFile === path}
           <span>
             <input 
@@ -177,6 +162,24 @@
         {:else}
           <li on:click={toggleVisibility(path)} class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"} on:contextmenu|preventDefault="{rightClickHandler(path)}" 
           on:click={activeFile || createFile || createFolder ? resetRename : undefined}>{name}</li>
+          {#if fileState[path] && createFile}
+          <span>
+            <input 
+            class='textBox'
+            on:keypress={(e) => createFileHandler(e,path)} 
+            value={newName}
+            type="text"/>
+          </span>
+        {/if}
+        {#if fileState[path] && createFolder}
+          <span>
+            <input 
+            class='textBox'
+            on:keypress={(e) => createFolderHandler(e,path)} 
+            value={newName}
+            type="text"/>
+          </span>
+        {/if}
           {#if activeFile === path}
           <CreateMenu filePath={path} />
           {/if}
@@ -198,7 +201,7 @@
         {/if}
       {/if}
 
-      {#if fileState[path] && items.length > 0}      
+      {#if fileState[path] && fs.statSync(path).isDirectory()}      
         <svelte:self fileTree={items.sort((a,b) => {
           return b.items.length - a.items.length
       })} />

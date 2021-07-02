@@ -7,9 +7,26 @@ const createApplicationMenu = () => {
   const hasFilePath = !!(focusedWindow && focusedWindow.getRepresentedFilename());
 
   const template = [
+    
     {
       label: 'File',
       submenu: [
+        {
+          label: 'Create Project',
+          accelerator: 'CommandOrControl+P',
+          click(item, focusedWindow) {
+            
+            if (focusedWindow) {
+              return mainProcess.createProjectFromUser(focusedWindow);
+            }
+    
+            const newWindow = mainProcess.createWindow();
+    
+            newWindow.on('show', () => {
+              mainProcess.createProjectFromUser(newWindow);
+            });
+          },
+        },
         {
           label: 'New File',
           accelerator: 'CommandOrControl+N',

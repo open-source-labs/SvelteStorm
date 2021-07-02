@@ -3,8 +3,7 @@
   import DirectoryData from '../Utilities/DirectoryStore';
   const fs = require('fs');
   let fileStat = fs.statSync(filePath)
-  console.log('isfile',fileStat.isFile())
-  console.log('isFolder', fileStat.isDirectory())
+  
   
 
   const unsub = DirectoryData.subscribe(data =>{
@@ -37,13 +36,13 @@
 
   const createFileHandler = () => {
     DirectoryData.update( currentData => {
-      return {...currentData, createFile :true};
+      return {...currentData, createFile :true, activeFile:''};
     })
   }
 
   const createFolderHandler = () => {
     DirectoryData.update( currentData => {
-      return {...currentData, createFolder :true};
+      return {...currentData, createFolder :true, activeFile:''};
     })
   }
 
@@ -99,4 +98,3 @@
   cursor: pointer;
 }
 </style>
-
