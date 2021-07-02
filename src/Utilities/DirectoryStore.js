@@ -14,7 +14,8 @@ const DirectoryData = writable({
   createFolder: false,
   createMainFile: false,
   createMainFolder: false,
-  reload: false
+  reload: false,
+  activeFolder : ''
 });
 
 
