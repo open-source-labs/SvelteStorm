@@ -148,9 +148,14 @@
               value.forEach( el => {
                 if(el && el.includes('export')) {                       
                   el = el.replace(/\s/g, '');
-                  if(el.includes('exportlet')) el = el.replace('exportlet','');
-                  if(el.includes('exportconst')) el = el.replace('exportconst','');
-                  stateArr.push(el.replace(';',''));
+                  if(el.includes('exportlet')) {
+                    el = el.replace('exportlet','');
+                    stateArr.push(el.replace(';',''));
+                  }
+                  if(el.includes('exportconst')) {
+                    el = el.replace('exportconst','');
+                    stateArr.push(el.replace(';',''));
+                  }
                                
                   stateObj[file] = stateArr;                                 
                 }
