@@ -52,7 +52,6 @@
         fs.watch(activeDir, (eventType, filename) => {
           console.log('directory',directory)
           if(eventType === 'rename' && !fsTimeout){  
-            console.log(' IN RUN BUILD');
             readFileNames(mainDir);              
           }
 
@@ -71,16 +70,15 @@
       directory = Array.isArray(content) ? content[0] : content;      
       console.log('directory',directory)
       if(directory) {       
-        fs.readdir(directory, (error,files) => {
-          console.log('files',files);
-          console.log('files.length',files.length)
+        fs.readdir(directory, (error,files) => {          
           if (files.length){
             var fileTree = new FileTree(directory);        
             fileTree.build();                
             savedTree = fileTree.items;
             savedTree.sort((a,b) => {
-                return b.items.length - a.items.length;
+              return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
             })
+
             DirectoryData.update(currentData =>{
               return {
                   ...currentData,
@@ -114,8 +112,9 @@
         fileTree.build();                
         savedTree = fileTree.items;
         savedTree.sort((a,b) => {
-            return b.items.length - a.items.length;
+          return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
         })
+        
         DirectoryData.update(currentData =>{
           return {
               ...currentData,

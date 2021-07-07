@@ -76,22 +76,6 @@
   height: auto;
   padding: 10px 10px 10px 10px;
 }
-.create-button {
-  width: 90%;
-  height: 20px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-top: 5px;
-  /* border-radius: 10px; */
-}
-
-.create-button:hover {
-  background-color: rgb(33, 37, 43);
-  color: white;
-  font-weight: 550;
-}
 
 .items:hover {
   color: rgb(250, 198, 164);

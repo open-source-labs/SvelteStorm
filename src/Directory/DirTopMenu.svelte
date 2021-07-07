@@ -7,6 +7,7 @@
   let reload = false;
   let newName = '';
   let fileState = {}
+  let fileName;
 
   const unsub = DirectoryData.subscribe(data =>{
       mainDir = data.mainDir;
@@ -59,23 +60,26 @@
       activeFile: '',   
       };
      })
-    console.log(path)
-    if(e.key === 'Enter') {      
-      newName = e.target.value;      
-      
-      fs.writeFileSync(path+'/'+newName, '', (err) => {
-        if(err) throw err;        
-      });
 
-      DirectoryData.update( currentData => {
-        return {
-        ...currentData,         
-        createMainFile: false,
-        rename:false, 
-        activeFile: '',
-        };
-      })      
-    }
+    if(e.key !== 'Enter') return;
+       
+    newName = e.target.value;      
+    
+    fs.writeFileSync(path+'/'+newName, '', (err) => {
+      if(err) throw err;        
+    });
+
+    DirectoryData.update( currentData => {
+      return {
+      ...currentData,         
+      createMainFile: false,
+      rename:false, 
+      activeFile: '',
+      };
+    })      
+    
+    newName = '';
+
   }
 
   const createFolderHandler = (e,path) => {
@@ -86,28 +90,27 @@
       activeFile: '',   
       };
      })
-    console.log(path)
-    if(e.key === 'Enter') {      
-      newName = e.target.value;
-      console.log(newName)
-      //const fullpath = path.substring(0, path.lastIndexOf('/'));
-      try {
+    if(e.key !== 'Enter') return;
+    
+    try {
       if (!fs.existsSync(path+'/'+newName)) {
         fs.mkdirSync(path+'/'+newName)
-      }
-      } catch (err) {
-        console.error(err)
-      }
-      DirectoryData.update( currentData => {
-        return {
-        ...currentData,         
-        createMainFolder: false,
-        rename:false, 
-        activeFile: '',
-        };
-      })   
-      
     }
+    } catch (err) {
+      console.error(err)
+    }
+
+    DirectoryData.update( currentData => {
+      return {
+      ...currentData,         
+      createMainFolder: false,
+      rename:false, 
+      activeFile: '',
+      };
+    })   
+    
+    newName = '';
+    
   }
 
   const resetStatus = () => {
@@ -128,22 +131,26 @@
     <div class='addFolder'on:click = {addFolder}></div>    
   </div>
   {#if createMainFile}
-    <span>
+    <span>      
       <input 
-      class='textBox'
-      on:keypress={(e) => createFileHandler(e,mainDir)} 
-      value={newName}
-      type="text"/>
+        class='textBox'
+        bind:this={fileName}
+        on:keydown={(e) => createFileHandler(e,mainDir)} 
+        bind:value={newName}
+        placeholder='New File Name'
+        type="text"/>      
     </span>
   {/if}
 
   {#if createMainFolder}
     <span>
       <input 
-      class='textBox'
-      on:keypress={(e) => createFolderHandler(e,mainDir)} 
-      value={newName}
-      type="text"/>
+        class='textBox'
+        bind:this={fileName}
+        on:keydown={(e) => createFolderHandler(e,mainDir)} 
+        bind:value={newName}
+        placeholder='New File Name'
+        type="text"/>
     </span>
   {/if}
 
@@ -194,7 +201,6 @@
     margin-left: 10px;
     padding: 10px 10px 10px 10px;
     font-size: 14px;
-    width: 150px;
-    
+    width: 150px;    
   }
 </style>
