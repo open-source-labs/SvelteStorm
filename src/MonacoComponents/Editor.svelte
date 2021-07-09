@@ -32,26 +32,20 @@
   };
 
   function deleteTab(targetId) {
-    console.log(targetId)
-    $openTabs = $openTabs.filter((t) => t.tabId != targetId)
-    
-    console.log($openTabs);
-    // for (let i = 0; i < $openTabs.length; i++) {
-    //   if ($openTabs.tabId === targetId) {
-    //     $openTabs = [ ...$openTabs, ]
-    //   }
-    // }
+    $openTabs = $openTabs.filter((t) => t.tabId != targetId).map((t, i) => ({
+      editorValue: t.editorValue,
+      editorLang: t.editorLang,
+      filePath: t.filePath,
+      fileName: t.fileName,
+      tabId: i,
+    }))
 
-    
-      activeTabValue = 0;
-    
+    count = count - 1;
+    activeTabValue = 0;
     activeEditor = activeTabValue;
-    console.log(activeEditor)
-    // value =$openTabs[(activeEditor)].editorValue)
   }
 
   const handleClick = (tabId) => () => {
-    console.log(tabId);
     activeTabValue = tabId;
     activeEditor = activeTabValue;
   }
