@@ -18,5 +18,6 @@ const DirectoryData = writable({
   activeFolder : ''
 });
 
+const openTabs = writable([]);
 
-export default DirectoryData; 
+export { DirectoryData, openTabs }; 

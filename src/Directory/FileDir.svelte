@@ -2,7 +2,7 @@
     import FileTest from './FileTest.svelte';  
     import DirTopMenu from './DirTopMenu.svelte'  
     import { onMount, onDestroy, afterUpdate} from 'svelte';
-    import DirectoryData from '../Utilities/DirectoryStore';
+    import { DirectoryData } from '../Utilities/DirectoryStore';
 
 
     const fs = require('fs');
@@ -28,7 +28,6 @@
       activeDir = data.activeDir;
       mainDir = data.mainDir;
       reload = data.reload;
-      
     });
 
     // store 

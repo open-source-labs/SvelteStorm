@@ -1,5 +1,5 @@
 {
-  "name": "SvelteStorm",
+  "name": "svelte-storm",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -54,17 +54,19 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.14.3",
+    "@decoupled/magic": "^0.1.3",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "estree-walker": "^1.0.1",
     "monaco-editor": "^0.23.0",
+    "monaco-editor-core": "^0.24.0",
     "monaco-languageclient": "^0.13.0",
     "node-pty": "^0.10.1",
     "rollup-plugin-monaco-editor": "0.0.7",
-    "rollup-plugin-postcss": "^4.0.0",
     "vscode-json-languageservice": "^4.1.4",
     "xterm": "^4.12.0",
-    "xterm-addon-fit": "^0.5.0"
+    "xterm-addon-fit": "^0.5.0",
+    "yootils": "^0.2.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.50",
@@ -72,7 +74,6 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.50",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.50",
     "@electron-forge/maker-zip": "^6.0.0-beta.50",
-    "@rollup/plugin-commonjs": "^11.1.0",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
     "@tsconfig/svelte": "^1.0.10",
@@ -87,7 +88,7 @@
     "rollup-plugin-import-css": "^2.0.1",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-postcss-modules": "^2.0.2",
+    "rollup-plugin-postcss": "^2.9.0",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-svelte": "^6.0.0",
     "rollup-plugin-terser": "^5.3.0",
