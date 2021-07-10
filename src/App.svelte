@@ -7,8 +7,8 @@
     export let orientation = 'columns';
     export let localhost;
 
-  let value = ""
-	let submit = false
+    let value = ""
+	  let submit = false
   
 	
 	const handleSubmit = () => {
@@ -45,7 +45,6 @@
       height: 100%;
       display: grid;
       border: 1px solid rgb(226, 142, 45);
-      grid-gap: 1px;
       grid-template-columns: min-content;
       grid-template-rows: 1fr;
       background-color: rgb(248, 246, 246);
@@ -53,7 +52,8 @@
   }
   
   .box {
-    background-color: rgb(233, 217, 186);
+    background-color: rgb(248, 246, 246);
+    border: 1px solid rgb(226, 142, 45);
     color: rgb(226, 142, 45);
     border-radius: 0px;
     padding: 10px;
