@@ -1,6 +1,6 @@
 <script>
   export let fileTree;
-  import DirectoryData from '../Utilities/DirectoryStore';
+  import { DirectoryData } from '../Utilities/DirectoryStore';
   import CreateMenu from './CreateMenu.svelte';
   const fs = require('fs');
   const fileState = {};
@@ -32,7 +32,8 @@
 
 
   const dblClickHandler = (path) => {
-    const openFilePath = path;      
+    const openFilePath = path; 
+    console.log(openFilePath)     
     DirectoryData.update(currentData =>{
       return {
         ...currentData,
