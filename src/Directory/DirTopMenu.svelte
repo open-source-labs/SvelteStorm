@@ -1,5 +1,5 @@
 <script>
-  import DirectoryData from '../Utilities/DirectoryStore';
+  import { DirectoryData } from '../Utilities/DirectoryStore';
   const fs = require('fs');
   let mainDir = '';
   let createMainFile= false;

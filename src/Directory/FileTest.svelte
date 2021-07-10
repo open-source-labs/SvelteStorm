@@ -1,6 +1,6 @@
 <script>
   export let fileTree;
-  import DirectoryData from '../Utilities/DirectoryStore';
+  import { DirectoryData } from '../Utilities/DirectoryStore';
   import CreateMenu from './CreateMenu.svelte';
   const fs = require('fs');
   const fileState = {};
