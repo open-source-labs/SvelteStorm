@@ -8,7 +8,6 @@
   let newName = '';
   let fileState = {}
   let fileName;
-
   const unsub = DirectoryData.subscribe(data =>{
       mainDir = data.mainDir;
       reload = data.reload; 
@@ -16,7 +15,6 @@
       createMainFolder = data.createMainFolder;
       fileState = data.fileState;
   });
-
   const refreshDir = () => {
     console.log('clickig now');
     DirectoryData.update( currentData => {
@@ -25,9 +23,7 @@
         reload: true
       };
     })
-
   }
-
   const addFolder = () => {
     console.log('clicking addFolder');
     DirectoryData.update( currentData => {
@@ -37,9 +33,7 @@
         activeFile: ''
       };
     })
-
   }
-
   const addFile = () => {
     console.log('clicking addFile');
     DirectoryData.update( currentData => {
@@ -49,9 +43,7 @@
         activeFile: ''
       };
     })
-
   }
-
   const createFileHandler = (e,path) => {
     DirectoryData.update( currentData => {
       return {
@@ -60,7 +52,6 @@
       activeFile: '',   
       };
      })
-
     if(e.key !== 'Enter') return;
        
     newName = e.target.value;      
@@ -68,7 +59,6 @@
     fs.writeFileSync(path+'/'+newName, '', (err) => {
       if(err) throw err;        
     });
-
     DirectoryData.update( currentData => {
       return {
       ...currentData,         
@@ -79,9 +69,7 @@
     })      
     
     newName = '';
-
   }
-
   const createFolderHandler = (e,path) => {
     DirectoryData.update( currentData => {
       return {
@@ -99,7 +87,6 @@
     } catch (err) {
       console.error(err)
     }
-
     DirectoryData.update( currentData => {
       return {
       ...currentData,         
@@ -112,7 +99,6 @@
     newName = '';
     
   }
-
   const resetStatus = () => {
     DirectoryData.update( currentData => {
         return {
@@ -122,7 +108,6 @@
         };
       })   
   }
-
 </script>
   <div class='fileMenu'>
     <div class='fileArea' on:click={createMainFile || createMainFolder ? resetStatus : undefined}>{mainDir.substring(mainDir.lastIndexOf('/')+1)}</div>
@@ -159,14 +144,12 @@
   .fileMenu {
     background-color: rgb(248, 200, 152);
   }
-
   .fileArea {    
     float: left;    
     height: 20px;
     font-size: 14px;
     color: white;
   }
-
   .refresh {
     float: right;
     background-image: url('./img/refresh.png');
@@ -175,8 +158,6 @@
     background-repeat: no-repeat;
     background-size: 20px;
   }
-
-
   .addFile {
     float: right;
     background-image: url('./img/addFile.png');
@@ -186,7 +167,6 @@
     background-size: 20px;
     margin-right: 5px;
   }
-
   .addFolder {
     float: right;
     background-image: url('./img/addFolder.png');
@@ -196,7 +176,6 @@
     background-size: 20px;
     margin-right: 5px;
   }
-
   .textBox {
     margin-left: 10px;
     padding: 10px 10px 10px 10px;
