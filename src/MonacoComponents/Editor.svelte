@@ -23,8 +23,8 @@
         duplicate = true;
       }
     })
+    
     if (!duplicate) {
-      // tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, tabId: count, ext: language }];
       $openTabs = [ ...$openTabs, newFile ]
       count = count + 1;
       console.log($openTabs)
