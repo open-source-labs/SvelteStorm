@@ -24,7 +24,7 @@
     
 
     const unsub = DirectoryData.subscribe(data =>{
-      rename = data.rename;      
+      rename = data.rename;    
       activeDir = data.activeDir;
       mainDir = data.mainDir;
       reload = data.reload;
