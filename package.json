@@ -1,7 +1,7 @@
 {
   "name": "svelte-storm",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Svelte IDE like no other. Embrace the storm.",
   "main": "src/index.js",
   "module": "src/index.js",
   "exports": {
@@ -66,8 +66,7 @@
     "rollup-plugin-monaco-editor": "0.0.7",
     "vscode-json-languageservice": "^4.1.4",
     "xterm": "^4.12.0",
-    "xterm-addon-fit": "^0.5.0",
-    "yootils": "^0.2.0"
+    "xterm-addon-fit": "^0.5.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.50",
