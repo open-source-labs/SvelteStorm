@@ -1,22 +1,25 @@
 <script>  
-  import FileTest from './FileTest.svelte';  
-  import DirTopMenu from './DirTopMenu.svelte'  
-  import { onMount, onDestroy, afterUpdate} from 'svelte';
-  import DirectoryData from '../Utilities/DirectoryStore';
-  const fs = require('fs');
-  let savedTree = [];
-  var remote = window.require('electron').remote;
-  var electronFs = remote.require('fs');
-  const {ipcRenderer} = require('electron');
-  
-  let directory;
-  let rename;
-  let stateObj = {};
-  let resultArr = [];
-  let fsTimeout;
-  export let activeDir = '';
-  let mainDir = '';
-  export let reload = false;
+    import FileTest from './FileTest.svelte';  
+    import DirTopMenu from './DirTopMenu.svelte'  
+    import { onMount, onDestroy, afterUpdate} from 'svelte';
+    import { DirectoryData } from '../Utilities/DirectoryStore';
+
+
+    const fs = require('fs');
+    let savedTree = [];
+    var remote = window.require('electron').remote;
+    var electronFs = remote.require('fs');
+    const {ipcRenderer} = require('electron');
+
+    
+    let directory;
+    let rename;
+    let stateObj = {};
+    let resultArr = [];
+    let fsTimeout;
+    export let activeDir = '';
+    let mainDir = '';
+    export let reload = false;
  
   
   const unsub = DirectoryData.subscribe(data =>{
