@@ -208,7 +208,11 @@
             type="text"/>
           </span>
         {:else}
-          <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={activeFile ? resetRename : undefined}>{name} </li>
+          <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={activeFile ? resetRename : undefined}>
+            
+            <img src='../src/icons/file_type_{name.split('.').pop()}.svg' alt={''} />
+            
+            {name} </li>
           {#if activeFile === path}
               <CreateMenu filePath={path} />
           {/if}
@@ -254,14 +258,14 @@
   .liFiles {
     font-size: 15px;
     cursor: pointer;
-    padding-left: 25px;
-    margin-left: 20px;
+    /* padding-left: 25px; */
+    /* margin-left: 20px; */
     margin-top: 1px;
     list-style: none;
-    background-image: url('./img/document.png');
+    /* background-image: url('./img/document.png'); */
     background-repeat: no-repeat;
     background-position: left;
-    background-size: 15px;
+    /* background-size: 15px; */
   }
   
   .directory{
@@ -287,4 +291,8 @@
     
   }
 
+img {
+  width: 15px;
+  margin-top: 10px;
+}
 </style>

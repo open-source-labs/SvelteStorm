@@ -49,6 +49,7 @@
   
   .box {
     background-color: rgb(233, 217, 186);
+    /* background-color: rgb(129, 126, 125); */
     color: rgb(226, 142, 45);
     border-radius: 0px;
     padding: 10px;
