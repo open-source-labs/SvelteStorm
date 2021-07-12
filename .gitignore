@@ -1,13 +1,7 @@
 **/node_modules
 **/package-lock.json
-<<<<<<< HEAD
-public/bundle**
-public/svelte**
-public/
-=======
 public/bundle.**
 public/svelte.**
 **/public
 release-builds
 
->>>>>>> 87a1b803ea03b57c76f7e0544ddf543ce2d58a07
