@@ -17,14 +17,15 @@
   let count = 0;
 
   function addTab(newFile) {
+    console.log(newFile)
     let duplicate = false;
     $openTabs.map((tab) => {
-      if (tab.filePath === filePath) {
+      if (tab.filePath === newFile.filePath) {
         duplicate = true;
       }
     })
+
     if (!duplicate) {
-      // tabs = [ ...tabs, { editorValue: value, editorLang: getLanguage(editorLang), fileName: fileName, filePath: filePath, tabId: count, ext: language }];
       $openTabs = [ ...$openTabs, newFile ]
       count = count + 1;
       console.log($openTabs)
@@ -34,6 +35,7 @@
   function deleteTab(targetId) {
     $openTabs = $openTabs.filter((t) => t.tabId != targetId).map((t, i) => ({
       editorValue: t.editorValue,
+      ext: t.ext,
       editorLang: t.editorLang,
       filePath: t.filePath,
       fileName: t.fileName,
@@ -76,7 +78,7 @@
   ipcRenderer.on('file-opened', function (evt, file, content) {
       const newTab = {}
       filePath = (file);
-      fileName = file.slice().split('/').pop();
+      process.platform === "win32" ? fileName = file.slice().split('\\').pop() : fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
       newTab.editorValue = content.split(/\r?\n/);
       newTab.ext = language;
@@ -99,7 +101,7 @@
         newTab.editorValue = value;
         newTab.ext = language;
         newTab.editorLang = getLanguage(language);
-        newTab.filePath = readData;
+        newTab.filePath = data.openFilePath;
         newTab.fileName = fileName;
         newTab.tabId = count;
         currentWindow.setTitle(title);

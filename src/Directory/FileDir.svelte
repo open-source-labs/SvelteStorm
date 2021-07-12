@@ -4,7 +4,6 @@
     import { onMount, onDestroy, afterUpdate} from 'svelte';
     import { DirectoryData } from '../Utilities/DirectoryStore';
 
-
     const fs = require('fs');
     let savedTree = [];
     var remote = window.require('electron').remote;
@@ -19,8 +18,7 @@
     let fsTimeout;
     export let activeDir = '';
     let mainDir = '';
-    export let reload = false;
- 
+    export let reload = false; 
   
   const unsub = DirectoryData.subscribe(data =>{
     rename = data.rename;      
