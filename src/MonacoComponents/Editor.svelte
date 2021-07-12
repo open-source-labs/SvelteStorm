@@ -17,7 +17,7 @@
   let count = 0;
 
   function addTab(newFile) {
-    console.log(newFile)
+  
     let duplicate = false;
     $openTabs.map((tab) => {
       if (tab.filePath === newFile.filePath) {
@@ -28,7 +28,6 @@
     if (!duplicate) {
       $openTabs = [ ...$openTabs, newFile ]
       count = count + 1;
-      console.log($openTabs)
     }
   };
 
