@@ -17,7 +17,7 @@
   let count = 0;
 
   function addTab(newFile) {
-    console.log(newFile)
+  
     let duplicate = false;
     $openTabs.map((tab) => {
       if (tab.filePath === newFile.filePath) {
@@ -28,10 +28,9 @@
     if (!duplicate) {
       $openTabs = [ ...$openTabs, newFile ]
       count = count + 1;
-      console.log($openTabs)
     }
   };
-
+  // remove and reset tab order
   function deleteTab(targetId) {
     $openTabs = $openTabs.filter((t) => t.tabId != targetId).map((t, i) => ({
       editorValue: t.editorValue,
@@ -51,7 +50,7 @@
     activeTabValue = tabId;
     activeEditor = activeTabValue;
   }
-  
+  // convert file extension to monaco language
   const getLanguage = (lang) => {
       switch (lang) {
         case 'js':
@@ -74,7 +73,7 @@
           return undefined;
       }
   }
-
+  // render file on open and add to store
   ipcRenderer.on('file-opened', function (evt, file, content) {
       const newTab = {}
       filePath = (file);
