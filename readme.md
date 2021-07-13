@@ -19,8 +19,8 @@ A Svelte IDE like no other. Embrace the storm.
 - something
 
 ## 🔥 Key Features  
-1.
-2.
+1. Visualize state in your Svelte apps with the Svelte Storm state manager.
+2. 
 3.
 
 ## 💻 Installing locally
@@ -31,6 +31,9 @@ A Svelte IDE like no other. Embrace the storm.
 
 ## Authors
 
+  [Arron Nestor](https://github.com/Nestar6) | [Aye Moe](https://github.com/ayemmoe) | 
+  [Frank Stepanski](https://github.com/frankstepanski) | [Kevin Sarchi](https://github.com/Svrchi) |
+  [Sam Filip](https://github.com/samfilip)
 
 ## Contact
 
