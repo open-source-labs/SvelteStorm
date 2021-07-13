@@ -26,6 +26,7 @@
     mainDir = data.mainDir;
     reload = data.reload;
     
+    
   });
   // store 
   onMount (()=>{
@@ -62,14 +63,17 @@
     directory = Array.isArray(content) ? content[0] : content;      
     console.log('directory',directory)
     if(directory) {       
-      fs.readdir(directory, (error,files) => {          
-        if (files.length){
+      fs.readdir(directory, (error,readfiles) => {     
+        let files = readfiles.filter(file => file !== '.git');        
+        if (files.length ){
           var fileTree = new FileTree(directory);        
           fileTree.build();                
           savedTree = fileTree.items;
           savedTree.sort((a,b) => {
             return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
           })
+
+          console.log('savedTree', savedTree)
           DirectoryData.update(currentData =>{
             return {
                 ...currentData,
@@ -131,12 +135,16 @@
     }
   //method to build file tree
     build () {
-      this.items = FileTree.readDir(this.path,'',0);
+        console.log(this.path.substring(this.path.lastIndexOf('/')+1))
+        
+        this.items = FileTree.readDir(this.path,'',0);
+      
     }
     static readDir(path) {
       var fileArray = [];        
       
       electronFs.readdirSync(path).forEach(file => {
+               
         var fileInfo = new FileTree(`${path}/${file}`, file);
         var stat = electronFs.statSync(fileInfo.path);
         if (file.split('.').pop() === 'svelte'){
@@ -172,10 +180,14 @@
           }                
         }
         if (stat.isDirectory()){
+          console.log(fileInfo.name)
           fileInfo.items = FileTree.readDir(fileInfo.path);
         }
-        fileArray.push(fileInfo);
-      })   
+
+        if (fileInfo.name !== '.git') {
+          fileArray.push(fileInfo);
+        }
+      })
     return fileArray;
     }
   }
