@@ -55,6 +55,7 @@
   "dependencies": {
     "@babel/core": "^7.14.3",
     "@decoupled/magic": "^0.1.3",
+    "@rollup/plugin-commonjs": "^19.0.0",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "estree-walker": "^1.0.1",

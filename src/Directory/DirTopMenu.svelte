@@ -110,7 +110,7 @@
   }
 </script>
   <div class='fileMenu'>
-    <div class='fileArea' on:click={createMainFile || createMainFolder ? resetStatus : undefined}>{mainDir.substring(mainDir.lastIndexOf('/')+1)}</div>
+    <div class='fileArea' on:click={createMainFile || createMainFolder ? resetStatus : undefined}>{process.platform === "win32" ?  mainDir.substring(mainDir.lastIndexOf('\\')+1) : mainDir.substring(mainDir.lastIndexOf('/')+1)}</div>
     <div class='refresh' on:click={refreshDir}></div>
     <div class='addFile' on:click = {addFile}></div>
     <div class='addFolder'on:click = {addFolder}></div>    
