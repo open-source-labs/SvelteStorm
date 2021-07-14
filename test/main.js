@@ -27,7 +27,7 @@ global.before(function () {
 describe('Test Example', function () {
   beforeEach(function () {
       return app.start();
-      done();
+      
   });
 
   afterEach(async function () {
