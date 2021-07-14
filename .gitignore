@@ -4,5 +4,10 @@ public/bundle.**
 public/svelte.**
 **/public
 release-builds
+<<<<<<< HEAD
 /public
+=======
+
+/bundle
+>>>>>>> 6716fa254e26d324fff07fbd48aece58d8840181
 bundle
