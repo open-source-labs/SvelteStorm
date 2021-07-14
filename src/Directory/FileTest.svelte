@@ -23,8 +23,7 @@
     createFile = data.createFile;
     createFolder = data.createFolder; 
     activeDir = data.activeDir;     
-    activeFolder = data.activeFolder;   
-    console.log('png file exist: ', fs.existsSync('src/icons/file_type_png.svg'))
+    activeFolder = data.activeFolder;    
   });
 
   const toggleVisibility = (path) => {

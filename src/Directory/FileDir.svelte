@@ -73,7 +73,7 @@
             return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
           })
 
-          console.log('savedTree', savedTree)
+          
           DirectoryData.update(currentData =>{
             return {
                 ...currentData,
@@ -135,8 +135,7 @@
     }
   //method to build file tree
     build () {
-        console.log(this.path.substring(this.path.lastIndexOf('/')+1))
-        
+               
         this.items = FileTree.readDir(this.path,'',0);
       
     }
@@ -148,7 +147,7 @@
         var fileInfo = new FileTree(`${path}/${file}`, file);
         var stat = electronFs.statSync(fileInfo.path);
         if (file.split('.').pop() === 'svelte'){
-          //console.log(`${path}/${file}`)
+          
           if(path.includes('node_modules') !== true) {
             var content = fs.readFileSync(`${path}/${file}`).toString();                    
             var stateArr = [];
@@ -179,8 +178,7 @@
             }                
           }                
         }
-        if (stat.isDirectory()){
-          console.log(fileInfo.name)
+        if (stat.isDirectory()){          
           fileInfo.items = FileTree.readDir(fileInfo.path);
         }
 
