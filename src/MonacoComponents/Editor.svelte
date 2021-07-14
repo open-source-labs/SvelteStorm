@@ -26,12 +26,13 @@
     })
 
     if (!duplicate) {
-      $openTabs = [ ...$openTabs, newFile ]
+      $openTabs = [ ...$openTabs, newFile]
       count = count + 1;
     }
   };
   // remove and reset tab order
   function deleteTab(targetId) {
+
     $openTabs = $openTabs.filter((t) => t.tabId != targetId).map((t, i) => ({
       editorValue: t.editorValue,
       ext: t.ext,
@@ -90,6 +91,7 @@
   });
 
   const unsub = DirectoryData.subscribe(data => {
+    console.log(data.openFilePath)
     const newTab = {};
       if (data.fileRead) {
         readData = fs.readFileSync(data.openFilePath).toString();
