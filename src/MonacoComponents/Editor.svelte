@@ -17,24 +17,25 @@
   let count = 0;
 
   function addTab(newFile) {
+  
     let duplicate = false;
     $openTabs.map((tab) => {
       if (tab.filePath === newFile.filePath) {
         duplicate = true;
       }
     })
+
     if (!duplicate) {
       $openTabs = [ ...$openTabs, newFile]
       count = count + 1;
-      console.log($openTabs)
     }
   };
-
+  // remove and reset tab order
   function deleteTab(targetId) {
 
     $openTabs = $openTabs.filter((t) => t.tabId != targetId).map((t, i) => ({
       editorValue: t.editorValue,
-      ext : t.ext,
+      ext: t.ext,
       editorLang: t.editorLang,
       filePath: t.filePath,
       fileName: t.fileName,
@@ -50,7 +51,7 @@
     activeTabValue = tabId;
     activeEditor = activeTabValue;
   }
-  
+  // convert file extension to monaco language
   const getLanguage = (lang) => {
       switch (lang) {
         case 'js':
@@ -73,20 +74,11 @@
           return undefined;
       }
   }
-
+  // render file on open and add to store
   ipcRenderer.on('file-opened', function (evt, file, content) {
       const newTab = {}
       filePath = (file);
-      console.log(filePath)
-      
-      if(process.platform === "win32") {
-        console.log("win32")
-        fileName = file.slice().split('\\').pop();
-      }
-      else {
-        fileName = file.slice().split('/').pop();
-      }
-     
+      process.platform === "win32" ? fileName = file.slice().split('\\').pop() : fileName = file.slice().split('/').pop();
       language = file.slice().split('.').pop();
       newTab.editorValue = content.split(/\r?\n/);
       newTab.ext = language;

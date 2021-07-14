@@ -4,7 +4,6 @@
     import { onMount, onDestroy, afterUpdate} from 'svelte';
     import { DirectoryData } from '../Utilities/DirectoryStore';
 
-
     const fs = require('fs');
     let savedTree = [];
     var remote = window.require('electron').remote;
@@ -19,14 +18,14 @@
     let fsTimeout;
     export let activeDir = '';
     let mainDir = '';
-    export let reload = false;
- 
+    export let reload = false; 
   
   const unsub = DirectoryData.subscribe(data =>{
     rename = data.rename;      
     activeDir = data.activeDir;
     mainDir = data.mainDir;
     reload = data.reload;
+    
     
   });
   // store 
@@ -64,14 +63,17 @@
     directory = Array.isArray(content) ? content[0] : content;      
     console.log('directory',directory)
     if(directory) {       
-      fs.readdir(directory, (error,files) => {          
-        if (files.length){
+      fs.readdir(directory, (error,readfiles) => {     
+        let files = readfiles.filter(file => file !== '.git');        
+        if (files.length ){
           var fileTree = new FileTree(directory);        
           fileTree.build();                
           savedTree = fileTree.items;
           savedTree.sort((a,b) => {
             return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
           })
+
+          
           DirectoryData.update(currentData =>{
             return {
                 ...currentData,
@@ -133,16 +135,19 @@
     }
   //method to build file tree
     build () {
-      this.items = FileTree.readDir(this.path,'',0);
+               
+        this.items = FileTree.readDir(this.path,'',0);
+      
     }
     static readDir(path) {
       var fileArray = [];        
       
       electronFs.readdirSync(path).forEach(file => {
+               
         var fileInfo = new FileTree(`${path}/${file}`, file);
         var stat = electronFs.statSync(fileInfo.path);
         if (file.split('.').pop() === 'svelte'){
-          //console.log(`${path}/${file}`)
+          
           if(path.includes('node_modules') !== true) {
             var content = fs.readFileSync(`${path}/${file}`).toString();                    
             var stateArr = [];
@@ -173,11 +178,14 @@
             }                
           }                
         }
-        if (stat.isDirectory()){
+        if (stat.isDirectory()){          
           fileInfo.items = FileTree.readDir(fileInfo.path);
         }
-        fileArray.push(fileInfo);
-      })   
+
+        if (fileInfo.name !== '.git') {
+          fileArray.push(fileInfo);
+        }
+      })
     return fileArray;
     }
   }
