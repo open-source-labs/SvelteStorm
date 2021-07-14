@@ -110,7 +110,7 @@
   }
 </script>
   <div class='fileMenu'>
-    <div class='fileArea' on:click={createMainFile || createMainFolder ? resetStatus : undefined}>{mainDir.substring(mainDir.lastIndexOf('/')+1)}</div>
+    <div class='fileArea' on:click={createMainFile || createMainFolder ? resetStatus : undefined}>{process.platform === "win32" ?  mainDir.substring(mainDir.lastIndexOf('\\')+1) : mainDir.substring(mainDir.lastIndexOf('/')+1)}</div>
     <div class='refresh' on:click={refreshDir}></div>
     <div class='addFile' on:click = {addFile}></div>
     <div class='addFolder'on:click = {addFolder}></div> 
@@ -142,7 +142,8 @@
 
 <style>
   .fileMenu {
-    background-color: rgb(248, 200, 152);
+    background-color: rgb(117, 117, 116);
+    border-radius: 10px;
   }
   .fileArea {    
     float: left;    
