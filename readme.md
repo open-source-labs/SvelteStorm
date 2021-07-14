@@ -32,9 +32,9 @@ A Svelte IDE like no other. Embrace the storm.
 ## Authors
 
   [Aye Moe] (https://github.com/ayemmoe) | [Frank Stepanski] (https://github.com/frankstepanski) |
-  [Kevin Sarchi] (https://github.com/Svrchi) | [Arron Nestor] (https://github.com/Nestar6) |
-  [Sam Filip] (https://github.com/samfilip)
-
+  [Kevin Sarchi](https://github.com/Svrchi) | [Arron Nestor] (https://github.com/Nestar6) |
+  [Sam Filip](https://github.com/samfilip)
+  [Jin Choi](https://github.com/jinihendrix)
 ## Contact
 
 
