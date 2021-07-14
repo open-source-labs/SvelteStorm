@@ -23,6 +23,7 @@ Svelte is an open-source IDE with a built-in State Manager window for viewing yo
   [Frank Stepanski](https://github.com/frankstepanski) | [Kevin Sarchi](https://github.com/Svrchi) |
   [Sam Filip](https://github.com/samfilip)
 
+
 ## Contributing
 There are many ways in which you can participate in this project, for example:
 Submit bugs and feature requests, and help us verify as they are checked in

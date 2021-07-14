@@ -20,7 +20,8 @@
     "lint": "echo \"No linting configured\"",
     "svelte-build": "rollup -c",
     "svelte-dev": "rollup -c -w",
-    "svelte-start": "sirv public"
+    "svelte-start": "sirv public",
+    "test": "mocha test/main.js"
   },
   "config": {
     "forge": {
@@ -79,10 +80,13 @@
     "@tsconfig/svelte": "^1.0.10",
     "autoprefixer": "^9.0.0",
     "babel": "^6.23.0",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "chokidar": "^3.5.1",
     "concurrently": "^5.1.0",
     "electron": "^8.0.2",
     "electron-packager": "^15.2.0",
+    "mocha": "^9.0.2",
     "rollup": "^2.26.10",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-import-css": "^2.0.1",
@@ -92,6 +96,7 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-svelte": "^6.0.0",
     "rollup-plugin-terser": "^5.3.0",
+    "spectron": "^10.0.0",
     "svelte": "^3.14.1"
   }
 }
