@@ -5,3 +5,5 @@ public/svelte.**
 **/public
 release-builds
 
+/bundle
+bundle
