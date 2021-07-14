@@ -211,13 +211,9 @@
         {:else}
           <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={activeFile ? resetRename : undefined}>
             
-            {#if process.platform === "win32"}
             <img src={fs.existsSync(`src/icons/file_type_${name.split('.').pop()}.svg`) ? `../src/icons/file_type_${name.split('.').pop()}.svg` : '../src/icons/file_type_exclam.svg'}  
             alt={''} />
-            {:else}
-            <img src={fs.existsSync(`src/icons/file_type_${name.split('.').pop()}.svg`) ? `../src/icons/file_type_${name.split('.').pop()}.svg` : '../src/icons/file_type_exclam.svg'}  
-            alt={''} />
-            {/if}
+            
             {name} </li>
           {#if activeFile === path}
               <CreateMenu filePath={path} />

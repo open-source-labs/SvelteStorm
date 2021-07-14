@@ -39,7 +39,7 @@
   .wrapper {
       height: 100%;
       display: grid;
-      border: 1px solid rgb(226, 142, 45);
+      border: 1px solid rgb(228, 81, 13);
       grid-template-columns: min-content;
       grid-template-rows: 1fr;
       background-color: rgb(39, 38, 38);
@@ -48,7 +48,7 @@
   
   .box {
     background-color: rgb(39, 38, 38);
-    border: 1px solid rgb(226, 142, 45);
+    border: 1px solid rgb(228, 81, 13);
     color: rgb(226, 142, 45);
     border-radius: 0px;
     padding: 10px;

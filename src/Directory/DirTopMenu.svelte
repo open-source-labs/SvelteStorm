@@ -142,7 +142,8 @@
 
 <style>
   .fileMenu {
-    background-color: rgb(248, 200, 152);
+    background-color: rgb(117, 117, 116);
+    border-radius: 10px;
   }
   .fileArea {    
     float: left;    
