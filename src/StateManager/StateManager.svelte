@@ -11,24 +11,14 @@
 <!-- Components -->
 
 <div class="state-container">
-    <h5 class="title">States</h5>
-    
+  <div class="h5Container">
+    <h5 class="title">States</h5> 
+  </div>   
     <ul>
         {#each Object.entries(stateObj) as [file,state]}
-            <li class='fileName'>{file} : <span class='stateName'>{'{ '}{state.join()}{' }'}</span> </li>
-                   
-            
+            <li class='fileName'>{file} : <span class='stateName'>{'{ '}{state.join()}{' }'}</span> </li>                 
         {/each}
-    </ul>
-    <!-- <ul>
-        {#each Object.entries(stateObj) as [file,state]}
-            <li class='fileName'>{file}</li> 
-            {#each state as s} 
-              <li class="stateName">|__ {s}</li>
-            {/each}
-        {/each}
-    </ul> -->
-    
+    </ul>    
 </div>
 
 
@@ -40,12 +30,25 @@
   padding-bottom: 10px;
   padding-left: 0;
   /* max-height: 500px; */
-  
+  margin-top: 0;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;  
+}
+.h5Container {
+background-color: rgb(27, 27, 26);
+height: 20px;
+width: 100%;
+padding-left: 7px;
+
+
 }
 
 .title {  
   color: rgb(230, 100, 41);
   margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 0;
   font-size: 16px;
   
 }
@@ -59,7 +62,7 @@ span {
   border-radius: 10px;
   font-size: 16px;
   /* max-width: 150px; */
-  padding: 0px 0 5px 25px;
+  /* padding: 0px 0 5px 25px; */
   background-image: url('../src/icons/arrow_head.svg');
   background-repeat: no-repeat;
   background-position: left;
@@ -74,6 +77,8 @@ span {
 ul {
   list-style: none;
   margin-top: 0;
+  margin: 0;
+  padding: 0;
   
   
 }
