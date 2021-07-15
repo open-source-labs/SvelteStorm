@@ -144,6 +144,10 @@
   .fileMenu {
     background-color: rgb(117, 117, 116);
     border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top : 2px;
+    padding-bottom: 2px;
   }
   .fileArea {    
     float: left;    
@@ -153,7 +157,7 @@
   }
   .refresh {
     float: right;
-    background-image: url('./img/refresh.png');
+    background-image: url('../src/icons/refresh.png');
     height: 20px;    
     width: 20px;
     background-repeat: no-repeat;
@@ -161,7 +165,7 @@
   }
   .addFile {
     float: right;
-    background-image: url('./img/addFile.png');
+    background-image: url('../src/icons/addFile.png');
     height: 20px;
     width: 20px;
     background-repeat: no-repeat;
@@ -170,7 +174,7 @@
   }
   .addFolder {
     float: right;
-    background-image: url('./img/add_folder2.png');
+    background-image: url('../src/icons/add_folder2.png');
     height: 20px;
     width: 20px;
     background-repeat: no-repeat;
