@@ -96,7 +96,7 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-svelte": "^6.0.0",
     "rollup-plugin-terser": "^5.3.0",
-    "spectron": "^10.0.1",
+    "spectron": "^10.0.0",
     "svelte": "^3.14.1"
   }
 }
