@@ -142,12 +142,13 @@
 
 <style>
   .fileMenu {
-    background-color: rgb(117, 117, 116);
-    border-radius: 10px;
-    padding-left: 10px;
+    background-color: rgb(27, 27, 26);
+    /* border-radius: 10px; */
+    /* padding-left: 2px; */
     padding-right: 10px;
     padding-top : 2px;
     padding-bottom: 2px;
+    width: 100%;
   }
   .fileArea {    
     float: left;    

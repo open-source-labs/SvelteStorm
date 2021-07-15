@@ -42,9 +42,4 @@ describe('Test Example', function () {
     expect(windowCount).to.equal(1);
   });
 
-  // it("should have correct text", async () => {
-  //   const h1Text = await app.client.getText("h1");
-
-  //   expect(h1Text).toEqual("💖 Hello World!");
-  // });
 });

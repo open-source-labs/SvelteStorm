@@ -4,4 +4,4 @@ public/bundle.**
 public/svelte.**
 **/public
 release-builds
-
+/public

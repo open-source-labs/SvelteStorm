@@ -11,7 +11,9 @@
 <!-- Components -->
 
 <div class="state-container">
-    <h5 class="title">States</h5>    
+  <div class="h5Container">
+    <h5 class="title">States</h5> 
+  </div>   
     <ul>
         {#each Object.entries(stateObj) as [file,state]}
             <li class='fileName'>{file} : <span class='stateName'>{'{ '}{state.join()}{' }'}</span> </li>                 
@@ -30,7 +32,16 @@
   /* max-height: 500px; */
   margin-top: 0;
   padding-top: 0;
-  
+  display: flex;
+  flex-direction: column;  
+}
+.h5Container {
+background-color: rgb(27, 27, 26);
+height: 20px;
+width: 100%;
+padding-left: 7px;
+
+
 }
 
 .title {  

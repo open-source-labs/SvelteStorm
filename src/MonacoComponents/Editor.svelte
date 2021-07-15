@@ -162,12 +162,13 @@
     margin-bottom: 0;
     list-style: none;
     border-bottom: 1px solid #dee2e6;
-    border-radius: 5px;
+    background-color: rgb(27, 27, 26);
+    /* border-radius: 5px; */
   }
 
 	li {
 		margin-bottom: -1px;
-    background-color: black;
+    background-color: rgb(37, 37, 37);
     color: #fff;
 	}
 
@@ -179,7 +180,7 @@
     flex-direction: row;
     padding: 0 1rem;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 16px;
   }
 
   .tab-span:hover {
@@ -187,8 +188,8 @@
   }
 
   li.active > span {
-    color: #495057;
-    background-color: #fff;
+    color: #ffffff;
+    background-color: rgb(53, 50, 50);
     border-color: #dee2e6 #dee2e6 #fff;
   }
 
