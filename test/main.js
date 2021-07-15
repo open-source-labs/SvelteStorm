@@ -19,20 +19,20 @@ var app = new Application({
   chromeDriverArgs: ["--disable-extensions"],
 });
 
-// global.before(function () {
-//     chai.should();
-//     chai.use(chaiAsPromised);
-// });
+global.before(function () {
+    chai.should();
+    chai.use(chaiAsPromised);
+});
 
 describe('Test Example', function () {
   beforeEach(function () {
       return app.start();
-      done();
+      
   });
 
   afterEach(async function () {
     if (app && app.isRunning()) {
-        await app.stop();
+        return app.stop();
     }
   });
 
@@ -42,9 +42,4 @@ describe('Test Example', function () {
     expect(windowCount).to.equal(1);
   });
 
-  // it("should have correct text", async () => {
-  //   const h1Text = await app.client.getText("h1");
-
-  //   expect(h1Text).toEqual("💖 Hello World!");
-  // });
 });

@@ -39,7 +39,7 @@
   .wrapper {
       height: 100%;
       display: grid;
-      border: 1px solid rgb(228, 81, 13);
+      /* border: 1px solid rgb(228, 81, 13); */
       grid-template-columns: min-content;
       grid-template-rows: 1fr;
       background-color: rgb(39, 38, 38);
@@ -48,7 +48,7 @@
   
   .box {
     background-color: rgb(39, 38, 38);
-    border: 1px solid rgb(228, 81, 13);
+    /* border: 1px solid rgb(228, 81, 13); */
     color: rgb(226, 142, 45);
     border-radius: 0px;
     padding: 10px;
@@ -58,12 +58,16 @@
   .a {
     overflow: auto;
     resize: horizontal;
-    min-width: 15%;
+    min-width: 20%;
     max-width: 150%;
     min-height: 10%;
     max-height: 150%;
     grid-column: 1 ;
     grid-row: 1;
+    padding: 0;
+    background-color: #242425;
+    border-right: 1px solid #3d3d3d;
+    border-bottom: 1px solid #3d3d3d;
   }
   
   .b {
@@ -74,6 +78,9 @@
     max-height: 150%;
     grid-column: 2;
     grid-row: 1;
+    background-color: #1d1d1d;
+    border-bottom:1px solid #3d3d3d;
+    border-right:1px solid #3d3d3d;
   }
 
   .c {
@@ -84,6 +91,9 @@
     max-height: 150%;
     grid-column: 1 ;
     grid-row: 2 ;
+    background-color: #242425;
+    border-right: 1px solid #3d3d3d;
+    padding: 0;
   }
   
   .d {
@@ -96,6 +106,8 @@
     text-align: center;
     grid-column: 3;
     grid-row: 1;
+    background-color: #1d1d1d;
+    border-bottom: 1px solid #3d3d3d;
   }
 
   .d input {
@@ -113,6 +125,7 @@
     min-height: 100%;
     grid-column: 2 / 4;
     grid-row: 2;
+    background-color: #1d1d1d;
   }
   
   .webpage {

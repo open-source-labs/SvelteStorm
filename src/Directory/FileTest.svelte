@@ -211,7 +211,7 @@
         {:else}
           <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={activeFile ? resetRename : undefined}>
             
-            <img src={fs.existsSync(`src/icons/file_type_${name.split('.').pop()}.svg`) ? `../src/icons/file_type_${name.split('.').pop()}.svg` : '../src/icons/file_type_exclam.svg'}  
+            <img src={fs.existsSync(`src/icons/file_type_${name.split('.').pop()}.svg`) ? `../src/icons/file_type_${name.split('.').pop()}.svg` : '../src/icons/file_type_exclam.png'}  
             alt={''} />
             
             {name} </li>
@@ -238,7 +238,7 @@
     cursor: pointer;
     padding: 0px 0 5px 25px;
     list-style: none;
-    background-image: url("./img/folderClosed.svg");
+    background-image: url("../src/icons/folder-1484.svg");
     background-repeat: no-repeat;
     background-position: left;
     background-size: 15px;   
@@ -251,7 +251,7 @@
     justify-content: flex-start;
     padding: 10px 0 5px 25px;
     list-style: none;
-    background-image: url('./img/folderOpen.svg');
+    background-image: url('../src/icons/folder-1485.svg');
     background-repeat: no-repeat;
     background-position: left;
     background-size: 15px;    
