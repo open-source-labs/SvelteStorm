@@ -28,7 +28,7 @@ const createApplicationMenu = () => {
           },
         },
         {
-          label: 'New File',
+          label: 'New Window',
           accelerator: 'CommandOrControl+N',
           click() {
             mainProcess.createWindow();
