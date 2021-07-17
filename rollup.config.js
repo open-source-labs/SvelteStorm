@@ -1,14 +1,9 @@
 import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-//import livereload from 'rollup-plugin-livereload';
-//import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
-// import monaco from 'rollup-plugin-monaco-editor';
-// import ts from '@rollup/plugin-typescript';
-// import typescript from 'typescript'
-//import replace from 'rollup-plugin-replace';
+
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -56,18 +51,10 @@ export default {
 				}]
 			]
 		}),
-		// monaco(),
+		
 		commonjs(),
 
-        !production & serve(),
-		// Watch the `public` directory and refresh the
-		// browser on changes when not in production
-		// livereload({
-		// 		watch: 'public',
-		// }),
-
-		// If we're building for production (npm run build
-		// instead of npm run dev), minify
+                !production & serve(),
 		production && terser()
 	],
 	watch: {
