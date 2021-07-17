@@ -14,8 +14,6 @@ Svelte is an open-source IDE with a built-in State Manager window for viewing yo
 ## 🔥 Key Features  
 1. Visualize state in your Svelte apps with the Svelte Storm state manager.
 2. See changes live with built-in window and local host navigator.
-3.Monaco Editor
-4. X-term terminal
 
 ## Authors
 

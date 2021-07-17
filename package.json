@@ -56,7 +56,6 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.14.3",
-    "@decoupled/magic": "^0.1.3",
     "@rollup/plugin-commonjs": "^19.0.0",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
@@ -64,7 +63,6 @@
     "monaco-editor": "^0.23.0",
     "monaco-languageclient": "^0.13.0",
     "node-pty": "^0.10.1",
-    "rollup-plugin-monaco-editor": "0.0.7",
     "vscode-json-languageservice": "^4.1.4",
     "xterm": "^4.12.0",
     "xterm-addon-fit": "^0.5.0"
@@ -96,7 +94,7 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-svelte": "^6.0.0",
     "rollup-plugin-terser": "^5.3.0",
-    "spectron": "^10.0.1",
+    "spectron": "^10.0.0",
     "svelte": "^3.14.1"
   }
 }
