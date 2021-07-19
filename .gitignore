@@ -5,3 +5,5 @@ public/svelte.**
 **/public
 release-builds
 /public
+.DS_Store
+
