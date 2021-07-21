@@ -1,5 +1,4 @@
-
-logo 
+![SvelteStorm Logo](https://user-images.githubusercontent.com/33353452/126491426-35047ed9-5ef1-47eb-8ab8-de2d48672492.png)
 
 # Svelte Storm
 
