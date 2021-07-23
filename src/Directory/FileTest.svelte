@@ -211,7 +211,7 @@
         {:else}
           <li  on:contextmenu|preventDefault="{rightClickHandler(path)}" on:dblclick={dblClickHandler(path)} class="liFiles" on:click={activeFile ? resetRename : undefined}>
             
-            <img src={fs.existsSync(`src/icons/file_type_${name.split('.').pop()}.svg`) ? `../src/icons/file_type_${name.split('.').pop()}.svg` : '../src/icons/file_type_exclam.png'}  
+            <img src={fs.existsSync(`src/icons/file_type_${name.split('.').pop().toLowerCase()}.svg`) ? `../src/icons/file_type_${name.split('.').pop().toLowerCase()}.svg` : '../src/icons/file_type_exclam.png'}  
             alt={''} />
             
             {name} </li>
