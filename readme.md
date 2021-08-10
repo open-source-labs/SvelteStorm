@@ -13,6 +13,10 @@ Svelte is an open-source IDE with a built-in State Manager window for viewing yo
 1. npm install
 2. npm start
 
+for VS users the link below can provide insight to potential installation issues. 
+
+https://github.com/oslabs-beta/SvelteStorm/issues/57
+
 ## 🔥 Key Features  
 1. Visualize state in your Svelte apps with the Svelte Storm state manager.
 2. See changes live with built-in window and local host navigator.
