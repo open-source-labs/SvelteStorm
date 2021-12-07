@@ -21,7 +21,7 @@ https://github.com/oslabs-beta/SvelteStorm/issues/57
 1. Visualize state in your Svelte apps with the Svelte Storm state manager.
 2. See changes live with built-in window and local host navigator.
 
-## Authors
+## Contributors
 
   [Arron Nestor](https://github.com/Nestar6) | [Aye Moe](https://github.com/ayemmoe) | 
   [Frank Stepanski](https://github.com/frankstepanski) | [Kevin Sarchi](https://github.com/Svrchi) |
