@@ -2,10 +2,10 @@
   import Monaco from './Monaco.svelte';
   import { DirectoryData, openTabs } from '../Utilities/DirectoryStore';
 
-  const { remote, ipcRenderer } = require('electron');
+  const { ipcRenderer } = require('electron');
   const fs = require('fs');
   const path = require('path');
-  const currentWindow = remote.getCurrentWindow();
+  const {currentWindow} = require('@electron/remote');
   
   export let activeTabValue = 0;
   let activeEditor = 0;
