@@ -5,7 +5,6 @@
   let fileStat = fs.statSync(filePath)
   
   
-
   const unsub = DirectoryData.subscribe(data =>{
   });
 

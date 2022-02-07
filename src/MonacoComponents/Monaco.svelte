@@ -9,17 +9,17 @@
   export let language;
   export let filePath;
   let messageObj;
+  export let fontSize;
 
   let monEditor;
   let containerElt;
-
   onMount(() => {
     monEditor = monaco.editor.create(containerElt, {
       value: value.join('\n'),
       language: language,
       theme: 'vs-dark',
       wordWrap: 'on',
-      fontSize: "16px",
+      fontSize: "12px",
     })
   })
 

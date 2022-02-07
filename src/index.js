@@ -4,8 +4,14 @@ const path = require('path');
 const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
+// import { fontSize } from './MonacoComponents/Monaco.svelte'
+
+//dialog is basically an electron modal pop up displaying an error message 
+//ipcMain is an event emitter that handles messages from the a renderer process
+//pty returns a terminal object which allows reading and writing (used with xterm)
 
 let userFile = ''
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -15,36 +21,43 @@ if (require('electron-squirrel-startup')) {
 const windows = new Set();
 const openFiles = new Map();
 
+//app.on is a start of the main process that controls the lifecycle events 
 app.on('ready', () => {
   
   createApplicationMenu();
   createWindow();
 });
 
+//testing to see if on mac, don't close all the windows
 app.on('window-all-closed', () => {
   if (process.platform === 'darwin') {
     return false;
   }
 });
 
+//activate occurs when the application is activated or run for the first time
+//returns an event 
+
 app.on('activate', (event, hasVisibleWindows) => {
   if (!hasVisibleWindows) { createWindow(); }
 });
 
 const increaseFontSize = exports.increaseFontSize = () => {
-  console.log("increase font");
+  fontSize++;
 }  
 
 const decreaseFontSize = exports.decreaseFontSize = () => {
-  console.log("decreas font");
+  fontSize--;
 } 
+
+//still in development mode 
+
 const createWindow = exports.createWindow = () => {
   
   process.env.NODE_ENV = 'development';
-  
 
-  let x, y;
-
+let x, y;
+//getFocusedWindow returns the browser window or null
   const currentWindow = BrowserWindow.getFocusedWindow();
 
   if (currentWindow) {
@@ -53,13 +66,21 @@ const createWindow = exports.createWindow = () => {
     y = currentWindowY + 10;
   }
 
+  
+  // But if you want to keep the abilities of using Node.js and Electron APIs, 
+  // you have to rename the symbols in the page before including other libraries:
+  //window.nodeRequire = require; in html file 
+
   let newWindow = new BrowserWindow({ x, y, show: false, webPreferences: {
+
     nodeIntegration: true,
     contextIsolation: false,
     
   }});
 
+  //theme for the menu bar on top
   nativeTheme.themeSource = 'dark'
+
 
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
@@ -68,6 +89,8 @@ const createWindow = exports.createWindow = () => {
   });
 
   newWindow.on('focus', createApplicationMenu);
+
+  //save changes dialog modal message
 
   newWindow.on('close', (event) => {
     if (newWindow.isDocumentEdited()) {
@@ -89,6 +112,7 @@ const createWindow = exports.createWindow = () => {
     }
   });
 
+  //chokidar is a library that watches the files
   let watcher;
   if (process.env.NODE_ENV === 'development') {
     watcher = require('chokidar').watch(path.join(__dirname, '../public'), { ignoreInitial: true });

@@ -22,7 +22,8 @@
     "svelte-build": "rollup -c",
     "svelte-dev": "rollup -c -w",
     "svelte-start": "sirv public",
-    "test": "mocha test/main.js --timeout 10000"
+    "test": "mocha test/main.js --timeout 10000",
+    "type": "module"
   },
   "config": {
     "forge": {
