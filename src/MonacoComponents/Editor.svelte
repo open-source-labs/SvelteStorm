@@ -2,10 +2,10 @@
   import Monaco from './Monaco.svelte';
   import { DirectoryData, openTabs } from '../Utilities/DirectoryStore';
 
-  const { remote, ipcRenderer } = require('electron');
+  const { ipcRenderer } = require('electron');
   const fs = require('fs');
   const path = require('path');
-  const currentWindow = remote.getCurrentWindow();
+  // const {currentWindow} = require('@electron/remote');
   
   export let activeTabValue = 0;
   let activeEditor = 0;
@@ -19,9 +19,11 @@
   function addTab(newFile) {
   
     let duplicate = false;
+    let focusTabId = newFile.tabId;
     $openTabs.map((tab) => {
       if (tab.filePath === newFile.filePath) {
         duplicate = true;
+        focusTabId = tab.tabId;
       }
     })
 
@@ -29,6 +31,9 @@
       $openTabs = [ ...$openTabs, newFile]
       count = count + 1;
     }
+
+    activeTabValue = focusTabId;
+    activeEditor = activeTabValue;
   };
   // remove and reset tab order
   function deleteTab(targetId) {
@@ -105,7 +110,7 @@
         newTab.filePath = data.openFilePath;
         newTab.fileName = fileName;
         newTab.tabId = count;
-        currentWindow.setTitle(title);
+        // currentWindow.setTitle(title);
         addTab(newTab);
       }
   });

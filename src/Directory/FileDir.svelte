@@ -6,8 +6,8 @@
 
     const fs = require('fs');
     let savedTree = [];
-    var remote = window.require('electron').remote;
-    var electronFs = remote.require('fs');
+    // let remote = require('@electron/remote');
+    // let fs = window.require('@electron/remote').fs;
     const {ipcRenderer} = require('electron');
 
     
@@ -142,10 +142,10 @@
     static readDir(path) {
       var fileArray = [];        
       
-      electronFs.readdirSync(path).forEach(file => {
+      fs.readdirSync(path).forEach(file => {
                
         var fileInfo = new FileTree(`${path}/${file}`, file);
-        var stat = electronFs.statSync(fileInfo.path);
+        var stat = fs.statSync(fileInfo.path);
         if (file.split('.').pop() === 'svelte'){
           
           if(path.includes('node_modules') !== true) {

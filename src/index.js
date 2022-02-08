@@ -1,9 +1,11 @@
-const { app, BrowserWindow, dialog, ipcMain, nativeTheme } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, nativeTheme, webContents } = require('electron');
 const createApplicationMenu = require('./application-menu');
 const path = require('path');
 const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
+require('@electron/remote/main').initialize();
+require('@electron/remote/main').enable(webContents);
 
 let userFile = ''
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -56,7 +58,6 @@ const createWindow = exports.createWindow = () => {
   let newWindow = new BrowserWindow({ x, y, show: false, webPreferences: {
     nodeIntegration: true,
     contextIsolation: false,
-    
   }});
 
   nativeTheme.themeSource = 'dark'
