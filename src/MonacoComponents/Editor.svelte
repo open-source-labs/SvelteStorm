@@ -5,7 +5,7 @@
   const { ipcRenderer } = require('electron');
   const fs = require('fs');
   const path = require('path');
-  const {currentWindow} = require('@electron/remote');
+  // const {currentWindow} = require('@electron/remote');
   
   export let activeTabValue = 0;
   let activeEditor = 0;
@@ -105,7 +105,7 @@
         newTab.filePath = data.openFilePath;
         newTab.fileName = fileName;
         newTab.tabId = count;
-        currentWindow.setTitle(title);
+        // currentWindow.setTitle(title);
         addTab(newTab);
       }
   });

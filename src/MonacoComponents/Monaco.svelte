@@ -1,7 +1,7 @@
 <script>
   import {  afterUpdate, onMount } from 'svelte';
   import * as monaco from 'monaco-editor';
-
+  // import {editor} from 'monaco-editor/esm/vs/editor/editor.api';
   const fs = require('fs');
   const { ipcRenderer } = require('electron');
   

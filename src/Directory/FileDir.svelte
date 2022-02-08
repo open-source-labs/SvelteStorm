@@ -4,10 +4,10 @@
     import { onMount, onDestroy, afterUpdate} from 'svelte';
     import { DirectoryData } from '../Utilities/DirectoryStore';
 
-    // const fs = require('fs');
+    const fs = require('fs');
     let savedTree = [];
     // let remote = require('@electron/remote');
-    let fs = window.require('@electron/remote').fs;
+    // let fs = window.require('@electron/remote').fs;
     const {ipcRenderer} = require('electron');
 
     

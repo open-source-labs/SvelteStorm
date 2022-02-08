@@ -26,6 +26,9 @@
   },
   "config": {
     "forge": {
+      "electronRebuildConfig":{
+        "forceABI": 101
+      },
       "packagerConfig": {},
       "makers": [
         {
