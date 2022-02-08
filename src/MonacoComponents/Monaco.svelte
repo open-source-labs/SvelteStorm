@@ -20,9 +20,9 @@
       theme: 'vs-dark',
       wordWrap: 'on',
       fontSize: "16px",
+      automaticLayout: true,
     })
   })
-
 	afterUpdate(() => {
     if(monEditor) {
         fs.readFile(filePath, 'utf8', (err, res) => {

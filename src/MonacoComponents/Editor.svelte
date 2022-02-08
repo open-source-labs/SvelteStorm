@@ -19,9 +19,11 @@
   function addTab(newFile) {
   
     let duplicate = false;
+    let focusTabId = newFile.tabId;
     $openTabs.map((tab) => {
       if (tab.filePath === newFile.filePath) {
         duplicate = true;
+        focusTabId = tab.tabId;
       }
     })
 
@@ -29,6 +31,9 @@
       $openTabs = [ ...$openTabs, newFile]
       count = count + 1;
     }
+
+    activeTabValue = focusTabId;
+    activeEditor = activeTabValue;
   };
   // remove and reset tab order
   function deleteTab(targetId) {

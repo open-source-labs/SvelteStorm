@@ -9,9 +9,14 @@
     const term = new Terminal();
 
     onMount(() => {
-        term.setOption('cursorStyle', 'block');
-        term.setOption('cursorBlink', true);
-        term.setOption('fontSize', 14);
+        // term.setOption('cursorStyle', 'block');
+        // term.setOption('cursorBlink', true);
+        // term.setOption('fontSize', 14);
+
+        term.options.cursorStyle = 'block';
+        term.options.cursorBlink = true;
+        term.options.fontSize = 14;
+
         term.loadAddon(fitAddon);
         term.open(document.getElementById('xterm'));
         fitAddon.fit();
