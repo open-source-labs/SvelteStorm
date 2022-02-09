@@ -1,12 +1,11 @@
-<!-- <script>
-  import Monaco from './Monaco.svelte';
+<script>
+
   import { DirectoryData, openTabs } from '../Utilities/DirectoryStore';
 
   const { ipcRenderer } = require('electron');
   const fs = require('fs');
   const path = require('path');
-  // const {currentWindow} = require('@electron/remote');
-  
+
   export let activeTabValue = 0;
   let activeEditor = 0;
 
@@ -15,6 +14,8 @@
   let [filePath, fileName, readData] = ['', '', ''];
   let title = 'Svelte Storm';
   let count = 0;
+
+
 
   function addTab(newFile) {
   
@@ -35,6 +36,8 @@
     activeTabValue = focusTabId;
     activeEditor = activeTabValue;
   };
+
+
   // remove and reset tab order
   function deleteTab(targetId) {
 
@@ -52,10 +55,14 @@
     activeEditor = activeTabValue;
   }
 
+
+
   const handleClick = (tabId) => () => {
-    activeTabValue = tabId;
-    activeEditor = activeTabValue;
+    // activeTabValue = tabId;
+    // activeEditor = activeTabValue;
   }
+
+
   // convert file extension to monaco language
   const getLanguage = (lang) => {
       switch (lang) {
@@ -79,76 +86,88 @@
           return undefined;
       }
   }
+
   // render file on open and add to store
   ipcRenderer.on('file-opened', function (evt, file, content) {
-      const newTab = {}
-      filePath = (file);
-      process.platform === "win32" ? fileName = file.slice().split('\\').pop() : fileName = file.slice().split('/').pop();
-      language = file.slice().split('.').pop();
-      newTab.editorValue = content.split(/\r?\n/);
-      newTab.ext = language;
-      newTab.editorLang = getLanguage(language);
-      newTab.filePath = filePath;
-      newTab.fileName = fileName;
-      newTab.tabId = count;
-      addTab(newTab);
-      if (file) { title = `${path.basename(file)} - ${title}`; }
+
+    console.log('ZZZZZZZZZZZZZZZZZZZ');
+    const newTab = {}
+    filePath = (file);
+    process.platform === "win32" ? fileName = file.slice().split('\\').pop() : fileName = file.slice().split('/').pop();
+    language = file.slice().split('.').pop();
+    newTab.editorValue = content.split(/\r?\n/);
+    newTab.ext = language;
+    newTab.editorLang = getLanguage(language);
+    newTab.filePath = filePath;
+    newTab.fileName = fileName;
+    newTab.tabId = count;
+    // addTab(newTab);
+    if (file) { title = `${path.basename(file)} - ${title}`; }
   });
 
+  // takes care of opening a file from within the file directory
   const unsub = DirectoryData.subscribe(data => {
-    console.log(data.openFilePath)
+    console.log('subscribing to the store', data.openFilePath)
     const newTab = {};
-      if (data.fileRead) {
-        readData = fs.readFileSync(data.openFilePath).toString();
-        value = readData.split(/\r?\n/);
-        fileName = data.openFilePath.slice().split('/').pop();
-        language = path.basename(data.openFilePath).split('.').pop();
-        if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
-        newTab.editorValue = value;
-        newTab.ext = language;
-        newTab.editorLang = getLanguage(language);
-        newTab.filePath = data.openFilePath;
-        newTab.fileName = fileName;
-        newTab.tabId = count;
-        // currentWindow.setTitle(title);
-        addTab(newTab);
-      }
+    if (data.fileRead) {
+      readData = fs.readFileSync(data.openFilePath).toString();
+      value = readData.split(/\r?\n/);
+      fileName = data.openFilePath.slice().split('/').pop();
+      language = path.basename(data.openFilePath).split('.').pop();
+      if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
+      newTab.editorValue = value;
+      newTab.ext = language;
+      newTab.editorLang = getLanguage(language);
+      newTab.filePath = data.openFilePath;
+      newTab.fileName = fileName;
+      newTab.tabId = count;
+      // currentWindow.setTitle(title);
+      // addTab(newTab);
+    }
   });
 
 </script>
 
-  <ul>
-    {#each $openTabs as tab}
-    <li class={activeTabValue === tab.tabId ? 'active' : ''}>
-      <span class="tab-span"
-        on:click={handleClick(tab.tabId)}
+
+
+<!--==========================================MARKUP==========================================-->
+<ul>
+  {#each $openTabs as tab}
+  <li class={activeTabValue === tab.tabId ? 'active' : ''}>
+    <span class="tab-span"
+      on:click={handleClick(tab.tabId)}
+    >
+      <img src="../src/icons/file_type_{tab.ext}.svg" 
+        alt={''}
+      />
+      {tab.fileName}
+      <span
+        class="delete-button" 
+        value={tab.tabId}
+        on:click={(value) => deleteTab(tab.tabId)}
       >
-        <img src="../src/icons/file_type_{tab.ext}.svg" 
-          alt={''}
-        />
-        {tab.fileName}
-        <span
-          class="delete-button" 
-          value={tab.tabId}
-          on:click={(value) => deleteTab(tab.tabId)}
-        >
-          &times
-        </span>
+        &times
       </span>
-    </li>
-    {/each}
-  </ul>
-  
-  {#if $openTabs.length > 0}
-    <div class="editor-body">
-        <Monaco
-          class="childClass current"
-          bind:value={$openTabs[(activeEditor)].editorValue}
-          bind:language={$openTabs[(activeEditor)].editorLang}
-          bind:filePath={$openTabs[(activeEditor)].filePath}
-        />
-    </div>
-  {/if}
+    </span>
+  </li>
+  {/each}
+</ul>
+
+
+{#if $openTabs.length > 0}
+  <div class="editor-body">
+      <!-- <Monaco
+        class="childClass current"
+        bind:value={$openTabs[(activeEditor)].editorValue}
+        bind:language={$openTabs[(activeEditor)].editorLang}
+        bind:filePath={$openTabs[(activeEditor)].filePath}
+      /> -->
+  </div>
+{/if}
+
+
+
+
 
 <style>
 
@@ -171,11 +190,11 @@
     /* border-radius: 5px; */
   }
 
-	li {
-		margin-bottom: -1px;
+  li {
+    margin-bottom: -1px;
     background-color: rgb(37, 37, 37);
     color: #fff;
-	}
+  }
 
   .tab-span {
     border: 1px solid transparent;
@@ -210,4 +229,4 @@
     border-left: black;
   }
 
-</style> -->
+</style>

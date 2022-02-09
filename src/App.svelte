@@ -1,7 +1,8 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'
     import XTerm from './XTerm.svelte';
-    import Editor from './MonacoComponents/Editor.svelte';
+    // import Editor from './MonacoComponents/Editor.svelte';
+    import Editor from './CodeEditor/Editor.svelte';
     import StateManager from './StateManager/StateManager.svelte'
     export let orientation = 'columns';
     export let localhost;
