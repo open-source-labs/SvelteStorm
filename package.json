@@ -22,11 +22,12 @@
     "svelte-build": "rollup -c",
     "svelte-dev": "rollup -c -w",
     "svelte-start": "sirv public",
-    "test": "mocha test/main.js --timeout 10000"
+    "test": "mocha test/main.js --timeout 10000",
+    "rebuild node-pty": "electron-rebuild -f -w node-pty"
   },
   "config": {
     "forge": {
-      "electronRebuildConfig":{
+      "electronRebuildConfig": {
         "forceABI": 101
       },
       "packagerConfig": {},
@@ -61,11 +62,13 @@
     "@babel/core": "^7.17.0",
     "@electron/remote": "^2.0.4",
     "@rollup/plugin-commonjs": "^21.0.1",
+    "electron-rebuild": "^3.2.7",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "estree-walker": "^3.0.1",
     "monaco-editor": "^0.32.1",
     "monaco-languageclient": "^0.13.0",
+    "node-abi": "^3.8.0",
     "node-pty": "^0.10.1",
     "npm-check-updates": "^12.2.1",
     "vscode-json-languageservice": "^4.2.0",
