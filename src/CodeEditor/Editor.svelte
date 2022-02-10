@@ -1,5 +1,5 @@
 <script>
-
+  import CodeMirror from './CodeMirror.svelte';
   import { DirectoryData, openTabs } from '../Utilities/DirectoryStore';
 
   const { ipcRenderer } = require('electron');
@@ -58,7 +58,7 @@
 
 
   const handleClick = (tabId) => () => {
-    // activeTabValue = tabId;
+    activeTabValue = tabId;
     // activeEditor = activeTabValue;
   }
 
@@ -122,7 +122,7 @@
       newTab.fileName = fileName;
       newTab.tabId = count;
       // currentWindow.setTitle(title);
-      // addTab(newTab);
+      addTab(newTab);
     }
   });
 
@@ -156,12 +156,12 @@
 
 {#if $openTabs.length > 0}
   <div class="editor-body">
-      <!-- <Monaco
+      <CodeMirror
         class="childClass current"
         bind:value={$openTabs[(activeEditor)].editorValue}
         bind:language={$openTabs[(activeEditor)].editorLang}
         bind:filePath={$openTabs[(activeEditor)].filePath}
-      /> -->
+      />
   </div>
 {/if}
 
