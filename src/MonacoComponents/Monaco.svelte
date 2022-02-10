@@ -1,7 +1,7 @@
 <script>
   import {  afterUpdate, onMount } from 'svelte';
   import * as monaco from 'monaco-editor';
-
+  // import {editor} from 'monaco-editor/esm/vs/editor/editor.api';
   const fs = require('fs');
   const { ipcRenderer } = require('electron');
   
@@ -22,7 +22,6 @@
       fontSize: "12px",
     })
   })
-
 	afterUpdate(() => {
     if(monEditor) {
         fs.readFile(filePath, 'utf8', (err, res) => {
