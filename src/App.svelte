@@ -9,11 +9,11 @@
     let value = ""
 	  let submit = false
   
-	
-	const handleSubmit = () => {
-		submit = false
-    return false
-	}
+
+	// const handleSubmit = () => {
+	// 	submit = false
+  //   return false
+	// }
 	
 	const handleKeyup = () => {
 		submit = false
@@ -49,11 +49,11 @@
   .box {
     background-color: rgb(39, 38, 38);
     /* border: 1px solid rgb(228, 81, 13); */
-    color: rgb(226, 142, 45);
+    color: rgb(168, 224, 222);
     border-radius: 0px;
     padding: 10px;
     font-size: 150%;
-  }
+  } 
 
   .a {
     overflow: auto;
@@ -115,7 +115,7 @@
     margin-top: 0;
     margin-bottom: 0;
     height: 20px;
-    font-size: 15px;
+    font-size: 12px;
   }
   
   .e {
@@ -159,18 +159,21 @@
         <StateManager />
       </div>
       <div class="box d root"> 
-        <form on:submit|preventDefault={handleSubmit}>
-          <input placeholder="Local Host Port" type="text" on:keyup|preventDefault={handleKeyup}>
-        </form>
+        <form on:submit|preventDefault={handleKeyup}>
+          <input placeholder="Local Host Port" type="text" >   
+         <button type="submit">Submit</button>
+          <!-- <input type="submit" on:click|preventDefault={handleKeyup}>on:keyup|preventDefault={handleKeyup} -->
         {#if submit === true} 
           <iframe  class="webpage" title="local host" src={localhost}></iframe>
         {/if}
           <iframe  class="webpage" title="local host" src={localhost}></iframe>
-        </div>
+       </form> 
+      </div> 
+  
       <div class="box e"> 
           <XTerm />
       </div>
-
+  
   </main>
   </body>
 

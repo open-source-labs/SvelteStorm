@@ -185,7 +185,7 @@
     flex-direction: row;
     padding: 0 1rem;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
   }
 
   .tab-span:hover {
