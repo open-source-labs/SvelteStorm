@@ -23,6 +23,7 @@
     "svelte-dev": "rollup -c -w",
     "svelte-start": "sirv public",
     "test": "mocha test/main.js --timeout 10000",
+    "type": "module",
     "rebuild node-pty": "electron-rebuild -f -w node-pty"
   },
   "config": {

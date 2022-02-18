@@ -143,29 +143,49 @@ const createApplicationMenu = () => {
         {
           label: 'Select All',
           accelerator: 'CommandOrControl+A',
-          role: 'selectall',
+          role: 'selectAll',
         },
       ],
     },
     {
-      label: 'Editor',
+      label: 'View',
       submenu: [
         {
-          label: 'Increase Font Size',
-          accelerator: 'CommandOrControl+]',
-          click() {
-            mainProcess.increaseFontSize();
-          },
+          label: 'Zoom In',
+          accelerator: 'CommandorControl+]',
+          role: 'zoomIn'
         },
         {
-          label: 'Decrease Font Size',
-          accelerator: 'CommandOrControl+[',
-          click() {
-            mainProcess.decreaseFontSize();
-          },
+          label: 'Zoom Out',
+          accelerator: 'CommandorControl+[',
+          role: 'zoomOut'
         },
+        {
+          label: 'Reset Zoom',
+          accelerator: 'Command+0',
+          role: 'resetZoom'
+        }
       ]
     },
+    // {
+    //   label: 'Editor',
+    //   submenu: [
+    //     {
+    //       label: 'Increase Font Size',
+    //       accelerator: 'CommandOrControl+]',
+    //       click() {
+    //         mainProcess.increaseFontSize();
+    //       },
+    //     },
+    //     {
+    //       label: 'Decrease Font Size',
+    //       accelerator: 'CommandOrControl+[',
+    //       click() {
+    //         mainProcess.decreaseFontSize();
+    //       },
+    //     },
+    //   ]
+    // },
     {
       label: 'Window',
       submenu: [
@@ -186,8 +206,10 @@ const createApplicationMenu = () => {
       role: 'help',
       submenu: [
         {
-          label: 'Visit Website',
-          click() { /* To be implemented */ }
+          label: 'Visit the SvelteStorm Website',
+          click(focusedWindow) {
+            if(focusedWindow) require('electron').shell.openExternal('https://www.youtube.com')
+          }
         },
         {
           label: 'Toggle Developer Tools',
@@ -199,6 +221,7 @@ const createApplicationMenu = () => {
       ],
     }
   ];
+
 
   if (process.platform === 'darwin') {
     const name = 'Firesale';

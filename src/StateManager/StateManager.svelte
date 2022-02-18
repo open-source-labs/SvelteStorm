@@ -41,26 +41,25 @@ height: 20px;
 width: 100%;
 padding-left: 7px;
 
-
 }
 
 .title {  
-  color: rgb(230, 100, 41);
+  color: rgb(126, 173, 226);
   margin-bottom: 0;
   margin-top: 0;
   padding-top: 0;
-  font-size: 16px;
+  font-size: 12px;
   
 }
 
 span {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .fileName {
   /* background-color: peachpuff; */
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
   /* max-width: 150px; */
   /* padding: 0px 0 5px 25px; */
   background-image: url('../src/icons/arrow_head.svg');
@@ -70,8 +69,8 @@ span {
 }
 
 .stateName {
-  font-size: 14px;
-  color: rgb(194, 83, 39);
+  font-size: 12px;
+  color: rgb(151, 181, 221);
 }
 
 ul {
