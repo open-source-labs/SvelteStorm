@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import Monaco from './Monaco.svelte';
   import { DirectoryData, openTabs } from '../Utilities/DirectoryStore';
 
@@ -210,4 +210,4 @@
     border-left: black;
   }
 
-</style>
+</style> -->

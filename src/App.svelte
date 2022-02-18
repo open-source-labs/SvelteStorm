@@ -1,7 +1,8 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'
     import XTerm from './XTerm.svelte';
-    import Editor from './MonacoComponents/Editor.svelte';
+    // import Editor from './MonacoComponents/Editor.svelte';
+    import Editor from './CodeEditor/Editor.svelte';
     import StateManager from './StateManager/StateManager.svelte'
     export let orientation = 'columns';
     export let localhost;
@@ -49,11 +50,11 @@
   .box {
     background-color: rgb(39, 38, 38);
     /* border: 1px solid rgb(228, 81, 13); */
-    color: rgb(168, 224, 222);
+    color: rgb(245, 242, 239);
     border-radius: 0px;
     padding: 10px;
-    font-size: 150%;
-  } 
+    /* font-size: 150%; */
+  }
 
   .a {
     overflow: auto;
