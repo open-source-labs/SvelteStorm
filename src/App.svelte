@@ -50,10 +50,10 @@
   .box {
     background-color: rgb(39, 38, 38);
     /* border: 1px solid rgb(228, 81, 13); */
-    color: rgb(226, 142, 45);
+    color: rgb(245, 242, 239);
     border-radius: 0px;
     padding: 10px;
-    font-size: 150%;
+    /* font-size: 150%; */
   }
 
   .a {

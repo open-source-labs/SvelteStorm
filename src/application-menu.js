@@ -191,6 +191,7 @@ const createApplicationMenu = () => {
         },
         {
           label: 'Toggle Developer Tools',
+          accelerator: 'CommandOrControl+D',
           click(item, focusedWindow) {
             if (focusedWindow) focusedWindow.webContents.toggleDevTools();
           }

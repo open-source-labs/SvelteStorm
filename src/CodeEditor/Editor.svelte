@@ -16,7 +16,6 @@
   let count = 0;
 
 
-
   function addTab(newFile) {
   
     let duplicate = false;
@@ -59,49 +58,53 @@
 
   const handleClick = (tabId) => () => {
     activeTabValue = tabId;
-    // activeEditor = activeTabValue;
+    activeEditor = activeTabValue;
   }
 
+  const modes = {
+		js: {
+			name: 'javascript',
+			json: false
+		},
+		json: {
+			name: 'javascript',
+			json: true
+		},
+		svelte: {
+			name: 'htmlmixed',
+			/*base: 'text/html'*/
+		},
+		md: {
+			name: 'markdown',
+      highlightFormatting: true,
+      fencedCodeBlockHighlighting: true,
+      base: 'text/x-markdown',
+		},
+    css: {
+      name: 'css',
+    },
+    html: {
+      name: 'htmlmixed',
+    },
+	};
 
-  // convert file extension to monaco language
-  const getLanguage = (lang) => {
-      switch (lang) {
-        case 'js':
-          return 'javascript';
-        case 'jsx':
-          return 'javascript';
-        case 'ts':
-          return 'typescript';
-        case 'json':
-          return 'json';
-        case 'css':
-          return 'css';
-        case 'html':
-          return 'html';
-        case 'md':
-          return 'markdown';
-        case 'svelte':
-          return 'html';
-        default:
-          return undefined;
-      }
-  }
 
   // render file on open and add to store
   ipcRenderer.on('file-opened', function (evt, file, content) {
 
-    console.log('ZZZZZZZZZZZZZZZZZZZ');
     const newTab = {}
     filePath = (file);
     process.platform === "win32" ? fileName = file.slice().split('\\').pop() : fileName = file.slice().split('/').pop();
     language = file.slice().split('.').pop();
-    newTab.editorValue = content.split(/\r?\n/);
+    // newTab.editorValue = content.split(/\r?\n/);
+    newTab.editorValue = content;
     newTab.ext = language;
-    newTab.editorLang = getLanguage(language);
+    newTab.editorLang = modes[language]; //getLanguage(language);
     newTab.filePath = filePath;
     newTab.fileName = fileName;
     newTab.tabId = count;
-    // addTab(newTab);
+    console.log('NEW TAB', newTab);
+    addTab(newTab);
     if (file) { title = `${path.basename(file)} - ${title}`; }
   });
 
@@ -111,16 +114,18 @@
     const newTab = {};
     if (data.fileRead) {
       readData = fs.readFileSync(data.openFilePath).toString();
-      value = readData.split(/\r?\n/);
+      // value = readData.split(/\r?\n/);
       fileName = data.openFilePath.slice().split('/').pop();
       language = path.basename(data.openFilePath).split('.').pop();
       if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
-      newTab.editorValue = value;
+      // newTab.editorValue = value;
+      newTab.editorValue = readData;
       newTab.ext = language;
-      newTab.editorLang = getLanguage(language);
+      newTab.editorLang = modes[language]; //getLanguage(language);
       newTab.filePath = data.openFilePath;
       newTab.fileName = fileName;
       newTab.tabId = count;
+      console.log('NEW TAB', newTab);
       // currentWindow.setTitle(title);
       addTab(newTab);
     }
@@ -167,8 +172,6 @@
 
 
 
-
-
 <style>
 
   .editor-body {
@@ -180,7 +183,9 @@
   ul {
     display: flex;
     flex-direction: row;
-    overflow: scroll;
+    overflow: auto;
+    white-space: nowrap;
+    scrollbar-width: thin;
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 0;
