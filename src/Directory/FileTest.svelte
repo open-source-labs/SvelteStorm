@@ -234,7 +234,7 @@
 <!-- CSS Styling -->
 <style>    
   .liFolderClosed {
-    font-size: 15px;
+    font-size: 12px;
     cursor: pointer;
     padding: 0px 0 5px 25px;
     list-style: none;
@@ -245,7 +245,7 @@
   }
 
   .liFolderOpen {
-    font-size: 15px;
+    font-size: 12px;
     cursor: pointer;
     display: flex;
     justify-content: flex-start;
@@ -258,11 +258,11 @@
   }
 
   .liFiles {
-    font-size: 15px;
+    font-size: 12px;
     cursor: pointer;
     /* padding-left: 25px; */
     /* margin-left: 20px; */
-    margin-top: 1px;
+    margin-top: 0.5px;
     list-style: none;
     /* background-image: url('./img/document.png'); */
     background-repeat: no-repeat;
