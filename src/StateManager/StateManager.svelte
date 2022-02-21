@@ -12,7 +12,7 @@
 
 <div class="state-container">
   <div class="h5Container">
-    <h5 class="title">States</h5> 
+    <h5 class="title">State Management Tree</h5> 
   </div>   
     <ul>
         {#each Object.entries(stateObj) as [file,state]}
@@ -26,6 +26,7 @@
 <style>
 .state-container {
   /* background-color: rgb(2, 29, 2); */
+  background-color: rgba(28, 28, 36, 0.678); 
   margin-bottom: 10px;
   padding-bottom: 10px;
   padding-left: 0;
@@ -36,7 +37,8 @@
   flex-direction: column;  
 }
 .h5Container {
-background-color: rgb(27, 27, 26);
+/* background-color: rgb(27, 27, 26); */
+background-color: rgba(28, 28, 36, 0.678); 
 height: 20px;
 width: 100%;
 padding-left: 7px;
@@ -44,7 +46,7 @@ padding-left: 7px;
 }
 
 .title {  
-  color: rgb(126, 173, 226);
+  color: rgb(133, 165, 201);
   margin-bottom: 0;
   margin-top: 0;
   padding-top: 0;
@@ -57,11 +59,11 @@ span {
 }
 
 .fileName {
-  /* background-color: peachpuff; */
+  /* background-color: peachpuff; */ 
   border-radius: 10px;
   font-size: 14px;
   /* max-width: 150px; */
-  /* padding: 0px 0 5px 25px; */
+  padding: 0px 0 5px 25px;
   background-image: url('../src/icons/arrow_head.svg');
   background-repeat: no-repeat;
   background-position: left;

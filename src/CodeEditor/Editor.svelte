@@ -181,6 +181,7 @@
   }
 
   ul {
+    font-size: 10px;
     display: flex;
     flex-direction: row;
     overflow: auto;
@@ -209,9 +210,9 @@
     flex-direction: row;
     padding: 0 1rem;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
   }
-
+  ç
   .tab-span:hover {
     border-color: #e9ecef #e9ecef #dee2e6;
   }

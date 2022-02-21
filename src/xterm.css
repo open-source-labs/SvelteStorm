@@ -4,6 +4,8 @@
     -ms-user-select: none;
     -webkit-user-select: none;
     font-size: 12px;
+    color: white;
+
 }
 
 .xterm.focus,
@@ -18,10 +20,12 @@
      * The z-index of the helpers must be higher than the canvases in order for
      * IMEs to appear on top.
      */
-    z-index: 5;
+    z-index: 10;
+    color: white;
 }
 
 .xterm .xterm-helper-textarea {
+    color: white;
     padding: 0;
     border: 0;
     margin: 0;
@@ -32,7 +36,7 @@
     top: 0;
     width: 0;
     height: 0;
-    z-index: -5;
+    z-index: -10;
     /** Prevent wrapping so the IME appears against the textarea at the correct position */
     white-space: nowrap;
     overflow: hidden;
@@ -41,7 +45,7 @@
 
 .xterm .composition-view {
     /* TODO: Composition position got messed up somewhere */
-    background: #000;
+    background: rgba(35, 35, 65, 0.452);
     color: #FFF;
     display: none;
     position: absolute;
@@ -55,7 +59,8 @@
 
 .xterm .xterm-viewport {
     /* On OS X this is required in order for the scroll bar to appear fully opaque */
-    background-color: #000;
+    background-color: rgba(35, 35, 65, 0.452);
+    color: #FFF;
     overflow-y: scroll;
     cursor: default;
     position: absolute;
@@ -66,10 +71,15 @@
 }
 
 .xterm .xterm-screen {
+    background-color: white;
     position: relative;
 }
 
 .xterm .xterm-screen canvas {
+    width: 200%;
+    z-index: 1;
+    background-color:rgba(20, 20, 51, 0.452);
+    opacity: 0.5;
     position: absolute;
     left: 0;
     top: 0;
@@ -114,6 +124,7 @@
     bottom: 0;
     right: 0;
     z-index: 10;
+    color: #FFF;
     color: transparent;
 }
 
@@ -126,7 +137,7 @@
 }
 
 .xterm-dim {
-    opacity: 0.5;
+    opacity: 0.1;
 }
 
 .xterm-underline {

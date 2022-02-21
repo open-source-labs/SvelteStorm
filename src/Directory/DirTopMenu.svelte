@@ -139,16 +139,16 @@
     </span>
   {/if}
 
-
 <style>
   .fileMenu {
-    background-color: rgb(27, 27, 26);
+    background-color: rgba(28, 28, 36, 0.678); 
     /* border-radius: 10px; */
     /* padding-left: 2px; */
     padding-right: 10px;
     padding-top : 2px;
     padding-bottom: 2px;
     width: 100%;
+    font-size: 10px;
   }
   .fileArea {    
     float: left;    
@@ -185,7 +185,7 @@
   .textBox {
     margin-left: 10px;
     padding: 10px 10px 10px 10px;
-    font-size: 14px;
+    font-size: 12px;
     width: 150px;    
   }
 </style>

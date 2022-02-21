@@ -6,7 +6,8 @@ html, body {
 }
 
 body {
-	color: #333;
+	/* color: #333; */
+	color: white;
 	margin: 0;
 	
 	box-sizing: border-box;
@@ -42,7 +43,8 @@ input, button, select, textarea {
 	margin: 0 0 0.5em 0;
 	box-sizing: border-box;
 	border: 1px solid #ccc;
-	border-radius: 2px;
+	border-radius: 2px;	
+	color: white;
 }
 
 input:disabled {
@@ -61,6 +63,7 @@ button {
 
 button:disabled {
 	color: #999;
+
 }
 
 button:not(:disabled):active {

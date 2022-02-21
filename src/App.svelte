@@ -11,10 +11,10 @@
 	  let submit = false
   
 
-	// const handleSubmit = () => {
-	// 	submit = false
-  //   return false
-	// }
+	const handleSubmit = () => {
+		submit = false
+    return false
+	}
 	
 	const handleKeyup = () => {
 		submit = false
@@ -57,16 +57,17 @@
   }
 
   .a {
+    font-size: 10px;
     overflow: auto;
     resize: horizontal;
-    min-width: 20%;
+    min-width: 10%;
     max-width: 150%;
     min-height: 10%;
     max-height: 150%;
     grid-column: 1 ;
     grid-row: 1;
     padding: 0;
-    background-color: #242425;
+    background-color: rgba(28, 28, 36, 0.678); 
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
   }
@@ -79,7 +80,7 @@
     max-height: 150%;
     grid-column: 2;
     grid-row: 1;
-    background-color: #1d1d1d;
+    background-color: rgba(35, 35, 65, 0.452);
     border-bottom:1px solid #3d3d3d;
     border-right:1px solid #3d3d3d;
   }
@@ -92,11 +93,11 @@
     max-height: 150%;
     grid-column: 1 ;
     grid-row: 2 ;
-    background-color: #242425;
+    background-color: rgba(28, 28, 36, 0.678); 
     border-right: 1px solid #3d3d3d;
     padding: 0;
   }
-  
+   
   .d {
     overflow: auto;
     resize: vertical;
@@ -107,9 +108,9 @@
     text-align: center;
     grid-column: 3;
     grid-row: 1;
-    background-color: #1d1d1d;
+    background-color: rgba(35, 35, 65, 0.452);
     border-bottom: 1px solid #3d3d3d;
-  }
+  } 
 
   .d input {
     margin: auto;
@@ -118,19 +119,27 @@
     height: 20px;
     font-size: 12px;
   }
-  
+
   .e {
+    font: white;
     overflow: auto;
     min-width: 10%;
     max-width: 150%;
     min-height: 100%;
     grid-column: 2 / 4;
     grid-row: 2;
-    background-color: #1d1d1d;
+    background-color: rgba(35, 35, 65, 0.452);
   }
-  
-  .webpage {
-    height: 90%;
+
+    .webpage {
+    overflow: auto;
+    resize: vertical;
+    min-width: 10%;
+    min-height: 10%;
+    max-height: 150%;
+    padding: 0px;
+    grid-row: 1; 
+    height: 500px;
     width: 95%;
   }
 
@@ -160,10 +169,8 @@
         <StateManager />
       </div>
       <div class="box d root"> 
-        <form on:submit|preventDefault={handleKeyup}>
-          <input placeholder="Local Host Port" type="text" >   
-         <button type="submit">Submit</button>
-          <!-- <input type="submit" on:click|preventDefault={handleKeyup}>on:keyup|preventDefault={handleKeyup} -->
+        <form on:submit|preventDefault={handleSubmit}>
+          <input placeholder="Local Host Port" type="text" on:keyup|preventDefault={handleKeyup}>  
         {#if submit === true} 
           <iframe  class="webpage" title="local host" src={localhost}></iframe>
         {/if}

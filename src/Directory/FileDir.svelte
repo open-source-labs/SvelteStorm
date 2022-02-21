@@ -202,17 +202,17 @@
 <!-- CSS -->
 <style>
 .directoryContainer{
-    max-height: 50vh;
+    max-height: 70vh;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-content: flex-start;
 }
 .directoryContainer::-webkit-scrollbar {
-width: 12px;
+  width: 12px;
 }
 .directoryContainer::-webkit-scrollbar-thumb:hover {
-    background-color: #e28e2d;
+    background-color: rgba(28, 28, 36, 0.678); 
     transition: background-color 2s ease-in-out;
 }
 
