@@ -46,6 +46,17 @@
           }
         },
         {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "options": {
+              "homepage": "http://svelte-storm.com",
+              "icon": "./public/img/SvelteStormLogo.jpg",
+              "name": "SvelteStorm v2.0",
+              "overwrite": true
+            }
+          }
+        },
+        {
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "exe": "SvelteStorm",
