@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
-if (require('electron-squirrel-startup')) return app.quit();
 // import { fontSize } from './MonacoComponents/Monaco.svelte'
 
 //dialog is basically an electron modal pop up displaying an error message 
