@@ -122,10 +122,9 @@
 
   .e {
     font: white;
-    overflow: hidden;
-    width:100%;
-    min-width: 300%;
-    max-width: 200%;
+    overflow: auto;
+    min-width: 10%;
+    max-width: 150%;
     min-height: 100%;
     grid-column: 2 / 4;
     grid-row: 2;
