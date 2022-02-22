@@ -123,8 +123,7 @@
   .e {
     font: white;
     overflow: auto;
-    min-width: 10%;
-    max-width: 150%;
+    min-width: 300%;
     min-height: 100%;
     grid-column: 2 / 4;
     grid-row: 2;
