@@ -142,8 +142,6 @@
 <style>
   .fileMenu {
     background-color: rgba(28, 28, 36, 0.678); 
-    /* border-radius: 10px; */
-    /* padding-left: 2px; */
     padding-right: 10px;
     padding-top : 2px;
     padding-bottom: 2px;

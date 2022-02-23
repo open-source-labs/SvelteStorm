@@ -167,25 +167,7 @@ const createApplicationMenu = () => {
         }
       ]
     },
-    // {
-    //   label: 'Editor',
-    //   submenu: [
-    //     {
-    //       label: 'Increase Font Size',
-    //       accelerator: 'CommandOrControl+]',
-    //       click() {
-    //         mainProcess.increaseFontSize();
-    //       },
-    //     },
-    //     {
-    //       label: 'Decrease Font Size',
-    //       accelerator: 'CommandOrControl+[',
-    //       click() {
-    //         mainProcess.decreaseFontSize();
-    //       },
-    //     },
-    //   ]
-    // },
+
     {
       label: 'Window',
       submenu: [
@@ -208,7 +190,7 @@ const createApplicationMenu = () => {
         {
           label: 'Visit the SvelteStorm Website',
           click(focusedWindow) {
-            if(focusedWindow) require('electron').shell.openExternal('https://www.youtube.com')
+            if(focusedWindow) require('electron').shell.openExternal('http://www.svelte-storm.com')
           }
         },
         {
@@ -257,7 +239,7 @@ const createApplicationMenu = () => {
         {
           label: `Quit ${name}`,
           accelerator: 'Command+Q',
-          click() { app.quit(); }, // A
+          click() { app.quit(); },
         },
       ],
     });

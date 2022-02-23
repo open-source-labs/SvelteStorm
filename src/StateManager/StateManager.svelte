@@ -25,19 +25,16 @@
 <!-- CSS Styling -->
 <style>
 .state-container {
-  /* background-color: rgb(2, 29, 2); */
   background-color: rgba(28, 28, 36, 0.678); 
   margin-bottom: 10px;
   padding-bottom: 10px;
   padding-left: 0;
-  /* max-height: 500px; */
   margin-top: 0;
   padding-top: 0;
   display: flex;
   flex-direction: column;  
 }
 .h5Container {
-/* background-color: rgb(27, 27, 26); */
 background-color: rgba(28, 28, 36, 0.678); 
 height: 20px;
 width: 100%;
@@ -59,10 +56,8 @@ span {
 }
 
 .fileName {
-  /* background-color: peachpuff; */ 
   border-radius: 10px;
   font-size: 14px;
-  /* max-width: 150px; */
   padding: 0px 0 5px 25px;
   background-image: url('../src/icons/arrow_head.svg');
   background-repeat: no-repeat;

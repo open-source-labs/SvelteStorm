@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs')
 const os = require('os');
 const pty = require('node-pty');
-// import { fontSize } from './MonacoComponents/Monaco.svelte'
 
 //dialog is basically an electron modal pop up displaying an error message 
 //ipcMain is an event emitter that handles messages from the a renderer process
@@ -140,7 +139,7 @@ let x, y;
           env: process.env
       });
     
-    ptyProcess.on("data", (data) => {
+    ptyProcess.onData((data) => {
       newWindow.webContents.send("terminal-incData", data);
     });
 
@@ -173,9 +172,7 @@ const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
 const openFile = exports.openFile = (targetWindow, file) => {
   
   const content = fs.readFileSync(file).toString();
-  //console.log(fileContent)
   app.addRecentDocument(file);
-  //targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
   createApplicationMenu();
 };
@@ -198,10 +195,7 @@ const createProjectFromUser = exports.createProjectFromUser = async (targetWindo
     properties: ['createDirectory'],
   });
 
-  // if(files) {
-  //   console.log(files.filePaths)
-  //   if (files) { openFolder(targetWindow, files.filePaths); }
-  // }
+
   if(folderName.filePath && !fs.existsSync(folderName.filePath)){
     await fs.mkdirSync(folderName.filePath);
 
@@ -213,8 +207,6 @@ const createProjectFromUser = exports.createProjectFromUser = async (targetWindo
 const openFolder = exports.openFolder = (targetWindow, folder) => {
   const content = folder
   console.log('contents',content)
-  //app.addRecentDocument(folder);
-  //targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('folder-opened', folder, content);
   createApplicationMenu();
 };
@@ -223,7 +215,6 @@ const saveFile = exports.saveFile = (targetWindow) => {
 
 
   ipcMain.on('synchronous-message', (event, arg) => {
-    //console.log(arg) // prints "ping"
     if(arg.file === undefined) { 
       fs.writeFileSync(userFile.filePaths[0], arg.content)
       openFile(targetWindow, userFile.filePaths[0]);

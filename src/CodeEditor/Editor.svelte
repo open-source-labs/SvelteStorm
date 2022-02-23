@@ -72,7 +72,6 @@
 		},
 		svelte: {
 			name: 'htmlmixed',
-			/*base: 'text/html'*/
 		},
 		md: {
 			name: 'markdown',
@@ -96,10 +95,9 @@
     filePath = (file);
     process.platform === "win32" ? fileName = file.slice().split('\\').pop() : fileName = file.slice().split('/').pop();
     language = file.slice().split('.').pop();
-    // newTab.editorValue = content.split(/\r?\n/);
     newTab.editorValue = content;
     newTab.ext = language;
-    newTab.editorLang = modes[language]; //getLanguage(language);
+    newTab.editorLang = modes[language]; 
     newTab.filePath = filePath;
     newTab.fileName = fileName;
     newTab.tabId = count;
@@ -114,19 +112,16 @@
     const newTab = {};
     if (data.fileRead) {
       readData = fs.readFileSync(data.openFilePath).toString();
-      // value = readData.split(/\r?\n/);
       fileName = data.openFilePath.slice().split('/').pop();
       language = path.basename(data.openFilePath).split('.').pop();
       if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
-      // newTab.editorValue = value;
       newTab.editorValue = readData;
       newTab.ext = language;
-      newTab.editorLang = modes[language]; //getLanguage(language);
+      newTab.editorLang = modes[language]; 
       newTab.filePath = data.openFilePath;
       newTab.fileName = fileName;
       newTab.tabId = count;
       console.log('NEW TAB', newTab);
-      // currentWindow.setTitle(title);
       addTab(newTab);
     }
   });

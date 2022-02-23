@@ -260,14 +260,10 @@
   .liFiles {
     font-size: 12px;
     cursor: pointer;
-    /* padding-left: 25px; */
-    /* margin-left: 20px; */
     margin-top: 0.5px;
     list-style: none;
-    /* background-image: url('./img/document.png'); */
     background-repeat: no-repeat;
     background-position: left;
-    /* background-size: 15px; */
   }
   
   .directory{

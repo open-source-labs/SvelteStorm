@@ -16,7 +16,6 @@
     "create-debian-installer": "electron-installer-debian --src release-builds/svelte-storm-linux-x64/ --arch amd64 --config debian.json",
     "start": "concurrently \"npm:svelte-dev\" \"electron-forge start\"",
     "package": "electron-forge package",
-    "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "svelte-build": "rollup -c",

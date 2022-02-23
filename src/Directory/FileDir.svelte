@@ -6,8 +6,6 @@
 
     const fs = require('fs');
     let savedTree = [];
-    // let remote = require('@electron/remote');
-    // let fs = window.require('@electron/remote').fs;
     const {ipcRenderer} = require('electron');
 
     
@@ -136,7 +134,7 @@
   //method to build file tree
     build () {
                
-        this.items = FileTree.readDir(this.path,'',0);
+      this.items = FileTree.readDir(this.path,'',0);
       
     }
     static readDir(path) {

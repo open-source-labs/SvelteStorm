@@ -47,7 +47,6 @@
 
 </script>
 
-<!-- Svelte -->
 <div class=createMenuWrapper>
   {#if fileStat.isFile()}
     <p class='items' on:click={renameHandler}>Rename</p>
@@ -65,7 +64,6 @@
 
 
 
-<!-- Style -->
 <style>
 .createMenuWrapper{
   background-color:  rgba(28, 28, 36, 0.678); 

@@ -1,7 +1,6 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'
     import XTerm from './XTerm.svelte';
-    // import Editor from './MonacoComponents/Editor.svelte';
     import Editor from './CodeEditor/Editor.svelte';
     import StateManager from './StateManager/StateManager.svelte'
     export let orientation = 'columns';
@@ -16,7 +15,7 @@
     return false
 	}
 	
-	const handleKeyup = () => {
+	const handleKeyup = (event) => {
 		submit = false
 		
 		if (event.code == 'Enter') {
@@ -40,7 +39,6 @@
   .wrapper {
       height: 100%;
       display: grid;
-      /* border: 1px solid rgb(228, 81, 13); */
       grid-template-columns: min-content;
       grid-template-rows: 1fr;
       background-color: rgb(39, 38, 38);
@@ -49,11 +47,9 @@
   
   .box {
     background-color: rgb(39, 38, 38);
-    /* border: 1px solid rgb(228, 81, 13); */
     color: rgb(245, 242, 239);
     border-radius: 0px;
     padding: 10px;
-    /* font-size: 150%; */
   }
 
   .a {
@@ -118,6 +114,7 @@
     margin-bottom: 0;
     height: 20px;
     font-size: 12px;
+    color: black;
   }
 
   .e {

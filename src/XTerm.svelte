@@ -9,9 +9,6 @@
     const term = new Terminal();
 
     onMount(() => {
-        // term.setOption('cursorStyle', 'block');
-        // term.setOption('cursorBlink', true);
-        // term.setOption('fontSize', 14);
 
         term.options.cursorStyle = 'block';
         term.options.cursorBlink = true;
