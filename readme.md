@@ -43,8 +43,7 @@ The Mac distributable is in progress, but Mac users can still follow the "Other 
 
 ## Linux Installation 
 
-1. Navigate to the [SvelteStorm website](http://svelte-storm.com/), and click the Linux Penguin "Download" button on the top left of the page
-2. Select the .zip file for Linux to download the file to your "Downloads" folder on your machine
+1. [Download](https://s3.amazonaws.com/svelte-storm.com/sveltestorm-v2.0_2.0_amd64.zip) SvelteStorm 
 3. Unzip the file and use an installer (Such as Eddy) to install the application
 4. SvelteStorm is now ready! Embrace the storm!
 
