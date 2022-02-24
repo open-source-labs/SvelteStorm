@@ -143,29 +143,31 @@ const createApplicationMenu = () => {
         {
           label: 'Select All',
           accelerator: 'CommandOrControl+A',
-          role: 'selectall',
+          role: 'selectAll',
         },
       ],
     },
     {
-      label: 'Editor',
+      label: 'View',
       submenu: [
         {
-          label: 'Increase Font Size',
-          accelerator: 'CommandOrControl+]',
-          click() {
-            mainProcess.increaseFontSize();
-          },
+          label: 'Zoom In',
+          accelerator: 'CommandorControl+]',
+          role: 'zoomIn'
         },
         {
-          label: 'Decrease Font Size',
-          accelerator: 'CommandOrControl+[',
-          click() {
-            mainProcess.decreaseFontSize();
-          },
+          label: 'Zoom Out',
+          accelerator: 'CommandorControl+[',
+          role: 'zoomOut'
         },
+        {
+          label: 'Reset Zoom',
+          accelerator: 'Command+0',
+          role: 'resetZoom'
+        }
       ]
     },
+
     {
       label: 'Window',
       submenu: [
@@ -186,11 +188,14 @@ const createApplicationMenu = () => {
       role: 'help',
       submenu: [
         {
-          label: 'Visit Website',
-          click() { /* To be implemented */ }
+          label: 'Visit the SvelteStorm Website',
+          click(focusedWindow) {
+            if(focusedWindow) require('electron').shell.openExternal('http://www.svelte-storm.com')
+          }
         },
         {
           label: 'Toggle Developer Tools',
+          accelerator: 'CommandOrControl+D',
           click(item, focusedWindow) {
             if (focusedWindow) focusedWindow.webContents.toggleDevTools();
           }
@@ -198,6 +203,7 @@ const createApplicationMenu = () => {
       ],
     }
   ];
+
 
   if (process.platform === 'darwin') {
     const name = 'Firesale';
@@ -233,7 +239,7 @@ const createApplicationMenu = () => {
         {
           label: `Quit ${name}`,
           accelerator: 'Command+Q',
-          click() { app.quit(); }, // A
+          click() { app.quit(); },
         },
       ],
     });

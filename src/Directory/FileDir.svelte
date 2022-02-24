@@ -6,8 +6,6 @@
 
     const fs = require('fs');
     let savedTree = [];
-    var remote = window.require('electron').remote;
-    var electronFs = remote.require('fs');
     const {ipcRenderer} = require('electron');
 
     
@@ -136,16 +134,16 @@
   //method to build file tree
     build () {
                
-        this.items = FileTree.readDir(this.path,'',0);
+      this.items = FileTree.readDir(this.path,'',0);
       
     }
     static readDir(path) {
       var fileArray = [];        
       
-      electronFs.readdirSync(path).forEach(file => {
+      fs.readdirSync(path).forEach(file => {
                
         var fileInfo = new FileTree(`${path}/${file}`, file);
-        var stat = electronFs.statSync(fileInfo.path);
+        var stat = fs.statSync(fileInfo.path);
         if (file.split('.').pop() === 'svelte'){
           
           if(path.includes('node_modules') !== true) {
@@ -202,17 +200,17 @@
 <!-- CSS -->
 <style>
 .directoryContainer{
-    max-height: 50vh;
+    max-height: 70vh;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-content: flex-start;
 }
 .directoryContainer::-webkit-scrollbar {
-width: 12px;
+  width: 12px;
 }
 .directoryContainer::-webkit-scrollbar-thumb:hover {
-    background-color: #e28e2d;
+    background-color: rgba(28, 28, 36, 0.678); 
     transition: background-color 2s ease-in-out;
 }
 
