@@ -5,7 +5,6 @@
   let fileStat = fs.statSync(filePath)
   
   
-
   const unsub = DirectoryData.subscribe(data =>{
   });
 
@@ -48,7 +47,6 @@
 
 </script>
 
-<!-- Svelte -->
 <div class=createMenuWrapper>
   {#if fileStat.isFile()}
     <p class='items' on:click={renameHandler}>Rename</p>
@@ -66,19 +64,18 @@
 
 
 
-<!-- Style -->
 <style>
 .createMenuWrapper{
-  background-color: rgb(126, 107, 89);
+  background-color:  rgba(28, 28, 36, 0.678); 
   color: rgb(238, 227, 221);
-  font-size: 15px;
-  width:100px;
+  font-size: 12px;
+  width: 150px;
   height: auto;
   padding: 10px 10px 10px 10px;
 }
 
 .items:hover {
-  color: rgb(250, 198, 164);
+  color:rgb(151, 181, 221); 
   cursor: pointer;
 }
 </style>

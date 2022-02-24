@@ -1,7 +1,7 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'
     import XTerm from './XTerm.svelte';
-    import Editor from './MonacoComponents/Editor.svelte';
+    import Editor from './CodeEditor/Editor.svelte';
     import StateManager from './StateManager/StateManager.svelte'
     export let orientation = 'columns';
     export let localhost;
@@ -9,13 +9,13 @@
     let value = ""
 	  let submit = false
   
-	
+
 	const handleSubmit = () => {
 		submit = false
     return false
 	}
 	
-	const handleKeyup = () => {
+	const handleKeyup = (event) => {
 		submit = false
 		
 		if (event.code == 'Enter') {
@@ -39,7 +39,6 @@
   .wrapper {
       height: 100%;
       display: grid;
-      /* border: 1px solid rgb(228, 81, 13); */
       grid-template-columns: min-content;
       grid-template-rows: 1fr;
       background-color: rgb(39, 38, 38);
@@ -48,24 +47,23 @@
   
   .box {
     background-color: rgb(39, 38, 38);
-    /* border: 1px solid rgb(228, 81, 13); */
-    color: rgb(226, 142, 45);
+    color: rgb(245, 242, 239);
     border-radius: 0px;
     padding: 10px;
-    font-size: 150%;
   }
 
   .a {
+    font-size: 10px;
     overflow: auto;
     resize: horizontal;
-    min-width: 20%;
+    min-width: 10%;
     max-width: 150%;
     min-height: 10%;
     max-height: 150%;
     grid-column: 1 ;
     grid-row: 1;
     padding: 0;
-    background-color: #242425;
+    background-color: rgba(28, 28, 36, 0.678); 
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
   }
@@ -78,7 +76,7 @@
     max-height: 150%;
     grid-column: 2;
     grid-row: 1;
-    background-color: #1d1d1d;
+    background-color: rgba(35, 35, 65, 0.452);
     border-bottom:1px solid #3d3d3d;
     border-right:1px solid #3d3d3d;
   }
@@ -91,11 +89,11 @@
     max-height: 150%;
     grid-column: 1 ;
     grid-row: 2 ;
-    background-color: #242425;
+    background-color: rgba(28, 28, 36, 0.678); 
     border-right: 1px solid #3d3d3d;
     padding: 0;
   }
-  
+   
   .d {
     overflow: auto;
     resize: vertical;
@@ -106,30 +104,38 @@
     text-align: center;
     grid-column: 3;
     grid-row: 1;
-    background-color: #1d1d1d;
+    background-color: rgba(35, 35, 65, 0.452);
     border-bottom: 1px solid #3d3d3d;
-  }
+  } 
 
   .d input {
     margin: auto;
     margin-top: 0;
     margin-bottom: 0;
     height: 20px;
-    font-size: 15px;
+    font-size: 12px;
+    color: black;
   }
-  
+
   .e {
+    font: white;
     overflow: auto;
-    min-width: 10%;
-    max-width: 150%;
+    min-width: 300%;
     min-height: 100%;
     grid-column: 2 / 4;
     grid-row: 2;
-    background-color: #1d1d1d;
+    background-color: rgba(35, 35, 65, 0.452);
   }
-  
-  .webpage {
-    height: 90%;
+
+    .webpage {
+    overflow: auto;
+    resize: vertical;
+    min-width: 10%;
+    min-height: 10%;
+    max-height: 150%;
+    padding: 0px;
+    grid-row: 1; 
+    height: 500px;
     width: 95%;
   }
 
@@ -160,17 +166,18 @@
       </div>
       <div class="box d root"> 
         <form on:submit|preventDefault={handleSubmit}>
-          <input placeholder="Local Host Port" type="text" on:keyup|preventDefault={handleKeyup}>
-        </form>
+          <input placeholder="Local Host Port" type="text" on:keyup|preventDefault={handleKeyup}>  
         {#if submit === true} 
           <iframe  class="webpage" title="local host" src={localhost}></iframe>
         {/if}
           <iframe  class="webpage" title="local host" src={localhost}></iframe>
-        </div>
+       </form> 
+      </div> 
+  
       <div class="box e"> 
           <XTerm />
       </div>
-
+  
   </main>
   </body>
 
