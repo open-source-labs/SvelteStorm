@@ -38,10 +38,8 @@ for VSCode users the link below can provide insight to potential installation is
 https://github.com/oslabs-beta/SvelteStorm/issues/57
 
 ## Mac Installation
-1. For Mac users with the M1 Chip, navigate to the SvelteStorm website, and click the Apple "Download" button on the top left of the page
-2. Select the .zip file for Mac to download the file to your "Downloads" folder on your machine
-3. Unzip the file and click to install the application
-4. SvelteStorm is now ready! Embrace the storm!
+
+Building the Mac distributable is still in progress, but Mac users can still follow the "Other Devices Installation" instructions below to use SvelteStorm.
 
 ## Linux Installation 
 
