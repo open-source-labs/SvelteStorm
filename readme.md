@@ -39,7 +39,7 @@ https://github.com/oslabs-beta/SvelteStorm/issues/57
 
 ## Mac Installation
 
-Building the Mac distributable is still in progress, but Mac users can still follow the "Other Devices Installation" instructions below to use SvelteStorm.
+The Mac distributable is in progress, but Mac users can still follow the "Other Devices Installation" instructions below to use SvelteStorm!
 
 ## Linux Installation 
 
