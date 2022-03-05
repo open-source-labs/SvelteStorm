@@ -35,7 +35,7 @@ SvelteStorm is a new and improved open-source integrated developer environment (
  
 for VSCode users the link below can provide insight to potential installation issues:
  
-https://github.com/oslabs-beta/SvelteStorm/issues/57
+https://github.com/open-source-labs/SvelteStorm/issues/57
 
 ## Mac Installation
 
