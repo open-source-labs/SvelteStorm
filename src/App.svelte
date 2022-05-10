@@ -70,16 +70,16 @@
   /* Wrapper Window - SvelteTeam */
   .wrapper {
     height: 100%;
-    /* display: flex; */
-    /* flex-direction: row; */
+    display: flex;
+    flex-direction: column;
     width: 100%;
     /* flex-wrap: wrap; */
     /* grid-template-areas: "a b b b b b b"
                          "c e e e e e e"; */
-    grid-template-areas: "a a a a a a a"
-                         "b b b b b b b";
+    /* grid-template-areas: "a a a a a a a"
+                         "b b b b b b b"; */
     /* grid-template-columns: min-content; */
-    grid-template-rows: 1fr;
+    /* grid-template-rows: 1fr; */
     background-color: rgb(39, 38, 38);
     color: #444;
   }
@@ -98,12 +98,14 @@
     grid-area: a;
   }
   .wrapper-bottom {
-    min-height: 35%;
+    min-height: 10%;
+    /* max-height: 35%; */
+    height: 35%;
     flex-grow: 1;
     display: flex;
-    flex: 1 1 auto;
+    /* flex: 1 1 auto; */
     flex-direction: row;
-    width: 100%;
+    width: 98%;
     /* grid-template-columns: min-content; */
     grid-template-rows: 1fr;
     background-color: rgb(39, 38, 38);
@@ -127,7 +129,7 @@
     background-color: rgb(39, 38, 38);
     color: rgb(245, 242, 239);
     border-radius: 0px;
-    padding: 10px;
+    padding: 5px;
   }
   /* File Directory - SvelteTeam */
   .a {
@@ -180,14 +182,16 @@
     /* State Management Window - SvelteTeam */
   .c {
     overflow: auto;
+    width:10%;
+    min-width:10%;
     /* min-width: 10%; */
     /* max-width: 150%; */
     /* min-height: 10%; */
     /* max-height: 150%; */
     /* grid-column: 1;
     grid-row: 2; */
-    resize: both;
-    width:10%;
+    /* resize: both; */
+    /* width:10%; */
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     padding: 0;
@@ -203,7 +207,7 @@
     max-height: 150%; */
     flex-direction: column;
     flex-grow: 1; /*Let render window take up remaining space in the flexbox */
-    width:45%;
+    /* width:45%; */
     padding: 0px;
     text-align: center;
     /* grid-column: 3;
@@ -226,11 +230,13 @@
   .e {
     font: white;
     overflow: auto;
-    width: 90%;
+    width: 100%;
     /* min-width: 300%; */
     /* min-height: 100%; */
     /* grid-column: 2 / 5;
     grid-row: 2; */
+    display: flex;
+    flex-direction: column;
     background-color: rgba(35, 35, 65, 0.452);
     grid-area: e;
   }

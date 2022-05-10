@@ -5,6 +5,14 @@
   -webkit-user-select: none;
   font-size: 12px;
   color: white;
+
+  /* display: flex;
+  flex-direction: column;
+  flex-grow: 1; */
+  /* height: 1000px; */
+}
+
+#xterm {
 }
 
 .xterm.focus,
@@ -31,7 +39,7 @@
   /* Move textarea out of the screen to the far left, so that the cursor is not visible */
   position: absolute;
   opacity: 0;
-  left: -9999em;
+  /* left: -9999em; */
   top: 0;
   width: 0;
   height: 0;
@@ -72,6 +80,7 @@
 .xterm .xterm-screen {
   background-color: white;
   position: relative;
+  min-height: 1000px;
 }
 
 .xterm .xterm-screen canvas {
