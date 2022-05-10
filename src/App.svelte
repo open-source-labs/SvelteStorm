@@ -1,50 +1,79 @@
 <script>
-    import FileDir from './Directory/FileDir.svelte'
-    import XTerm from './XTerm.svelte';
-    import Editor from './CodeEditor/Editor.svelte';
-    import StateManager from './StateManager/StateManager.svelte'
-    export let orientation = 'columns';
-    export let localhost;
+  import FileDir from "./Directory/FileDir.svelte";
+  import XTerm from "./XTerm.svelte";
+  import Editor from "./CodeEditor/Editor.svelte";
+  import StateManager from "./StateManager/StateManager.svelte";
+  export let orientation = "columns";
+  export let localhost;
 
-    let value = ""
-	  let submit = false
-  
+  let value = "";
+  let submit = false;
 
-	const handleSubmit = () => {
-		submit = false
-    return false
-	}
-	
-	const handleKeyup = (event) => {
-		submit = false
-		
-		if (event.code == 'Enter') {
-			event.preventDefault()
-			event.target.value
-			value = event.target.value
-      localhost = `http://127.0.0.1:${value}/`
-			return false
-		}
-	}
+  const handleSubmit = () => {
+    submit = false;
+    return false;
+  };
 
-  </script>
-  
-  <style>
-  
+  const handleKeyup = (event) => {
+    submit = false;
+
+    if (event.code == "Enter") {
+      event.preventDefault();
+      event.target.value;
+      value = event.target.value;
+      localhost = `http://127.0.0.1:${value}/`;
+      return false;
+    }
+  };
+</script>
+
+<body class:orientation>
+  <main class="wrapper">
+    <div class="box a target">
+      <FileDir />
+    </div>
+    <div class="box b">
+      <!-- svelte-ignore missing-declaration -->
+      <Editor class="childClass" />
+    </div>
+    <div class="box c root">
+      <StateManager />
+    </div>
+    <div class="box d root">
+      <form on:submit|preventDefault={handleSubmit}>
+        <input
+          placeholder="Local Host Port"
+          type="text"
+          on:keyup|preventDefault={handleKeyup}
+        />
+        {#if submit === true}
+          <iframe class="webpage" title="local host" src={localhost} />
+        {/if}
+        <iframe class="webpage" title="local host" src={localhost} />
+      </form>
+    </div>
+
+    <div class="box e">
+      <XTerm />
+    </div>
+  </main>
+</body>
+
+<style>
   body {
     height: 100%;
     width: 100%;
   }
 
   .wrapper {
-      height: 100%;
-      display: grid;
-      grid-template-columns: min-content;
-      grid-template-rows: 1fr;
-      background-color: rgb(39, 38, 38);
-      color: #444;
+    height: 100%;
+    display: grid;
+    grid-template-columns: min-content;
+    grid-template-rows: 1fr;
+    background-color: rgb(39, 38, 38);
+    color: #444;
   }
-  
+
   .box {
     background-color: rgb(39, 38, 38);
     color: rgb(245, 242, 239);
@@ -60,14 +89,14 @@
     max-width: 150%;
     min-height: 10%;
     max-height: 150%;
-    grid-column: 1 ;
+    grid-column: 1;
     grid-row: 1;
     padding: 0;
-    background-color: rgba(28, 28, 36, 0.678); 
+    background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
   }
-  
+
   .b {
     overflow: scroll;
     min-width: 10%;
@@ -77,8 +106,8 @@
     grid-column: 2;
     grid-row: 1;
     background-color: rgba(35, 35, 65, 0.452);
-    border-bottom:1px solid #3d3d3d;
-    border-right:1px solid #3d3d3d;
+    border-bottom: 1px solid #3d3d3d;
+    border-right: 1px solid #3d3d3d;
   }
 
   .c {
@@ -87,13 +116,13 @@
     max-width: 150%;
     min-height: 10%;
     max-height: 150%;
-    grid-column: 1 ;
-    grid-row: 2 ;
-    background-color: rgba(28, 28, 36, 0.678); 
+    grid-column: 1;
+    grid-row: 2;
+    background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     padding: 0;
   }
-   
+
   .d {
     overflow: auto;
     resize: vertical;
@@ -106,7 +135,7 @@
     grid-row: 1;
     background-color: rgba(35, 35, 65, 0.452);
     border-bottom: 1px solid #3d3d3d;
-  } 
+  }
 
   .d input {
     margin: auto;
@@ -127,14 +156,14 @@
     background-color: rgba(35, 35, 65, 0.452);
   }
 
-    .webpage {
+  .webpage {
     overflow: auto;
     resize: vertical;
     min-width: 10%;
     min-height: 10%;
     max-height: 150%;
     padding: 0px;
-    grid-row: 1; 
+    grid-row: 1;
     height: 500px;
     width: 95%;
   }
@@ -149,37 +178,4 @@
   iframe:focus {
     outline: none;
   }
-
 </style>
-  <body class:orientation>
-  <main class="wrapper" >
-    
-      <div class="box a target">
-          <FileDir />
-      </div>
-      <div class="box b">
-          <!-- svelte-ignore missing-declaration -->
-          <Editor class="childClass" />
-      </div>
-      <div class="box c root">
-        <StateManager />
-      </div>
-      <div class="box d root"> 
-        <form on:submit|preventDefault={handleSubmit}>
-          <input placeholder="Local Host Port" type="text" on:keyup|preventDefault={handleKeyup}>  
-        {#if submit === true} 
-          <iframe  class="webpage" title="local host" src={localhost}></iframe>
-        {/if}
-          <iframe  class="webpage" title="local host" src={localhost}></iframe>
-       </form> 
-      </div> 
-  
-      <div class="box e"> 
-          <XTerm />
-      </div>
-  
-  </main>
-  </body>
-
-
-

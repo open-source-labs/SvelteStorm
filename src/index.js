@@ -11,6 +11,12 @@ const pty = require('node-pty');
 require('@electron/remote/main').initialize();
 require('@electron/remote/main').enable(webContents);
 
+//hot reload for electron development
+try {
+  require('electron-reloader')(module)
+} catch (_) { }
+
+
 let userFile = ''
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -24,7 +30,7 @@ const openFiles = new Map();
 
 //app.on is a start of the main process that controls the lifecycle events 
 app.on('ready', () => {
-  
+
   createApplicationMenu();
   createWindow();
 });
@@ -45,20 +51,20 @@ app.on('activate', (event, hasVisibleWindows) => {
 
 const increaseFontSize = exports.increaseFontSize = () => {
   fontSize++;
-}  
+}
 
 const decreaseFontSize = exports.decreaseFontSize = () => {
   fontSize--;
-} 
+}
 
 //still in development mode 
 
 const createWindow = exports.createWindow = () => {
-  
+
   process.env.NODE_ENV = 'development';
 
-let x, y;
-//getFocusedWindow returns the browser window or null
+  let x, y;
+  //getFocusedWindow returns the browser window or null
   const currentWindow = BrowserWindow.getFocusedWindow();
 
   if (currentWindow) {
@@ -67,16 +73,18 @@ let x, y;
     y = currentWindowY + 10;
   }
 
-  
+
   // But if you want to keep the abilities of using Node.js and Electron APIs, 
   // you have to rename the symbols in the page before including other libraries:
   //window.nodeRequire = require; in html file 
 
-  let newWindow = new BrowserWindow({ x, y, show: false, webPreferences: {
+  let newWindow = new BrowserWindow({
+    x, y, show: false, webPreferences: {
 
-    nodeIntegration: true,
-    contextIsolation: false,
-  }});
+      nodeIntegration: true,
+      contextIsolation: false,
+    }
+  });
 
   //theme for the menu bar on top
   nativeTheme.themeSource = 'dark'
@@ -124,7 +132,7 @@ let x, y;
   newWindow.on('closed', () => {
     if (watcher) {
       watcher.close();
-     }
+    }
     windows.delete(newWindow);
     createApplicationMenu();
     newWindow = null;
@@ -132,25 +140,25 @@ let x, y;
 
   var shell = os.platform() === "win32" ? "powershell.exe" : "bash";
   var ptyProcess = pty.spawn(shell, [], {
-          name: 'xterm-color',
-          cols: 80,
-          rows: 24,
-          cwd: process.env.HOME,
-          env: process.env
-      });
-    
-    ptyProcess.onData((data) => {
-      newWindow.webContents.send("terminal-incData", data);
-    });
+    name: 'xterm-color',
+    cols: 80,
+    rows: 24,
+    cwd: process.env.HOME,
+    env: process.env
+  });
 
-    ipcMain.on("terminal-into", (event, data)=> {
-      ptyProcess.write(data);
-    })
+  ptyProcess.onData((data) => {
+    newWindow.webContents.send("terminal-incData", data);
+  });
 
-require('electron-reload')(__dirname, {
-  electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
-  awaitWriteFinish: true
-});
+  ipcMain.on("terminal-into", (event, data) => {
+    ptyProcess.write(data);
+  })
+
+  require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
+    awaitWriteFinish: true
+  });
 
   windows.add(newWindow);
   return newWindow;
@@ -164,13 +172,13 @@ const getFileFromUser = exports.getFileFromUser = async (targetWindow) => {
 
   userFile = files
 
-  if(files) {
+  if (files) {
     if (files) { openFile(targetWindow, files.filePaths[0]); }
   }
 }
 
 const openFile = exports.openFile = (targetWindow, file) => {
-  
+
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file);
   targetWindow.webContents.send('file-opened', file, content);
@@ -182,7 +190,7 @@ const getFolderFromUser = exports.getFolderFromUser = async (targetWindow) => {
     properties: ['openDirectory'],
   });
 
-  if(files) {
+  if (files) {
     console.log(files.filePaths)
     if (files) { openFolder(targetWindow, files.filePaths); }
   }
@@ -196,7 +204,7 @@ const createProjectFromUser = exports.createProjectFromUser = async (targetWindo
   });
 
 
-  if(folderName.filePath && !fs.existsSync(folderName.filePath)){
+  if (folderName.filePath && !fs.existsSync(folderName.filePath)) {
     await fs.mkdirSync(folderName.filePath);
 
     openFolder(targetWindow, folderName.filePath);
@@ -206,7 +214,7 @@ const createProjectFromUser = exports.createProjectFromUser = async (targetWindo
 
 const openFolder = exports.openFolder = (targetWindow, folder) => {
   const content = folder
-  console.log('contents',content)
+  console.log('contents', content)
   targetWindow.webContents.send('folder-opened', folder, content);
   createApplicationMenu();
 };
@@ -215,17 +223,17 @@ const saveFile = exports.saveFile = (targetWindow) => {
 
 
   ipcMain.on('synchronous-message', (event, arg) => {
-    if(arg.file === undefined) { 
+    if (arg.file === undefined) {
       fs.writeFileSync(userFile.filePaths[0], arg.content)
       openFile(targetWindow, userFile.filePaths[0]);
     } else {
       fs.writeFileSync(arg.file, arg.content)
       openFile(targetWindow, arg.file);
     }
-    
+
   })
 
- };
+};
 
 ipcMain.handle('saveFileFromUser', saveFile)
 
