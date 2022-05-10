@@ -18,6 +18,11 @@ const pty = require('node-pty');
 require('@electron/remote/main').initialize();
 require('@electron/remote/main').enable(webContents);
 
+//hot reload for electron development
+try {
+  require('electron-reloader')(module);
+} catch (_) {}
+
 let userFile = '';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -30,9 +35,8 @@ const windows = new Set();
 const openFiles = new Map();
 
 //app.on is a start of the main process that controls the lifecycle events
+//Fires once when app is ready..
 app.on('ready', () => {
-  //Fires once when app is ready...main event with want our Electron app to listen to
-
   createApplicationMenu();
   createWindow();
 });
