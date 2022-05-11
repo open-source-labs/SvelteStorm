@@ -29,33 +29,37 @@
 
 <body class:orientation>
   <main class="wrapper">
-    <div class="box a target">
-      <FileDir />
+    <div class="box wrapper-upper">
+      <div class="box a target">
+        <FileDir />
+      </div>
+      <div class="box b">
+        <!-- svelte-ignore missing-declaration -->
+        <Editor class="childClass" />
+      </div>
+      <div class="box d root">
+        <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
+          <input 
+            placeholder="Local Host Port"
+            type="text"
+            on:keyup|preventDefault={handleKeyup}
+          />
+          {#if submit === true}
+            <iframe class="webpage" title="local host" src={localhost} />
+          {/if}
+          <iframe class="webpage" title="local host" src={localhost} />
+        </form>
+      </div>
     </div>
-    <div class="box b">
-      <!-- svelte-ignore missing-declaration -->
-      <Editor class="childClass" />
-    </div>
+  <div class="middle-separator"></div>
+  <div class="box wrapper-bottom">
     <div class="box c root">
       <StateManager />
     </div>
-    <div class="box d root">
-      <form on:submit|preventDefault={handleSubmit}>
-        <input
-          placeholder="Local Host Port"
-          type="text"
-          on:keyup|preventDefault={handleKeyup}
-        />
-        {#if submit === true}
-          <iframe class="webpage" title="local host" src={localhost} />
-        {/if}
-        <iframe class="webpage" title="local host" src={localhost} />
-      </form>
-    </div>
-
     <div class="box e">
       <XTerm />
     </div>
+  </div>
   </main>
 </body>
 
@@ -64,75 +68,95 @@
     height: 100%;
     width: 100%;
   }
-
+  /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
+  /* Wrapper Window - SvelteTeam */
   .wrapper {
     height: 100%;
-    display: grid;
-    grid-template-columns: min-content;
-    grid-template-rows: 1fr;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     background-color: rgb(39, 38, 38);
     color: #444;
+  }
+
+  .wrapper-upper {
+    height: 65%;
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    resize: vertical;
+    overflow: auto;
+    background-color: rgb(39, 38, 38);
+    color: #444;
+  }
+  .wrapper-bottom {
+    min-height: 10%;
+    height: 35%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    background-color: rgb(39, 38, 38);
+    color: #444;
+  }
+
+  .render-wrapper {
+    background-color: #252532;
+    display:flex;
+    flex-direction:column;
+    height: 100%;
+  }
+
+  .middle-separator{
+    padding: 2px;
   }
 
   .box {
     background-color: rgb(39, 38, 38);
     color: rgb(245, 242, 239);
     border-radius: 0px;
-    padding: 10px;
+    /* padding: 5px; */
   }
-
+  /* File Directory - SvelteTeam */
   .a {
     font-size: 10px;
     overflow: auto;
     resize: horizontal;
-    min-width: 10%;
-    max-width: 150%;
-    min-height: 10%;
-    max-height: 150%;
-    grid-column: 1;
-    grid-row: 1;
+    width:10%;
+    min-width:10%;
+    max-width: 30%;
     padding: 0;
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
   }
-
+  
+  /* Text Editor - SvelteTeam */
   .b {
-    overflow: scroll;
-    min-width: 10%;
-    max-width: 150%;
-    min-height: 10%;
-    max-height: 150%;
-    grid-column: 2;
-    grid-row: 1;
+    overflow: auto;
+    width:45%;
+    resize: horizontal;
     background-color: rgba(35, 35, 65, 0.452);
     border-bottom: 1px solid #3d3d3d;
     border-right: 1px solid #3d3d3d;
   }
-
+    /* State Management Window - SvelteTeam */
   .c {
     overflow: auto;
-    min-width: 10%;
-    max-width: 150%;
-    min-height: 10%;
-    max-height: 150%;
-    grid-column: 1;
-    grid-row: 2;
+    width:10%;
+    min-width:10%;
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     padding: 0;
   }
 
+    /* Browser Render Window - SvelteTeam */
   .d {
-    overflow: auto;
-    resize: vertical;
-    min-width: 10%;
-    min-height: 10%;
-    max-height: 150%;
+    min-width:30%;
+    flex-direction: column;
+    flex-grow: 1; /*Let render window take up remaining space in the flexbox */
     padding: 0px;
     text-align: center;
-    grid-column: 3;
-    grid-row: 1;
     background-color: rgba(35, 35, 65, 0.452);
     border-bottom: 1px solid #3d3d3d;
   }
@@ -145,34 +169,25 @@
     font-size: 12px;
     color: black;
   }
-
+    /* Terminal Window - SvelteTeam */
   .e {
     font: white;
     overflow: auto;
-    min-width: 300%;
-    min-height: 100%;
-    grid-column: 2 / 4;
-    grid-row: 2;
+    width: 100%;
     background-color: rgba(35, 35, 65, 0.452);
   }
 
-  .webpage {
+    /* Webpage Render - SvelteTeam */
+    .webpage {
     overflow: auto;
-    resize: vertical;
-    min-width: 10%;
-    min-height: 10%;
-    max-height: 150%;
-    padding: 0px;
-    grid-row: 1;
-    height: 500px;
-    width: 95%;
+    /* resize: vertical; */
+    height: 100%;
+    width: 98%;
   }
 
   .b :global(.childClass) {
     overflow: scroll;
     display: flex;
-    height: 100%;
-    width: 100%;
   }
 
   iframe:focus {

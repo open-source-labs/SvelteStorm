@@ -171,7 +171,8 @@
 
   .editor-body {
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
+    height: 97%; /*2022-ST-RJ modified height of editor so resize handler still shows and is not covered by editor */
     overflow: scroll;
   }
 
