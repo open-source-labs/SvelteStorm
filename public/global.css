@@ -78,20 +78,33 @@ button:focus {
 }
 
 ::-webkit-scrollbar {
-  /* display: none; */
-  /* RJ Setting display to contents from none so resize handlers show - SvelteTeam */
   display: none;
+  /* RJ Setting display to contents from none so resize handlers show - SvelteTeam */
+  /* display: contents; */
 }
 
 /*RJ added webkit resizer to test handler appearance for resizing - SvelteTeam*/
 ::-webkit-resizer {
-  border: 2px solid yellow;
+  /* border: 2px solid yellow;
   background: blue;
   box-shadow: 0 0 2px 5px red;
-  outline: 2px dashed green;
+  outline: 2px dashed green; */
+  display: inline-block;
+  border-top: 50px solid transparent;
+  border-right: 50px solid rgb(109, 58, 58);
+  /* background-color: rgba(116, 62, 62, 0.842);
+  border-radius: 85%; */
 
   /*size does not work*/
-  display: block;
+  /* display: block;
   width: 150px !important;
-  height: 150px !important;
+  height: 150px !important; */
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #646464;
+}
+
+::-webkit-scrollbar-button {
+  background-color: #666;
 }

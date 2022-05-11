@@ -12,7 +12,8 @@
   /* height: 1000px; */
 }
 
-#xterm {
+.terminal {
+  width: 100%;
 }
 
 .xterm.focus,
@@ -75,12 +76,14 @@
   left: 0;
   top: 0;
   bottom: 0;
+  width: 100%;
 }
 
 .xterm .xterm-screen {
   background-color: white;
   position: relative;
   min-height: 1000px;
+  width: 100%;
 }
 
 .xterm .xterm-screen canvas {
