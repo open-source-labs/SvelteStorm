@@ -39,7 +39,7 @@
       </div>
       <div class="box d root">
         <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
-          <input 
+          <input
             placeholder="Local Host Port"
             type="text"
             on:keyup|preventDefault={handleKeyup}
@@ -51,15 +51,15 @@
         </form>
       </div>
     </div>
-  <div class="middle-separator"></div>
-  <div class="box wrapper-bottom">
-    <div class="box c root">
-      <StateManager />
+    <div class="middle-separator" />
+    <div class="box wrapper-bottom">
+      <div class="box c root">
+        <StateManager />
+      </div>
+      <div class="box e">
+        <XTerm />
+      </div>
     </div>
-    <div class="box e">
-      <XTerm />
-    </div>
-  </div>
   </main>
 </body>
 
@@ -102,12 +102,12 @@
 
   .render-wrapper {
     background-color: #252532;
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
     height: 100%;
   }
 
-  .middle-separator{
+  .middle-separator {
     padding: 2px;
   }
 
@@ -122,37 +122,37 @@
     font-size: 10px;
     overflow: auto;
     resize: horizontal;
-    width:10%;
-    min-width:10%;
+    width: 10%;
+    min-width: 10%;
     max-width: 30%;
     padding: 0;
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
   }
-  
+
   /* Text Editor - SvelteTeam */
   .b {
     overflow: auto;
-    width:45%;
+    width: 45%;
     resize: horizontal;
     background-color: rgba(35, 35, 65, 0.452);
     border-bottom: 1px solid #3d3d3d;
     border-right: 1px solid #3d3d3d;
   }
-    /* State Management Window - SvelteTeam */
+  /* State Management Window - SvelteTeam */
   .c {
     overflow: auto;
-    width:10%;
-    min-width:10%;
+    width: 10%;
+    min-width: 10%;
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     padding: 0;
   }
 
-    /* Browser Render Window - SvelteTeam */
+  /* Browser Render Window - SvelteTeam */
   .d {
-    min-width:30%;
+    min-width: 30%;
     flex-direction: column;
     flex-grow: 1; /*Let render window take up remaining space in the flexbox */
     padding: 0px;
@@ -169,7 +169,7 @@
     font-size: 12px;
     color: black;
   }
-    /* Terminal Window - SvelteTeam */
+  /* Terminal Window - SvelteTeam */
   .e {
     font: white;
     overflow: auto;
@@ -177,8 +177,8 @@
     background-color: rgba(35, 35, 65, 0.452);
   }
 
-    /* Webpage Render - SvelteTeam */
-    .webpage {
+  /* Webpage Render - SvelteTeam */
+  .webpage {
     overflow: auto;
     /* resize: vertical; */
     height: 100%;
