@@ -46,7 +46,7 @@
   height: 0;
   z-index: -10;
   /** Prevent wrapping so the IME appears against the textarea at the correct position */
-  white-space: nowrap;
+  /* white-space: nowrap; */
   overflow: hidden;
   resize: none;
 }
@@ -87,7 +87,8 @@
 }
 
 .xterm .xterm-screen canvas {
-  width: 100%; /*RJ Testing 100% instead of 200% */
+  width: 100%;
+  /*RJ Testing 100% instead of 200% */
   z-index: 1;
   background-color: rgba(20, 20, 51, 0.452);
   opacity: 0.5;
