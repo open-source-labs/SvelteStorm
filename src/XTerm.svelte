@@ -31,6 +31,16 @@
 
         term.prompt();
 
+        term.onResize((size: { cols, rows}) => {
+    if (!pid) {
+      return;
+    }
+    const cols = size.cols;
+    const rows = size.rows;
+    const url = '/terminals/' + pid + '/size?cols=' + cols + '&rows=' + rows;
+
+    fetch(url, {method: 'POST'});
+  });
         term.onData((e) => {
             ipcRenderer.send("terminal-into", e);
         });
