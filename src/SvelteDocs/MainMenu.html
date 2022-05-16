@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+<head>
+</head>
+
+<body>
+    <h1 style="color:white">Svelte Documentation</h1>
+    <aside class="sidebar-container svelte-1jnw08q"><div class="sidebar svelte-1jnw08q">
+		<ul class="reference-toc svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="section svelte-1jnw08q" href="/docs#before-we-begin">Before we begin</a>
+
+					<ul class="svelte-1jnw08q"></ul>
+				</li><li class="svelte-1jnw08q"><a class="section svelte-1jnw08q" href="/Users/zacharyradford/Desktop/Codesmith/Projects/SvelteStorm/src/SvelteDocs/ComponentFormat.html">Component format</a>
+
+					<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/Users/zacharyradford/Desktop/Codesmith/Projects/SvelteStorm/src/SvelteDocs/script.html">&lt;script&gt;</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#component-format-script-1-export-creates-a-component-prop">1. export creates a component prop</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#component-format-script-2-assignments-are-reactive">2. Assignments are &#39;reactive&#39;</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#component-format-script-3-$-marks-a-statement-as-reactive">3. $: marks a statement as reactive</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#component-format-script-4-prefix-stores-with-$-to-access-their-values">4. Prefix stores with $ to access their values</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#component-format-script-context-module">&lt;script context=&quot;module&quot;&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#component-format-style">&lt;style&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li></ul>
+				</li><li class="svelte-1jnw08q"><a class="section svelte-1jnw08q" href="/docs#template-syntax">Template syntax</a>
+
+					<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-tags">Tags</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-attributes-and-props">Attributes and props</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-text-expressions">Text expressions</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-comments">Comments</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-if">{#if ...}</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-each">{#each ...}</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-await">{#await ...}</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-key">{#key ...}</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-html">{@html ...}</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-debug">{@debug ...}</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-const">{@const ...}</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives">Element directives</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-on-eventname">on:eventname</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-bind-property">bind:property</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-bind-group">bind:group</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-bind-this">bind:this</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-class-name">class:name</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-style-property">style:property</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-use-action">use:action</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-transition-fn">transition:fn</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-in-fn-out-fn">in:fn/out:fn</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-element-directives-animate-fn">animate:fn</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-component-directives">Component directives</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-component-directives-on-eventname">on:eventname</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-component-directives---style-props">--style-props</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-component-directives-bind-property">bind:property</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-component-directives-bind-this">bind:this</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-slot">&lt;slot&gt;</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-slot-slot-name-name">&lt;slot name=&quot;name&quot;&gt;</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-slot-$$slots">$$slots</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#template-syntax-slot-slot-key-value">&lt;slot key={value}&gt;</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-self">&lt;svelte:self&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-component">&lt;svelte:component&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-element">&lt;svelte:element&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-window">&lt;svelte:window&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-body">&lt;svelte:body&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-head">&lt;svelte:head&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-options">&lt;svelte:options&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#template-syntax-svelte-fragment">&lt;svelte:fragment&gt;</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li></ul>
+				</li><li class="svelte-1jnw08q"><a class="section svelte-1jnw08q" href="/docs#run-time">Run time</a>
+
+					<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-svelte">svelte</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-onmount">onMount</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-beforeupdate">beforeUpdate</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-afterupdate">afterUpdate</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-ondestroy">onDestroy</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-tick">tick</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-setcontext">setContext</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-getcontext">getContext</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-hascontext">hasContext</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-getallcontexts">getAllContexts</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-createeventdispatcher">createEventDispatcher</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-svelte-store">svelte/store</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-store-writable">writable</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-store-readable">readable</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-store-derived">derived</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-store-get">get</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-svelte-motion">svelte/motion</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-motion-tweened">tweened</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-motion-spring">spring</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition">svelte/transition</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition-fade">fade</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition-blur">blur</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition-fly">fly</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition-slide">slide</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition-scale">scale</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition-draw">draw</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-transition-crossfade">crossfade</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-svelte-animate">svelte/animate</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-svelte-animate-flip">flip</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-svelte-easing">svelte/easing</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-svelte-register">svelte/register</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-client-side-component-api">Client-side component API</a>
+
+								<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-client-side-component-api-creating-a-component">Creating a component</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-client-side-component-api-$set">$set</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-client-side-component-api-$on">$on</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-client-side-component-api-$destroy">$destroy</a>
+										</li><li class="svelte-1jnw08q"><a class="nested subsection svelte-1jnw08q" href="/docs#run-time-client-side-component-api-component-props">Component props</a>
+										</li></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-custom-element-api">Custom element API</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#run-time-server-side-component-api">Server-side component API</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li></ul>
+				</li><li class="svelte-1jnw08q"><a class="section svelte-1jnw08q" href="/docs#compile-time">Compile time</a>
+
+					<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#compile-time-svelte-compile">svelte.compile</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#compile-time-svelte-parse">svelte.parse</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#compile-time-svelte-preprocess">svelte.preprocess</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#compile-time-svelte-walk">svelte.walk</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#compile-time-svelte-version">svelte.VERSION</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li></ul>
+				</li><li class="svelte-1jnw08q"><a class="section svelte-1jnw08q" href="/docs#accessibility-warnings">Accessibility warnings</a>
+
+					<ul class="svelte-1jnw08q"><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-accesskey">a11y-accesskey</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-aria-attributes">a11y-aria-attributes</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-autofocus">a11y-autofocus</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-distracting-elements">a11y-distracting-elements</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-hidden">a11y-hidden</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-img-redundant-alt">a11y-img-redundant-alt</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-invalid-attribute">a11y-invalid-attribute</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-label-has-associated-control">a11y-label-has-associated-control</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-media-has-caption">a11y-media-has-caption</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-misplaced-role">a11y-misplaced-role</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-misplaced-scope">a11y-misplaced-scope</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-missing-attribute">a11y-missing-attribute</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-missing-content">a11y-missing-content</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-mouse-events-have-key-events">a11y-mouse-events-have-key-events</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-no-redundant-roles">a11y-no-redundant-roles</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-positive-tabindex">a11y-positive-tabindex</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-structure">a11y-structure</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-unknown-aria-attribute">a11y-unknown-aria-attribute</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li><li class="svelte-1jnw08q"><a class="subsection svelte-1jnw08q" href="/docs#accessibility-warnings-a11y-unknown-role">a11y-unknown-role</a>
+
+								<ul class="svelte-1jnw08q"></ul>
+							</li></ul>
+				</li></ul></div>
+
+</body>
+
+
+
+
+</html>

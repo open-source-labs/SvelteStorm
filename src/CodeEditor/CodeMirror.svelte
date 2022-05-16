@@ -17,7 +17,10 @@
   import "codemirror/addon/edit/closebrackets.js";
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
+<<<<<<< HEAD
   // export { hoverTooltip } from "@codemirror/view";
+=======
+>>>>>>> sveltedocs
 
   const fs = require("fs");
   const { ipcRenderer } = require("electron");
@@ -52,9 +55,20 @@
   //     var A1 = editor.getCursor().line;
   //     var A2 = editor.getCursor().ch;
 
+<<<<<<< HEAD
   //     var B1 = editor.findWordAt({line: A1, ch: A2}).anchor.ch;
   //     var B2 = editor.findWordAt({line: A1, ch: A2}).head.ch;
 
+=======
+  //Could be used to get value of word on hover over
+  //   editor.on('cursorActivity', function() {
+  //     var A1 = editor.getCursor().line;
+  //     var A2 = editor.getCursor().ch;
+
+  //     var B1 = editor.findWordAt({line: A1, ch: A2}).anchor.ch;
+  //     var B2 = editor.findWordAt({line: A1, ch: A2}).head.ch;
+
+>>>>>>> sveltedocs
   //     console.log(editor.getRange({line: A1,ch: B1}, {line: A1,ch: B2}));
   // });
   //Another example:
