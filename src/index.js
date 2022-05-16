@@ -6,11 +6,13 @@ const {
   nativeTheme,
   webContents,
 } = require('electron');
+// const handleDocuments = require('./App.svelte')
 const createApplicationMenu = require('./application-menu');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const pty = require('node-pty');
+// const { require } = require('@electron/remote');
 
 //dialog is basically an electron modal pop up displaying an error message
 //ipcMain is an event emitter that handles messages from the a renderer process
@@ -171,6 +173,11 @@ const createWindow = (exports.createWindow = () => {
   windows.add(newWindow);
   return newWindow;
 });
+
+//Opening docs in ide browser
+// const openDocs = (exports.openDocs = () => {
+  
+// })
 
 const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
