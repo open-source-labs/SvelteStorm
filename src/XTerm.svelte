@@ -6,7 +6,9 @@
     const Terminal = require("xterm").Terminal;
 
     const fitAddon = new FitAddon();
-    const term = new Terminal({ convertEol: true });
+    const term = new Terminal({
+        fontFamily: "Fira Code, courier-new, courier, monospace",
+    });
 
     const fitOnTheGo = () => {
         fitAddon.fit();
@@ -20,6 +22,7 @@
         term.loadAddon(fitAddon);
         term.open(document.getElementById("xterm"));
         fitAddon.fit();
+        //TODO: after first fit, send the col and rows to node-pty to align
 
         //2022-ST-AJ prompt appears after welcome message
         term.prompt = () => {
@@ -33,6 +36,11 @@
 
         term.onData((e) => {
             ipcRenderer.send("terminal-into", e);
+        });
+
+        term.onResize((size) => {
+            console.log("terminal resized. size:", size);
+            ipcRenderer.send("terminal-resize", size);
         });
 
         ipcRenderer.on("terminal-incData", (event, data) => {
