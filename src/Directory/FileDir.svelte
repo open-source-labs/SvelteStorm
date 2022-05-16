@@ -137,18 +137,22 @@
       this.items = FileTree.readDir(this.path,'',0);
       
     }
+    
     static readDir(path) {
       var fileArray = [];        
+      
       
       fs.readdirSync(path).forEach(file => {
                
         var fileInfo = new FileTree(`${path}/${file}`, file);
         var stat = fs.statSync(fileInfo.path);
+        //2022-ST-RJ reading svelte files to help construct state management tree. storing info in the stateObj of the DirectoryStore aliased as DirectoryData
         if (file.split('.').pop() === 'svelte'){
           
           if(path.includes('node_modules') !== true) {
             var content = fs.readFileSync(`${path}/${file}`).toString();                    
             var stateArr = [];
+            //splitting contents of svelte files at carriage returns and newline. The ? signifies once or none occurrence...look for carriage return and split if it exists, otherwise split at newline?
             var value = content.split(/\r?\n/);
             if(value !==[""]) {
               value.forEach( el => {
