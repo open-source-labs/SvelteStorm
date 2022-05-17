@@ -13,25 +13,8 @@
 
   //Testing code for window resize
  
-  
-
-  // let leftWidth;
-  // let mainWidth;
-
-    // function handleLeftResize(node) {
-    //     leftWidth = node.clientWidth;
-    // }
-
-    // function handleMainResize(node) {
-    //     mainWidth = node.clientWidth;
-    // }
-  let x = 0;
-  let y = 0;
-
-
-  let isResizing = {'upperPanel': false, 'editorPanel': false};
-  let inResizeRange = {'upperPanel': false, 'editorPanel': false};
-  let onBorder = false;
+  let isResizing = {'upperPanel': false, 'editorPanel': false, 'fileDirPanel': false};
+  let inResizeRange = {'upperPanel': false, 'editorPanel': false, 'fileDirPanel': false};
 
   onMount(async () => {
   
@@ -53,7 +36,11 @@
     }
 
     if (panel === editorPanel){
-      editorPanel.style.width = (parseInt(getComputedStyle(editorPanel).width) - dx) + "px"; //Resizing width of  //Resizing height of upper/lower
+      editorPanel.style.width = (parseInt(getComputedStyle(editorPanel).width) - dx) + "px"; //Resizing width of edit panel
+    }
+
+    if (panel === fileDirPanel){
+      fileDirPanel.style.width = (parseInt(getComputedStyle(fileDirPanel).width) - dx) + "px"; //Resizing width of file director panel
     }
     //Update mousedown coordinates for next resizing event (curor moves again while mouse is down)
     mdown_posx = e.x; 
@@ -73,7 +60,13 @@
     mdown_posx = e.x; //Initial mouse position saved on mousedown of div....only the border is exposed
     mdown_posy = e.y;
     isResizing.editorPanel=true;
-    
+  });
+
+  fileDirPanel.addEventListener('mousedown', function(e) {
+    e.preventDefault(); //stop selection of text during mouse move / mouse down event 
+    mdown_posx = e.x; //Initial mouse position saved on mousedown of div....only the border is exposed
+    mdown_posy = e.y;
+    isResizing.fileDirPanel=true;
   });
 
   upperPanel.addEventListener('mousemove', function(e) {
@@ -86,7 +79,7 @@
     } else {
       inResizeRange.upperPanel = false;
       isResizing.upperPanel = false;
-        if (inResizeRange.upperPanel === false && inResizeRange.editorPanel === false) {
+        if (inResizeRange.upperPanel === false && inResizeRange.editorPanel === false && inResizeRange.fileDirPanel === false) {
         e.target.style.cursor = 'auto';
         }   
     }
@@ -103,7 +96,7 @@
       e.target.style.cursor = 'col-resize'
     } else {
       inResizeRange.editorPanel = false;
-      if (inResizeRange.upperPanel === false && inResizeRange.editorPanel === false) {
+      if (inResizeRange.upperPanel === false && inResizeRange.editorPanel === false && inResizeRange.fileDirPanel === false) {
         e.target.style.cursor = 'auto';
       }
         isResizing.editorPanel = false;
@@ -112,36 +105,62 @@
       resize(e, editorPanel);
   }});
 
+  fileDirPanel.addEventListener('mousemove', function(e) {
+    e.preventDefault(); //stop selection of text during mouse move / mouse down event 
+    x_pos = e.x;
+    // console.log(`xpos: ${x_pos}`);
+    if (x_pos > parseInt(getComputedStyle(fileDirPanel).width)  -20  && x_pos < parseInt(getComputedStyle(fileDirPanel).width) +20) {
+      inResizeRange.fileDirPanel = true;
+      e.target.style.cursor = 'col-resize'
+    } else {
+      inResizeRange.fileDirPanel = false;
+      if (inResizeRange.upperPanel === false && inResizeRange.editorPanel === false && inResizeRange.fileDirPanel === false) {
+        e.target.style.cursor = 'auto';
+      }
+        isResizing.fileDirPanel = false;
+    }
+    if (isResizing.fileDirPanel === true) {
+      resize(e, fileDirPanel);
+  }});
+
   //Including mouse leave events to avoid resizing stuck on leave and auto-resume on reentry
   upperPanel.addEventListener('mouseleave', function(e) {
     isResizing.upperPanel = false;
     isResizing.editorPanel = false;
+    isResizing.fileDirPanel = false;
     inResizeRange.upperPanel = false;
     inResizeRange.editorPanel = false;
+    inResizeRange.fileDirPanel = false;
   })
 
   editorPanel.addEventListener('mouseleave', function(e) {
     isResizing.upperPanel = false;
     isResizing.editorPanel = false;
+    isResizing.fileDirPanel = false;
     inResizeRange.upperPanel = false;
     inResizeRange.editorPanel = false;
+    inResizeRange.fileDirPanel = false;
   })
 
+  fileDirPanel.addEventListener('mouseleave', function(e) {
+    isResizing.upperPanel = false;
+    isResizing.editorPanel = false;
+    isResizing.fileDirPanel = false;
+    inResizeRange.upperPanel = false;
+    inResizeRange.editorPanel = false;
+    inResizeRange.fileDirPanel = false;
+  })
 
-  // window.addEventListener('mouseup', function(e) {
-  // console.log('MOUSE UP');
-  // if (isResizing.upperPanel === true || isResizing.editorPanel === true) {
-  //   isResizing.upperPanel = false;
-  //   isResizing.editorPanel = false;
-    
-  // }
-  // // isResizing.upperPanel = false;
-  // // isResizing.editorPanel = false;
- 
-  // console.log('Svelte.app has mounted');
-
-  // });
 });
+
+window.addEventListener('mouseup', function(e) {
+    isResizing.upperPanel = false;
+    isResizing.editorPanel = false;
+    isResizing.fileDirPanel = false;
+    inResizeRange.upperPanel = false;
+    inResizeRange.editorPanel = false;
+    inResizeRange.fileDirPanel = false;
+  });
 
 
   //Testing code for window resize end
