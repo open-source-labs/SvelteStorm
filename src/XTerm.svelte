@@ -28,15 +28,20 @@
         //2022-ST-AJ immediately call resize to have proper prompt in, and have node-pty adjust to correct size.
 
         term.prompt = () => {
-            term.write("\r\n$ ");
-
-            const size = { cols: term.cols, rows: term.rows };
-            ipcRenderer.send("terminal-resize", size);
+            //TODO: to get the cwd showing. pass it from ipcMain
+            let cwd = "";
+            ipcRenderer.send("cwd", "cwd");
+            ipcRenderer.on("cwdreply", (event, data) => {
+                cwd = data;
+                let prompt = "\r\n" + cwd + "$ ";
+                term.write(prompt);
+                // console.warn("renderer received cwd:", cwd);
+            });
         };
 
         term.writeln("Welcome to SvelteStorm");
         // term.writeln("\b \b");
-        term.writeln("");
+
         term.prompt();
         term.focus();
 
