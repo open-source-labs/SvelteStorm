@@ -29,14 +29,13 @@
 
         term.prompt = () => {
             //TODO: to get the cwd showing. pass it from ipcMain
-            let cwd = "";
-            ipcRenderer.send("cwd", "cwd");
-            ipcRenderer.on("cwdreply", (event, data) => {
-                cwd = data;
-                let prompt = "\r\n" + cwd + "$ ";
-                term.write(prompt);
-                // console.warn("renderer received cwd:", cwd);
-            });
+            // let cwd = "";
+            ipcRenderer.send("terminal-into", "\r");
+            // ipcRenderer.on("cwdreply", (event, data) => {
+            //     cwd = data;
+            //     let prompt = "\r\n" + cwd + "$ ";
+            //     term.write(prompt);
+            // console.warn("renderer received cwd:", cwd);
         };
 
         term.writeln("Welcome to SvelteStorm");
