@@ -147,6 +147,7 @@ const createWindow = (exports.createWindow = () => {
   });
 
   var shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
+
   var ptyProcess = pty.spawn(shell, [], {
     name: 'xterm-color',
     cols: 80,
@@ -159,13 +160,15 @@ const createWindow = (exports.createWindow = () => {
     newWindow.webContents.send('terminal-incData', data);
   });
 
+  
+  
   ipcMain.on('terminal-into', (event, data) => {
     ptyProcess.write(data);
   });
   ipcMain.on('terminal-resize', (event,size) => {
     const cols = size.cols;
     const rows = size.rows;
-
+    
     console.log('pty resizing to cols and rows', cols,rows);
     ptyProcess.resize(cols, rows);
   })

@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { FitAddon } from "xterm-addon-fit";
     import "./xterm.css";
+
     const { remote, ipcRenderer, BrowserWindow } = require("electron");
     const Terminal = require("xterm").Terminal;
 
@@ -17,29 +18,34 @@
     onMount(() => {
         term.options.cursorStyle = "block";
         term.options.cursorBlink = true;
-        term.options.fontSize = 14;
+        term.options.fontSize = 12;
 
         term.loadAddon(fitAddon);
         term.open(document.getElementById("xterm"));
         fitAddon.fit();
-        //TODO: after first fit, send the col and rows to node-pty to align
 
         //2022-ST-AJ prompt appears after welcome message
+        //2022-ST-AJ immediately call resize to have proper prompt in, and have node-pty adjust to correct size.
+
         term.prompt = () => {
             term.write("\r\n$ ");
+
+            const size = { cols: term.cols, rows: term.rows };
+            ipcRenderer.send("terminal-resize", size);
         };
 
         term.writeln("Welcome to SvelteStorm");
-        term.write("\b \b");
-
+        // term.writeln("\b \b");
+        term.writeln("");
         term.prompt();
+        term.focus();
 
         term.onData((e) => {
             ipcRenderer.send("terminal-into", e);
         });
 
         term.onResize((size) => {
-            console.log("terminal resized. size:", size);
+            // console.log("terminal resized. size:", size);
             ipcRenderer.send("terminal-resize", size);
         });
 
