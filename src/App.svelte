@@ -59,9 +59,25 @@
       e.target.style.cursor = 'col-resize';
     }
   }
-
+  
   function dragStart (e, panel) {
-    e.preventDefault(); //stop selection of text during mouse move / mouse down event 
+    e.preventDefault(); //stop selection of text during mouse move / mouse down event
+
+    //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
+    const trackMouseMove = (e) => {
+    // console.log(`ex: ${e.x}`) 
+    dragMovement(e, panel)
+  };
+
+  const trackMouseUp = (e) => {
+    // console.log('Mouse Up');
+    dragEnd(e, panel)
+    window.removeEventListener('mousemove', trackMouseMove, true);
+    window.removeEventListener('mouseup', trackMouseUp, true);
+  };
+    window.addEventListener('mousemove', trackMouseMove, true);
+    window.addEventListener('mouseup', trackMouseUp, true);
+  
     if (panel === 'horizontal-divider') {
       mdown_posy = e.y;
       resizeObj[panel].isResizing = true;
@@ -75,6 +91,7 @@
     e.preventDefault(); //stop selection of text during mouse move / mouse down event 
     x_pos = e.x;
     y_pos = e.y;
+    
     if (panel === 'horizontal-divider'){
       if (resizeObj[panel].isResizing === true) {
       resize(e, 'horizontal-divider');
@@ -98,12 +115,12 @@
     else {
     } 
   };
+ 
 
   function dragEnd (e, panel) {
     e.preventDefault(); //stop selection of text during mouse move / mouse down event
     resizeObj[panel].isResizing = false;
   }
-
 
   let horizDivider = document.getElementById('horizontal-divider');
   let editorDivider = document.getElementById('editor-divider');
@@ -112,27 +129,16 @@
 
   horizDivider.addEventListener('mouseover', (e) => chgCursor(e, 'horizontal-divider'));
   horizDivider.addEventListener('mousedown', (e) => dragStart(e, 'horizontal-divider'));
-  horizDivider.addEventListener('mousemove', (e) => dragMovement(e, 'horizontal-divider'));
-  horizDivider.addEventListener('mouseleave', (e) => dragEnd(e, 'horizontal-divider'));
-  horizDivider.addEventListener('mouseup', (e) => dragEnd(e, 'horizontal-divider'));
 
   editorDivider.addEventListener('mouseover', (e) => chgCursor(e, 'editor-divider'));
   editorDivider.addEventListener('mousedown', (e) => dragStart(e, 'editor-divider'));
-  editorDivider.addEventListener('mousemove', (e) => dragMovement(e, 'editor-divider'));
-  editorDivider.addEventListener('mouseleave', (e) => dragEnd(e, 'editor-divider'));
-  editorDivider.addEventListener('mouseup', (e) => dragEnd(e, 'editor-divider'));
 
   filedirDivider.addEventListener('mouseover', (e) => chgCursor(e, 'filedir-divider'));
   filedirDivider.addEventListener('mousedown', (e) => dragStart(e, 'filedir-divider'));
-  filedirDivider.addEventListener('mousemove', (e) => dragMovement(e, 'filedir-divider'));
-  filedirDivider.addEventListener('mouseleave', (e) => dragEnd(e, 'filedir-divider'));
-  filedirDivider.addEventListener('mouseup', (e) => dragEnd(e, 'filedir-divider'));
 
   statemgrDivider.addEventListener('mouseover', (e) => chgCursor(e, 'statemgr-divider'));
   statemgrDivider.addEventListener('mousedown', (e) => dragStart(e, 'statemgr-divider'));
-  statemgrDivider.addEventListener('mousemove', (e) => dragMovement(e, 'statemgr-divider'));
-  statemgrDivider.addEventListener('mouseleave', (e) => dragEnd(e, 'statemgr-divider'));
-  statemgrDivider.addEventListener('mouseup', (e) => dragEnd(e, 'statemgr-divider'));
+
   //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 }); //End of onMount
  
@@ -215,10 +221,6 @@
     height: 100%;
     width: 100%;
     z-index: 1;
-    /* display: flex;
-    flex-direction: column;
-    background-color: rgb(39, 38, 38);
-    color: #444; */
   }
 
   .wrapper-upper {
@@ -283,9 +285,9 @@
     font-size: 10px;
     overflow: auto;
     /* resize: horizontal; */
-    width: 10%;
+    width: 12.5%;
     min-width: 10%;
-    max-width: 30%;
+    /* max-width: 30%; */
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
@@ -304,7 +306,7 @@
   /* State Management Window - SvelteTeam */
   .c {
     overflow: auto;
-    width: 11.8%;
+    width: 14.8%;
     min-width: 10%;
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
@@ -353,5 +355,6 @@
 
   iframe:focus {
     outline: none;
+    
   }
 </style>
