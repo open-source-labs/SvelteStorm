@@ -21,7 +21,7 @@ require('@electron/remote/main').enable(webContents);
 //hot reload for electron development
 try {
   require('electron-reloader')(module);
-} catch (_) { }
+} catch (err) {console.log(err) }
 
 let userFile = '';
 
@@ -162,12 +162,12 @@ const createWindow = (exports.createWindow = () => {
   ipcMain.on('terminal-into', (event, data) => {
     ptyProcess.write(data);
   });
-  ipcMain.on('terminal-resize', (size) => {
+  ipcMain.on('terminal-resize', (event,size) => {
     const cols = size.cols;
     const rows = size.rows;
 
-    console.log('pty resizing to cols and rows', cols, rows);
-    // ptyProcess.resize(cols, rows);
+    console.log('pty resizing to cols and rows', cols,rows);
+    ptyProcess.resize(cols, rows);
   })
 
   require('electron-reload')(__dirname, {
