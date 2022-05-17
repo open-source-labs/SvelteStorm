@@ -31,10 +31,11 @@
     else fileState[path] = false;
   }
 
-
+  // invoked when a file is opened
   const dblClickHandler = (path) => {
     const openFilePath = path; 
-    console.log('openFilePath', openFilePath)     
+    console.log('dblClickHandler invoked');
+
     DirectoryData.update(currentData =>{
       return {
         ...currentData,
