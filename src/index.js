@@ -101,10 +101,12 @@ const createWindow = (exports.createWindow = () => {
   //loading index.html into the app
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
+  //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
     newWindow.show();
   });
 
+  
   newWindow.on('focus', createApplicationMenu);
 
   //save changes dialog modal message
