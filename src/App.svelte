@@ -11,12 +11,14 @@
   let value = "";
   let submit = false;
 
-  //Testing code for window resize
+  //Testing code for window resize 
  
   let isResizing = {'upperPanel': false, 'editorPanel': false, 'fileDirPanel': false};
   let inResizeRange = {'upperPanel': false, 'editorPanel': false, 'fileDirPanel': false};
 
   onMount(async () => {
+
+  //==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS - NOT USING DIVIDERS===========//
   
   let mdown_posx;
   let mdown_posy;
@@ -25,21 +27,20 @@
   let upperPanel = document.getElementById('wrapper-upper');
   let editorPanel = document.getElementById('editor-window');
   let fileDirPanel = document.getElementById('file-dir');
+  let resizeDomElem = {'upperPanel': upperPanel, 'editorPanel': editorPanel, 'fileDirPanel': fileDirPanel};
+ 
 
+  
   function resize(e, panel){
-    console.log('resizing');
+    // console.log('resizing');
     const dx = mdown_posx - e.x; //difference in x coordinates (current mouse position versus where mousedown began)
     const dy = mdown_posy - e.y;
 
     if (panel === upperPanel){
       upperPanel.style.height = (parseInt(getComputedStyle(upperPanel).height) - dy) + "px"; //Resizing height of upper/lower
-    }
-
-    if (panel === editorPanel){
+    } else if (panel === editorPanel){
       editorPanel.style.width = (parseInt(getComputedStyle(editorPanel).width) - dx) + "px"; //Resizing width of edit panel
-    }
-
-    if (panel === fileDirPanel){
+    } else {// (panel === fileDirPanel){
       fileDirPanel.style.width = (parseInt(getComputedStyle(fileDirPanel).width) - dx) + "px"; //Resizing width of file director panel
     }
     //Update mousedown coordinates for next resizing event (curor moves again while mouse is down)
@@ -47,27 +48,33 @@
     mdown_posy = e.y;
   }
 
-  upperPanel.addEventListener('mousedown', function(e) {
-    e.preventDefault(); //stop selection of text during mouse move / mouse down event 
-    mdown_posx = e.x; //Initial mouse position saved on mousedown of div....only the border is exposed
-    mdown_posy = e.y;
-    isResizing.upperPanel=true;
-    
-  });
+  //Adding mouse down events for resizing to each of the resizable dom elements
+  for (const key in resizeDomElem) {
+    if (Object.hasOwnProperty.call(resizeDomElem, key)) {
+      const element = resizeDomElem[key];
+      element.addEventListener('mousedown', function(e) {
+      e.preventDefault(); //stop selection of text during mouse move / mouse down event 
+      mdown_posx = e.x; //Initial mouse position saved on mousedown of div....only the border is exposed
+      mdown_posy = e.y;
+      isResizing[key]=true;
+  }); 
+}
+  }
 
-  editorPanel.addEventListener('mousedown', function(e) {
-    e.preventDefault(); //stop selection of text during mouse move / mouse down event 
-    mdown_posx = e.x; //Initial mouse position saved on mousedown of div....only the border is exposed
-    mdown_posy = e.y;
-    isResizing.editorPanel=true;
-  });
-
-  fileDirPanel.addEventListener('mousedown', function(e) {
-    e.preventDefault(); //stop selection of text during mouse move / mouse down event 
-    mdown_posx = e.x; //Initial mouse position saved on mousedown of div....only the border is exposed
-    mdown_posy = e.y;
-    isResizing.fileDirPanel=true;
-  });
+  //Adding mouse leave events for resizing to each of the resizable dom elements
+  for (const key in resizeDomElem) {
+    if (Object.hasOwnProperty.call(resizeDomElem, key)) {
+      const element = resizeDomElem[key];
+      element.addEventListener('mouseleave', function(e) {
+      isResizing.upperPanel = false;
+      isResizing.editorPanel = false;
+      isResizing.fileDirPanel = false;
+      inResizeRange.upperPanel = false;
+      inResizeRange.editorPanel = false;
+      inResizeRange.fileDirPanel = false;
+  });   
+    }
+  }
 
   upperPanel.addEventListener('mousemove', function(e) {
     e.preventDefault(); //stop selection of text during mouse move / mouse down event 
@@ -123,37 +130,7 @@
       resize(e, fileDirPanel);
   }});
 
-  //Including mouse leave events to avoid resizing stuck on leave and auto-resume on reentry
-  upperPanel.addEventListener('mouseleave', function(e) {
-    isResizing.upperPanel = false;
-    isResizing.editorPanel = false;
-    isResizing.fileDirPanel = false;
-    inResizeRange.upperPanel = false;
-    inResizeRange.editorPanel = false;
-    inResizeRange.fileDirPanel = false;
-  })
-
-  editorPanel.addEventListener('mouseleave', function(e) {
-    isResizing.upperPanel = false;
-    isResizing.editorPanel = false;
-    isResizing.fileDirPanel = false;
-    inResizeRange.upperPanel = false;
-    inResizeRange.editorPanel = false;
-    inResizeRange.fileDirPanel = false;
-  })
-
-  fileDirPanel.addEventListener('mouseleave', function(e) {
-    isResizing.upperPanel = false;
-    isResizing.editorPanel = false;
-    isResizing.fileDirPanel = false;
-    inResizeRange.upperPanel = false;
-    inResizeRange.editorPanel = false;
-    inResizeRange.fileDirPanel = false;
-  })
-
-});
-
-window.addEventListener('mouseup', function(e) {
+  window.addEventListener('mouseup', function(e) {
     isResizing.upperPanel = false;
     isResizing.editorPanel = false;
     isResizing.fileDirPanel = false;
@@ -162,8 +139,9 @@ window.addEventListener('mouseup', function(e) {
     inResizeRange.fileDirPanel = false;
   });
 
+    //==========ENDING - WORKING CODE FOR RESIZING DOM ELEMENTS - NOT USING DIVIDERS===========//
 
-  //Testing code for window resize end
+}); //End of onMount
  
 
   const handleSubmit = () => {
