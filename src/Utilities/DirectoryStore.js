@@ -20,4 +20,10 @@ const DirectoryData = writable({
 
 const openTabs = writable([]);
 
-export { DirectoryData, openTabs }; 
+const currentTabFilePath = writable('');
+
+const editorCache = writable({});
+
+const codeMirrorEditor = writable(undefined);
+
+export { DirectoryData, openTabs, editorCache, codeMirrorEditor, currentTabFilePath }; 
