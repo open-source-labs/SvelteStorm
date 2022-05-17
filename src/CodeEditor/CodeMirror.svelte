@@ -1,5 +1,5 @@
 <script>
-  import { afterUpdate, beforeUpdate, onMount } from "svelte";
+  import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
   import "codemirror/lib/codemirror.css";
   import "codemirror/theme/dracula.css";
@@ -20,10 +20,8 @@
   import {
     editorCache,
     codeMirrorEditor,
-    openTabs,
     currentTabFilePath,
   } from "../Utilities/DirectoryStore.js";
-  import Editor from "./Editor.svelte";
 
   const fs = require("fs");
   const { ipcRenderer } = require("electron");
@@ -32,15 +30,9 @@
   export let language;
   export let filePath;
   let messageObj;
-
-  // export let handleClick;
-  // let codeMirrorEditor;
   let containerElt;
 
   onMount(async () => {
-    //console.log('before creating codemirror obj', language, filePath);
-    //console.log(codeMirrorEditor);
-
     $codeMirrorEditor = await CodeMirror.fromTextArea(containerElt, {
       mode: language,
       lineNumbers: true,
@@ -61,41 +53,29 @@
     $codeMirrorEditor.setSize("100%", "100%");
 
     if (!$editorCache[filePath]) {
-      // $editorCache[filePath] = value;
       $editorCache[currentTabFilePath] = value;
     }
-    console.log("onMount: ", $editorCache);
-    console.log("onMount compelte ");
-  });
-
-  beforeUpdate(() => {
-    //handleClick(tab.tabId)
-    //console.log('beforeUpdate cache: ', editorCache);
-    //if (!editorCache[filePath]) {editorCache[filePath] = value};
-    //  console.log('beforeUpdate: ', $openTabs[tabId].editorValue);
-    //console.log('beforeUpdate: ', tabId);
-    //console.log('beforeUpdate: ', $openTabs);
+    console.log("onMount complete ");
   });
 
   afterUpdate(async () => {
     if (codeMirrorEditor) {
-      // // 2022-05-CR: editorCache.filePath below looks to the editorCache object in DirectoryStore.svelte, accesses the key that matches the file name, and uses that key's value to populate the editor. This provides a cache to temporarily store code as a user writes it, rather than reloading from the source file each time a tab is clicked (which would cause all unsaved code to be lost upon every tab switch).
+      // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
+      const cacheCode = $editorCache[$currentTabFilePath];
 
-      // if file isn't cached
-      const cacheCode = $editorCache[$currentTabFilePath]; 
-      console.log('before if: ', cacheCode);
+      // if file hans't been cached yet
       if (!cacheCode) {
-        // cache the file and it's value (value=the raw that'll appear in the editor)
-        $editorCache[currentTabFilePath] = value; 
+        // cache the file and it's value (value=the raw code that'll appear in the editor)
+        $editorCache[currentTabFilePath] = value;
         // set value of current editor to display the current code
         $codeMirrorEditor.setValue(value);
       } else {
-      // if file already exists in the cache
+        // if file already exists in the cache
         $codeMirrorEditor.setValue(cacheCode);
-        $codeMirrorEditor.setOption("mode", language); 
+        $codeMirrorEditor.setOption("mode", language);
       }
     }
-    console.log("afterUpdate complete"); 
+    console.log("afterUpdate complete");
   });
 
   ipcRenderer.on("save-markdown", function () {
@@ -104,20 +84,6 @@
     console.log("ipcRenderer complete");
   });
 
-  // //console.log('filePath: ', filePath);
-      // console.log('afterUpdate currentTabPath: ', $currentTabFilePath);
-      // console.log('afterUpdate cache 0: ', $editorCache);
-
-      // if(!$editorCache[$currentTabFilePath]) {
-      //   $editorCache[$currentTabFilePath] = value;
-      // console.log('afterUpdate cach 1: ', $editorCache[$currentTabFilePath], 'value: ', value);
-      // // await $codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
-      // await $codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
-      // await $codeMirrorEditor.setOption('mode', language);
-      // } else {
-      //   await $codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
-      // }
-      // console.log('afterUpdate cach 2: ', $editorCache[$currentTabFilePath]);
 </script>
 
 <svelte:head />

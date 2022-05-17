@@ -59,19 +59,19 @@
   }
 
   const handleClick = async (tab) => {
+    // event listener for when a tab within the editor is clicked
     // update current tab in DirectoryStore.js to whichever tab was just clicked
     $currentTabFilePath = tab.filePath;
-    // save current code in editor to a variable 
+
+    // save current code inside the editor to a variable 
     const currentUserCode = await $codeMirrorEditor.getValue();
-    console.log('handleClick code: ',currentUserCode);
-    // update cache in DirectoryStore
+
+    // update cache in DirectoryStore to reflect current code in the editor
     $editorCache[$openTabs[(activeEditor)].filePath] = currentUserCode;
-    console.log('cach on click: ', $editorCache);
 
     activeTabValue = tab.tabId;
     activeEditor = activeTabValue;
 
-    //$codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
     console.log('handleClick complete');
   }
 
@@ -118,8 +118,6 @@
     console.log('ipcRnderer: new tab added');
     addTab(newTab);
     if (file) { title = `${path.basename(file)} - ${title}`; }
-    //if(!editorCache.newTab.filePath) {editorCache.newTab.filePath = content};
-    //console.log('editorCache: ', editorCache)
   });
 
   // takes care of opening a file from within the file directory
@@ -142,11 +140,6 @@
     }
   });
 
-
- //console.log('handleClick openTabsPath: ', $openTabs[(activeEditor)].filePath); // previous path
-    //console.log('handleClick tab.filePath: ', tab.filePath); // new path
-    //console.log('currentUserCode: ', currentUserCode);
-    //console.log('filePath: ', $openTabs[(activeEditor)].filePath);
 </script>
 
 <!--==========================================MARKUP==========================================-->
