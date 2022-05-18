@@ -12,6 +12,10 @@
   /* height: 1000px; */
 }
 
+#xterm {
+  flex-grow: 1;
+}
+
 .terminal {
   width: 100%;
 }
@@ -65,6 +69,7 @@
   display: block;
 }
 
+/* RJ separating xterm-viewport out */
 .xterm .xterm-viewport {
   /* On OS X this is required in order for the scroll bar to appear fully opaque */
   background-color: rgba(35, 35, 65, 0.452);
@@ -88,7 +93,6 @@
 
 .xterm .xterm-screen canvas {
   width: 100%;
-  /*RJ Testing 100% instead of 200% */
   z-index: 1;
   background-color: rgba(20, 20, 51, 0.452);
   opacity: 0.5;
