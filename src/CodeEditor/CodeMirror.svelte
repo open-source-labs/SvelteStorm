@@ -30,8 +30,103 @@
   export let language;
   export let filePath;
   let messageObj;
-  let containerElt;
 
+  let counter = 0;
+  let containerElt;
+  function searchDocumentation(value) {
+    // console.log("first console.log of search", value);
+    for (let item in searchDoc) {
+      // console.log("here is each item of search", item);
+      if (searchDoc[item].includes(value)) {
+        console.log("congrats!");
+        return item;
+      }
+    }
+    console.log(value, "is not in the docs!");
+    return false;
+  }
+  // const wordHover = hoverTooltip((view, pos, side) => {
+  //   let { from, to, text } = view.state.doc.lineAt(pos);
+  //   let start = pos,
+  //     end = pos;
+  //   while (start > from && /\w/.test(text[start - from - 1])) start--;
+  //   while (end < to && /\w/.test(text[end - from])) end++;
+  //   if ((start == pos && side < 0) || (end == pos && side > 0)) return null;
+  //   return {
+  //     pos: start,
+  //     end,
+  //     above: true,
+  //     create(view) {
+  //       let dom = document.createElement("div");
+  //       dom.textContent = text.slice(start - from, end - from);
+  //       return { dom };
+  //     },
+  //   };
+  // });
+
+  let hoverCounter = 0;
+  let lastHoverCounter = 0;
+  let lastWord;
+  let toolTip = false;
+  let src;
+  let tester;
+  let toolTipDiv;
+  // src = `https://svelte.dev/docs#${searchDocumentation(lastWord)}`;
+  function onHover() {
+    let word;
+    console.log("counter ", counter);
+    if (counter > 6 && searchDocumentation(lastWord) !== false) {
+      let url = searchDocumentation(lastWord);
+      src = `https://svelte.dev/docs#${url}`;
+      // toolTip = true;
+      counter = 0;
+      // toolTipDiv = `THIS IS WHERE THE TOOL TIP WIL BE ABOUT: ${lastWord}`;
+    }
+    if (counter > 6 && word !== lastWord) {
+      counter = 0;
+    }
+
+    var A1 = codeMirrorEditor.getCursor().line;
+    var A2 = codeMirrorEditor.getCursor().ch;
+
+    var B1 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).anchor.ch;
+    var B2 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).head.ch;
+    searchDocumentation(
+      codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
+    );
+    word = codeMirrorEditor.getRange(
+      { line: A1, ch: B1 },
+      { line: A1, ch: B2 }
+    );
+    // console.log("this is the word right after the document search", word);
+    if (lastWord !== word) {
+      counter = 0;
+    }
+    counter++;
+    lastWord = word;
+    // console.log(
+    //   "this is the last console log of tooltips",
+    //   codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
+    // );
+  }
+  function hoverTest() {
+    if (hoverCounter > lastHoverCounter) {
+      lastHoverCounter = hoverCounter;
+      return;
+    }
+    // console.log("hovering", hoverCounter, lastHoverCounter);
+    if (counter > 4) {
+      tester = true;
+    }
+    return;
+  }
+  setInterval(() => {
+    //   // word = codeMirrorEditor.findWordAt(codeMirrorEditor.getCursor());
+    //   // codeMirrorEditor.getRange(word.anchor, word.head);
+    hoverTest();
+    onHover();
+    // console.log("this is the mouse hover console.log ", word, obj);
+  }, 500);
   onMount(async () => {
     $codeMirrorEditor = await CodeMirror.fromTextArea(containerElt, {
       mode: language,
@@ -83,7 +178,6 @@
     ipcRenderer.send("synchronous-message", messageObj);
     console.log("ipcRenderer complete");
   });
-
 </script>
 
 <svelte:head />
