@@ -11,12 +11,9 @@
   let value = "";
   let submit = false;
 
-  //Testing code for window resize 
- 
-
   onMount(async () => {
 
-  //==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+  //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
   let upperPanel = document.getElementById('wrapper-upper');
   let editorPanel = document.getElementById('editor-window');
   let filedirPanel = document.getElementById('file-dir');
@@ -128,7 +125,6 @@
     } 
   };
  
-
   function dragEnd (e, panel) {
     e.preventDefault(); //stop selection of text during mouse move / mouse down event
     resizeObj[panel].isResizing = false;
@@ -153,7 +149,7 @@
 
   //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
-  //Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount
+  //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and 
   function xtermRestyle (className) {
     let domElement = document.getElementsByClassName(className);
     for (const item of domElement) {  
@@ -167,11 +163,18 @@
     }
   }
 
-  xtermRestyle('xterm-screen');
-  xtermRestyle('xterm-text-layer');
-  xtermRestyle('xterm-selection-layer');
-  xtermRestyle('xterm-link-layer');
-  xtermRestyle('xterm-cursor-layer');
+  function xtermSetWidth() {
+    xtermRestyle('xterm-screen');
+    xtermRestyle('xterm-text-layer');
+    xtermRestyle('xterm-selection-layer');
+    xtermRestyle('xterm-link-layer');
+    xtermRestyle('xterm-cursor-layer');
+  }
+
+  xtermSetWidth();
+  //Need to trigger this after resize so that it follows xterm's fittaddon resize
+  window.addEventListener('resize', xtermSetWidth);
+  
 
 
 
@@ -345,8 +348,8 @@
     overflow: auto;
     max-width: 30.4%;
     width: 12.8%;
-    min-width: 12.8%;
-    /* min-width: 1%; */
+    /* min-width: 12.8%; */
+    min-width: 1%;
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     padding: 0;

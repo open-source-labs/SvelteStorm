@@ -51,6 +51,8 @@
         ipcRenderer.on("terminal-incData", (event, data) => {
             term.write(data);
         });
+
+
     });
 
     //2022-ST-AJ listens to resize event and invokes fitAddOn on the go. Otherwise terminal will not resize.
