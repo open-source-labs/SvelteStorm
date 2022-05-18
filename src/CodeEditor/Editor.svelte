@@ -156,8 +156,10 @@
       <span
         class="delete-button" 
         value={tab.tabId}
+        innerText='x'
         on:click={(value) => deleteTab(tab.tabId)}
       >
+      X
       </span>
     </span>
   </li>
@@ -237,9 +239,17 @@
     /* margin-bottom: 0; */
   }
   .delete-button {
+    height: 10px;
+    width: 10px;
     margin-left: 5px;
+    padding-bottom: 4px;
     border-right: black;
     border-left: black;
+    color:rgb(90, 90, 90);
+  }
+
+  .delete-button:hover {
+    color: #f1f1f1;
   }
 
 </style>
