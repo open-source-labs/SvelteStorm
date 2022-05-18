@@ -179,6 +179,7 @@
     let filedirDivider = document.getElementById("filedir-divider");
     let statemgrDivider = document.getElementById("statemgr-divider");
 
+<<<<<<< HEAD
     horizDivider.addEventListener("mouseover", (e) =>
       chgCursor(e, "horizontal-divider")
     );
@@ -237,6 +238,13 @@
     //Need to trigger this after resize so that it follows xterm's fittaddon resize
     window.addEventListener("resize", xtermSetWidth);
   }); //End of onMount
+=======
+  xtermSetWidth();
+  //Need to trigger this after resize so that it follows xterm's fittaddon resize
+  window.addEventListener('resize', xtermSetWidth);
+}); //End of onMount
+ 
+>>>>>>> 03df4e1 (window resize state mgmt merge)
 
   const handleSubmit = () => {
     submit = false;
