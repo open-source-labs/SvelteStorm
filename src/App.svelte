@@ -62,7 +62,12 @@
   
   function dragStart (e, panel) {
     e.preventDefault(); //stop selection of text during mouse move / mouse down event
-
+    
+    //Need this so window events continue tracking on top of iframe
+    let iframeList = document.getElementsByClassName('webpage');
+    for (const item of iframeList) {
+      item.setAttribute('style','pointer-events: none');      
+    }
     //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
     const trackMouseMove = (e) => {
     // console.log(`ex: ${e.x}`) 
@@ -74,6 +79,13 @@
     dragEnd(e, panel)
     window.removeEventListener('mousemove', trackMouseMove, true);
     window.removeEventListener('mouseup', trackMouseUp, true);
+
+    //Removing no pointer events from iframes on mouse up
+    let iframeList = document.getElementsByClassName('webpage');
+    for (const item of iframeList) {
+      item.setAttribute('style','');      
+    }
+
   };
     window.addEventListener('mousemove', trackMouseMove, true);
     window.addEventListener('mouseup', trackMouseUp, true);
@@ -286,7 +298,7 @@
     overflow: auto;
     /* resize: horizontal; */
     width: 12.5%;
-    min-width: 10%;
+    min-width: 12.5%;
     /* max-width: 30%; */
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
@@ -346,6 +358,7 @@
     /* resize: vertical; */
     height: 98%;
     width: 98%;
+    /* pointer-events: none; */
   }
 
   .b :global(.childClass) {
