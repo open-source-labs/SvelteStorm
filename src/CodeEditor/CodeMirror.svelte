@@ -80,51 +80,48 @@
   //   };
   // });
 
-  let hoverCounter = 0;
-  let lastHoverCounter = 0;
-  let lastWord;
-  let toolTip = false;
-  let src;
-  let tester;
-  let toolTipDiv;
-  // src = `https://svelte.dev/docs#${searchDocumentation(lastWord)}`;
-  function onHover() {
-    let word;
-    console.log("counter ", counter);
-    if (counter > 6 && searchDocumentation(lastWord) !== false) {
-      let url = searchDocumentation(lastWord);
-      src = `https://svelte.dev/docs#${url}`;
-      // toolTip = true;
-      counter = 0;
-      // toolTipDiv = `THIS IS WHERE THE TOOL TIP WIL BE ABOUT: ${lastWord}`;
-    }
-    if (counter > 6 && word !== lastWord) {
-      counter = 0;
-    }
+  // let hoverCounter = 0;
+  // let lastHoverCounter = 0;
+  // let lastWord;
+  // let toolTip = false;
+  // let src;
+  // let tester;
+  // let toolTipDiv;
+  // // src = `https://svelte.dev/docs#${searchDocumentation(lastWord)}`;
+  // function onHover() {
+  //   let word;
+  //   console.log("counter ", counter);
+  //   if (counter > 6 && searchDocumentation(lastWord) !== false) {
+  //     let url = searchDocumentation(lastWord);
+  //     src = `https://svelte.dev/docs#${url}`;
+  //     // toolTip = true;
+  //     counter = 0;
+  //     // toolTipDiv = `THIS IS WHERE THE TOOL TIP WIL BE ABOUT: ${lastWord}`;
+  //   }
+  //   if (counter > 6 && word !== lastWord) {
+  //     counter = 0;
+  //   }
 
-    var A1 = codeMirrorEditor.getCursor().line;
-    var A2 = codeMirrorEditor.getCursor().ch;
+  //   var A1 = codeMirrorEditor.getCursor().line;
+  //   var A2 = codeMirrorEditor.getCursor().ch;
 
-    var B1 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).anchor.ch;
-    var B2 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).head.ch;
-    searchDocumentation(
-      codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
-    );
-    word = codeMirrorEditor.getRange(
-      { line: A1, ch: B1 },
-      { line: A1, ch: B2 }
-    );
-    console.log("this is the word right after the document search", word);
-    if (lastWord !== word) {
-      counter = 0;
-    }
-    counter++;
-    lastWord = word;
-    console.log(
-      "this is the last console log of tooltips",
-      codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
-    );
+  var B1 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).anchor.ch;
+  var B2 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).head.ch;
+  searchDocumentation(
+    codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
+  );
+  word = codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 });
+  console.log("this is the word right after the document search", word);
+  if (lastWord !== word) {
+    counter = 0;
   }
+  counter++;
+  lastWord = word;
+  console.log(
+    "this is the last console log of tooltips",
+    codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
+  );
+
   function hoverTest() {
     if (hoverCounter > lastHoverCounter) {
       lastHoverCounter = hoverCounter;
