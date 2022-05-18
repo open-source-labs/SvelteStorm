@@ -1,12 +1,18 @@
 <script>
   import CodeMirror from "./CodeMirror.svelte";
-  import { DirectoryData, openTabs } from "../Utilities/DirectoryStore";
-  // import hover from "./hover.js";
+  import {
+    DirectoryData,
+    openTabs,
+    codeMirrorEditor,
+    currentTabFilePath,
+  } from "../Utilities/DirectoryStore.js";
+  import { editorCache } from "../Utilities/DirectoryStore";
+
   const { ipcRenderer } = require("electron");
   const fs = require("fs");
   const path = require("path");
 
-  export let activeTabValue = 0;
+  let activeTabValue = 0;
   let activeEditor = 0;
 
   let value = [""];
@@ -15,6 +21,7 @@
   let title = "Svelte Storm";
   let count = 0;
 
+  // creates a new tab when a new file is opened
   function addTab(newFile) {
     let duplicate = false;
     let focusTabId = newFile.tabId;
@@ -32,6 +39,12 @@
 
     activeTabValue = focusTabId;
     activeEditor = activeTabValue;
+
+    // 2022-05-CR: when a new file is opened, check if the editorCache cache in DirectoryStore.js contains a key equal to the current file path. If not, assign a new key with the value being the actual code contained within that file.
+    if (!editorCache[$currentTabFilePath]) {
+      editorCache[$currentTabFilePath] = newFile.editorValue;
+    }
+    //console.log('addTab: editorCache: ', editorCache);
   }
 
   // remove and reset tab order
@@ -52,9 +65,21 @@
     activeEditor = activeTabValue;
   }
 
-  const handleClick = (tabId) => () => {
-    activeTabValue = tabId;
+  const handleClick = async (tab) => {
+    // event listener for when a tab within the editor is clicked
+    // update current tab in DirectoryStore.js to whichever tab was just clicked
+    $currentTabFilePath = tab.filePath;
+
+    // save current code inside the editor to a variable
+    const currentUserCode = await $codeMirrorEditor.getValue();
+
+    // update cache in DirectoryStore to reflect current code in the editor
+    $editorCache[$openTabs[activeEditor].filePath] = currentUserCode;
+
+    activeTabValue = tab.tabId;
     activeEditor = activeTabValue;
+
+    console.log("handleClick complete");
   };
 
   const modes = {
@@ -91,13 +116,13 @@
       ? (fileName = file.slice().split("\\").pop())
       : (fileName = file.slice().split("/").pop());
     language = file.slice().split(".").pop();
-    newTab.editorValue = content;
+    newTab.editorValue = "content";
     newTab.ext = language;
     newTab.editorLang = modes[language];
     newTab.filePath = filePath;
     newTab.fileName = fileName;
     newTab.tabId = count;
-    console.log("NEW TAB", newTab);
+    console.log("ipcRnderer: new tab added");
     addTab(newTab);
     if (file) {
       title = `${path.basename(file)} - ${title}`;
@@ -121,26 +146,46 @@
       newTab.filePath = data.openFilePath;
       newTab.fileName = fileName;
       newTab.tabId = count;
-      console.log("NEW TAB", newTab);
+      console.log("unsub: new tab");
       addTab(newTab);
     }
   });
+
+  // takes care of opening a file from within the file directory
+  // const unsub = DirectoryData.subscribe((data) => {
+  //   console.log("subscribing to the store", data.openFilePath);
+  //   const newTab = {};
+  //   if (data.fileRead) {
+  //     readData = fs.readFileSync(data.openFilePath).toString();
+  //     fileName = data.openFilePath.slice().split("/").pop();
+  //     language = path.basename(data.openFilePath).split(".").pop();
+  //     if (data.openFilePath) {
+  //       title = `${path.basename(data.openFilePath)} - Svelte Storm`;
+  //     }
+  //     newTab.editorValue = readData;
+  //     newTab.ext = language;
+  //     newTab.editorLang = modes[language];
+  //     newTab.filePath = data.openFilePath;
+  //     newTab.fileName = fileName;
+  //     newTab.tabId = count;
+  //     console.log("NEW TAB", newTab);
+  //     addTab(newTab);
+  //   }
+  // });
 </script>
 
 <!--==========================================MARKUP==========================================-->
 <ul>
   {#each $openTabs as tab}
     <li class={activeTabValue === tab.tabId ? "active" : ""}>
-      <span class="tab-span" on:click={handleClick(tab.tabId)}>
+      <span class="tab-span" on:click={handleClick(tab)}>
         <img src="../src/icons/file_type_{tab.ext}.svg" alt={""} />
         {tab.fileName}
         <span
           class="delete-button"
           value={tab.tabId}
           on:click={(value) => deleteTab(tab.tabId)}
-        >
-          &times
-        </span>
+        />
       </span>
     </li>
   {/each}
@@ -172,6 +217,7 @@
     overflow: auto;
     white-space: nowrap;
     scrollbar-width: thin;
+    height: 30px;
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 0;
@@ -193,6 +239,8 @@
     border-top-right-radius: 0.25rem;
     display: flex;
     flex-direction: row;
+    height: 30px;
+    align-items: center;
     padding: 0 1rem;
     cursor: pointer;
     font-size: 12px;

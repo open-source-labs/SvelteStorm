@@ -23,7 +23,7 @@ require('@electron/remote/main').enable(webContents);
 //hot reload for electron development
 try {
   require('electron-reloader')(module);
-} catch (_) {}
+} catch (err) {console.log(err) }
 
 let userFile = '';
 
@@ -103,10 +103,12 @@ const createWindow = (exports.createWindow = () => {
   //loading index.html into the app
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
+  //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
     newWindow.show();
   });
 
+  
   newWindow.on('focus', createApplicationMenu);
 
   //save changes dialog modal message
@@ -149,6 +151,7 @@ const createWindow = (exports.createWindow = () => {
   });
 
   var shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
+
   var ptyProcess = pty.spawn(shell, [], {
     name: 'xterm-color',
     cols: 80,
@@ -156,14 +159,29 @@ const createWindow = (exports.createWindow = () => {
     cwd: process.env.HOME,
     env: process.env,
   });
+  
+  //2022-ST-AJ sends to renderer cwd for it to display on prompt
+  ipcMain.on('cwd',(event,data) => {
+    event.reply('cwdreply',process.env.HOME);
+  });
 
+  //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
   ptyProcess.onData((data) => {
     newWindow.webContents.send('terminal-incData', data);
   });
-
+  
+  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell  
   ipcMain.on('terminal-into', (event, data) => {
     ptyProcess.write(data);
   });
+
+  //2022-ST-AJ ipcMain listens to resizing event from renderer and calls resize on node-pty to align size between node-pty and xterm. They need to align otherwise there are wierd bugs everywhere.
+  ipcMain.on('terminal-resize', (event,size) => {
+    const cols = size.cols;
+    const rows = size.rows;
+    console.log('pty resizing to cols and rows', cols,rows);
+    ptyProcess.resize(cols, rows);
+  })
 
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
