@@ -3,7 +3,6 @@
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
-<<<<<<< HEAD
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
 
   import searchDoc from "./SearchProgram.js";
@@ -34,26 +33,13 @@
       }
     }
   }
-=======
-  // import DocsBool from "src/index.js";
-  export let orientation = "columns";
-  export let localhost;
-  export let docsBool = false;
-  let value = "";
-  let submit = false;
-  let documentation = "https://svelte.dev/docs#";
-
->>>>>>> sveltedocs
   const handleSubmit = () => {
     submit = false;
     return false;
   };
-<<<<<<< HEAD
   export const handleDocuments = () => {
-=======
-  const handleDocuments = () => {
->>>>>>> sveltedocs
     // submit = false;
+    console.log("the handleDocs is firing");
     docsBool = !docsBool;
     // return false;
   };
@@ -71,7 +57,6 @@
   };
   const handleKeyup2 = (event) => {
     submit = false;
-<<<<<<< HEAD
     console.log("handlekeyup 2", textVal);
 
     event.preventDefault();
@@ -86,18 +71,6 @@
     documentation = `https://svelte.dev/docs#"${url}/`;
     documentation = documentation;
     return false;
-=======
-
-    if (event.code == "Enter") {
-      event.preventDefault();
-      event.target.value;
-      value = event.target.value;
-      console.log("this is the handlekey2 event", event);
-      documentation = `https://svelte.dev/docs#"${value}/`;
-      documentation = documentation;
-      return false;
-    }
->>>>>>> sveltedocs
   };
 </script>
 
@@ -114,17 +87,18 @@
       <div class="box d root">
         <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
           {#if docsBool === true}
-<<<<<<< HEAD
             <div class="parent grid-parent">
               <input
                 class="child"
                 placeholder="Search Documentation"
                 type="text"
                 bind:value={textVal}
-                on:submit={handleKeyup2}
               />
-              <button class="child" on:click={handleKeyup2}>Search</button>
+              <button class="child" on:click|preventDefault={handleKeyup2}
+                >Search</button
+              >
             </div>
+            <!-- on:submit={handleKeyup2} -->
 
             <iframe class="docs" title="test" src={documentation} />
             <button on:click={handleDocuments}>Back to browser</button>
@@ -135,37 +109,19 @@
                 class="child"
                 placeholder="Local Host Port"
                 type="text"
-                on:keyup|preventDefault={handleKeyup}
+                on:submit|preventDefault={handleKeyup}
               />
-              <button class="child" on:click={handleDocuments}>Docs?</button>
+              <button type="button" class="child" on:click={handleDocuments}
+                >Docs?</button
+              >
             </div>
-=======
-            <input
-              placeholder="Search Documentation"
-              type="text"
-              on:keyup={handleKeyup2}
-            />
-            <button on:click={handleKeyup2}>Search</button>
-            <iframe class="docs" title="test" src={documentation} />
-          {/if}
-          {#if docsBool === false}
-            <input
-              placeholder="Local Host Port"
-              type="text"
-              on:keyup|preventDefault={handleKeyup}
-            />
->>>>>>> sveltedocs
             {#if submit === true && docsBool === false}
               <iframe class="webpage" title="local host" src={localhost} />
             {/if}
 
             <iframe class="webpage" title="local host" src={localhost} />
           {/if}
-<<<<<<< HEAD
           <!-- <button on:click={handleDocuments}>Documentation</button> -->
-=======
-          <button on:click={handleDocuments}>Documentation</button>
->>>>>>> sveltedocs
         </form>
       </div>
       <div />

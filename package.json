@@ -60,6 +60,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.17.0",
+    "@codemirror/tooltip": "^0.19.16",
     "@electron/remote": "^2.0.4",
     "@rollup/plugin-commonjs": "^21.0.1",
     "codemirror": "^5.65.1",

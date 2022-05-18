@@ -1,7 +1,6 @@
 const { app, BrowserWindow, dialog, Menu } = require('electron');
 const main = require('electron-reload');
 const mainProcess = require('./index.js');
-<<<<<<< HEAD
 // const handleDocuments  = require('./App.svelte');
 // export let docsBool = false;
 // export const handleDocuments = () => {
@@ -10,9 +9,6 @@ const mainProcess = require('./index.js');
 //   docsBool = !docsBool;
 //   // return false;
 // };
-=======
-// const { handleDocuments } = require('./App.svelte');
->>>>>>> sveltedocs
 const createApplicationMenu = () => {
   const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length;
   const focusedWindow = BrowserWindow.getFocusedWindow();
@@ -208,7 +204,6 @@ const createApplicationMenu = () => {
         {
           label: 'Svelte Docs',
           click(focusedWindow) {
-<<<<<<< HEAD
             // console.log('this is in the application menu')
 
             if (focusedWindow) {
@@ -217,10 +212,6 @@ const createApplicationMenu = () => {
               // require('electron').shell.openExternal('https://svelte.dev/docs')
 
               console.log('this is in the application menu')
-=======
-            if (focusedWindow) {
-              // handleDocuments()
->>>>>>> sveltedocs
             }
               // require('electron').shell.openExternal('https://svelte.dev/docs')
           }
