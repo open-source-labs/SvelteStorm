@@ -24,7 +24,7 @@
   function searchDocumentation(value) {
     let result;
     for (let item in searchDoc) {
-      if (searchDoc[item].includes(value)) {
+      if (searchDoc[item][0].includes(value)) {
         console.log("congrats!");
         result = item;
         return result;

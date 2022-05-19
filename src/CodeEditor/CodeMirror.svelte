@@ -18,7 +18,7 @@
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
   import searchDoc from "/Users/zacharyradford/Desktop/Codesmith/Projects/SvelteStorm/src/SearchProgram.js";
-  export { Tooltip, hoverTooltip } from "@codemirror/view";
+  // export { Tooltip, hoverTooltip } from "@codemirror/view";
 
   const fs = require("fs");
   const { ipcRenderer } = require("electron");
@@ -32,45 +32,48 @@
   export let value;
   export let language;
   export let filePath;
-
+  let tipContent = "";
   let messageObj;
-  let counter = 0;
+  // let counter = 0;
   let containerElt;
   function searchDocumentation(value) {
     // console.log("first console.log of search", value);
     for (let item in searchDoc) {
       // console.log("here is each item of search", item);
-      if (searchDoc[item].includes(value)) {
+      if (searchDoc[item][0].includes(value)) {
         console.log("congrats!");
-        return item;
+        return searchDoc[item][1][0];
       }
     }
     console.log(value, "is not in the docs!");
     return false;
   }
-
+  let stillMouse = false;
   let hoverCounter = 0;
   let lastHoverCounter = 0;
   let lastWord;
   let toolTip = true;
   let src;
-  let tester;
+  let showToolTip = false;
+  let showToolTripTransition = false;
   let toolTipDiv;
+  let noUpdate = false;
   // src = `https://svelte.dev/docs#${searchDocumentation(lastWord)}`;
   function onHover() {
     let word;
-    console.log("counter ", counter);
-    if (counter > 6 && searchDocumentation(lastWord) !== false) {
+    if (stillMouse && searchDocumentation(lastWord) !== false) {
       let url = searchDocumentation(lastWord);
-      src = `https://svelte.dev/docs#${url}`;
+      // src = `https://svelte.dev/docs#${url}`;
       toolTip = true;
-      counter = 0;
-      toolTipDiv = `THIS IS WHERE THE TOOL TIP WIL BE ABOUT: ${lastWord}`;
+      // counter = 0;
+      tipContent = `${url}`;
+      console.log("this is tipcont", tipContent);
+      noUpdate = true;
+      lastWord = word;
     }
-    if (counter > 6 && word !== lastWord) {
-      counter = 0;
-    }
-
+    // if (counter > 6 && word !== lastWord) {
+    //   // counter = 0;
+    // }
     var A1 = $codeMirrorEditor.getCursor().line;
     var A2 = $codeMirrorEditor.getCursor().ch;
 
@@ -84,10 +87,12 @@
       { line: A1, ch: B2 }
     );
     // console.log("this is the word right after the document search", word);
-    if (lastWord !== word) {
-      counter = 0;
-    }
-    counter++;
+    // if (lastWord !== word) {
+    //   counter = 0;
+    //   console.log("this is in the if block", counter);
+    // }
+    // counter++;
+
     lastWord = word;
   }
   function hoverTest() {
@@ -95,10 +100,12 @@
       lastHoverCounter = hoverCounter;
       return;
     }
+    stillMouse = true;
     // console.log("hovering", hoverCounter, lastHoverCounter);
-    if (counter > 4) {
-      tester = true;
-      console.log("tester is now true TOOLTIP should appear");
+    if (stillMouse) {
+      // if (counter > 4) {
+      showToolTip = true;
+      console.log("showToolTip is now true TOOLTIP should appear");
     }
     return;
   }
@@ -108,7 +115,8 @@
     hoverTest();
     onHover();
     // console.log("this is the mouse hover console.log ", word, obj);
-  }, 2000);
+  }, 500);
+
   onMount(async () => {
     $codeMirrorEditor = await CodeMirror.fromTextArea(containerElt, {
       mode: language,
@@ -136,22 +144,27 @@
   });
 
   afterUpdate(async () => {
-    if (codeMirrorEditor) {
-      // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
-      const cacheCode = $editorCache[$currentTabFilePath];
+    if (!noUpdate && !showToolTripTransition) {
+      if (codeMirrorEditor) {
+        // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
+        const cacheCode = $editorCache[$currentTabFilePath];
 
-      // if file hans't been cached yet
-      if (!cacheCode) {
-        // cache the file and it's value (value=the raw code that'll appear in the editor)
-        $editorCache[currentTabFilePath] = value;
-        // set value of current editor to display the current code
-        $codeMirrorEditor.setValue(value);
-      } else {
-        // if file already exists in the cache
-        $codeMirrorEditor.setValue(cacheCode);
-        $codeMirrorEditor.setOption("mode", language);
+        // if file hans't been cached yet
+        if (!cacheCode) {
+          // cache the file and it's value (value=the raw code that'll appear in the editor)
+          $editorCache[currentTabFilePath] = value;
+          // set value of current editor to display the current code
+          $codeMirrorEditor.setValue(value);
+        } else {
+          // if file already exists in the cache
+          $codeMirrorEditor.setValue(cacheCode);
+          $codeMirrorEditor.setOption("mode", language);
+        }
       }
     }
+    noUpdate = false;
+    showToolTripTransition = false;
+
     console.log("afterUpdate complete");
   });
 
@@ -178,10 +191,12 @@
 
   function handleMousMove() {
     if (hoverCounter - lastHoverCounter > 10) {
-      tester = false;
+      stillMouse = false;
+      showToolTripTransition = true;
+      showToolTip = false;
     }
     hoverCounter++;
-    console.log("this is hover counter", hoverCounter);
+    // console.log("this is hover counter", hoverCounter);
   }
   function onClick() {
     window.open(
@@ -193,25 +208,30 @@
 </script>
 
 <svelte:head />
-<!-- {#if tester && searchDocumentation(lastWord)} -->
-<div data-tooltip="tooltip" id="div_span" on:click={onClick}>
-  THIS IS THE TOOLTIP ABOUT {lastWord}
-</div>
+<!-- {#if showToolTip && searchDocumentation(lastWord)} -->
+{#key tipContent}
+  <textarea data-tooltip="tooltip" id="div_span" on:click={onClick}>
+    {tipContent}
+  </textarea>
+{/key}
 <!-- {/if} -->
 <div on:mousemove={handleMousMove}>
-  <textarea class={$$props.class} bind:this={containerElt} />
+  <textarea id="textarea" class={$$props.class} bind:this={containerElt} />
 </div>
 
 <style>
   /* [data-tooltip] */
   #div_span {
+    min-height: 1.75em;
+    max-height: 2.7em;
+    font-size: 65%;
     position: relative;
     cursor: help;
-    background-color: rgb(6, 6, 6);
-    z-index: 10 !important;
-    box-shadow: 2px 2px;
+    background-color: rgba(35, 35, 65, 0.452);
+    z-index: 2 !important;
+    /* box-shadow: 2px 2px; */
   }
-  #div_span ::after {
+  /* #div_span ::after {
     position: absolute;
     width: 140px;
     left: calc(50% - 70px);
@@ -235,5 +255,9 @@
   #div_span :hover ::after {
     opacity: 1;
     visibility: visible;
+  } */
+  #textarea {
+    position: relative;
+    z-index: 1;
   }
 </style>

@@ -1,57 +1,57 @@
  const searchDoc = {
-    "component-format": [
+    "component-format": [[
       "component format",
       "format",
       "component",
       "Component",
       "Component format",
       "Component Format",
-    ],
-    "component-format-script": [
+    ],["Components are the building blocks of Svelte applications. They are written into .svelte files, using a superset of HTML.  All three sections — script, styles and markup — are optional."]],
+    "component-format-script": [[
       "component format script",
       "component script",
       "script",
       "script tag",
-    ],
-    "component-format-script-1-export-creates-a-component-prop": [],
-    "component-format-script-2-assignments-are-reactive": [],
-    "component-format-script-3-$-marks-a-statement-as-reactive": [],
-    "component-format-script-4-prefix-stores-with-$-to-access-their-values": [],
-    "component-format-script-context-module": [
+    ],["A <script></script> block contains JavaScript that runs when a component instance is created. Variables declared (or imported) at the top level are 'visible' from the component's markup."]],
+    "component-format-script-1-export-creates-a-component-prop": [["export", "exports"],["The export keyword marks a variable declaration as a property or prop, which means it becomes accessible to consumers of the component: export let foo;"]],
+    "component-format-script-2-assignments-are-reactive": [["state", "update"], ["To change component state and trigger a re-render, assign to a locally declared variable. Svelte's reactivity is based on assignments. Use '$:' at the top-level."]],
+    "component-format-script-3-$-marks-a-statement-as-reactive": [["$", "$:", "reactive"], ["Any top-level statement (i.e. not inside a block or a function) can be made reactive by prefixing it with the '$:'"]],
+    "component-format-script-4-prefix-stores-with-$-to-access-their-values": [[],[]],
+    "component-format-script-context-module": [[
       "context module",
       "module",
       "context",
       "component format context module",
       "component format script context module",
-    ],
-    "component-format-style": ["component format style", "format style"],
+    ], ["A <script> tag with  context='module' attribute runs once when the module first evaluates, rather than for each component instance. Values declared in this block are accessible from a regular <script> but not vice versa."]],
+    "component-format-style": [["component format style", "format style", "style", "<style>", "style tag"],["CSS inside a <style> block will be scoped to that component: \n <style> \n p {color: burlywood;}\n </style>"]],
     "template-syntax": ["template syntax", "template", "syntax"],
-    "template-syntax-tags": [
+    "template-syntax-tags": [[
       "template syntax tags",
       "tags",
       "template tags",
       "tag",
-    ],
-    "template-syntax-attributes-and-props": [
+    ],["A lowercase tag denotes a regular HTML element. A capitalised tag indicates a component."]],
+    "template-syntax-attributes-and-props": [[
       "attritbutes and props",
       "attributes",
       "props",
       "attributes syntax",
       "props syntax",
-    ],
-    "template-syntax-text-expressions": [
+    ],["Attributes work exactly like their HTML counterparts. Values may be unquoted, contain JavaScript expressions, or they can be JavaScript expressions."]],
+    "template-syntax-text-expressions": [[
       "text expressions",
       "template syntax text expressions",
       "text expression",
       "text expression syntax",
-    ],
-    "template-syntax-comments": [
+    ],["Text can also contain JavaScript expressions: {expression}"]],
+    "template-syntax-comments": [[
       "comments",
       "comments syntax",
       "comment syntax",
       "comment",
-    ],
-   "template-syntax-if": [
+    ],["Comments beginning with 'svelte-ignore' disable warnings for the next block of markup. Comment syntax: <!-- this is a comment! -->"]],
+   "template-syntax-if": [[
     "{if}",
     "{@if...}",
     "{@if}",
@@ -62,8 +62,8 @@
       "if syntax",
       "{#if syntax",
       "{if syntax",
-    ],
-   "template-syntax-each": [
+    ],["Content that is conditionally rendered can be wrapped in an if block. 'If' syntax: {#if expression}...{:else if expression}...{/if}"]],
+   "template-syntax-each": [[
     "{each}",
     "{@each...}",
     "{@each}",
@@ -74,8 +74,8 @@
       "each syntax",
       "{#each syntax",
       "{each syntax",
-    ],
-   "template-syntax-await": [
+    ],["Iterating over lists of values can be done with an each block. 'Each' syntax: {#each items as item}	<li> {item.name} x {item.qty} </li> {/each} "]],
+   "template-syntax-await": [[
     "{await}",
     "{@await...}",
     "{@await}",
@@ -86,8 +86,8 @@
       "await syntax",
       "{#await syntax",
       "{await syntax",
-    ],
-   "template-syntax-key": [
+    ],["Await blocks allow you to branch on the three possible states of a Promise — pending, fulfilled or rejected. 'Await' syntax: {#await expression}...{:then name}...{:catch name}...{/await}"]],
+   "template-syntax-key": [[
     "{key}",
     "{@key...}",
     "{@key}",
@@ -98,7 +98,7 @@
       "key syntax",
       "{#key syntax",
       "{key syntax",
-    ],
+    ],["Key blocks destroy and recreate their contents when the value of an expression changes."]],
    "template-syntax-html": [
      "{html}",
      "{@html...}",
