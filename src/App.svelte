@@ -11,12 +11,9 @@
   let value = "";
   let submit = false;
 
-  //Testing code for window resize 
- 
-
   onMount(async () => {
 
-  //==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+  //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
   let upperPanel = document.getElementById('wrapper-upper');
   let editorPanel = document.getElementById('editor-window');
   let filedirPanel = document.getElementById('file-dir');
@@ -42,7 +39,7 @@
     } else if (panel === 'filedir-divider') {
       filedirPanel.style.width = (parseInt(getComputedStyle(filedirPanel).width) - dx) + "px"; //Resizing width of edit panel
     } else if (panel === 'statemgr-divider') {
-      // statemgrPanel.style.width = (parseInt(getComputedStyle(statemgrPanel).width) - dx) + "px"; //Resizing width of edit panel
+      statemgrPanel.style.width = (parseInt(getComputedStyle(statemgrPanel).width) - dx) + "px"; //Resizing width of edit panel
       // statemgrPanel.style.width = 500 + "px"; //Direct resize works but not with dragging---think it may be related to xterm sizing...
     }
     else {
@@ -128,7 +125,6 @@
     } 
   };
  
-
   function dragEnd (e, panel) {
     e.preventDefault(); //stop selection of text during mouse move / mouse down event
     resizeObj[panel].isResizing = false;
@@ -152,6 +148,36 @@
   statemgrDivider.addEventListener('mousedown', (e) => dragStart(e, 'statemgr-divider'));
 
   //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+
+  //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and 
+  function xtermRestyle (className) {
+    let domElement = document.getElementsByClassName(className);
+    for (const item of domElement) {  
+      let currentStyle = item.getAttribute('style').split(';'); //Array of each style attribute string
+      for (let i = 0; i < currentStyle.length; i++) {
+        const style = currentStyle[i];
+        console.log(style.indexOf('width'));
+        if (style.indexOf('width') !== -1) currentStyle[i] = 'width: 100%';
+      }
+      item.setAttribute('style', currentStyle.join(';'));
+    }
+  }
+
+  function xtermSetWidth() {
+    xtermRestyle('xterm-screen');
+    xtermRestyle('xterm-text-layer');
+    xtermRestyle('xterm-selection-layer');
+    xtermRestyle('xterm-link-layer');
+    xtermRestyle('xterm-cursor-layer');
+  }
+
+  xtermSetWidth();
+  //Need to trigger this after resize so that it follows xterm's fittaddon resize
+  window.addEventListener('resize', xtermSetWidth);
+  
+
+
+
 }); //End of onMount
  
 
@@ -236,7 +262,7 @@
   }
 
   .wrapper-upper {
-    height: 65%;
+    height: 80%;
     display: flex;
     flex-direction: row;
     width: 98%;
@@ -249,7 +275,7 @@
   }
   .wrapper-bottom {
     min-height: 1%;
-    height: 35%;
+    height: 20%;
     flex-grow: 1;
     display: flex;
     flex-direction: row;
@@ -297,8 +323,10 @@
     font-size: 10px;
     overflow: auto;
     /* resize: horizontal; */
+    max-width: 30%;
     width: 12.5%;
     min-width: 12.5%;
+    min-width: 1%;
     /* max-width: 30%; */
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
@@ -318,8 +346,10 @@
   /* State Management Window - SvelteTeam */
   .c {
     overflow: auto;
-    width: 14.8%;
-    min-width: 10%;
+    max-width: 30.4%;
+    width: 12.8%;
+    /* min-width: 12.8%; */
+    min-width: 1%;
     background-color: rgba(28, 28, 36, 0.678);
     border-right: 1px solid #3d3d3d;
     padding: 0;
@@ -348,7 +378,8 @@
   .e {
     font: white;
     overflow: auto;
-    width: 100%;
+    /* width: 100%; */
+    flex-grow: 1;
     background-color: rgba(35, 35, 65, 0.452);
   }
 
