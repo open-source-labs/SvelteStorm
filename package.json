@@ -66,6 +66,7 @@
     "electron-rebuild": "^3.2.7",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-tooltip": "^1.1.5",
     "estree-walker": "^3.0.1",
     "monaco-editor": "^0.32.1",
     "monaco-languageclient": "^0.13.0",
