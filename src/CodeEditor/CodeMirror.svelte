@@ -18,7 +18,6 @@
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
   import searchDoc from "/Users/zacharyradford/Desktop/Codesmith/Projects/SvelteStorm/src/SearchProgram.js";
-  // export { Tooltip, hoverTooltip } from "@codemirror/view";
 
   const fs = require("fs");
   const { ipcRenderer } = require("electron");
@@ -34,19 +33,17 @@
   export let filePath;
   let tipContent = "";
   let messageObj;
-  // let counter = 0;
   let containerElt;
   function searchDocumentation(value) {
+    if (!value || value === " ") {
+      tipContent = " ";
+      return false;
+    }
     // console.log("first console.log of search", value);
     for (let item in searchDoc) {
       // console.log("here is each item of search", item);
       if (searchDoc[item][0].includes(value)) {
-        console.log(
-          "congrats!",
-          value,
-          searchDoc[item][0].includes(value),
-          searchDoc[item][0]
-        );
+        // console.log("here is each item, value", item, value);
         let result = {};
         result.tip = searchDoc[item][1][0];
         result.url = item;
@@ -54,7 +51,7 @@
       }
     }
     tipContent = " ";
-    console.log(value, "is not in the docs!");
+    // console.log(value, "is not in the docs!");
     return false;
   }
   let stillMouse = false;
@@ -74,15 +71,12 @@
       let searchObj = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
       toolTip = true;
-      // counter = 0;
       tipContent = `${searchObj.tip}`;
-      console.log("this is tipcont", tipContent);
+      // console.log("this is tipcont", tipContent);
       noUpdate = true;
       lastWord = word;
     }
-    // if (counter > 6 && word !== lastWord) {
-    //   // counter = 0;
-    // }
+
     var A1 = $codeMirrorEditor.getCursor().line;
     var A2 = $codeMirrorEditor.getCursor().ch;
 
@@ -95,12 +89,6 @@
       { line: A1, ch: B1 },
       { line: A1, ch: B2 }
     );
-    // console.log("this is the word right after the document search", word);
-    // if (lastWord !== word) {
-    //   counter = 0;
-    //   console.log("this is in the if block", counter);
-    // }
-    // counter++;
 
     lastWord = word;
   }
@@ -112,98 +100,20 @@
     stillMouse = true;
     // console.log("hovering", hoverCounter, lastHoverCounter);
     if (stillMouse) {
-      // if (counter > 4) {
       showToolTip = true;
-      console.log("showToolTip is now true TOOLTIP should appear");
+      // console.log("showToolTip is now true TOOLTIP should appear");
     }
     return;
   }
-  setInterval(() => {
-    //   // word = codeMirrorEditor.findWordAt(codeMirrorEditor.getCursor());
-    //   // codeMirrorEditor.getRange(word.anchor, word.head);
-    hoverTest();
-    onHover();
-    // console.log("this is the mouse hover console.log ", word, obj);
-  }, 500);
 
   let counter = 0;
-  // let containerElt;
-  // function searchDocumentation(value) {
-  //   // console.log("first console.log of search", value);
-  //   for (let item in searchDoc) {
-  //     // console.log("here is each item of search", item);
-  //     if (searchDoc[item].includes(value)) {
-  //       console.log("congrats!");
-  //       return item;
-  //     }
-  //   }
-  //   console.log(value, "is not in the docs!");
-  //   return false;
-  // }
 
-  // let hoverCounter = 0;
-  // let lastHoverCounter = 0;
-  // let lastWord;
-  // let toolTip = false;
-  // let src;
-  // let tester;
-  // let toolTipDiv;
-  // // src = `https://svelte.dev/docs#${searchDocumentation(lastWord)}`;
-  // function onHover() {
-  //   let word;
-  //   console.log("counter ", counter);
-  //   if (counter > 6 && searchDocumentation(lastWord) !== false) {
-  //     let url = searchDocumentation(lastWord);
-  //     src = `https://svelte.dev/docs#${url}`;
-  //     // toolTip = true;
-  //     counter = 0;
-  //     // toolTipDiv = `THIS IS WHERE THE TOOL TIP WIL BE ABOUT: ${lastWord}`;
-  //   }
-  //   if (counter > 6 && word !== lastWord) {
-  //     counter = 0;
-  //   }
-
-  //   var A1 = codeMirrorEditor.getCursor().line;
-  //   var A2 = codeMirrorEditor.getCursor().ch;
-
-  //   var B1 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).anchor.ch;
-  //   var B2 = codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).head.ch;
-  //   searchDocumentation(
-  //     codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
-  //   );
-  //   word = codeMirrorEditor.getRange(
-  //     { line: A1, ch: B1 },
-  //     { line: A1, ch: B2 }
-  //   );
-  //   // console.log("this is the word right after the document search", word);
-  //   if (lastWord !== word) {
-  //     counter = 0;
-  //   }
-  //   counter++;
-  //   lastWord = word;
-  //   // console.log(
-  //   //   "this is the last console log of tooltips",
-  //   //   codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
-  //   // );
-  // }
-  // function hoverTest() {
-  //   if (hoverCounter > lastHoverCounter) {
-  //     lastHoverCounter = hoverCounter;
-  //     return;
-  //   }
-  //   // console.log("hovering", hoverCounter, lastHoverCounter);
-  //   if (counter > 4) {
-  //     tester = true;
-  //   }
-  //   return;
-  // }
   setInterval(() => {
-    //   // word = codeMirrorEditor.findWordAt(codeMirrorEditor.getCursor());
-    //   // codeMirrorEditor.getRange(word.anchor, word.head);
     hoverTest();
     onHover();
     // console.log("this is the mouse hover console.log ", word, obj);
-  }, 500);
+  }, 700);
+
   onMount(async () => {
     $codeMirrorEditor = await CodeMirror.fromTextArea(containerElt, {
       mode: language,
@@ -261,16 +171,6 @@
     console.log("ipcRenderer complete");
   });
 
-  // afterUpdate(() => {
-  //   if (codeMirrorEditor) {
-  //     console.log(filePath, language);
-  //     codeMirrorEditor.setValue(value);
-  // codeMirrorEditor.setOption("mode", language);
-  // console.log("afterUpdate()", codeMirrorEditor.getOption("mode"));
-  // counter = 0;
-  //   }
-  // });
-
   ipcRenderer.on("save-markdown", function () {
     messageObj = { content: codeMirrorEditor.getValue(), file: filePath };
     ipcRenderer.send("synchronous-message", messageObj);
@@ -301,11 +201,9 @@
 </script>
 
 <svelte:head />
-<!-- {#if showToolTip && searchDocumentation(lastWord)} -->
 <div data-tooltip="tooltip" id="div_span" on:click={onClick}>
   {tipContent}
 </div>
-<!-- {/if} -->
 <div on:mousemove={handleMousMove} on:keydown={onType}>
   <textarea id="textarea" class={$$props.class} bind:this={containerElt} />
 </div>
@@ -322,45 +220,7 @@
     z-index: 2 !important;
     /* box-shadow: 2px 2px; */
   }
-  /* .popup .popuptext {
-  visibility: hidden;
-  width: 160px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-} */
-  /* #div_span ::after {
-    position: absolute;
-    width: 140px;
-    left: calc(50% - 70px);
-    bottom: 125%;
-    text-align: center;
-    box-sizing: border-box;
-    content: attr(data-tooltip);
-    color: white;
-    background: rgb(224, 7, 7);
-    padding: 8px;
-    border-radius: 10px;
-    font-size: 0.9em;
-    font-weight: bold;
 
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s, transform 0.2s;
-  }
-
-  #div_span :hover ::after {
-    opacity: 1;
-    visibility: visible;
-  } */
   #textarea {
     position: relative;
     z-index: 1;

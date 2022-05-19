@@ -226,19 +226,21 @@ const searchDoc = {
     "svelte element",
     "<svelte:element>",
     "svelte:element",
-  ], []],
+  ], ["The <svelte:element> element lets you render an element of a dynamically specified type.Any properties and event listeners present will be applied to the element."]],
   "template-syntax-svelte-window": [[
     "<svelte window>",
     "svelte window",
     "<svelte:window>",
     "svelte:window",
-  ], []],
+  ], ["The <svelte:window> element allows you to add event listeners to the window object without having to removing them when the component is destroyed. Unlike <svelte:self>, this element may only appear the top level of your component"]],
   "template-syntax-svelte-body": [[
     "<svelte body>",
     "svelte body",
     "<svelte:body>",
     "svelte:body",
-  ], []],
+    ":body",
+    "body"
+  ], ["Like <svelte:window>, this element adds listeners to events on document.body which don't fire on window. It also allows actions on the <body> element. 'Svelte window' syntax: <svelte:body on:mouseenter={handleMouseenter} use:someAction/>"]],
   "template-syntax-svelte-head": [[
     "<svelte head>",
     "svelte head",
