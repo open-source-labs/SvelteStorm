@@ -3,187 +3,279 @@
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
+  const { remote, ipcRenderer, BrowserWindow } = require("electron");
+
+  import searchDoc from "./SearchProgram.js";
+  // import docsBool from "./application-menu.js";
+
+  // export let docsBool = false;
+  let docsBool = false;
+  // const handleDocuments = () => {
+  //   // submit = false;
+  //   console.log("handledocs fired");
+  //   docsBool = !docsBool;
+  //   // return false;
+  // };
+
+  let documentation;
+  let url;
+  $: documentation = `https://svelte.dev/docs#${url}`;
+  let textVal;
+  function searchDocumentation(value) {
+    let result;
+    for (let item in searchDoc) {
+      if (searchDoc[item][0].includes(value)) {
+        console.log("congrats!");
+        result = item;
+        return result;
+      }
+    }
+  }
   import { onMount } from "svelte";
 
   export let orientation = "columns";
   export let localhost;
-  
+
   let value = "";
   let submit = false;
 
   onMount(async () => {
+    //==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+    // let upperPanel = document.getElementById("wrapper-upper");
+    // let editorPanel = document.getElementById("editor-window");
+    // let filedirPanel = document.getElementById("file-dir");
+    // let statemgrPanel = document.getElementById("state-mgr");
+    // let mdown_posx;
+    // let mdown_posy;
+    // let x_pos;
+    // let y_pos;
+    // let resizeObj = {
+    //   "horizontal-divider": { isResizing: false },
+    //   "editor-divider": { isResizing: false },
+    //   "filedir-divider": { isResizing: false },
+    //   "statemgr-divider": { isResizing: false },
+    // };
 
-  //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
-  let upperPanel = document.getElementById('wrapper-upper');
-  let editorPanel = document.getElementById('editor-window');
-  let filedirPanel = document.getElementById('file-dir');
-  let statemgrPanel = document.getElementById('state-mgr');
-  let mdown_posx;
-  let mdown_posy;
-  let x_pos;
-  let y_pos;
-  let resizeObj = {'horizontal-divider': {isResizing: false},
-                   'editor-divider': {isResizing: false},
-                   'filedir-divider': {isResizing: false},
-                   'statemgr-divider': {isResizing: false}
-              };
+    //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+    let upperPanel = document.getElementById("wrapper-upper");
+    let editorPanel = document.getElementById("editor-window");
+    let filedirPanel = document.getElementById("file-dir");
+    let statemgrPanel = document.getElementById("state-mgr");
+    let mdown_posx;
+    let mdown_posy;
+    let x_pos;
+    let y_pos;
+    let resizeObj = {
+      "horizontal-divider": { isResizing: false },
+      "editor-divider": { isResizing: false },
+      "filedir-divider": { isResizing: false },
+      "statemgr-divider": { isResizing: false },
+    };
 
-  function resize(e, panel){
-    const dx = mdown_posx - e.x; //difference in x coordinates (current mouse position versus where mousedown began)
-    const dy = mdown_posy - e.y;
+    function resize(e, panel) {
+      const dx = mdown_posx - e.x; //difference in x coordinates (current mouse position versus where mousedown began)
+      const dy = mdown_posy - e.y;
 
-    if (panel === 'horizontal-divider') {
-      upperPanel.style.height = (parseInt(getComputedStyle(upperPanel).height) - dy) + "px";
-    } else if (panel === 'editor-divider') {
-      editorPanel.style.width = (parseInt(getComputedStyle(editorPanel).width) - dx) + "px"; //Resizing width of edit panel
-    } else if (panel === 'filedir-divider') {
-      filedirPanel.style.width = (parseInt(getComputedStyle(filedirPanel).width) - dx) + "px"; //Resizing width of edit panel
-    } else if (panel === 'statemgr-divider') {
-      statemgrPanel.style.width = (parseInt(getComputedStyle(statemgrPanel).width) - dx) + "px"; //Resizing width of edit panel
-      // statemgrPanel.style.width = 500 + "px"; //Direct resize works but not with dragging---think it may be related to xterm sizing...
-    }
-    else {
-        }
-    //Update mousedown coordinates for next resizing event (curor moves again while mouse is down)
-    mdown_posx = e.x; 
-    mdown_posy = e.y;
-  }
-
-  function chgCursor (e, panel) {
-    if (panel === 'horizontal-divider') {
-      e.target.style.cursor = 'row-resize';
-    } else {
-      e.target.style.cursor = 'col-resize';
-    }
-  }
-  
-  function dragStart (e, panel) {
-    e.preventDefault(); //stop selection of text during mouse move / mouse down event
-    
-    //Need this so window events continue tracking on top of iframe
-    let iframeList = document.getElementsByClassName('webpage');
-    for (const item of iframeList) {
-      item.setAttribute('style','pointer-events: none');      
-    }
-    //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
-    const trackMouseMove = (e) => {
-    // console.log(`ex: ${e.x}`) 
-    dragMovement(e, panel)
-  };
-
-  const trackMouseUp = (e) => {
-    // console.log('Mouse Up');
-    dragEnd(e, panel)
-    window.removeEventListener('mousemove', trackMouseMove, true);
-    window.removeEventListener('mouseup', trackMouseUp, true);
-
-    //Removing no pointer events from iframes on mouse up
-    let iframeList = document.getElementsByClassName('webpage');
-    for (const item of iframeList) {
-      item.setAttribute('style','');      
-    }
-
-  };
-    window.addEventListener('mousemove', trackMouseMove, true);
-    window.addEventListener('mouseup', trackMouseUp, true);
-  
-    if (panel === 'horizontal-divider') {
-      mdown_posy = e.y;
-      resizeObj[panel].isResizing = true;
-    } else {
+      if (panel === "horizontal-divider") {
+        upperPanel.style.height =
+          parseInt(getComputedStyle(upperPanel).height) - dy + "px";
+      } else if (panel === "editor-divider") {
+        editorPanel.style.width =
+          parseInt(getComputedStyle(editorPanel).width) - dx + "px"; //Resizing width of edit panel
+      } else if (panel === "filedir-divider") {
+        filedirPanel.style.width =
+          parseInt(getComputedStyle(filedirPanel).width) - dx + "px"; //Resizing width of edit panel
+      } else if (panel === "statemgr-divider") {
+        statemgrPanel.style.width =
+          parseInt(getComputedStyle(statemgrPanel).width) - dx + "px"; //Resizing width of edit panel
+        // statemgrPanel.style.width = 500 + "px"; //Direct resize works but not with dragging---think it may be related to xterm sizing...
+      } else {
+      }
+      //Update mousedown coordinates for next resizing event (curor moves again while mouse is down)
       mdown_posx = e.x;
-      resizeObj[panel].isResizing = true;
+      mdown_posy = e.y;
     }
-  }
 
-  function dragMovement (e, panel) {
-    e.preventDefault(); //stop selection of text during mouse move / mouse down event 
-    x_pos = e.x;
-    y_pos = e.y;
-    
-    if (panel === 'horizontal-divider'){
-      if (resizeObj[panel].isResizing === true) {
-      resize(e, 'horizontal-divider');
-       }
+    function chgCursor(e, panel) {
+      if (panel === "horizontal-divider") {
+        e.target.style.cursor = "row-resize";
+      } else {
+        e.target.style.cursor = "col-resize";
+      }
     }
-     else if (panel === 'editor-divider'){
-      if (resizeObj[panel].isResizing === true) {
-      resize(e, 'editor-divider');
+
+    function dragStart(e, panel) {
+      e.preventDefault(); //stop selection of text during mouse move / mouse down event
+
+      //Need this so window events continue tracking on top of iframe
+      let iframeList = document.getElementsByClassName("webpage");
+      for (const item of iframeList) {
+        item.setAttribute("style", "pointer-events: none");
+      }
+      //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
+      const trackMouseMove = (e) => {
+        // console.log(`ex: ${e.x}`)
+        dragMovement(e, panel);
+      };
+
+      const trackMouseUp = (e) => {
+        // console.log('Mouse Up');
+        dragEnd(e, panel);
+        window.removeEventListener("mousemove", trackMouseMove, true);
+        window.removeEventListener("mouseup", trackMouseUp, true);
+
+        //Removing no pointer events from iframes on mouse up
+        let iframeList = document.getElementsByClassName("webpage");
+        for (const item of iframeList) {
+          item.setAttribute("style", "");
+        }
+      };
+      window.addEventListener("mousemove", trackMouseMove, true);
+      window.addEventListener("mouseup", trackMouseUp, true);
+
+      if (panel === "horizontal-divider") {
+        mdown_posy = e.y;
+        resizeObj[panel].isResizing = true;
+      } else {
+        mdown_posx = e.x;
+        mdown_posy = e.y;
+      }
+
+      function chgCursor(e, panel) {
+        if (panel === "horizontal-divider") {
+          e.target.style.cursor = "row-resize";
+        } else {
+          e.target.style.cursor = "col-resize";
+        }
+      }
+
+      function dragStart(e, panel) {
+        e.preventDefault(); //stop selection of text during mouse move / mouse down event
+
+        //Need this so window events continue tracking on top of iframe
+        let iframeList = document.getElementsByClassName("webpage");
+        for (const item of iframeList) {
+          item.setAttribute("style", "pointer-events: none");
+        }
+        //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
+        const trackMouseMove = (e) => {
+          // console.log(`ex: ${e.x}`)
+          dragMovement(e, panel);
+        };
+
+        const trackMouseUp = (e) => {
+          // console.log('Mouse Up');
+          dragEnd(e, panel);
+          window.removeEventListener("mousemove", trackMouseMove, true);
+          window.removeEventListener("mouseup", trackMouseUp, true);
+
+          //Removing no pointer events from iframes on mouse up
+          let iframeList = document.getElementsByClassName("webpage");
+          for (const item of iframeList) {
+            item.setAttribute("style", "");
+          }
+        };
+        window.addEventListener("mousemove", trackMouseMove, true);
+        window.addEventListener("mouseup", trackMouseUp, true);
+
+        if (panel === "horizontal-divider") {
+          mdown_posy = e.y;
+          resizeObj[panel].isResizing = true;
+        } else {
+          mdown_posx = e.x;
+          resizeObj[panel].isResizing = true;
+        }
+      }
+      // else {
+      // }
     }
-    }
-    else if (panel === 'filedir-divider'){
+
+    function dragEnd(e, panel) {
+      e.preventDefault(); //stop selection of text during mouse move / mouse down event
+      resizeObj[panel].isResizing = false;
+
+      if (panel === "horizontal-divider") {
         if (resizeObj[panel].isResizing === true) {
-        resize(e, 'filedir-divider');
-      }
-    }
-    else if (panel === 'statemgr-divider'){
+          resize(e, "horizontal-divider");
+        }
+      } else if (panel === "editor-divider") {
         if (resizeObj[panel].isResizing === true) {
-        resize(e, 'statemgr-divider');
+          resize(e, "editor-divider");
+        }
+      } else if (panel === "filedir-divider") {
+        if (resizeObj[panel].isResizing === true) {
+          resize(e, "filedir-divider");
+        }
+      } else if (panel === "statemgr-divider") {
+        if (resizeObj[panel].isResizing === true) {
+          resize(e, "statemgr-divider");
+        }
+      } else {
       }
     }
-    else {
-    } 
-  };
- 
-  function dragEnd (e, panel) {
-    e.preventDefault(); //stop selection of text during mouse move / mouse down event
-    resizeObj[panel].isResizing = false;
-  }
 
-  let horizDivider = document.getElementById('horizontal-divider');
-  let editorDivider = document.getElementById('editor-divider');
-  let filedirDivider = document.getElementById('filedir-divider');
-  let statemgrDivider = document.getElementById('statemgr-divider');
-
-  horizDivider.addEventListener('mouseover', (e) => chgCursor(e, 'horizontal-divider'));
-  horizDivider.addEventListener('mousedown', (e) => dragStart(e, 'horizontal-divider'));
-
-  editorDivider.addEventListener('mouseover', (e) => chgCursor(e, 'editor-divider'));
-  editorDivider.addEventListener('mousedown', (e) => dragStart(e, 'editor-divider'));
-
-  filedirDivider.addEventListener('mouseover', (e) => chgCursor(e, 'filedir-divider'));
-  filedirDivider.addEventListener('mousedown', (e) => dragStart(e, 'filedir-divider'));
-
-  statemgrDivider.addEventListener('mouseover', (e) => chgCursor(e, 'statemgr-divider'));
-  statemgrDivider.addEventListener('mousedown', (e) => dragStart(e, 'statemgr-divider'));
-
-  //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
-
-  //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and 
-  function xtermRestyle (className) {
-    let domElement = document.getElementsByClassName(className);
-    for (const item of domElement) {  
-      let currentStyle = item.getAttribute('style').split(';'); //Array of each style attribute string
-      for (let i = 0; i < currentStyle.length; i++) {
-        const style = currentStyle[i];
-        console.log(style.indexOf('width'));
-        if (style.indexOf('width') !== -1) currentStyle[i] = 'width: 100%';
-      }
-      item.setAttribute('style', currentStyle.join(';'));
+    function dragEnd(e, panel) {
+      e.preventDefault(); //stop selection of text during mouse move / mouse down event
+      resizeObj[panel].isResizing = false;
     }
-  }
 
-  function xtermSetWidth() {
-    xtermRestyle('xterm-screen');
-    xtermRestyle('xterm-text-layer');
-    xtermRestyle('xterm-selection-layer');
-    xtermRestyle('xterm-link-layer');
-    xtermRestyle('xterm-cursor-layer');
-  }
+    let horizDivider = document.getElementById("horizontal-divider");
+    let editorDivider = document.getElementById("editor-divider");
+    let filedirDivider = document.getElementById("filedir-divider");
+    let statemgrDivider = document.getElementById("statemgr-divider");
 
-  xtermSetWidth();
-  //Need to trigger this after resize so that it follows xterm's fittaddon resize
-  window.addEventListener('resize', xtermSetWidth);
-  
+    horizDivider.addEventListener("mouseover", (e) =>
+      chgCursor(e, "horizontal-divider")
+    );
+    horizDivider.addEventListener("mousedown", (e) =>
+      dragStart(e, "horizontal-divider")
+    );
 
+    editorDivider.addEventListener("mouseover", (e) =>
+      chgCursor(e, "editor-divider")
+    );
+    editorDivider.addEventListener("mousedown", (e) =>
+      dragStart(e, "editor-divider")
+    );
 
+    //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
-}); //End of onMount
- 
+    //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and
+    function xtermRestyle(className) {
+      let domElement = document.getElementsByClassName(className);
+      for (const item of domElement) {
+        let currentStyle = item.getAttribute("style").split(";"); //Array of each style attribute string
+        for (let i = 0; i < currentStyle.length; i++) {
+          const style = currentStyle[i];
+          console.log(style.indexOf("width"));
+          if (style.indexOf("width") !== -1) currentStyle[i] = "width: 100%";
+        }
+        item.setAttribute("style", currentStyle.join(";"));
+      }
+    }
+
+    function xtermSetWidth() {
+      xtermRestyle("xterm-screen");
+      xtermRestyle("xterm-text-layer");
+      xtermRestyle("xterm-selection-layer");
+      xtermRestyle("xterm-link-layer");
+      xtermRestyle("xterm-cursor-layer");
+    }
+
+    xtermSetWidth();
+    //Need to trigger this after resize so that it follows xterm's fittaddon resize
+    window.addEventListener("resize", xtermSetWidth);
+  }); //End of onMount
 
   const handleSubmit = () => {
     submit = false;
     return false;
+  };
+  export const handleDocuments = () => {
+    // submit = false;
+    console.log("the handleDocs is firing");
+    docsBool = !docsBool;
+    // return false;
   };
 
   const handleKeyup = (event) => {
@@ -196,6 +288,23 @@
       localhost = `http://127.0.0.1:${value}/`;
       return false;
     }
+  };
+  const handleKeyup2 = (event) => {
+    submit = false;
+    console.log("handlekeyup 2", textVal);
+
+    event.preventDefault();
+    // event.target.value;
+    // value = event.target.value;
+    url = searchDocumentation(textVal);
+    console
+      .log
+      // "this is the handlekey2 testVal" textVal
+      ();
+    console.log("this is the url", searchDocumentation(textVal));
+    documentation = `https://svelte.dev/docs#"${url}/`;
+    documentation = documentation;
+    return false;
   };
 </script>
 
@@ -215,17 +324,45 @@
       <div id="editor-divider" />
       <div class="box d root">
         <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
-          <input
-            placeholder="Local Host Port"
-            type="text"
-            on:keyup|preventDefault={handleKeyup}
-          />
-          {#if submit === true}
+          {#if docsBool === true}
+            <div class="parent grid-parent">
+              <input
+                class="child"
+                placeholder="Search Documentation"
+                type="text"
+                bind:value={textVal}
+              />
+              <button class="child" on:click|preventDefault={handleKeyup2}
+                >Search</button
+              >
+            </div>
+            <!-- on:submit={handleKeyup2} -->
+
+            <iframe class="docs" title="test" src={documentation} />
+            <button on:click={handleDocuments}>Back to browser</button>
+          {/if}
+          {#if docsBool === false}
+            <div class="parent grid-parent">
+              <input
+                class="child"
+                placeholder="Local Host Port"
+                type="text"
+                on:submit|preventDefault={handleKeyup}
+              />
+              <button type="button" class="child" on:click={handleDocuments}
+                >Docs?</button
+              >
+            </div>
+            {#if submit === true && docsBool === false}
+              <iframe class="webpage" title="local host" src={localhost} />
+            {/if}
+
             <iframe class="webpage" title="local host" src={localhost} />
           {/if}
-          <iframe class="webpage" title="local host" src={localhost} />
+          <!-- <button on:click={handleDocuments}>Documentation</button> -->
         </form>
       </div>
+      <div />
     </div>
     <div id="horizontal-divider" />
     <div class="box wrapper-bottom">
@@ -239,11 +376,29 @@
     </div>
   </main>
 </body>
+
 <style>
   body {
     height: 100%;
     width: 100%;
   }
+  .grid-parent {
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
+    float: left;
+  }
+  /* .inline-flex-parent {
+    display: inline-flex;
+    justify-content: flex-start;
+  }
+  .search1 {
+    justify-content: center;
+    /* padding-left: 200px; */
+  /* } */
+  /* .search2 {
+    padding-right: 150px;
+  } */
+
   /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
   /* Wrapper Window - SvelteTeam */
   .wrapper {
@@ -271,7 +426,7 @@
     background-color: rgb(39, 38, 38);
     color: #444;
     padding: 5px;
-    z-index:0;
+    z-index: 0;
   }
   .wrapper-bottom {
     min-height: 1%;
@@ -293,23 +448,33 @@
 
   /*Dividers used for resizing events*/
   #horizontal-divider {
-    width:100%;
+    width: 100%;
     height: 10px;
   }
 
   #filedir-divider {
-    height:100%;
+    height: 100%;
     width: 10px;
   }
 
   #editor-divider {
-    height:100%;
+    height: 100%;
     width: 10px;
   }
 
   #statemgr-divider {
-    height:100%;
+    height: 100%;
     width: 10px;
+  }
+  button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    font-size: small;
+    color: white;
   }
 
   .box {
@@ -391,6 +556,13 @@
     width: 98%;
     /* pointer-events: none; */
   }
+  .docs {
+    overflow: auto;
+    /* resize: vertical; */
+    height: 100%;
+    width: 98%;
+    color: "grey";
+  }
 
   .b :global(.childClass) {
     overflow: scroll;
@@ -399,6 +571,5 @@
 
   iframe:focus {
     outline: none;
-    
   }
 </style>
