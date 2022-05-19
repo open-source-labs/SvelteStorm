@@ -45,77 +45,81 @@
         statemgrPanel.style.width =
           parseInt(getComputedStyle(statemgrPanel).width) - dx + "px"; //Resizing width of edit panel
         // statemgrPanel.style.width = 500 + "px"; //Direct resize works but not with dragging---think it may be related to xterm sizing...
+      } else {
       }
+      //Update mousedown coordinates for next resizing event (curor moves again while mouse is down)
+      mdown_posx = e.x;
+      mdown_posy = e.y;
+    }
 
-      function chgCursor(e, panel) {
-        if (panel === "horizontal-divider") {
-          e.target.style.cursor = "row-resize";
-        } else {
-          e.target.style.cursor = "col-resize";
-        }
+    function chgCursor(e, panel) {
+      if (panel === "horizontal-divider") {
+        e.target.style.cursor = "row-resize";
+      } else {
+        e.target.style.cursor = "col-resize";
       }
+    }
 
-      function dragStart(e, panel) {
-        e.preventDefault(); //stop selection of text during mouse move / mouse down event
+    function dragStart(e, panel) {
+      e.preventDefault(); //stop selection of text during mouse move / mouse down event
 
-        //Need this so window events continue tracking on top of iframe
+      //Need this so window events continue tracking on top of iframe
+      let iframeList = document.getElementsByClassName("webpage");
+      for (const item of iframeList) {
+        item.setAttribute("style", "pointer-events: none");
+      }
+      //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
+      const trackMouseMove = (e) => {
+        // console.log(`ex: ${e.x}`)
+        dragMovement(e, panel);
+      };
+
+      const trackMouseUp = (e) => {
+        // console.log('Mouse Up');
+        dragEnd(e, panel);
+        window.removeEventListener("mousemove", trackMouseMove, true);
+        window.removeEventListener("mouseup", trackMouseUp, true);
+
+        //Removing no pointer events from iframes on mouse up
         let iframeList = document.getElementsByClassName("webpage");
         for (const item of iframeList) {
-          item.setAttribute("style", "pointer-events: none");
+          item.setAttribute("style", "");
         }
-        //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
-        const trackMouseMove = (e) => {
-          // console.log(`ex: ${e.x}`)
-          dragMovement(e, panel);
-        };
+      };
+      window.addEventListener("mousemove", trackMouseMove, true);
+      window.addEventListener("mouseup", trackMouseUp, true);
 
-        const trackMouseUp = (e) => {
-          // console.log('Mouse Up');
-          dragEnd(e, panel);
-          window.removeEventListener("mousemove", trackMouseMove, true);
-          window.removeEventListener("mouseup", trackMouseUp, true);
-
-          //Removing no pointer events from iframes on mouse up
-          let iframeList = document.getElementsByClassName("webpage");
-          for (const item of iframeList) {
-            item.setAttribute("style", "");
-          }
-        };
-        window.addEventListener("mousemove", trackMouseMove, true);
-        window.addEventListener("mouseup", trackMouseUp, true);
-
-        if (panel === "horizontal-divider") {
-          mdown_posy = e.y;
-          resizeObj[panel].isResizing = true;
-        } else {
-          mdown_posx = e.x;
-          resizeObj[panel].isResizing = true;
-        }
+      if (panel === "horizontal-divider") {
+        mdown_posy = e.y;
+        resizeObj[panel].isResizing = true;
+      } else {
+        mdown_posx = e.x;
+        resizeObj[panel].isResizing = true;
       }
+    }
 
-      function dragMovement(e, panel) {
-        e.preventDefault(); //stop selection of text during mouse move / mouse down event
-        x_pos = e.x;
-        y_pos = e.y;
+    function dragMovement(e, panel) {
+      e.preventDefault(); //stop selection of text during mouse move / mouse down event
+      x_pos = e.x;
+      y_pos = e.y;
 
-        if (panel === "horizontal-divider") {
-          if (resizeObj[panel].isResizing === true) {
-            resize(e, "horizontal-divider");
-          }
-        } else if (panel === "editor-divider") {
-          if (resizeObj[panel].isResizing === true) {
-            resize(e, "editor-divider");
-          }
-        } else if (panel === "filedir-divider") {
-          if (resizeObj[panel].isResizing === true) {
-            resize(e, "filedir-divider");
-          }
-        } else if (panel === "statemgr-divider") {
-          if (resizeObj[panel].isResizing === true) {
-            resize(e, "statemgr-divider");
-          }
-        } else {
+      if (panel === "horizontal-divider") {
+        if (resizeObj[panel].isResizing === true) {
+          resize(e, "horizontal-divider");
         }
+      } else if (panel === "editor-divider") {
+        if (resizeObj[panel].isResizing === true) {
+          resize(e, "editor-divider");
+        }
+      } else if (panel === "filedir-divider") {
+        if (resizeObj[panel].isResizing === true) {
+          resize(e, "filedir-divider");
+        }
+      } else if (panel === "statemgr-divider") {
+        if (resizeObj[panel].isResizing === true) {
+          resize(e, "statemgr-divider");
+        }
+      } else {
       }
     }
 
@@ -143,10 +147,19 @@
       dragStart(e, "editor-divider")
     );
 
-    function dragEnd(e, panel) {
-      e.preventDefault(); //stop selection of text during mouse move / mouse down event
-      resizeObj[panel].isResizing = false;
-    }
+    filedirDivider.addEventListener("mouseover", (e) =>
+      chgCursor(e, "filedir-divider")
+    );
+    filedirDivider.addEventListener("mousedown", (e) =>
+      dragStart(e, "filedir-divider")
+    );
+
+    statemgrDivider.addEventListener("mouseover", (e) =>
+      chgCursor(e, "statemgr-divider")
+    );
+    statemgrDivider.addEventListener("mousedown", (e) =>
+      dragStart(e, "statemgr-divider")
+    );
 
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
@@ -157,7 +170,7 @@
         let currentStyle = item.getAttribute("style").split(";"); //Array of each style attribute string
         for (let i = 0; i < currentStyle.length; i++) {
           const style = currentStyle[i];
-          console.log(style.indexOf("width"));
+          // console.log(style.indexOf('width'));
           if (style.indexOf("width") !== -1) currentStyle[i] = "width: 100%";
         }
         item.setAttribute("style", currentStyle.join(";"));
@@ -217,9 +230,19 @@
             on:keyup|preventDefault={handleKeyup}
           />
           {#if submit === true}
-            <iframe class="webpage" title="local host" src={localhost} />
+            <iframe
+              class="webpage"
+              title="local host"
+              src={localhost}
+              frameBorder="0"
+            />
           {/if}
-          <iframe class="webpage" title="local host" src={localhost} />
+          <iframe
+            class="webpage"
+            title="local host"
+            src={localhost}
+            frameBorder="0"
+          />
         </form>
       </div>
     </div>
@@ -248,7 +271,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: rgb(39, 38, 38);
+    /* background-color: rgb(39, 38, 38); */
+    background-color: #0d1117;
     color: #444;
   }
 
@@ -262,10 +286,11 @@
     height: 80%;
     display: flex;
     flex-direction: row;
-    width: 98%;
+    width: 100%;
     /* resize: vertical; */
     overflow: auto;
-    background-color: rgb(39, 38, 38);
+    /* background-color: rgb(39, 38, 38); */
+    background-color: #0d1117;
     color: #444;
     padding: 5px;
     z-index: 0;
@@ -276,13 +301,15 @@
     flex-grow: 1;
     display: flex;
     flex-direction: row;
-    width: 98%;
-    background-color: rgb(39, 38, 38);
+    width: 100%;
+    /* background-color: rgb(39, 38, 38); */
+    background-color: #0d1117;
     color: #444;
   }
 
   .render-wrapper {
-    background-color: #252532;
+    /* background-color: #252532; */
+    background-color: #0d1117;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -291,22 +318,22 @@
   /*Dividers used for resizing events*/
   #horizontal-divider {
     width: 100%;
-    height: 10px;
+    height: 1px;
   }
 
   #filedir-divider {
     height: 100%;
-    width: 10px;
+    width: 1px;
   }
 
   #editor-divider {
     height: 100%;
-    width: 10px;
+    width: 1px;
   }
 
   #statemgr-divider {
     height: 100%;
-    width: 10px;
+    width: 1px;
   }
 
   .box {
