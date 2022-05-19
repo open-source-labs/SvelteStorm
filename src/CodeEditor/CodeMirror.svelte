@@ -41,10 +41,19 @@
     for (let item in searchDoc) {
       // console.log("here is each item of search", item);
       if (searchDoc[item][0].includes(value)) {
-        console.log("congrats!");
-        return searchDoc[item][1][0];
+        console.log(
+          "congrats!",
+          value,
+          searchDoc[item][0].includes(value),
+          searchDoc[item][0]
+        );
+        let result = {};
+        result.tip = searchDoc[item][1][0];
+        result.url = item;
+        return result;
       }
     }
+    tipContent = " ";
     console.log(value, "is not in the docs!");
     return false;
   }
@@ -58,15 +67,15 @@
   let showToolTripTransition = false;
   let toolTipDiv;
   let noUpdate = false;
-  // src = `https://svelte.dev/docs#${searchDocumentation(lastWord)}`;
+  src = `https://svelte.dev/docs#`;
   function onHover() {
     let word;
     if (stillMouse && searchDocumentation(lastWord) !== false) {
-      let url = searchDocumentation(lastWord);
-      // src = `https://svelte.dev/docs#${url}`;
+      let searchObj = searchDocumentation(lastWord);
+      src = `https://svelte.dev/docs#${searchObj.url}`;
       toolTip = true;
       // counter = 0;
-      tipContent = `${url}`;
+      tipContent = `${searchObj.tip}`;
       console.log("this is tipcont", tipContent);
       noUpdate = true;
       lastWord = word;
@@ -189,11 +198,13 @@
     ipcRenderer.send("synchronous-message", messageObj);
   });
 
-  function handleMousMove() {
-    if (hoverCounter - lastHoverCounter > 10) {
+  function handleMousMove(e) {
+    // console.log("here is the event listener in handleMouseMove", e);
+    if (hoverCounter - lastHoverCounter > 12) {
       stillMouse = false;
       showToolTripTransition = true;
       showToolTip = false;
+      tipContent = " ";
     }
     hoverCounter++;
     // console.log("this is hover counter", hoverCounter);
@@ -205,24 +216,26 @@
       "top=900,left=200,frame=true,nodeIntegration=no"
     );
   }
+  function onType() {
+    console.log("this is the key down event");
+    hoverCounter += 13;
+  }
 </script>
 
 <svelte:head />
 <!-- {#if showToolTip && searchDocumentation(lastWord)} -->
-{#key tipContent}
-  <textarea data-tooltip="tooltip" id="div_span" on:click={onClick}>
-    {tipContent}
-  </textarea>
-{/key}
+<div data-tooltip="tooltip" id="div_span" on:click={onClick}>
+  {tipContent}
+</div>
 <!-- {/if} -->
-<div on:mousemove={handleMousMove}>
+<div on:mousemove={handleMousMove} on:keydown={onType}>
   <textarea id="textarea" class={$$props.class} bind:this={containerElt} />
 </div>
 
 <style>
   /* [data-tooltip] */
   #div_span {
-    min-height: 1.75em;
+    min-height: 2.7em;
     max-height: 2.7em;
     font-size: 65%;
     position: relative;
@@ -231,6 +244,20 @@
     z-index: 2 !important;
     /* box-shadow: 2px 2px; */
   }
+  /* .popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+} */
   /* #div_span ::after {
     position: absolute;
     width: 140px;
