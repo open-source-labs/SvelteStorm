@@ -190,7 +190,7 @@ const createApplicationMenu = () => {
         {
           label: 'Visit the SvelteStorm Website',
           click(focusedWindow) {
-            if(focusedWindow) require('electron').shell.openExternal('http://www.svelte-storm.com')
+            if(focusedWindow) require('electron').shell.openExternal('https://svelte-storm.com/')
           }
         },
         {

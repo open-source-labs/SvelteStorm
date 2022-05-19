@@ -11,10 +11,8 @@
   let value = "";
   let submit = false;
 
-  //Testing code for window resize
-
   onMount(async () => {
-    //==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+    //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
     let upperPanel = document.getElementById("wrapper-upper");
     let editorPanel = document.getElementById("editor-window");
     let filedirPanel = document.getElementById("file-dir");
@@ -44,83 +42,80 @@
         filedirPanel.style.width =
           parseInt(getComputedStyle(filedirPanel).width) - dx + "px"; //Resizing width of edit panel
       } else if (panel === "statemgr-divider") {
-        // statemgrPanel.style.width = (parseInt(getComputedStyle(statemgrPanel).width) - dx) + "px"; //Resizing width of edit panel
+        statemgrPanel.style.width =
+          parseInt(getComputedStyle(statemgrPanel).width) - dx + "px"; //Resizing width of edit panel
         // statemgrPanel.style.width = 500 + "px"; //Direct resize works but not with dragging---think it may be related to xterm sizing...
-      } else {
       }
-      //Update mousedown coordinates for next resizing event (curor moves again while mouse is down)
-      mdown_posx = e.x;
-      mdown_posy = e.y;
-    }
 
-    function chgCursor(e, panel) {
-      if (panel === "horizontal-divider") {
-        e.target.style.cursor = "row-resize";
-      } else {
-        e.target.style.cursor = "col-resize";
+      function chgCursor(e, panel) {
+        if (panel === "horizontal-divider") {
+          e.target.style.cursor = "row-resize";
+        } else {
+          e.target.style.cursor = "col-resize";
+        }
       }
-    }
 
-    function dragStart(e, panel) {
-      e.preventDefault(); //stop selection of text during mouse move / mouse down event
+      function dragStart(e, panel) {
+        e.preventDefault(); //stop selection of text during mouse move / mouse down event
 
-      //Need this so window events continue tracking on top of iframe
-      let iframeList = document.getElementsByClassName("webpage");
-      for (const item of iframeList) {
-        item.setAttribute("style", "pointer-events: none");
-      }
-      //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
-      const trackMouseMove = (e) => {
-        // console.log(`ex: ${e.x}`)
-        dragMovement(e, panel);
-      };
-
-      const trackMouseUp = (e) => {
-        // console.log('Mouse Up');
-        dragEnd(e, panel);
-        window.removeEventListener("mousemove", trackMouseMove, true);
-        window.removeEventListener("mouseup", trackMouseUp, true);
-
-        //Removing no pointer events from iframes on mouse up
+        //Need this so window events continue tracking on top of iframe
         let iframeList = document.getElementsByClassName("webpage");
         for (const item of iframeList) {
-          item.setAttribute("style", "");
+          item.setAttribute("style", "pointer-events: none");
         }
-      };
-      window.addEventListener("mousemove", trackMouseMove, true);
-      window.addEventListener("mouseup", trackMouseUp, true);
+        //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
+        const trackMouseMove = (e) => {
+          // console.log(`ex: ${e.x}`)
+          dragMovement(e, panel);
+        };
 
-      if (panel === "horizontal-divider") {
-        mdown_posy = e.y;
-        resizeObj[panel].isResizing = true;
-      } else {
-        mdown_posx = e.x;
-        resizeObj[panel].isResizing = true;
+        const trackMouseUp = (e) => {
+          // console.log('Mouse Up');
+          dragEnd(e, panel);
+          window.removeEventListener("mousemove", trackMouseMove, true);
+          window.removeEventListener("mouseup", trackMouseUp, true);
+
+          //Removing no pointer events from iframes on mouse up
+          let iframeList = document.getElementsByClassName("webpage");
+          for (const item of iframeList) {
+            item.setAttribute("style", "");
+          }
+        };
+        window.addEventListener("mousemove", trackMouseMove, true);
+        window.addEventListener("mouseup", trackMouseUp, true);
+
+        if (panel === "horizontal-divider") {
+          mdown_posy = e.y;
+          resizeObj[panel].isResizing = true;
+        } else {
+          mdown_posx = e.x;
+          resizeObj[panel].isResizing = true;
+        }
       }
-    }
 
-    function dragMovement(e, panel) {
-      e.preventDefault(); //stop selection of text during mouse move / mouse down event
-      x_pos = e.x;
-      y_pos = e.y;
+      function dragMovement(e, panel) {
+        e.preventDefault(); //stop selection of text during mouse move / mouse down event
+        x_pos = e.x;
+        y_pos = e.y;
 
-      if (panel === "horizontal-divider") {
-        if (resizeObj[panel].isResizing === true) {
-          resize(e, "horizontal-divider");
+        if (panel === "horizontal-divider") {
+          if (resizeObj[panel].isResizing === true) {
+            resize(e, "horizontal-divider");
+          }
+        } else if (panel === "editor-divider") {
+          if (resizeObj[panel].isResizing === true) {
+            resize(e, "editor-divider");
+          }
+        } else if (panel === "filedir-divider") {
+          if (resizeObj[panel].isResizing === true) {
+            resize(e, "filedir-divider");
+          }
+        } else if (panel === "statemgr-divider") {
+          if (resizeObj[panel].isResizing === true) {
+            resize(e, "statemgr-divider");
+          }
+        } else {
         }
-      } else if (panel === "editor-divider") {
-        if (resizeObj[panel].isResizing === true) {
-          resize(e, "editor-divider");
-        }
-      } else if (panel === "filedir-divider") {
-        if (resizeObj[panel].isResizing === true) {
-          resize(e, "filedir-divider");
-        }
-      } else if (panel === "statemgr-divider") {
-        if (resizeObj[panel].isResizing === true) {
-          resize(e, "statemgr-divider");
-        }
-      } else {
       }
     }
 
@@ -148,21 +143,38 @@
       dragStart(e, "editor-divider")
     );
 
-    filedirDivider.addEventListener("mouseover", (e) =>
-      chgCursor(e, "filedir-divider")
-    );
-    filedirDivider.addEventListener("mousedown", (e) =>
-      dragStart(e, "filedir-divider")
-    );
-
-    statemgrDivider.addEventListener("mouseover", (e) =>
-      chgCursor(e, "statemgr-divider")
-    );
-    statemgrDivider.addEventListener("mousedown", (e) =>
-      dragStart(e, "statemgr-divider")
-    );
+    function dragEnd(e, panel) {
+      e.preventDefault(); //stop selection of text during mouse move / mouse down event
+      resizeObj[panel].isResizing = false;
+    }
 
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+
+    //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and
+    function xtermRestyle(className) {
+      let domElement = document.getElementsByClassName(className);
+      for (const item of domElement) {
+        let currentStyle = item.getAttribute("style").split(";"); //Array of each style attribute string
+        for (let i = 0; i < currentStyle.length; i++) {
+          const style = currentStyle[i];
+          console.log(style.indexOf("width"));
+          if (style.indexOf("width") !== -1) currentStyle[i] = "width: 100%";
+        }
+        item.setAttribute("style", currentStyle.join(";"));
+      }
+    }
+
+    function xtermSetWidth() {
+      xtermRestyle("xterm-screen");
+      xtermRestyle("xterm-text-layer");
+      xtermRestyle("xterm-selection-layer");
+      xtermRestyle("xterm-link-layer");
+      xtermRestyle("xterm-cursor-layer");
+    }
+
+    xtermSetWidth();
+    //Need to trigger this after resize so that it follows xterm's fittaddon resize
+    window.addEventListener("resize", xtermSetWidth);
   }); //End of onMount
 
   const handleSubmit = () => {
@@ -247,7 +259,7 @@
   }
 
   .wrapper-upper {
-    height: 65%;
+    height: 80%;
     display: flex;
     flex-direction: row;
     width: 98%;
@@ -260,7 +272,7 @@
   }
   .wrapper-bottom {
     min-height: 1%;
-    height: 35%;
+    height: 20%;
     flex-grow: 1;
     display: flex;
     flex-direction: row;
@@ -308,8 +320,10 @@
     font-size: 10px;
     overflow: auto;
     /* resize: horizontal; */
+    max-width: 30%;
     width: 12.5%;
     min-width: 12.5%;
+    min-width: 1%;
     /* max-width: 30%; */
     background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
@@ -329,8 +343,11 @@
   /* State Management Window - SvelteTeam */
   .c {
     overflow: auto;
-    width: 14.8%;
-    min-width: 10%;
+    max-width: 30.4%;
+    width: 12.8%;
+    /* min-width: 12.8%; */
+    min-width: 1%;
+    /* background-color: rgba(28, 28, 36, 0.678); */
     background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
     padding: 0;
@@ -358,8 +375,10 @@
   /* Terminal Window - SvelteTeam */
   .e {
     font: white;
-    /* overflow: auto; */
-    width: 100%;
+    overflow: auto;
+    /* width: 100%; */
+    flex-grow: 1;
+    /* background-color: rgba(35, 35, 65, 0.452); */
     background-color: #0d1117;
   }
 
