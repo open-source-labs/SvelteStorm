@@ -4,12 +4,29 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   import { onMount } from "svelte";
+  import searchDoc from "./SearchProgram.js";
 
   export let orientation = "columns";
   export let localhost;
 
   let value = "";
   let submit = false;
+  let docsBool = false;
+
+  let documentation;
+  let url;
+  $: documentation = `https://svelte.dev/docs#${url}`;
+  let textVal;
+  function searchDocumentation(value) {
+    let result;
+    for (let item in searchDoc) {
+      if (searchDoc[item][0].includes(value)) {
+        console.log("congrats!");
+        result = item;
+        return result;
+      }
+    }
+  }
 
   onMount(async () => {
     //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
@@ -206,6 +223,25 @@
       return false;
     }
   };
+  const handleKeyup2 = (event) => {
+    submit = false;
+    console.log("handlekeyup 2", textVal);
+
+    // event.preventDefault();
+
+    url = searchDocumentation(textVal);
+
+    console.log("this is the url", searchDocumentation(textVal));
+    documentation = `https://svelte.dev/docs#"${url}/`;
+    documentation = documentation;
+    return false;
+  };
+  const handleDocuments = () => {
+    // submit = false;
+    console.log("the handleDocs is firing");
+    docsBool = !docsBool;
+    // return false;
+  };
 </script>
 
 <body class:orientation>
@@ -224,12 +260,46 @@
       <div id="editor-divider" />
       <div class="box d root">
         <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
-          <input
-            placeholder="Local Host Port"
-            type="text"
-            on:keyup|preventDefault={handleKeyup}
-          />
-          {#if submit === true}
+          {#if docsBool === true}
+            <div class="parent grid-parent">
+              <input
+                class="child"
+                placeholder="Search Documentation"
+                type="text"
+                bind:value={textVal}
+              />
+              <button
+                class="searchButton"
+                on:click|preventDefault={handleKeyup2}>Search</button
+              >
+              <button class="backButton" on:click={handleDocuments}>Back</button
+              >
+            </div>
+            <iframe class="docs" title="test" src={documentation} />
+          {/if}
+          {#if docsBool === false}
+            <div class="parent grid-parent">
+              <input
+                class="child"
+                placeholder="Local Host Port"
+                type="text"
+                on:submit|preventDefault={handleKeyup}
+              />
+              <button
+                type="button"
+                class="childButton"
+                on:click={handleDocuments}>Docs?</button
+              >
+            </div>
+            {#if submit === true && docsBool === false}
+              <iframe
+                class="webpage"
+                title="local host"
+                src={localhost}
+                frameBorder="0"
+              />
+            {/if}
+
             <iframe
               class="webpage"
               title="local host"
@@ -237,12 +307,6 @@
               frameBorder="0"
             />
           {/if}
-          <iframe
-            class="webpage"
-            title="local host"
-            src={localhost}
-            frameBorder="0"
-          />
         </form>
       </div>
     </div>
@@ -281,7 +345,13 @@
     width: 100%;
     z-index: 1;
   }
-
+  .docs {
+    overflow: auto;
+    /* resize: vertical; */
+    height: 90%;
+    width: 98%;
+    color: "grey";
+  }
   .wrapper-upper {
     height: 80%;
     display: flex;
@@ -320,7 +390,28 @@
     width: 100%;
     height: 1px;
   }
-
+  .childButton {
+    color: grey;
+    background: transparent;
+    font-size: small;
+    border: none;
+  }
+  .backButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
+  }
+  .searchButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
+  }
   #filedir-divider {
     height: 100%;
     width: 1px;
