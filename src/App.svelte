@@ -156,7 +156,7 @@
       let currentStyle = item.getAttribute('style').split(';'); //Array of each style attribute string
       for (let i = 0; i < currentStyle.length; i++) {
         const style = currentStyle[i];
-        console.log(style.indexOf('width'));
+        //console.log(style.indexOf('width'));
         if (style.indexOf('width') !== -1) currentStyle[i] = 'width: 100%';
       }
       item.setAttribute('style', currentStyle.join(';'));

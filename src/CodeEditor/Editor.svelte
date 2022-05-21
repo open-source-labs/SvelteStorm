@@ -43,7 +43,7 @@
 
   // remove and reset tab order
   function deleteTab(targetId) {
-
+    console.log('targetId: ', targetId);
     $openTabs = $openTabs.filter((t) => t.tabId != targetId).map((t, i) => ({
       editorValue: t.editorValue,
       ext: t.ext,
