@@ -214,14 +214,14 @@
       <div class="box a target" id="file-dir">
         <FileDir />
       </div>
-      <div id="filedir-divider" />
+      <div class="dividers-v" id="filedir-divider" />
       <div class="box b" id="editor-window">
         <!-- svelte-ignore missing-declaration -->
         <div class="editor-wrapper">
           <Editor class="childClass" />
         </div>
       </div>
-      <div id="editor-divider" />
+      <div class="dividers-v" id="editor-divider" />
       <div class="box d root">
         <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
           <input
@@ -246,12 +246,12 @@
         </form>
       </div>
     </div>
-    <div id="horizontal-divider" />
+    <div class="dividers-h" id="horizontal-divider" />
     <div class="box wrapper-bottom">
       <div class="box c root" id="state-mgr">
         <StateManager />
       </div>
-      <div id="statemgr-divider" />
+      <div class="dividers-v" id="statemgr-divider" />
       <div class="box e" id="terminal-window">
         <XTerm />
       </div>
@@ -292,7 +292,7 @@
     /* background-color: rgb(39, 38, 38); */
     background-color: #0d1117;
     color: #444;
-    padding: 5px;
+    /* padding: 5px; */
     z-index: 0;
   }
   .wrapper-bottom {
@@ -305,6 +305,8 @@
     /* background-color: rgb(39, 38, 38); */
     background-color: #0d1117;
     color: #444;
+    position: relative;
+    margin-top: -8px;
   }
 
   .render-wrapper {
@@ -316,25 +318,59 @@
   }
 
   /*Dividers used for resizing events*/
-  #horizontal-divider {
+  /* #horizontal-divider {
     width: 100%;
-    height: 1px;
+    height: 4px;
+    background-color: transparent;
   }
 
   #filedir-divider {
     height: 100%;
-    width: 1px;
+    width: 4px;
+    background-color: transparent;
   }
 
   #editor-divider {
     height: 100%;
     width: 1px;
+    background-color: transparent;
   }
 
   #statemgr-divider {
     height: 100%;
     width: 1px;
+  } */
+
+  .dividers-h {
+    /* height: 1px; */
+    z-index: 9999;
+    background-clip: content-box;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    position: relative;
+    /* top: -5px; */
   }
+
+  .dividers-v {
+    z-index: 9999;
+    background-clip: content-box;
+    padding-left: 4px;
+    padding-right: 4px;
+    position: relative;
+    height: 100%;
+
+    z-index: 9999;
+
+    /* left: -5px; */
+  }
+
+  /* .dividers-h:hover {
+    cursor: ns-resize;
+  }
+
+  .dividers-v:hover {
+    cursor: ew-resize;
+  } */
 
   .box {
     background-color: rgb(39, 38, 38);
@@ -365,7 +401,11 @@
     background-color: #0d1117;
     border-bottom: 1px solid #3d3d3d;
     border-right: 1px solid #3d3d3d;
-    padding-right: 5px;
+    position: relative;
+    /* left: -8px; */
+    margin-left: -8px;
+    margin-right: -8px;
+    padding-right: 8px;
   }
   /* State Management Window - SvelteTeam */
   .c {
@@ -378,6 +418,7 @@
     background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
     padding: 0;
+    margin-right: -8px;
   }
 
   /* Browser Render Window - SvelteTeam */
@@ -389,6 +430,9 @@
     text-align: center;
     background-color: #0d1117;
     border-bottom: 1px solid #3d3d3d;
+    position: relative;
+
+    /* left: -16px; */
   }
 
   .d input {
@@ -407,6 +451,7 @@
     flex-grow: 1;
     /* background-color: rgba(35, 35, 65, 0.452); */
     background-color: #0d1117;
+    position: relative;
   }
 
   /* Webpage Render - SvelteTeam */
