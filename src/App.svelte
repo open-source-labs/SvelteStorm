@@ -225,6 +225,7 @@
     submit = false;
 
     if (event.code == "Enter") {
+      console.log('Enter submitted');
       event.preventDefault();
       event.target.value;
       value = event.target.value;
@@ -233,7 +234,7 @@
     }
   };
   const handleKeyup2 = (event) => {
-    submit = false;
+    submit = true;
     console.log("handlekeyup 2", textVal);
     url = searchDocumentation(textVal);
     console.log("this is the url", searchDocumentation(textVal));
@@ -291,21 +292,12 @@
                 on:click={handleDocuments}>Docs?</button
               >
             </div>
-            {#if submit === true && docsBool === false}
               <iframe
                 class="webpage"
                 title="local host"
                 src={localhost}
                 frameBorder="0"
               />
-            {/if}
-
-            <iframe
-              class="webpage"
-              title="local host"
-              src={localhost}
-              frameBorder="0"
-            />
           {/if}
         </form>
       </div>
