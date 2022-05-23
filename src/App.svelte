@@ -6,33 +6,8 @@
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
 
   import searchDoc from "./SearchProgram.js";
-  // import docsBool from "./application-menu.js";
-
-  // export let docsBool = false;
-  let docsBool = false;
-  // const handleDocuments = () => {
-  //   // submit = false;
-  //   console.log("handledocs fired");
-  //   docsBool = !docsBool;
-  //   // return false;
-  // };
-
-  let documentation;
-  let url;
-  $: documentation = `https://svelte.dev/docs#${url}`;
-  let textVal;
-  function searchDocumentation(value) {
-    let result;
-    for (let item in searchDoc) {
-      if (searchDoc[item][0].includes(value)) {
-        console.log("congrats!");
-        result = item;
-        return result;
-      }
-    }
-  }
   import { onMount } from "svelte";
-  import searchDoc from "./SearchProgram.js";
+
 
   export let orientation = "columns";
   export let localhost;
@@ -179,6 +154,7 @@
     let filedirDivider = document.getElementById("filedir-divider");
     let statemgrDivider = document.getElementById("statemgr-divider");
 
+
     horizDivider.addEventListener("mouseover", (e) =>
       chgCursor(e, "horizontal-divider")
     );
@@ -238,6 +214,7 @@
     window.addEventListener("resize", xtermSetWidth);
   }); //End of onMount
 
+
   const handleSubmit = () => {
     submit = false;
     return false;
@@ -263,23 +240,11 @@
   const handleKeyup2 = (event) => {
     submit = false;
     console.log("handlekeyup 2", textVal);
-
-
-    // event.preventDefault();
-
     url = searchDocumentation(textVal);
-
-
     console.log("this is the url", searchDocumentation(textVal));
     documentation = `https://svelte.dev/docs#"${url}/`;
     documentation = documentation;
     return false;
-  };
-  const handleDocuments = () => {
-    // submit = false;
-    console.log("the handleDocs is firing");
-    docsBool = !docsBool;
-    // return false;
   };
 
 </script>
@@ -322,9 +287,9 @@
             <div class="parent grid-parent">
               <input
                 class="child"
-                placeholder="Local Host Port"
+                placeholder={value === "" ? "Local Host Port" : value}
                 type="text"
-                on:submit|preventDefault={handleKeyup}
+                on:keyup|preventDefault={handleKeyup}
               />
 
               <button
@@ -449,7 +414,9 @@
   /*Dividers used for resizing events*/
   #horizontal-divider {
     width: 100%;
-    height: 1px;
+    height: 2px;
+    /* padding-top: 3px; */
+    /* padding-bottom: 3px; */
   }
   .childButton {
     color: grey;
