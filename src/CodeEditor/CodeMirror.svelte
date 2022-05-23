@@ -17,7 +17,7 @@
   import "codemirror/addon/edit/closebrackets.js";
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
-  import searchDoc from "/Users/zacharyradford/Desktop/Codesmith/Projects/SvelteStorm/src/SearchProgram.js";
+  import searchDoc from "../SearchProgram.js";
 
   const fs = require("fs");
   const { ipcRenderer } = require("electron");

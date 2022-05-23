@@ -238,7 +238,7 @@
     //Need to trigger this after resize so that it follows xterm's fittaddon resize
     window.addEventListener("resize", xtermSetWidth);
   }); //End of onMount
- 
+
 
   const handleSubmit = () => {
     submit = false;
@@ -451,7 +451,9 @@
   /*Dividers used for resizing events*/
   #horizontal-divider {
     width: 100%;
-    height: 1px;
+    height: 2px;
+    /* padding-top: 3px; */
+    /* padding-bottom: 3px; */
   }
   .childButton {
     color: grey;
@@ -478,18 +480,27 @@
   }
   #filedir-divider {
     height: 100%;
+<<<<<<< HEAD
     width: 1px;
 
+=======
+    width: 2px;
+>>>>>>> 661ddd7 (Merging Zach's tooltip + docs changes)
   }
 
   #editor-divider {
     height: 100%;
+<<<<<<< HEAD
     width: 1px;
 
+=======
+    width: 2px;
+>>>>>>> 661ddd7 (Merging Zach's tooltip + docs changes)
   }
 
   #statemgr-divider {
     height: 100%;
+<<<<<<< HEAD
     width: 1px;
 
   }
@@ -502,6 +513,9 @@
     outline: none;
     font-size: small;
     color: white;
+=======
+    width: 2px;
+>>>>>>> 661ddd7 (Merging Zach's tooltip + docs changes)
   }
 
   .box {
