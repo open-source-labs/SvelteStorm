@@ -6,33 +6,8 @@
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
 
   import searchDoc from "./SearchProgram.js";
-  // import docsBool from "./application-menu.js";
-
-  // export let docsBool = false;
-  let docsBool = false;
-  // const handleDocuments = () => {
-  //   // submit = false;
-  //   console.log("handledocs fired");
-  //   docsBool = !docsBool;
-  //   // return false;
-  // };
-
-  let documentation;
-  let url;
-  $: documentation = `https://svelte.dev/docs#${url}`;
-  let textVal;
-  function searchDocumentation(value) {
-    let result;
-    for (let item in searchDoc) {
-      if (searchDoc[item][0].includes(value)) {
-        console.log("congrats!");
-        result = item;
-        return result;
-      }
-    }
-  }
   import { onMount } from "svelte";
-  import searchDoc from "./SearchProgram.js";
+
 
   export let orientation = "columns";
   export let localhost;
@@ -265,23 +240,11 @@
   const handleKeyup2 = (event) => {
     submit = false;
     console.log("handlekeyup 2", textVal);
-
-
-    // event.preventDefault();
-
     url = searchDocumentation(textVal);
-
-
     console.log("this is the url", searchDocumentation(textVal));
     documentation = `https://svelte.dev/docs#"${url}/`;
     documentation = documentation;
     return false;
-  };
-  const handleDocuments = () => {
-    // submit = false;
-    console.log("the handleDocs is firing");
-    docsBool = !docsBool;
-    // return false;
   };
 
 </script>
@@ -324,9 +287,9 @@
             <div class="parent grid-parent">
               <input
                 class="child"
-                placeholder="Local Host Port"
+                placeholder={value === "" ? "Local Host Port" : value}
                 type="text"
-                on:submit|preventDefault={handleKeyup}
+                on:keyup|preventDefault={handleKeyup}
               />
 
               <button
@@ -480,27 +443,18 @@
   }
   #filedir-divider {
     height: 100%;
-<<<<<<< HEAD
     width: 1px;
 
-=======
-    width: 2px;
->>>>>>> 661ddd7 (Merging Zach's tooltip + docs changes)
   }
 
   #editor-divider {
     height: 100%;
-<<<<<<< HEAD
     width: 1px;
 
-=======
-    width: 2px;
->>>>>>> 661ddd7 (Merging Zach's tooltip + docs changes)
   }
 
   #statemgr-divider {
     height: 100%;
-<<<<<<< HEAD
     width: 1px;
 
   }
@@ -513,9 +467,6 @@
     outline: none;
     font-size: small;
     color: white;
-=======
-    width: 2px;
->>>>>>> 661ddd7 (Merging Zach's tooltip + docs changes)
   }
 
   .box {
