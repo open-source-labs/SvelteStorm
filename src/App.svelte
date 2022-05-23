@@ -3,6 +3,9 @@
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
+  const { remote, ipcRenderer, BrowserWindow } = require("electron");
+
+  import searchDoc from "./SearchProgram.js";
   import { onMount } from "svelte";
 
   export let orientation = "columns";
@@ -10,6 +13,22 @@
 
   let value = "";
   let submit = false;
+  let docsBool = false;
+
+  let documentation;
+  let url;
+  $: documentation = `https://svelte.dev/docs#${url}`;
+  let textVal;
+  function searchDocumentation(value) {
+    let result;
+    for (let item in searchDoc) {
+      if (searchDoc[item][0].includes(value)) {
+        console.log("congrats!");
+        result = item;
+        return result;
+      }
+    }
+  }
 
   onMount(async () => {
     //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
@@ -170,7 +189,7 @@
         let currentStyle = item.getAttribute("style").split(";"); //Array of each style attribute string
         for (let i = 0; i < currentStyle.length; i++) {
           const style = currentStyle[i];
-          // console.log(style.indexOf('width'));
+
           if (style.indexOf("width") !== -1) currentStyle[i] = "width: 100%";
         }
         item.setAttribute("style", currentStyle.join(";"));
@@ -194,6 +213,12 @@
     submit = false;
     return false;
   };
+  export const handleDocuments = () => {
+    // submit = false;
+    console.log("the handleDocs is firing");
+    docsBool = !docsBool;
+    // return false;
+  };
 
   const handleKeyup = (event) => {
     submit = false;
@@ -205,6 +230,15 @@
       localhost = `http://127.0.0.1:${value}/`;
       return false;
     }
+  };
+  const handleKeyup2 = (event) => {
+    submit = false;
+    console.log("handlekeyup 2", textVal);
+    url = searchDocumentation(textVal);
+    console.log("this is the url", searchDocumentation(textVal));
+    documentation = `https://svelte.dev/docs#"${url}/`;
+    documentation = documentation;
+    return false;
   };
 </script>
 
@@ -224,12 +258,47 @@
       <div class="dividers-v" id="editor-divider" />
       <div class="box d root">
         <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
-          <input
-            placeholder="Local Host Port"
-            type="text"
-            on:keyup|preventDefault={handleKeyup}
-          />
-          {#if submit === true}
+          {#if docsBool === true}
+            <div class="parent grid-parent">
+              <input
+                class="child"
+                placeholder="Search Documentation"
+                type="text"
+                bind:value={textVal}
+              />
+              <button
+                class="searchButton"
+                on:click|preventDefault={handleKeyup2}>Search</button
+              >
+              <button class="backButton" on:click={handleDocuments}>Back</button
+              >
+            </div>
+            <iframe class="docs" title="test" src={documentation} />
+          {/if}
+          {#if docsBool === false}
+            <div class="parent grid-parent">
+              <input
+                class="child"
+                placeholder={value === "" ? "Local Host Port" : value}
+                type="text"
+                on:keyup|preventDefault={handleKeyup}
+              />
+
+              <button
+                type="button"
+                class="childButton"
+                on:click={handleDocuments}>Docs?</button
+              >
+            </div>
+            {#if submit === true && docsBool === false}
+              <iframe
+                class="webpage"
+                title="local host"
+                src={localhost}
+                frameBorder="0"
+              />
+            {/if}
+
             <iframe
               class="webpage"
               title="local host"
@@ -237,14 +306,9 @@
               frameBorder="0"
             />
           {/if}
-          <iframe
-            class="webpage"
-            title="local host"
-            src={localhost}
-            frameBorder="0"
-          />
         </form>
       </div>
+      <div />
     </div>
     <div class="dividers-h" id="horizontal-divider" />
     <div class="box wrapper-bottom">
@@ -264,6 +328,23 @@
     height: 100%;
     width: 100%;
   }
+  .grid-parent {
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
+    float: left;
+  }
+  /* .inline-flex-parent {
+    display: inline-flex;
+    justify-content: flex-start;
+  }
+  .search1 {
+    justify-content: center;
+    /* padding-left: 200px; */
+  /* } */
+  /* .search2 {
+    padding-right: 150px;
+  } */
+
   /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
   /* Wrapper Window - SvelteTeam */
   .wrapper {
@@ -281,7 +362,13 @@
     width: 100%;
     z-index: 1;
   }
-
+  .docs {
+    overflow: auto;
+    /* resize: vertical; */
+    height: 90%;
+    width: 98%;
+    color: "grey";
+  }
   .wrapper-upper {
     height: 80%;
     display: flex;
@@ -320,11 +407,33 @@
   /*Dividers used for resizing events*/
   /* #horizontal-divider {
     width: 100%;
-    height: 4px;
-    background-color: transparent;
+    height: 2px;
+    /* padding-top: 3px; */
+  /* padding-bottom: 3px; */
+  /* } */
+  .childButton {
+    color: grey;
+    background: transparent;
+    font-size: small;
+    border: none;
   }
-
-  #filedir-divider {
+  .backButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
+  }
+  .searchButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
+  }
+  /* #filedir-divider {
     height: 100%;
     width: 4px;
     background-color: transparent;
@@ -462,6 +571,13 @@
     width: 100%;
     background-color: #0d1117;
     /* pointer-events: none; */
+  }
+  .docs {
+    overflow: auto;
+    /* resize: vertical; */
+    height: 100%;
+    width: 98%;
+    color: "grey";
   }
 
   .b :global(.childClass) {

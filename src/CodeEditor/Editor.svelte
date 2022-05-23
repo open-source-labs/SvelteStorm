@@ -174,6 +174,7 @@
 
 {#if $openTabs.length > 0}
   <div class="editor-body">
+
     <CodeMirror
       class="childClass current"
       bind:value={$openTabs[activeEditor].editorValue}
@@ -230,7 +231,6 @@
     cursor: pointer;
     font-size: 12px;
   }
-
   .tab-span:hover {
     border-color: #e9ecef #e9ecef #dee2e6;
   }
