@@ -3,6 +3,34 @@
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
+  const { remote, ipcRenderer, BrowserWindow } = require("electron");
+
+  import searchDoc from "./SearchProgram.js";
+  // import docsBool from "./application-menu.js";
+
+  // export let docsBool = false;
+  let docsBool = false;
+  // const handleDocuments = () => {
+  //   // submit = false;
+  //   console.log("handledocs fired");
+  //   docsBool = !docsBool;
+  //   // return false;
+  // };
+
+  let documentation;
+  let url;
+  $: documentation = `https://svelte.dev/docs#${url}`;
+  let textVal;
+  function searchDocumentation(value) {
+    let result;
+    for (let item in searchDoc) {
+      if (searchDoc[item][0].includes(value)) {
+        console.log("congrats!");
+        result = item;
+        return result;
+      }
+    }
+  }
   import { onMount } from "svelte";
   import searchDoc from "./SearchProgram.js";
 
@@ -120,6 +148,7 @@
       x_pos = e.x;
       y_pos = e.y;
 
+
       if (panel === "horizontal-divider") {
         if (resizeObj[panel].isResizing === true) {
           resize(e, "horizontal-divider");
@@ -164,6 +193,7 @@
       dragStart(e, "editor-divider")
     );
 
+ 
     filedirDivider.addEventListener("mouseover", (e) =>
       chgCursor(e, "filedir-divider")
     );
@@ -178,6 +208,7 @@
       dragStart(e, "statemgr-divider")
     );
 
+
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
     //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and
@@ -187,7 +218,7 @@
         let currentStyle = item.getAttribute("style").split(";"); //Array of each style attribute string
         for (let i = 0; i < currentStyle.length; i++) {
           const style = currentStyle[i];
-          // console.log(style.indexOf('width'));
+
           if (style.indexOf("width") !== -1) currentStyle[i] = "width: 100%";
         }
         item.setAttribute("style", currentStyle.join(";"));
@@ -211,6 +242,12 @@
     submit = false;
     return false;
   };
+  export const handleDocuments = () => {
+    // submit = false;
+    console.log("the handleDocs is firing");
+    docsBool = !docsBool;
+    // return false;
+  };
 
   const handleKeyup = (event) => {
     submit = false;
@@ -227,9 +264,11 @@
     submit = false;
     console.log("handlekeyup 2", textVal);
 
+
     // event.preventDefault();
 
     url = searchDocumentation(textVal);
+
 
     console.log("this is the url", searchDocumentation(textVal));
     documentation = `https://svelte.dev/docs#"${url}/`;
@@ -242,6 +281,7 @@
     docsBool = !docsBool;
     // return false;
   };
+
 </script>
 
 <body class:orientation>
@@ -276,6 +316,7 @@
               >
             </div>
             <iframe class="docs" title="test" src={documentation} />
+
           {/if}
           {#if docsBool === false}
             <div class="parent grid-parent">
@@ -285,6 +326,7 @@
                 type="text"
                 on:submit|preventDefault={handleKeyup}
               />
+
               <button
                 type="button"
                 class="childButton"
@@ -307,8 +349,10 @@
               frameBorder="0"
             />
           {/if}
+
         </form>
       </div>
+      <div />
     </div>
     <div id="horizontal-divider" />
     <div class="box wrapper-bottom">
@@ -328,6 +372,23 @@
     height: 100%;
     width: 100%;
   }
+  .grid-parent {
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
+    float: left;
+  }
+  /* .inline-flex-parent {
+    display: inline-flex;
+    justify-content: flex-start;
+  }
+  .search1 {
+    justify-content: center;
+    /* padding-left: 200px; */
+  /* } */
+  /* .search2 {
+    padding-right: 150px;
+  } */
+
   /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
   /* Wrapper Window - SvelteTeam */
   .wrapper {
@@ -411,20 +472,34 @@
     font-size: small;
     border-style: inset;
     border-color: grey;
+
   }
   #filedir-divider {
     height: 100%;
     width: 1px;
+
   }
 
   #editor-divider {
     height: 100%;
     width: 1px;
+
   }
 
   #statemgr-divider {
     height: 100%;
     width: 1px;
+
+  }
+  button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    font-size: small;
+    color: white;
   }
 
   .box {
@@ -508,6 +583,13 @@
     width: 100%;
     background-color: #0d1117;
     /* pointer-events: none; */
+  }
+  .docs {
+    overflow: auto;
+    /* resize: vertical; */
+    height: 100%;
+    width: 98%;
+    color: "grey";
   }
 
   .b :global(.childClass) {

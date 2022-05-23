@@ -247,12 +247,14 @@ const searchDoc = {
     "<svelte:head>",
     "svelte:head",
   ], ["This makes it possible to insert elements into document.head. As with <svelte:window> and <svelte:body>, it may only appear at the top level of your component. 'Svelte head' syntax: <svelte:head>...</svelte:head>"]],
+
   "template-syntax-svelte-options": [[
     "<svelte options>",
     "svelte options",
     "<svelte:options>",
     "svelte:options",
   ], ["This provides a place to specify per-component compiler options, which are detailed in the compiler section. 'Svelte options' syntax: <svelte:options option={value}/>"]],
+
   "template-syntax-svelte-fragment": [[
     "<svelte fragment>",
     "svelte fragment",
@@ -267,6 +269,7 @@ const searchDoc = {
     "before update",
     "beforeUpdate",
   ], ["beforeUpdate schedules a callback to run immediately before the component is updated after any state change. 'beforeUpdate' syntax: beforeUpdate(callback: () => void)"]],
+
   "run-time-svelte-afterupdate": [[
     "afterupdate",
     "after update",
@@ -283,6 +286,7 @@ const searchDoc = {
     "getallcontext",
     "getallcontexts",
   ], ["Retrieves the whole context map that belongs to the closest parent component. Must be called during component initialisation.'getAllContexts' syntax: contexts: Map<any, any> = getAllContexts()"]],
+
   "run-time-svelte-createeventdispatcher": [[
     "create event dispatcher",
     "event dispatcher",
@@ -323,6 +327,7 @@ const searchDoc = {
     "transition",
     "svelte transition",
   ], ["The svelte/transition module exports seven functions: fade, blur, fly, slide, scale, draw and crossfade. They are for use with Svelte transitions."]],
+
   "run-time-svelte-transition-fade": [[
     "fade transition",
     "transition fade",
@@ -371,6 +376,7 @@ const searchDoc = {
     "svelte animate",
     "run time svelte animate",
   ], ["The svelte/animate module exports one function for use with Svelte animations. 'Animate' syntax: animate:flip={params}"]],
+
   "run-time-svelte-animate-flip": [[
     "animate flip",
     "run time animate flip",
@@ -378,11 +384,13 @@ const searchDoc = {
     "run time svelte animate flip",
     "flip",
   ], []],
+
   "run-time-svelte-easing": [["easing", "run time easing", "svelte easing"], ["Easing functions specify the rate of change over time and are useful when working with Svelte's built-in transitions and animations as well as the tweened and spring utilities."]],
   "run-time-svelte-register": [["register", "run time register", "svelte register"], ["To render Svelte components in Node.js without bundling, use require('svelte/register'). After that, you can use require to include any .svelte file."]],
   "run-time-client-side-component-api": [["component api", "api", "client side api", "client side", "client side component", "client side component api"], ["A client-side component — that is, a component compiled with generate: 'dom' (or the generate option left unspecified) is a JavaScript class."]],
   "run-time-client-side-component-api-creating-a-component": [["create api component", "api component", "creating api component", "creating an api component"], []],
   "run-time-client-side-component-api-$set": [["$set", "api $set"], ["Programmatically sets props on an instance. component.$set({ x: 1 }) is equivalent to x = 1 inside the component's <script> block. '$set' syntax: component.$set(props)"]],
+
   "run-time-client-side-component-api-$on": [["$on", "api $on"], []],
   "run-time-client-side-component-api-$destroy": [["$destroy", "api $destroy"], []],
   "run-time-client-side-component-api-component-props": [["api component props", "api props"], []],

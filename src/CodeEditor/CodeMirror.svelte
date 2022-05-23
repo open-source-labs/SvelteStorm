@@ -40,8 +40,10 @@
   let src;
   let showToolTip;
   let containerElt;
+
   let showToolTripTransition = false;
   let noUpdate = false;
+
 
   function searchDocumentation(value) {
     if (!value || value === " ") {
@@ -64,7 +66,6 @@
     return false;
   }
 
-  // let toolTipDiv;
   src = `https://svelte.dev/docs#`;
   function onHover() {
     let word;
@@ -72,6 +73,7 @@
       let searchObj = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
       showToolTip = true;
+
       tipContent = `${searchObj.tip}`;
       // console.log("this is tipcont", tipContent);
       noUpdate = true;
@@ -104,6 +106,7 @@
 
     return;
   }
+
 
   setInterval(() => {
     hoverTest();
@@ -168,6 +171,7 @@
     console.log("ipcRenderer complete");
   });
 
+
   function handleMousMove(e) {
     // console.log("here is the event listener in handleMouseMove", e);
     if (hoverCounter - lastHoverCounter > 12) {
@@ -187,7 +191,7 @@
     );
   }
   function onType() {
-    // console.log("this is the key down event");
+
     hoverCounter += 13;
   }
 </script>
@@ -214,7 +218,6 @@
   }
 
   #textarea {
-    /* width: 100%; */
     position: relative;
     z-index: 1;
   }
