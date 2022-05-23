@@ -32,30 +32,31 @@
     }
   }
   import { onMount } from "svelte";
+  import searchDoc from "./SearchProgram.js";
 
   export let orientation = "columns";
   export let localhost;
 
   let value = "";
   let submit = false;
+  let docsBool = false;
+
+  let documentation;
+  let url;
+  $: documentation = `https://svelte.dev/docs#${url}`;
+  let textVal;
+  function searchDocumentation(value) {
+    let result;
+    for (let item in searchDoc) {
+      if (searchDoc[item][0].includes(value)) {
+        console.log("congrats!");
+        result = item;
+        return result;
+      }
+    }
+  }
 
   onMount(async () => {
-    //==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
-    // let upperPanel = document.getElementById("wrapper-upper");
-    // let editorPanel = document.getElementById("editor-window");
-    // let filedirPanel = document.getElementById("file-dir");
-    // let statemgrPanel = document.getElementById("state-mgr");
-    // let mdown_posx;
-    // let mdown_posy;
-    // let x_pos;
-    // let y_pos;
-    // let resizeObj = {
-    //   "horizontal-divider": { isResizing: false },
-    //   "editor-divider": { isResizing: false },
-    //   "filedir-divider": { isResizing: false },
-    //   "statemgr-divider": { isResizing: false },
-    // };
-
     //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
     let upperPanel = document.getElementById("wrapper-upper");
     let editorPanel = document.getElementById("editor-window");
@@ -138,61 +139,15 @@
         resizeObj[panel].isResizing = true;
       } else {
         mdown_posx = e.x;
-        mdown_posy = e.y;
+        resizeObj[panel].isResizing = true;
       }
-
-      function chgCursor(e, panel) {
-        if (panel === "horizontal-divider") {
-          e.target.style.cursor = "row-resize";
-        } else {
-          e.target.style.cursor = "col-resize";
-        }
-      }
-
-      function dragStart(e, panel) {
-        e.preventDefault(); //stop selection of text during mouse move / mouse down event
-
-        //Need this so window events continue tracking on top of iframe
-        let iframeList = document.getElementsByClassName("webpage");
-        for (const item of iframeList) {
-          item.setAttribute("style", "pointer-events: none");
-        }
-        //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
-        const trackMouseMove = (e) => {
-          // console.log(`ex: ${e.x}`)
-          dragMovement(e, panel);
-        };
-
-        const trackMouseUp = (e) => {
-          // console.log('Mouse Up');
-          dragEnd(e, panel);
-          window.removeEventListener("mousemove", trackMouseMove, true);
-          window.removeEventListener("mouseup", trackMouseUp, true);
-
-          //Removing no pointer events from iframes on mouse up
-          let iframeList = document.getElementsByClassName("webpage");
-          for (const item of iframeList) {
-            item.setAttribute("style", "");
-          }
-        };
-        window.addEventListener("mousemove", trackMouseMove, true);
-        window.addEventListener("mouseup", trackMouseUp, true);
-
-        if (panel === "horizontal-divider") {
-          mdown_posy = e.y;
-          resizeObj[panel].isResizing = true;
-        } else {
-          mdown_posx = e.x;
-          resizeObj[panel].isResizing = true;
-        }
-      }
-      // else {
-      // }
     }
 
-    function dragEnd(e, panel) {
+    function dragMovement(e, panel) {
       e.preventDefault(); //stop selection of text during mouse move / mouse down event
-      resizeObj[panel].isResizing = false;
+      x_pos = e.x;
+      y_pos = e.y;
+
 
       if (panel === "horizontal-divider") {
         if (resizeObj[panel].isResizing === true) {
@@ -238,6 +193,22 @@
       dragStart(e, "editor-divider")
     );
 
+ 
+    filedirDivider.addEventListener("mouseover", (e) =>
+      chgCursor(e, "filedir-divider")
+    );
+    filedirDivider.addEventListener("mousedown", (e) =>
+      dragStart(e, "filedir-divider")
+    );
+
+    statemgrDivider.addEventListener("mouseover", (e) =>
+      chgCursor(e, "statemgr-divider")
+    );
+    statemgrDivider.addEventListener("mousedown", (e) =>
+      dragStart(e, "statemgr-divider")
+    );
+
+
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
     //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and
@@ -247,7 +218,7 @@
         let currentStyle = item.getAttribute("style").split(";"); //Array of each style attribute string
         for (let i = 0; i < currentStyle.length; i++) {
           const style = currentStyle[i];
-          console.log(style.indexOf("width"));
+
           if (style.indexOf("width") !== -1) currentStyle[i] = "width: 100%";
         }
         item.setAttribute("style", currentStyle.join(";"));
@@ -293,19 +264,24 @@
     submit = false;
     console.log("handlekeyup 2", textVal);
 
-    event.preventDefault();
-    // event.target.value;
-    // value = event.target.value;
+
+    // event.preventDefault();
+
     url = searchDocumentation(textVal);
-    console
-      .log
-      // "this is the handlekey2 testVal" textVal
-      ();
+
+
     console.log("this is the url", searchDocumentation(textVal));
     documentation = `https://svelte.dev/docs#"${url}/`;
     documentation = documentation;
     return false;
   };
+  const handleDocuments = () => {
+    // submit = false;
+    console.log("the handleDocs is firing");
+    docsBool = !docsBool;
+    // return false;
+  };
+
 </script>
 
 <body class:orientation>
@@ -332,14 +308,15 @@
                 type="text"
                 bind:value={textVal}
               />
-              <button class="child" on:click|preventDefault={handleKeyup2}
-                >Search</button
+              <button
+                class="searchButton"
+                on:click|preventDefault={handleKeyup2}>Search</button
+              >
+              <button class="backButton" on:click={handleDocuments}>Back</button
               >
             </div>
-            <!-- on:submit={handleKeyup2} -->
-
             <iframe class="docs" title="test" src={documentation} />
-            <button on:click={handleDocuments}>Back to browser</button>
+
           {/if}
           {#if docsBool === false}
             <div class="parent grid-parent">
@@ -349,17 +326,30 @@
                 type="text"
                 on:submit|preventDefault={handleKeyup}
               />
-              <button type="button" class="child" on:click={handleDocuments}
-                >Docs?</button
+
+              <button
+                type="button"
+                class="childButton"
+                on:click={handleDocuments}>Docs?</button
               >
             </div>
             {#if submit === true && docsBool === false}
-              <iframe class="webpage" title="local host" src={localhost} />
+              <iframe
+                class="webpage"
+                title="local host"
+                src={localhost}
+                frameBorder="0"
+              />
             {/if}
 
-            <iframe class="webpage" title="local host" src={localhost} />
+            <iframe
+              class="webpage"
+              title="local host"
+              src={localhost}
+              frameBorder="0"
+            />
           {/if}
-          <!-- <button on:click={handleDocuments}>Documentation</button> -->
+
         </form>
       </div>
       <div />
@@ -406,7 +396,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: rgb(39, 38, 38);
+    /* background-color: rgb(39, 38, 38); */
+    background-color: #0d1117;
     color: #444;
   }
 
@@ -415,15 +406,22 @@
     width: 100%;
     z-index: 1;
   }
-
+  .docs {
+    overflow: auto;
+    /* resize: vertical; */
+    height: 90%;
+    width: 98%;
+    color: "grey";
+  }
   .wrapper-upper {
     height: 80%;
     display: flex;
     flex-direction: row;
-    width: 98%;
+    width: 100%;
     /* resize: vertical; */
     overflow: auto;
-    background-color: rgb(39, 38, 38);
+    /* background-color: rgb(39, 38, 38); */
+    background-color: #0d1117;
     color: #444;
     padding: 5px;
     z-index: 0;
@@ -434,13 +432,15 @@
     flex-grow: 1;
     display: flex;
     flex-direction: row;
-    width: 98%;
-    background-color: rgb(39, 38, 38);
+    width: 100%;
+    /* background-color: rgb(39, 38, 38); */
+    background-color: #0d1117;
     color: #444;
   }
 
   .render-wrapper {
-    background-color: #252532;
+    /* background-color: #252532; */
+    background-color: #0d1117;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -449,22 +449,47 @@
   /*Dividers used for resizing events*/
   #horizontal-divider {
     width: 100%;
-    height: 10px;
+    height: 1px;
   }
+  .childButton {
+    color: grey;
+    background: transparent;
+    font-size: small;
+    border: none;
+  }
+  .backButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
+  }
+  .searchButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
 
+  }
   #filedir-divider {
     height: 100%;
-    width: 10px;
+    width: 1px;
+
   }
 
   #editor-divider {
     height: 100%;
-    width: 10px;
+    width: 1px;
+
   }
 
   #statemgr-divider {
     height: 100%;
-    width: 10px;
+    width: 1px;
+
   }
   button {
     background-color: transparent;
@@ -493,7 +518,7 @@
     min-width: 12.5%;
     min-width: 1%;
     /* max-width: 30%; */
-    background-color: rgba(28, 28, 36, 0.678);
+    background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
   }
@@ -503,7 +528,7 @@
     overflow: auto;
     width: 45%;
     /* resize: horizontal; */
-    background-color: rgba(35, 35, 65, 0.452);
+    background-color: #0d1117;
     border-bottom: 1px solid #3d3d3d;
     border-right: 1px solid #3d3d3d;
     padding-right: 5px;
@@ -515,7 +540,8 @@
     width: 12.8%;
     /* min-width: 12.8%; */
     min-width: 1%;
-    background-color: rgba(28, 28, 36, 0.678);
+    /* background-color: rgba(28, 28, 36, 0.678); */
+    background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
     padding: 0;
   }
@@ -527,7 +553,7 @@
     flex-grow: 1; /*Let render window take up remaining space in the flexbox */
     padding: 0px;
     text-align: center;
-    background-color: rgba(35, 35, 65, 0.452);
+    background-color: #0d1117;
     border-bottom: 1px solid #3d3d3d;
   }
 
@@ -545,15 +571,17 @@
     overflow: auto;
     /* width: 100%; */
     flex-grow: 1;
-    background-color: rgba(35, 35, 65, 0.452);
+    /* background-color: rgba(35, 35, 65, 0.452); */
+    background-color: #0d1117;
   }
 
   /* Webpage Render - SvelteTeam */
   .webpage {
-    overflow: auto;
+    /* overflow: auto; */
     /* resize: vertical; */
-    height: 98%;
-    width: 98%;
+    height: 100%;
+    width: 100%;
+    background-color: #0d1117;
     /* pointer-events: none; */
   }
   .docs {

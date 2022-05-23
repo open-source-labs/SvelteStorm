@@ -33,7 +33,18 @@
   export let filePath;
   let tipContent = "";
   let messageObj;
+  let stillMouse = false;
+  let hoverCounter = 0;
+  let lastHoverCounter = 0;
+  let lastWord;
+  let src;
+  let showToolTip;
   let containerElt;
+
+  let showToolTripTransition = false;
+  let noUpdate = false;
+
+
   function searchDocumentation(value) {
     if (!value || value === " ") {
       tipContent = " ";
@@ -54,23 +65,15 @@
     // console.log(value, "is not in the docs!");
     return false;
   }
-  let stillMouse = false;
-  let hoverCounter = 0;
-  let lastHoverCounter = 0;
-  let lastWord;
-  let toolTip = true;
-  let src;
-  let showToolTip = false;
-  let showToolTripTransition = false;
-  let toolTipDiv;
-  let noUpdate = false;
+
   src = `https://svelte.dev/docs#`;
   function onHover() {
     let word;
     if (stillMouse && searchDocumentation(lastWord) !== false) {
       let searchObj = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
-      toolTip = true;
+      showToolTip = true;
+
       tipContent = `${searchObj.tip}`;
       // console.log("this is tipcont", tipContent);
       noUpdate = true;
@@ -82,9 +85,7 @@
 
     var B1 = $codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).anchor.ch;
     var B2 = $codeMirrorEditor.findWordAt({ line: A1, ch: A2 }).head.ch;
-    searchDocumentation(
-      $codeMirrorEditor.getRange({ line: A1, ch: B1 }, { line: A1, ch: B2 })
-    );
+
     word = $codeMirrorEditor.getRange(
       { line: A1, ch: B1 },
       { line: A1, ch: B2 }
@@ -92,6 +93,7 @@
 
     lastWord = word;
   }
+
   function hoverTest() {
     if (hoverCounter > lastHoverCounter) {
       lastHoverCounter = hoverCounter;
@@ -99,14 +101,12 @@
     }
     stillMouse = true;
     // console.log("hovering", hoverCounter, lastHoverCounter);
-    if (stillMouse) {
-      showToolTip = true;
-      // console.log("showToolTip is now true TOOLTIP should appear");
-    }
+    showToolTip = true;
+    // console.log("showToolTip is now true TOOLTIP should appear");
+
     return;
   }
 
-  let counter = 0;
 
   setInterval(() => {
     hoverTest();
@@ -171,10 +171,6 @@
     console.log("ipcRenderer complete");
   });
 
-  ipcRenderer.on("save-markdown", function () {
-    messageObj = { content: codeMirrorEditor.getValue(), file: filePath };
-    ipcRenderer.send("synchronous-message", messageObj);
-  });
 
   function handleMousMove(e) {
     // console.log("here is the event listener in handleMouseMove", e);
@@ -195,7 +191,7 @@
     );
   }
   function onType() {
-    console.log("this is the key down event");
+
     hoverCounter += 13;
   }
 </script>

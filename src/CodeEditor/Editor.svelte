@@ -173,7 +173,8 @@
 </ul>
 
 {#if $openTabs.length > 0}
-  <div class="editor-body" id="editor-body">
+  <div class="editor-body">
+
     <CodeMirror
       class="childClass current"
       bind:value={$openTabs[activeEditor].editorValue}
@@ -204,7 +205,11 @@
     margin-bottom: 0;
     list-style: none;
     border-bottom: 1px solid #dee2e6;
-    background-color: rgb(27, 27, 26);
+    background-color: rgb(
+      27,
+      26,
+      26
+    ); /* this is the background color of the tab zone*/
     /* border-radius: 5px; */
   }
 
