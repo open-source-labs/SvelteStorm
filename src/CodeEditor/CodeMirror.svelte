@@ -61,12 +61,15 @@
   afterUpdate(async () => {
     if (codeMirrorEditor) {
       // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
-      const cacheCode = $editorCache[$currentTabFilePath];
-
-      // if file hans't been cached yet
+      let cacheCode;
+      if($editorCache[$currentTabFilePath]) cacheCode = $editorCache[$currentTabFilePath];
+      console.log('afterUpdate currentTabPath: ', $currentTabFilePath);
+      console.log('afterUpdate cacheCode: ', cacheCode);
+      // if file hasn't been cached yet 
       if (!cacheCode) {
         // cache the file and it's value (value=the raw code that'll appear in the editor)
-        $editorCache[currentTabFilePath] = value;
+        $editorCache[$currentTabFilePath] = value;
+        console.log('afterUpdate If: value: ', value)
         // set value of current editor to display the current code
         $codeMirrorEditor.setValue(value);
       } else {
