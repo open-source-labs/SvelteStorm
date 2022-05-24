@@ -35,9 +35,9 @@
     activeTabValue = focusTabId;
     activeEditor = activeTabValue;
 
-    // 2022-05-CR: when a new file is opened, check if the editorCache cache in DirectoryStore.js contains a key equal to the current file path. If not, assign a new key with the value being the actual code contained within that file.
+    // When a new file is opened, check if the editorCache cache in DirectoryStore.js contains a key equal to the current file path. If not, assign a new key with its value being the raw code contained within that file.
     if (!editorCache[$currentTabFilePath]) {editorCache[$currentTabFilePath] = newFile.editorValue};
-    console.log('addTab fn: cached!: ', editorCache);
+    console.log('addTab complete');
   };
 
 
@@ -54,9 +54,15 @@
     }))
 
     count = count - 1;
-    activeTabValue = 0;
+    activeTabValue = count - 1;
     activeEditor = activeTabValue;
-    console.log('deleteTab complete');
+
+    // if at least 1 tab still open, update currentTabFilePath to the next tab over
+    if(count > 0) {
+      $currentTabFilePath = $openTabs[activeEditor].filePath;
+    } else {
+      $currentTabFilePath = '';
+    }
   }
 
 
@@ -64,10 +70,10 @@
   const handleClick = async (tab) => {
     // update current tab in DirectoryStore.js to whichever tab was just clicked
     $currentTabFilePath = tab.filePath;
-
+    console.log('handleClick currentTabFilePath: ', $currentTabFilePath)
     // save current code inside the editor to a variable 
-    const currentUserCode = await $codeMirrorEditor.getValue();
-
+    const currentUserCode = await $codeMirrorEditor.getValue(); 
+    console.log('handleClick currentUserCode: ', currentUserCode); 
     // update cache in DirectoryStore to reflect current code in the editor
     $editorCache[$openTabs[(activeEditor)].filePath] = currentUserCode;
 
@@ -155,7 +161,7 @@
     }
   });
 
-  
+
 
 // </script>
 

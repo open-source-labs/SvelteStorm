@@ -76,6 +76,7 @@
         // if file already exists in the cache
         $codeMirrorEditor.setValue(cacheCode);
         $codeMirrorEditor.setOption("mode", language);
+        console.log('else - afterUpdate value set');
       }
     }
     console.log("afterUpdate complete");
