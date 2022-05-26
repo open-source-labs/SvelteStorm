@@ -168,8 +168,6 @@
       newTab.tabId = count;
 
       $currentTabFilePath = newTab.filePath;
-      // console.log('end of unsub: new tab path: ', $currentTabFilePath);
-      // console.log('newTab editorValue: ', newTab.editorValue)
       addTab(newTab);
     }
   });
