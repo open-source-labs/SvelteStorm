@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
   import "codemirror/lib/codemirror.css";
