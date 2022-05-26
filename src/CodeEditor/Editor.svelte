@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import CodeMirror from "./CodeMirror.svelte";
   import {
     DirectoryData,
@@ -12,19 +12,39 @@
   const fs = require("fs");
   const path = require("path");
 
-  let activeTabValue = 0;
-  let activeEditor = 0;
+  let activeTabValue: number = 0;
+  let activeEditor: number = 0;
 
-  let value = [""];
-  let language = "html";
-  let [filePath, fileName, readData] = ["", "", ""];
-  let title = "Svelte Storm";
-  let count = 0;
+  let language: string = "html";
+  let filePath: string= ""; 
+  let fileName: string= ""; 
+  let readData: string = "";
+  let title: string = "Svelte Storm";
+  let count: number = 0;
+
+  // define typescript types for the mode obj. (used in newFile)
+  type Mode = {
+    name: string,
+    json?: boolean
+    highlightFormatting?: boolean,
+    fencedCodeBlockHighlighting?: boolean,
+    base?: string
+  }
+
+  // define typescript types for newFile
+  type NewFile = {
+    editorValue: string
+    ext: string
+    editorLang: Mode
+    filePath: string 
+    fileName: string
+    tabId: number
+  }
 
   // creates a new tab when a new file is opened
-  function addTab(newFile) {
-    let duplicate = false;
-    let focusTabId = newFile.tabId;
+  function addTab(newFile: NewFile): void {
+    let duplicate: boolean = false;
+    let focusTabId: number = newFile.tabId;
     $openTabs.map((tab) => {
       if (tab.filePath === newFile.filePath) {
         duplicate = true;

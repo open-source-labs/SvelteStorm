@@ -3,7 +3,8 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
-
+import autoPreprocess from 'svelte-preprocess';
+import typescript from '@rollup/plugin-typescript';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -33,8 +34,10 @@ export default {
 			css: css => {
 				css.write('bundle.css');
 			},
-			emitCss: true
+			emitCss: true,
+			preprocess: autoPreprocess()
 		}),
+		typescript({ sourceMap: !production }),
 		resolve({
 			browser: true,
 			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/'),
@@ -44,7 +47,7 @@ export default {
 			extract: true,
 			minimize: true,
 			use: [
-			  ['sass', {
+			['sass', {
 					includePaths: [
 						'./node_modules'
 					]
