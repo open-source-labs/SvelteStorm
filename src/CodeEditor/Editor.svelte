@@ -67,7 +67,7 @@
 
 
   // remove and reset tab order 
-  function deleteTab(tab) {
+  function deleteTab(tab): void {
     //console.log('delete tab: ', tab);
     $openTabs = $openTabs.filter((t) => t.tabId != tab.tabId).map((t, i) => ({
       editorValue: t.editorValue,
@@ -92,12 +92,12 @@
 
 
   // event listener for when a tab within the editor is clicked
-  const handleClick = async (tab) => {
+  const handleClick = async (tab: NewFile) => {
     // update current tab in DirectoryStore.js to whichever tab was just clicked
     $currentTabFilePath = tab.filePath;
 
     // save current code inside the editor to a variable
-    const currentUserCode = await $codeMirrorEditor.getValue();
+    const currentUserCode: string = await $codeMirrorEditor.getValue();
 
     // update cache in DirectoryStore to reflect current code in the editor
     $editorCache[$openTabs[activeEditor].filePath] = currentUserCode;
@@ -108,8 +108,33 @@
     console.log("handleClick complete");
   };
 
+  type Modes = {
+    js: {
+      name: string;
+      json: boolean;
+    };
+    json: {
+      name: string;
+      json: boolean;
+    };
+    svelte: {
+      name: string;
+    }; 
+    md: {
+      name: string;
+      highlightFormatting: boolean;
+      fencedCodeBlockHighlighting: boolean;
+      base: string
+    },
+    css: {
+      name: string
+    },
+    html: {
+      name: string;
+    },
+  }
 
-  const modes = {
+  const modes: Modes = {
     js: {
       name: "javascript",
       json: false,
@@ -134,22 +159,24 @@
       name: "htmlmixed",
     },
   };
-  
+
 
   // render file on open and add to store
-  ipcRenderer.on("file-opened", function (evt, file, content) {
-    const newTab = {};
+  ipcRenderer.on("file-opened", function (evt:any, file: string, content) {
     filePath = file;
     process.platform === "win32"
       ? (fileName = file.slice().split("\\").pop())
       : (fileName = file.slice().split("/").pop());
     language = file.slice().split(".").pop();
-    newTab.editorValue = "content";
-    newTab.ext = language;
-    newTab.editorLang = modes[language];
-    newTab.filePath = filePath;
-    newTab.fileName = fileName;
-    newTab.tabId = count;
+    const newTab: NewFile = {
+      editorValue : "content",
+      ext : language,
+      editorLang : modes[language],
+      filePath : filePath,
+      fileName : fileName,
+      tabId : count
+    }
+
     console.log("ipcRnderer: new tab added");
     addTab(newTab);
     if (file) {
@@ -157,9 +184,9 @@
     }
   });
 
+  
   // takes care of opening a file from within the file directory
-
-  const unsub = DirectoryData.subscribe(async data => {
+    DirectoryData.subscribe(async data => {
     console.log('subscribing to the store');
  
     // if at least 1 tab is already open, grab the current code and save it to the cache before switching to a new tab
@@ -167,11 +194,19 @@
     const currentUserCode = await $codeMirrorEditor.getValue();
     // update cache in DirectoryStore to reflect current code in the editor
     $editorCache[$openTabs[(activeEditor)].filePath] = currentUserCode;
-    console.log('currentCode: ', currentUserCode); 
     }
 
     const newTab = {};
     if (data.fileRead) {
+      const newTab: NewFile = {
+        editorValue: '',
+        ext: language,
+        editorLang: modes[language],
+        filePath: data.openFilePath, 
+        fileName: fileName,
+        tabId: count
+      }
+
       readData = fs.readFileSync(data.openFilePath).toString();
       fileName = data.openFilePath.slice().split('/').pop();
       language = path.basename(data.openFilePath).split('.').pop();
@@ -180,12 +215,6 @@
       if($editorCache[data.openFilePath]) {
         newTab.editorValue = $editorCache[data.openFilePath];
       } else {newTab.editorValue = readData}
-
-      newTab.ext = language;
-      newTab.editorLang = modes[language];
-      newTab.filePath = data.openFilePath;
-      newTab.fileName = fileName;
-      newTab.tabId = count;
 
       $currentTabFilePath = newTab.filePath;
       addTab(newTab);
@@ -199,14 +228,13 @@
 <ul>
   {#each $openTabs as tab}
     <li class={activeTabValue === tab.tabId ? "active" : ""}>
-      <span class="tab-span" on:click={handleClick(tab)}>
+      <span class="tab-span" on:click={() => handleClick(tab)}>
         <img src="../src/icons/file_type_{tab.ext}.svg" alt={""} />
         {tab.fileName}
         <span
           class="delete-button"
           value={tab}
-          innerText="x"
-          on:click={(value) => deleteTab(tab)}
+          on:click={() => deleteTab(tab)}
         >
           X
         </span>
