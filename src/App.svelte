@@ -446,22 +446,20 @@
   .dividers-h {
     /* height: 1px; */
     z-index: 9999;
-    background-clip: content-box;
+    /* background-clip: content-box; */
     padding-top: 4px;
     padding-bottom: 4px;
-    position: relative;
+    /* position: relative; */
     /* top: -5px; */
   }
 
   .dividers-v {
     z-index: 9999;
-    background-clip: content-box;
+    /* background-clip: content-box; */
     padding-left: 4px;
     padding-right: 4px;
-    position: relative;
+    /* position: relative; */
     height: 100%;
-
-    z-index: 9999;
 
     /* left: -5px; */
   }
