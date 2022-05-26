@@ -1,4 +1,5 @@
-<script lang="ts">
+<!-- <script lang="ts"> -->
+<script>
   import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
   import { scale } from "svelte/transition";
