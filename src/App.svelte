@@ -147,6 +147,7 @@
       resizeObj[panel].isResizing = false;
     }
 
+    
     let horizDivider = document.getElementById("horizontal-divider");
     let editorDivider = document.getElementById("editor-divider");
     let filedirDivider = document.getElementById("filedir-divider");

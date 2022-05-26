@@ -40,33 +40,39 @@
     activeTabValue = focusTabId;
     activeEditor = activeTabValue;
 
-    // 2022-05-CR: when a new file is opened, check if the editorCache cache in DirectoryStore.js contains a key equal to the current file path. If not, assign a new key with the value being the actual code contained within that file.
-    if (!editorCache[$currentTabFilePath]) {
-      editorCache[$currentTabFilePath] = newFile.editorValue;
-    }
-    //console.log('addTab: editorCache: ', editorCache);
-  }
+    // When a new file is opened, check if the editorCache cache in DirectoryStore.js contains a key equal to the current file path. If not, assign a new key with its value being the raw code contained within that file.
+    if (!editorCache[$currentTabFilePath]) {editorCache[$currentTabFilePath] = newFile.editorValue};
+    console.log('addTab complete');
+  };
 
-  // remove and reset tab order
-  function deleteTab(targetId) {
-    $openTabs = $openTabs
-      .filter((t) => t.tabId != targetId)
-      .map((t, i) => ({
-        editorValue: t.editorValue,
-        ext: t.ext,
-        editorLang: t.editorLang,
-        filePath: t.filePath,
-        fileName: t.fileName,
-        tabId: i,
-      }));
+
+  // remove and reset tab order 
+  function deleteTab(tab) {
+    //console.log('delete tab: ', tab);
+    $openTabs = $openTabs.filter((t) => t.tabId != tab.tabId).map((t, i) => ({
+      editorValue: t.editorValue,
+      ext: t.ext,
+      editorLang: t.editorLang,
+      filePath: t.filePath,
+      fileName: t.fileName, 
+      tabId: i,
+    }))
 
     count = count - 1;
-    activeTabValue = 0;
+    activeTabValue = count - 1;
     activeEditor = activeTabValue;
+
+    // if at least 1 tab still open, update currentTabFilePath to the next tab over
+    if(count > 0) {
+      $currentTabFilePath = $openTabs[activeEditor].filePath;
+    } else {
+      $currentTabFilePath = '';
+    }
   }
 
+
+  // event listener for when a tab within the editor is clicked
   const handleClick = async (tab) => {
-    // event listener for when a tab within the editor is clicked
     // update current tab in DirectoryStore.js to whichever tab was just clicked
     $currentTabFilePath = tab.filePath;
 
@@ -81,6 +87,7 @@
 
     console.log("handleClick complete");
   };
+
 
   const modes = {
     js: {
@@ -107,6 +114,7 @@
       name: "htmlmixed",
     },
   };
+  
 
   // render file on open and add to store
   ipcRenderer.on("file-opened", function (evt, file, content) {
@@ -130,27 +138,44 @@
   });
 
   // takes care of opening a file from within the file directory
-  const unsub = DirectoryData.subscribe((data) => {
-    console.log("subscribing to the store", data.openFilePath);
+
+  const unsub = DirectoryData.subscribe(async data => {
+    console.log('subscribing to the store');
+ 
+    // if at least 1 tab is already open, grab the current code and save it to the cache before switching to a new tab
+    if($currentTabFilePath !== ''){
+    const currentUserCode = await $codeMirrorEditor.getValue();
+    // update cache in DirectoryStore to reflect current code in the editor
+    $editorCache[$openTabs[(activeEditor)].filePath] = currentUserCode;
+    console.log('currentCode: ', currentUserCode); 
+    }
+
     const newTab = {};
     if (data.fileRead) {
       readData = fs.readFileSync(data.openFilePath).toString();
-      fileName = data.openFilePath.slice().split("/").pop();
-      language = path.basename(data.openFilePath).split(".").pop();
-      if (data.openFilePath) {
-        title = `${path.basename(data.openFilePath)} - Svelte Storm`;
-      }
-      newTab.editorValue = readData;
+      fileName = data.openFilePath.slice().split('/').pop();
+      language = path.basename(data.openFilePath).split('.').pop();
+      if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
+      // if file path in cache exists then retrieve cached code, else create a new file path in cache
+      if($editorCache[data.openFilePath]) {
+        newTab.editorValue = $editorCache[data.openFilePath];
+      } else {newTab.editorValue = readData}
+
       newTab.ext = language;
       newTab.editorLang = modes[language];
       newTab.filePath = data.openFilePath;
       newTab.fileName = fileName;
       newTab.tabId = count;
-      console.log("unsub: new tab");
+
+      $currentTabFilePath = newTab.filePath;
+      // console.log('end of unsub: new tab path: ', $currentTabFilePath);
+      // console.log('newTab editorValue: ', newTab.editorValue)
       addTab(newTab);
     }
   });
-</script>
+
+
+// </script>
 
 <!--==========================================MARKUP==========================================-->
 <ul>
@@ -161,9 +186,9 @@
         {tab.fileName}
         <span
           class="delete-button"
-          value={tab.tabId}
+          value={tab}
           innerText="x"
-          on:click={(value) => deleteTab(tab.tabId)}
+          on:click={(value) => deleteTab(tab)}
         >
           X
         </span>
