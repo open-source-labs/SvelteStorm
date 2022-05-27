@@ -98,7 +98,7 @@
     lastWord = word;
   }
 
-  function hoverTest() {
+  function hoverTest(): void {
     if (hoverCounter > lastHoverCounter) {
       lastHoverCounter = hoverCounter;
       return;
@@ -108,13 +108,13 @@
   }
 
 
-  setInterval(() => {
+  setInterval((): void => {
     hoverTest();
     onHover();
     // console.log("this is the mouse hover console.log ", word, obj);
   }, 700);
 
-  onMount(async () => {
+  onMount(async (): Promise<void> => {
     $codeMirrorEditor = await CodeMirror.fromTextArea(containerElt, {
       mode: language,
       lineNumbers: true,
@@ -125,7 +125,6 @@
       extraKeys: {
         "Ctrl-Space": "autocomplete",
       },
-      matchBrackets: true,
       autoCloseBrackets: true,
       matchTags: true,
       autoCloseTags: true,
@@ -135,16 +134,16 @@
     $codeMirrorEditor.setSize("100%", "100%");
 
     if (!$editorCache[filePath]) {
-      $editorCache[currentTabFilePath] = value;
+      $editorCache[$currentTabFilePath] = value;
     }
     console.log("onMount complete ");
   });
 
-  afterUpdate(async () => {
+  afterUpdate(async (): Promise<void> => {
     if (!noUpdate && !showToolTripTransition) {
       if (codeMirrorEditor) {
       // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
-      let cacheCode;
+      let cacheCode: string;
       if($editorCache[$currentTabFilePath]) cacheCode = $editorCache[$currentTabFilePath];
       // if file hasn't been cached yet 
       if (!cacheCode) {
@@ -166,14 +165,14 @@
     console.log("afterUpdate complete");
   });
 
-  ipcRenderer.on("save-markdown", function () {
+  ipcRenderer.on("save-markdown", function (): void {
     messageObj = { content: $codeMirrorEditor.getValue(), file: filePath };
     ipcRenderer.send("synchronous-message", messageObj);
     console.log("ipcRenderer complete");
   });
 
 
-  function handleMousMove(e) {
+  function handleMouseMove(this: HTMLElement): void {
     // console.log("here is the event listener in handleMouseMove", e);
     if (hoverCounter - lastHoverCounter > 12) {
       stillMouse = false;
@@ -183,14 +182,14 @@
     hoverCounter++;
     // console.log("this is hover counter", hoverCounter);
   }
-  function onClick() {
+  function onClick(): void {
     window.open(
       `${src}`,
       "_blank",
       "top=900,left=200,frame=true,nodeIntegration=no"
     );
   }
-  function onType() {
+  function onType(): void {
 
     hoverCounter += 13;
   }
@@ -200,7 +199,7 @@
 <div data-tooltip="tooltip" id="div_span" on:click={onClick}>
   {tipContent}
 </div>
-<div on:mousemove={handleMousMove} on:keydown={onType}>
+<div on:mousemove={handleMouseMove} on:keydown={onType}>
   <textarea id="textarea" class={$$props.class} bind:this={containerElt} />
 </div>
 
