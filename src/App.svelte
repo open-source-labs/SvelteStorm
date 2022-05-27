@@ -84,6 +84,7 @@
 
       //Need this so window events continue tracking on top of iframe
       let iframeList = document.getElementsByClassName("webpage");
+      console.log(iframeList);
       for (const item of iframeList) {
         item.setAttribute("style", "pointer-events: none");
       }
@@ -210,7 +211,7 @@
     //Need to trigger this after resize so that it follows xterm's fittaddon resize
     window.addEventListener("resize", xtermSetWidth);
   }); //End of onMount
- 
+
 
   const handleSubmit = () => {
     submit = false;
@@ -404,8 +405,8 @@
     width: 100%;
     height: 2px;
     /* padding-top: 3px; */
-  /* padding-bottom: 3px; */
-  /* } */
+    /* padding-bottom: 3px; */
+  
   .childButton {
     color: grey;
     background: transparent;
@@ -430,14 +431,12 @@
   }
   /* #filedir-divider {
     height: 100%;
-    width: 4px;
-    background-color: transparent;
+    width: 2px;
   }
 
   #editor-divider {
     height: 100%;
-    width: 1px;
-    background-color: transparent;
+    width: 2px;
   }
 
   #statemgr-divider {
