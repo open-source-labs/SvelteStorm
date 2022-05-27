@@ -1,6 +1,8 @@
 <script lang="ts">
   import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
+  import { scale } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
   import "codemirror/lib/codemirror.css";
   import "codemirror/theme/dracula.css";
   import "codemirror/mode/javascript/javascript.js";
@@ -30,6 +32,8 @@
   export let value;
   export let language;
   export let filePath;
+  export let word;
+  let lastWord: string;
   let tipContent: string = "";
   let messageObj: MessageObj;
   let stillMouse: boolean = false;
@@ -39,6 +43,10 @@
   let containerElt: HTMLTextAreaElement;
   let showToolTripTransition: boolean = false;
   let noUpdate: boolean = false;
+  let popupTopMargin;
+  let popupLeftMargin;
+  let clientX;
+  let clientY;
 
   type MessageObj = { 
     content: string,
@@ -49,7 +57,7 @@
     url: string
   }
 
-
+  //5-23-22 ZR this searches the documentation object and sets tooltip value
   function searchDocumentation(value: string): boolean | ToolTip {
     if (!value || value === " ") {
       tipContent = " ";
@@ -72,18 +80,16 @@
   }
 
   function onHover(): void {
-    let word: string;
-    let lastWord: string;
+    
     if (stillMouse && searchDocumentation(lastWord) !== false) {
       let searchObj: boolean | ToolTip = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
 
       tipContent = `${searchObj.tip}`;
-      // console.log("this is tipcont", tipContent);
       noUpdate = true;
       lastWord = word;
     }
-
+    //this whole process is to get the value of the word
     var A1 = $codeMirrorEditor.getCursor().line;
     var A2 = $codeMirrorEditor.getCursor().ch;
 
@@ -94,7 +100,7 @@
       { line: A1, ch: B1 },
       { line: A1, ch: B2 }
     );
-
+    // console.log("A1", A1, "A2", A2, "B1", B1, "B2", B2);
     lastWord = word;
   }
 
@@ -103,6 +109,8 @@
       lastHoverCounter = hoverCounter;
       return;
     }
+    //if hoverCounter is not greater than lastHoverCounter, it means the mouse is hovering
+    onHover();
     stillMouse = true;
     return;
   }
@@ -110,9 +118,7 @@
 
   setInterval((): void => {
     hoverTest();
-    onHover();
-    // console.log("this is the mouse hover console.log ", word, obj);
-  }, 700);
+  }, 600);
 
   onMount(async (): Promise<void> => {
     $codeMirrorEditor = await CodeMirror.fromTextArea(containerElt, {
@@ -172,15 +178,24 @@
   });
 
 
-  function handleMouseMove(this: HTMLElement): void {
+  function handleMouseMove(e): void {
     // console.log("here is the event listener in handleMouseMove", e);
     if (hoverCounter - lastHoverCounter > 12) {
+      console.log("this is handleMousMove, still mouse should now be false");
       stillMouse = false;
       showToolTripTransition = true;
       tipContent = " ";
+      popupLeftMargin = clientX;
+      popupTopMargin = clientY;
+      let domPop = document.getElementById("popup");
+      domPop.setAttribute(
+        "style",
+        `min-height:2.7em; max-height: 7em; font-size: 65%; margin-top : ${popupTopMargin}px; margin-left : ${popupLeftMargin}px; position:absolute; cursor: help; max-width:300px; background:rgba(0, 0, 0, 0.452); z-index: 1`
+      );
     }
+    clientX = e.clientX - 150;
+    clientY = e.clientY - 25;
     hoverCounter++;
-    // console.log("this is hover counter", hoverCounter);
   }
   function onClick(): void {
     window.open(
@@ -192,32 +207,45 @@
   function onType(): void {
 
     hoverCounter += 13;
+    console.log("this is from onType hoverCounter is now", hoverCounter);
   }
 </script>
 
 <svelte:head />
-<div data-tooltip="tooltip" id="div_span" on:click={onClick}>
-  {tipContent}
+<div in:scale={{ duration: 1500, easing: quintOut }} id="popup">
+  <p class="paragraph" on:click={onClick}>
+    {tipContent}
+  </p>
 </div>
 <div on:mousemove={handleMouseMove} on:keydown={onType}>
   <textarea id="textarea" class={$$props.class} bind:this={containerElt} />
 </div>
 
 <style>
-  /* [data-tooltip] */
-  #div_span {
-    min-height: 2.7em;
-    max-height: 2.7em;
-    font-size: 65%;
-    position: relative;
-    cursor: help;
-    background-color: rgba(35, 35, 65, 0.452);
-    z-index: 2 !important;
-    /* box-shadow: 2px 2px; */
+  .paragraph {
+    font-size: small;
+    z-index: 1 !important;
+    background: rgb(33, 34, 34);
+    box-shadow: 3px;
+    border-style: solid;
+    border-color: grey;
+    border: 2px;
   }
-
+  #popup {
+    min-height: 2.7em;
+    max-height: 7em;
+    font-size: 45%;
+    margin-left: 50px;
+    margin-top: 0px;
+    position: absolute;
+    cursor: help;
+    max-width: 300px;
+    background: rgb(33, 34, 34);
+    z-index: 1 !important;
+    height: 100%;
+  }
   #textarea {
     position: relative;
-    z-index: 1;
+    z-index: 0;
   }
 </style>
