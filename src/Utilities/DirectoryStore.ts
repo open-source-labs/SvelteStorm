@@ -1,6 +1,15 @@
 import {writable} from 'svelte/store';
+import type { Writable } from 'svelte/store';
+//Move to separate TypeScript file
 
-const DirectoryData = writable({
+import type {NewFile, EditorCacheType, State} from '../types'
+
+
+
+
+
+
+const DirectoryData: Writable<State> = writable<State>({
   mainDir: '',
   fileTree: [],
   openFilePath :'',
@@ -18,12 +27,13 @@ const DirectoryData = writable({
   activeFolder : ''
 });
 
-const openTabs = writable([]);
+console.log(DirectoryData)
+const openTabs: Writable<NewFile[]> = writable<NewFile[]>([]);
 
-const currentTabFilePath = writable('');
+const currentTabFilePath: Writable<string> = writable<string>('');
 
-const editorCache = writable({});
+const editorCache: Writable<EditorCacheType> = writable<EditorCacheType> ({});
 
 const codeMirrorEditor = writable(undefined);
 
-export { DirectoryData, openTabs, editorCache, codeMirrorEditor, currentTabFilePath }; 
+export { DirectoryData, openTabs, editorCache, codeMirrorEditor, currentTabFilePath };
