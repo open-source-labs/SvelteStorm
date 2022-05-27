@@ -81,6 +81,8 @@
   }
 
   function onHover(): void {
+
+    let word;
     
     if (stillMouse && searchDocumentation(lastWord) !== false) {
       let searchObj: boolean | ToolTip = searchDocumentation(lastWord);
