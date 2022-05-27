@@ -1,5 +1,5 @@
-<!-- <script lang="ts"> -->
-<script>
+<script lang="ts">
+// <script>
   import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
   import { scale } from "svelte/transition";
@@ -33,7 +33,6 @@
   export let value;
   export let language;
   export let filePath;
-  export let word;
   let lastWord: string;
   let tipContent: string = "";
   let messageObj: MessageObj;
@@ -75,7 +74,8 @@
         return result;
       }
     }
-    tipContent = "";
+    //this empty space is required
+    tipContent = " ";
     // console.log(value, "is not in the docs!");
     return false;
   }
