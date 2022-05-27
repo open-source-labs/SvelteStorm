@@ -196,6 +196,10 @@
     $editorCache[$openTabs[(activeEditor)].filePath] = currentUserCode;
     }
 
+    readData = fs.readFileSync(data.openFilePath).toString();
+    fileName = data.openFilePath.slice().split('/').pop();
+    language = path.basename(data.openFilePath).split('.').pop();
+
     const newTab = {};
     if (data.fileRead) {
       const newTab: NewFile = {
@@ -207,9 +211,7 @@
         tabId: count
       }
 
-      readData = fs.readFileSync(data.openFilePath).toString();
-      fileName = data.openFilePath.slice().split('/').pop();
-      language = path.basename(data.openFilePath).split('.').pop();
+      
       if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
       // if file path in cache exists then retrieve cached code, else create a new file path in cache
       if($editorCache[data.openFilePath]) {
