@@ -27,7 +27,7 @@
     editorCache,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../Utilities/DirectoryStore.js";
+  } from "../Utilities/DirectoryStore.ts";
 
   export let value;
   export let language;
@@ -142,7 +142,7 @@
     if (!$editorCache[filePath]) {
       $editorCache[$currentTabFilePath] = value;
     }
-    console.log("onMount complete ");
+    console.log("onMount complete, code editor ", codeMirrorEditor);
   });
 
   afterUpdate(async (): Promise<void> => {
