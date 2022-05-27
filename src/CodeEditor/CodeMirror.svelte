@@ -19,9 +19,8 @@
   import "codemirror/addon/edit/closetag.js";
   import searchDoc from "../SearchProgram.js";
 
-  const fs = require("fs");
   const { ipcRenderer } = require("electron");
-  export let word;
+  
   import {
     editorCache,
     codeMirrorEditor,
@@ -31,21 +30,27 @@
   export let value;
   export let language;
   export let filePath;
-  let tipContent = "";
-  let messageObj;
-  let stillMouse = false;
-  let hoverCounter = 0;
-  let lastHoverCounter = 0;
-  let lastWord;
-  let src;
-  let showToolTip;
-  let containerElt;
+  let tipContent: string = "";
+  let messageObj: MessageObj;
+  let stillMouse: boolean = false;
+  let hoverCounter: number = 0;
+  let lastHoverCounter: number = 0;
+  let src: string = `https://svelte.dev/docs#`;
+  let containerElt: HTMLTextAreaElement;
+  let showToolTripTransition: boolean = false;
+  let noUpdate: boolean = false;
 
-  let showToolTripTransition = false;
-  let noUpdate = false;
+  type MessageObj = { 
+    content: string,
+    file: string 
+  };
+  type ToolTip = {
+    tip: string,
+    url: string
+  }
 
 
-  function searchDocumentation(value) {
+  function searchDocumentation(value: string): boolean | ToolTip {
     if (!value || value === " ") {
       tipContent = " ";
       return false;
@@ -55,24 +60,23 @@
       // console.log("here is each item of search", item);
       if (searchDoc[item][0].includes(value)) {
         // console.log("here is each item, value", item, value);
-        let result = {};
-        result.tip = searchDoc[item][1][0];
-        result.url = item;
+        let result:ToolTip = {
+        tip: searchDoc[item][1][0],
+        url: item}
         return result;
       }
     }
-    tipContent = " ";
+    tipContent = "";
     // console.log(value, "is not in the docs!");
     return false;
   }
 
-  src = `https://svelte.dev/docs#`;
-  function onHover() {
-    let word;
+  function onHover(): void {
+    let word: string;
+    let lastWord: string;
     if (stillMouse && searchDocumentation(lastWord) !== false) {
-      let searchObj = searchDocumentation(lastWord);
+      let searchObj: boolean | ToolTip = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
-      showToolTip = true;
 
       tipContent = `${searchObj.tip}`;
       // console.log("this is tipcont", tipContent);
@@ -100,10 +104,6 @@
       return;
     }
     stillMouse = true;
-    // console.log("hovering", hoverCounter, lastHoverCounter);
-    showToolTip = true;
-    // console.log("showToolTip is now true TOOLTIP should appear");
-
     return;
   }
 
@@ -178,7 +178,6 @@
     if (hoverCounter - lastHoverCounter > 12) {
       stillMouse = false;
       showToolTripTransition = true;
-      showToolTip = false;
       tipContent = " ";
     }
     hoverCounter++;
