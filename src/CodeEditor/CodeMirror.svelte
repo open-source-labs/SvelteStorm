@@ -1,5 +1,5 @@
 <script lang="ts">
-// <script>
+  // <script>
   import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
   import { scale } from "svelte/transition";
@@ -23,12 +23,12 @@
   import searchDoc from "../SearchProgram.js";
 
   const { ipcRenderer } = require("electron");
-  
+
   import {
     editorCache,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../Utilities/DirectoryStore.ts";
+  } from "../Utilities/DirectoryStore.js";
 
   export let value;
   export let language;
@@ -48,14 +48,14 @@
   let clientX;
   let clientY;
 
-  type MessageObj = { 
-    content: string,
-    file: string 
+  type MessageObj = {
+    content: string;
+    file: string;
   };
   type ToolTip = {
-    tip: string,
-    url: string
-  }
+    tip: string;
+    url: string;
+  };
 
   //5-23-22 ZR this searches the documentation object and sets tooltip value
   function searchDocumentation(value: string): boolean | ToolTip {
@@ -68,9 +68,10 @@
       // console.log("here is each item of search", item);
       if (searchDoc[item][0].includes(value)) {
         // console.log("here is each item, value", item, value);
-        let result:ToolTip = {
-        tip: searchDoc[item][1][0],
-        url: item}
+        let result: ToolTip = {
+          tip: searchDoc[item][1][0],
+          url: item,
+        };
         return result;
       }
     }
@@ -81,9 +82,7 @@
   }
 
   function onHover(): void {
-
     let word;
-    
     if (stillMouse && searchDocumentation(lastWord) !== false) {
       let searchObj: boolean | ToolTip = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
@@ -118,7 +117,6 @@
     return;
   }
 
-
   setInterval((): void => {
     hoverTest();
   }, 600);
@@ -145,26 +143,43 @@
     if (!$editorCache[filePath]) {
       $editorCache[$currentTabFilePath] = value;
     }
-    console.log("onMount complete, code editor ", codeMirrorEditor);
+    console.log(
+      "onMount complete, code editor ",
+      CodeMirror.fromTextArea(containerElt, {
+        mode: language,
+        lineNumbers: true,
+        tabSize: 2,
+        matchBrackets: true,
+        theme: "dracula",
+        scrollbarStyle: "native",
+        extraKeys: {
+          "Ctrl-Space": "autocomplete",
+        },
+        autoCloseBrackets: true,
+        matchTags: true,
+        autoCloseTags: true,
+      })
+    );
   });
 
   afterUpdate(async (): Promise<void> => {
     if (!noUpdate && !showToolTripTransition) {
       if (codeMirrorEditor) {
-      // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
-      let cacheCode: string;
-      if($editorCache[$currentTabFilePath]) cacheCode = $editorCache[$currentTabFilePath];
-      // if file hasn't been cached yet 
-      if (!cacheCode) {
-        // cache the file and it's value (value=the raw code that'll appear in the editor)
-        $editorCache[$currentTabFilePath] = value;
-        console.log('afterUpdate If: value: ', value)
-        // set value of current editor to display the current code
-        $codeMirrorEditor.setValue(value);
-      } else {
-        // if file already exists in the cache
-        $codeMirrorEditor.setValue(cacheCode);
-        $codeMirrorEditor.setOption("mode", language);
+        // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
+        let cacheCode: string;
+        if ($editorCache[$currentTabFilePath])
+          cacheCode = $editorCache[$currentTabFilePath];
+        // if file hasn't been cached yet
+        if (!cacheCode) {
+          // cache the file and it's value (value=the raw code that'll appear in the editor)
+          $editorCache[$currentTabFilePath] = value;
+          console.log("afterUpdate If: value: ", value);
+          // set value of current editor to display the current code
+          $codeMirrorEditor.setValue(value);
+        } else {
+          // if file already exists in the cache
+          $codeMirrorEditor.setValue(cacheCode);
+          $codeMirrorEditor.setOption("mode", language);
         }
       }
     }
@@ -172,6 +187,7 @@
     showToolTripTransition = false;
 
     console.log("afterUpdate complete");
+    console.log("afterUpdate complete, code editor ", codeMirrorEditor);
   });
 
   ipcRenderer.on("save-markdown", function (): void {
@@ -179,7 +195,6 @@
     ipcRenderer.send("synchronous-message", messageObj);
     console.log("ipcRenderer complete");
   });
-
 
   function handleMouseMove(e): void {
     // console.log("here is the event listener in handleMouseMove", e);
@@ -208,7 +223,6 @@
     );
   }
   function onType(): void {
-
     hoverCounter += 13;
     console.log("this is from onType hoverCounter is now", hoverCounter);
   }

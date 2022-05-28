@@ -24,6 +24,10 @@
     [key: string]: string;
   }
 
+  //fileState obj type
+export type FileState = {
+  [key: string]: boolean;
+  }
   //state object type
 
 export type State = {
@@ -41,5 +45,6 @@ export type State = {
   createMainFile?: boolean,
   createMainFolder?: boolean,
   reload?: boolean,
-  activeFolder?: string
+  activeFolder?: string,
+  fileState?: FileState
 }
