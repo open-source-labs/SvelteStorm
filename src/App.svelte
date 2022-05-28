@@ -6,7 +6,7 @@
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
 
   import searchDoc from "./SearchProgram.js";
-  import { onMount } from "svelte";
+  import { onMount, SvelteComponent } from "svelte";
 
   export let orientation = "columns";
   export let localhost;
