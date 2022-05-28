@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
   import FileDir from "./Directory/FileDir.svelte";
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
@@ -11,16 +11,16 @@
   export let orientation = "columns";
   export let localhost;
 
-  let value = "";
-  let submit = false;
-  let docsBool = false;
+  let value: string = "";
+  let submit: boolean = false;
+  let docsBool: boolean = false;
 
-  let documentation;
-  let url;
+  let documentation: string;
+  let url: string;
   $: documentation = `https://svelte.dev/docs#${url}`;
-  let textVal;
-  function searchDocumentation(value) {
-    let result;
+  let textVal: string;
+  function searchDocumentation(value: string) {
+    let result: string;
     for (let item in searchDoc) {
       if (searchDoc[item][0].includes(value)) {
         console.log("congrats!");
@@ -30,26 +30,26 @@
     }
   }
 
-  onMount(async () => {
+  onMount(async () : Promise<void> => {
     //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
-    let upperPanel = document.getElementById("wrapper-upper");
-    let editorPanel = document.getElementById("editor-window");
-    let filedirPanel = document.getElementById("file-dir");
-    let statemgrPanel = document.getElementById("state-mgr");
-    let mdown_posx;
-    let mdown_posy;
-    let x_pos;
-    let y_pos;
-    let resizeObj = {
+    let upperPanel: HTMLElement = document.getElementById("wrapper-upper");
+    let editorPanel: HTMLElement = document.getElementById("editor-window");
+    let filedirPanel: HTMLElement = document.getElementById("file-dir");
+    let statemgrPanel: HTMLElement = document.getElementById("state-mgr");
+    let mdown_posx: number;
+    let mdown_posy: number;
+    let x_pos: number;
+    let y_pos: number;
+    let resizeObj: object = {
       "horizontal-divider": { isResizing: false },
       "editor-divider": { isResizing: false },
       "filedir-divider": { isResizing: false },
       "statemgr-divider": { isResizing: false },
     };
 
-    function resize(e, panel) {
-      const dx = mdown_posx - e.x; //difference in x coordinates (current mouse position versus where mousedown began)
-      const dy = mdown_posy - e.y;
+    function resize(e: MouseEvent, panel: string) : void{
+      const dx: number = mdown_posx - e.x; //difference in x coordinates (current mouse position versus where mousedown began)
+      const dy: number = mdown_posy - e.y;
 
       if (panel === "horizontal-divider") {
         upperPanel.style.height =
@@ -71,37 +71,37 @@
       mdown_posy = e.y;
     }
 
-    function chgCursor(e, panel) {
+    function chgCursor(e: MouseEvent, panel: string): void{
       if (panel === "horizontal-divider") {
-        e.target.style.cursor = "row-resize";
+        (e.target as HTMLElement).style.cursor = "row-resize";
       } else {
-        e.target.style.cursor = "col-resize";
+        (e.target as HTMLElement).style.cursor = "col-resize";
       }
     }
 
-    function dragStart(e, panel) {
+    function dragStart(e: MouseEvent, panel: string): void {
       e.preventDefault(); //stop selection of text during mouse move / mouse down event
 
       //Need this so window events continue tracking on top of iframe
-      let iframeList = document.getElementsByClassName("webpage");
+      let iframeList: HTMLCollection = document.getElementsByClassName("webpage");
       console.log(iframeList);
       for (const item of iframeList) {
         item.setAttribute("style", "pointer-events: none");
       }
       //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
-      const trackMouseMove = (e) => {
+      const trackMouseMove = (e: MouseEvent) => {
         // console.log(`ex: ${e.x}`)
         dragMovement(e, panel);
       };
 
-      const trackMouseUp = (e) => {
+      const trackMouseUp = (e: MouseEvent): void  =>{
         // console.log('Mouse Up');
         dragEnd(e, panel);
         window.removeEventListener("mousemove", trackMouseMove, true);
         window.removeEventListener("mouseup", trackMouseUp, true);
 
         //Removing no pointer events from iframes on mouse up
-        let iframeList = document.getElementsByClassName("webpage");
+        let iframeList: HTMLCollection = document.getElementsByClassName("webpage");
         for (const item of iframeList) {
           item.setAttribute("style", "");
         }
@@ -118,7 +118,7 @@
       }
     }
 
-    function dragMovement(e, panel) {
+    function dragMovement(e: MouseEvent, panel: string): void {
       e.preventDefault(); //stop selection of text during mouse move / mouse down event
       x_pos = e.x;
       y_pos = e.y;
@@ -143,16 +143,16 @@
       }
     }
 
-    function dragEnd(e, panel) {
+    function dragEnd(e: MouseEvent, panel: string) {
       e.preventDefault(); //stop selection of text during mouse move / mouse down event
       resizeObj[panel].isResizing = false;
     }
 
     
-    let horizDivider = document.getElementById("horizontal-divider");
-    let editorDivider = document.getElementById("editor-divider");
-    let filedirDivider = document.getElementById("filedir-divider");
-    let statemgrDivider = document.getElementById("statemgr-divider");
+    let horizDivider: HTMLElement = document.getElementById("horizontal-divider");
+    let editorDivider: HTMLElement = document.getElementById("editor-divider");
+    let filedirDivider: HTMLElement = document.getElementById("filedir-divider");
+    let statemgrDivider: HTMLElement = document.getElementById("statemgr-divider");
 
 
     horizDivider.addEventListener("mouseover", (e) =>
@@ -186,12 +186,12 @@
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
     //ST-2022-RJ Setting xterm layers to have 100% width so risizing able to be dynamic - overwriting default styles onMount and
-    function xtermRestyle(className) {
+    function xtermRestyle(className: string): void {
       let domElement = document.getElementsByClassName(className);
       for (const item of domElement) {
-        let currentStyle = item.getAttribute("style").split(";"); //Array of each style attribute string
+        let currentStyle: string[] = item.getAttribute("style").split(";"); //Array of each style attribute string
         for (let i = 0; i < currentStyle.length; i++) {
-          const style = currentStyle[i];
+          const style: string = currentStyle[i];
 
           if (style.indexOf("width") !== -1) currentStyle[i] = "width: 100%";
         }
@@ -199,7 +199,7 @@
       }
     }
 
-    function xtermSetWidth() {
+    function xtermSetWidth(): void {
       xtermRestyle("xterm-screen");
       xtermRestyle("xterm-text-layer");
       xtermRestyle("xterm-selection-layer");
@@ -213,7 +213,7 @@
   }); //End of onMount
 
 
-  const handleSubmit = () => {
+  const handleSubmit = (): boolean => {
     submit = false;
     return false;
   };
@@ -224,19 +224,19 @@
     // return false;
   };
 
-  const handleKeyup = (event) => {
+  const handleKeyup = (e: KeyboardEvent) => {
     submit = false;
 
-    if (event.code == "Enter") {
+    if (e.code == "Enter") {
       console.log('Enter submitted');
-      event.preventDefault();
-      event.target.value;
-      value = event.target.value;
+      e.preventDefault();
+      (e.target as HTMLInputElement).value;
+      value = (e.target as HTMLInputElement).value;
       localhost = `http://127.0.0.1:${value}/`;
       return false;
     }
   };
-  const handleKeyup2 = (event) => {
+  const handleKeyup2 = (e: KeyboardEvent) => {
     submit = true;
     console.log("handlekeyup 2", textVal);
     url = searchDocumentation(textVal);
