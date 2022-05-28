@@ -16,6 +16,14 @@
     fileName: string;
     tabId: number;
   };
+  
+  // used in FileDir.svelte
+  export type Filetree = {
+    build?:Function
+    items?: any,
+    path?:string,
+    name?:string,
+  }
 
   export interface StateObjInterface {
     [key: string]: string[];

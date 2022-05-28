@@ -32,7 +32,7 @@
   export let value;
   export let language;
   export let filePath;
-  export let word;
+  let word;
   let lastWord: string;
   let tipContent: string = "";
   let messageObj: MessageObj;
@@ -58,30 +58,27 @@
   }
 
   //5-23-22 ZR this searches the documentation object and sets tooltip value
-  function searchDocumentation(value: string): boolean | ToolTip {
+  function searchDocumentation(value: string): ToolTip {
     if (!value || value === " ") {
       tipContent = " ";
-      return false;
+      return {tip:'N/A',url:'N/A'};
     }
-    // console.log("first console.log of search", value);
+ 
     for (let item in searchDoc) {
-      // console.log("here is each item of search", item);
       if (searchDoc[item][0].includes(value)) {
-        // console.log("here is each item, value", item, value);
         let result:ToolTip = {
         tip: searchDoc[item][1][0],
         url: item}
         return result;
       }
     }
-    tipContent = "";
-    // console.log(value, "is not in the docs!");
-    return false;
+    tipContent = " "; // space between quotes is required for tooltip functionality
+    return {tip:'N/A',url:'N/A'};
   }
 
   function onHover(): void {
     
-    if (stillMouse && searchDocumentation(lastWord) !== false) {
+    if (stillMouse && searchDocumentation(lastWord).tip !== 'N/A') {
       let searchObj: boolean | ToolTip = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
 
@@ -100,7 +97,6 @@
       { line: A1, ch: B1 },
       { line: A1, ch: B2 }
     );
-    // console.log("A1", A1, "A2", A2, "B1", B1, "B2", B2);
     lastWord = word;
   }
 
@@ -155,7 +151,6 @@
       if (!cacheCode) {
         // cache the file and it's value (value=the raw code that'll appear in the editor)
         $editorCache[$currentTabFilePath] = value;
-        console.log('afterUpdate If: value: ', value)
         // set value of current editor to display the current code
         $codeMirrorEditor.setValue(value);
       } else {
@@ -179,9 +174,7 @@
 
 
   function handleMouseMove(e): void {
-    // console.log("here is the event listener in handleMouseMove", e);
     if (hoverCounter - lastHoverCounter > 12) {
-      console.log("this is handleMousMove, still mouse should now be false");
       stillMouse = false;
       showToolTripTransition = true;
       tipContent = " ";

@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     import { FitAddon } from "xterm-addon-fit";
     import "./xterm.css";
 
-    const { remote, ipcRenderer, BrowserWindow } = require("electron");
+    const { ipcRenderer, BrowserWindow } = require("electron");
     const Terminal = require("xterm").Terminal;
 
     const fitAddon = new FitAddon();
@@ -11,7 +11,7 @@
         fontFamily: "Fira Code, courier-new, courier, monospace",
     });
 
-    const fitOnTheGo = () => {
+    const fitOnTheGo = (): void => {
         fitAddon.fit();
     };
 
@@ -28,7 +28,6 @@
         //2022-ST-AJ immediately call resize to have proper prompt in, and have node-pty adjust to correct size.
 
         term.prompt = () => {
-            //TODO: to get the cwd showing. pass it from ipcMain
 
             ipcRenderer.send("terminal-into", "\r");
         };
@@ -57,7 +56,7 @@
 
     //2022-ST-AJ listens to resize event and invokes fitAddOn on the go. Otherwise terminal will not resize.
     window.addEventListener("resize", fitOnTheGo);
-    //TODO: refactor xterm options for resizing/text wrapping
+
 </script>
 
 <div id="xterm" />
