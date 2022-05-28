@@ -75,7 +75,9 @@
         return result;
       }
     }
+ 
     //this empty space is required
+
     tipContent = " ";
     // console.log(value, "is not in the docs!");
     return false;
@@ -83,6 +85,7 @@
 
   function onHover(): void {
     let word;
+
     if (stillMouse && searchDocumentation(lastWord) !== false) {
       let searchObj: boolean | ToolTip = searchDocumentation(lastWord);
       src = `https://svelte.dev/docs#${searchObj.url}`;
