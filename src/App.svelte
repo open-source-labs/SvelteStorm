@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import FileDir from "./Directory/FileDir.svelte";
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
@@ -30,7 +30,7 @@
     }
   }
 
-  onMount(async () : Promise<void> => {
+  onMount(async (): Promise<void> => {
     //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
     let upperPanel: HTMLElement = document.getElementById("wrapper-upper");
     let editorPanel: HTMLElement = document.getElementById("editor-window");
@@ -47,7 +47,7 @@
       "statemgr-divider": { isResizing: false },
     };
 
-    function resize(e: MouseEvent, panel: string) : void{
+    function resize(e: MouseEvent, panel: string): void {
       const dx: number = mdown_posx - e.x; //difference in x coordinates (current mouse position versus where mousedown began)
       const dy: number = mdown_posy - e.y;
 
@@ -71,7 +71,7 @@
       mdown_posy = e.y;
     }
 
-    function chgCursor(e: MouseEvent, panel: string): void{
+    function chgCursor(e: MouseEvent, panel: string): void {
       if (panel === "horizontal-divider") {
         (e.target as HTMLElement).style.cursor = "row-resize";
       } else {
@@ -83,7 +83,8 @@
       e.preventDefault(); //stop selection of text during mouse move / mouse down event
 
       //Need this so window events continue tracking on top of iframe
-      let iframeList: HTMLCollection = document.getElementsByClassName("webpage");
+      let iframeList: HTMLCollection =
+        document.getElementsByClassName("webpage");
       console.log(iframeList);
       for (const item of iframeList) {
         item.setAttribute("style", "pointer-events: none");
@@ -94,14 +95,15 @@
         dragMovement(e, panel);
       };
 
-      const trackMouseUp = (e: MouseEvent): void  =>{
+      const trackMouseUp = (e: MouseEvent): void => {
         // console.log('Mouse Up');
         dragEnd(e, panel);
         window.removeEventListener("mousemove", trackMouseMove, true);
         window.removeEventListener("mouseup", trackMouseUp, true);
 
         //Removing no pointer events from iframes on mouse up
-        let iframeList: HTMLCollection = document.getElementsByClassName("webpage");
+        let iframeList: HTMLCollection =
+          document.getElementsByClassName("webpage");
         for (const item of iframeList) {
           item.setAttribute("style", "");
         }
@@ -148,12 +150,13 @@
       resizeObj[panel].isResizing = false;
     }
 
-    
-    let horizDivider: HTMLElement = document.getElementById("horizontal-divider");
+    let horizDivider: HTMLElement =
+      document.getElementById("horizontal-divider");
     let editorDivider: HTMLElement = document.getElementById("editor-divider");
-    let filedirDivider: HTMLElement = document.getElementById("filedir-divider");
-    let statemgrDivider: HTMLElement = document.getElementById("statemgr-divider");
-
+    let filedirDivider: HTMLElement =
+      document.getElementById("filedir-divider");
+    let statemgrDivider: HTMLElement =
+      document.getElementById("statemgr-divider");
 
     horizDivider.addEventListener("mouseover", (e) =>
       chgCursor(e, "horizontal-divider")
@@ -212,7 +215,6 @@
     window.addEventListener("resize", xtermSetWidth);
   }); //End of onMount
 
-
   const handleSubmit = (): boolean => {
     submit = false;
     return false;
@@ -228,7 +230,7 @@
     submit = false;
 
     if (e.code == "Enter") {
-      console.log('Enter submitted');
+      console.log("Enter submitted");
       e.preventDefault();
       (e.target as HTMLInputElement).value;
       value = (e.target as HTMLInputElement).value;
@@ -295,12 +297,12 @@
                 on:click={handleDocuments}>Docs?</button
               >
             </div>
-              <iframe
-                class="webpage"
-                title="local host"
-                src={localhost}
-                frameBorder="0"
-              />
+            <iframe
+              class="webpage"
+              title="local host"
+              src={localhost}
+              frameBorder="0"
+            />
           {/if}
         </form>
       </div>
@@ -405,8 +407,8 @@
     width: 100%;
     height: 2px;
     /* padding-top: 3px; */
-    /* padding-bottom: 3px; */
-  
+  /* padding-bottom: 3px; */
+
   .childButton {
     color: grey;
     background: transparent;
