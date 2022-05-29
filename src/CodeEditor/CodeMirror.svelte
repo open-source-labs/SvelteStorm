@@ -1,9 +1,4 @@
 <script lang="ts">
-<<<<<<< HEAD
-  // <script>
-=======
-// <script>
->>>>>>> 34893b5 (rebase)
   import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
   import { scale } from "svelte/transition";
