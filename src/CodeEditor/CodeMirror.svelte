@@ -1,5 +1,4 @@
 <script lang="ts">
-  // <script>
   import { afterUpdate, onMount } from "svelte";
   import CodeMirror from "codemirror";
   import { scale } from "svelte/transition";
@@ -75,9 +74,7 @@
         return result;
       }
     }
- 
     //this empty space is required
-
     tipContent = " ";
     // console.log(value, "is not in the docs!");
     return false;
@@ -146,23 +143,7 @@
     if (!$editorCache[filePath]) {
       $editorCache[$currentTabFilePath] = value;
     }
-    console.log(
-      "onMount complete, code editor ",
-      CodeMirror.fromTextArea(containerElt, {
-        mode: language,
-        lineNumbers: true,
-        tabSize: 2,
-        matchBrackets: true,
-        theme: "dracula",
-        scrollbarStyle: "native",
-        extraKeys: {
-          "Ctrl-Space": "autocomplete",
-        },
-        autoCloseBrackets: true,
-        matchTags: true,
-        autoCloseTags: true,
-      })
-    );
+    console.log("onMount complete, code editor ", codeMirrorEditor);
   });
 
   afterUpdate(async (): Promise<void> => {
@@ -190,7 +171,6 @@
     showToolTripTransition = false;
 
     console.log("afterUpdate complete");
-    console.log("afterUpdate complete, code editor ", codeMirrorEditor);
   });
 
   ipcRenderer.on("save-markdown", function (): void {
