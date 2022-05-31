@@ -12,13 +12,11 @@
   let fileState: FileState = {};
   let fileName;
   const unsub = DirectoryData.subscribe((data) => {
-    console.log("Directory Data in unsub", get(DirectoryData));
     mainDir = data.mainDir;
     reload = data.reload;
     createMainFile = data.createMainFile;
     createMainFolder = data.createMainFolder;
     fileState = data.fileState;
-    console.log("Directory Data in unsub after update", get(DirectoryData));
   });
   const refreshDir = (): void => {
     console.log("clickig now");

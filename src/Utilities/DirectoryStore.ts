@@ -4,6 +4,16 @@ import type { Writable } from 'svelte/store';
 
 import type { NewFile, EditorCacheType, State } from '../types';
 
+type EditorObj = {
+  getCursor?: Function
+  findWordAt?: Function
+  getRange?: Function
+  setValue?: Function
+  setSize?: Function
+  setOption?: Function
+  getValue?: Function
+}
+
 const DirectoryData: Writable<State> = writable<State>({
   mainDir: '',
   fileTree: [],
@@ -22,15 +32,14 @@ const DirectoryData: Writable<State> = writable<State>({
   activeFolder: '',
 });
 
-console.log(DirectoryData);
 const openTabs: Writable<NewFile[]> = writable<NewFile[]>([]);
 
 const currentTabFilePath: Writable<string> = writable<string>('');
 
 const editorCache: Writable<EditorCacheType> = writable<EditorCacheType>({});
 
-//CodeMirror.formTextArea is object being submitted in CodeMirror.svelte to this store
-const codeMirrorEditor: Writable<object> = writable<object>(undefined);
+//CodeMirror.fromTextArea is object being submitted in CodeMirror.svelte to this store
+const codeMirrorEditor: Writable<EditorObj> = writable<object>(undefined);
 
 export {
   DirectoryData,
