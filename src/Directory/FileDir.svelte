@@ -54,7 +54,6 @@
 
   ipcRenderer.on('folder-opened', function (evt, file:string, content:string) {
     directory = Array.isArray(content) ? content[0] : content;      
-    console.log('directory',directory)
     if(directory) {       
       fs.readdir(directory, (error,readfiles) => {     
         let files:string = readfiles.filter(file => file !== '.git');        
@@ -62,7 +61,6 @@
           var fileTree:Filetree = new FileTree(directory);        
           fileTree.build();                
           savedTree = fileTree.items;
-          console.log('savedTree: ', savedTree)
           savedTree.sort((a:any, b:any) => {
             return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
           })

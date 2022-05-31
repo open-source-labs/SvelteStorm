@@ -1,21 +1,23 @@
-<script>
-  export let fileTree;
+<script lang="ts">
+  import type { State } from "../types.js";
+
+  export let fileTree: [];
   import { DirectoryData } from "../Utilities/DirectoryStore";
   import CreateMenu from "./CreateMenu.svelte";
   const fs = require("fs");
   const fileState = {};
-  let rename = false;
-  let deleteFile = false;
-  let rightClickStatus = false;
-  let activeFile = "";
-  let newName = "";
-  let createFile = false;
-  let createFolder = false;
-  let activeDir = "";
-  let activeFolder = "";
-  let fileName;
+  let rename: boolean = false;
+  // let deleteFile = false;
+  // let rightClickStatus = false;
+  let activeFile: string = "";
+  let newName: string = "";
+  let createFile: boolean = false;
+  let createFolder: boolean = false;
+  let activeDir: string = "";
+  let activeFolder: string = "";
+  let fileName: HTMLInputElement;
 
-  const unsub = DirectoryData.subscribe((data) => {
+  DirectoryData.subscribe((data: State) => {
     activeFile = data.activeFile;
     rename = data.rename;
     createFile = data.createFile;
@@ -24,12 +26,12 @@
     activeFolder = data.activeFolder;
   });
 
-  const toggleVisibility = (path) => {
+  const toggleVisibility = (path: string): void => {
     if (!fileState[path]) fileState[path] = true;
     else fileState[path] = false;
   };
 
-  const dblClickHandler = (path) => {
+  const dblClickHandler = (path: string): void => {
     const openFilePath = path;
     console.log("openFilePath", openFilePath);
     DirectoryData.update((currentData) => {
@@ -41,9 +43,9 @@
     });
   };
 
-  const rightClickHandler = (path) => {
-    const openFilePath = path;
-    const fullPath = path.substring(0, path.lastIndexOf("/"));
+  const rightClickHandler = (path: string): void => {
+    const openFilePath: string = path;
+    const fullPath: string = path.substring(0, path.lastIndexOf("/"));
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -55,10 +57,10 @@
     });
   };
 
-  const renameHandler = (e, path) => {
+  const renameHandler = (e: KeyboardEvent, path: string): void => {
     if (e.key !== "Enter") return;
 
-    const fullPath = path.substring(0, path.lastIndexOf("/"));
+    const fullPath: string = path.substring(0, path.lastIndexOf("/"));
     fs.renameSync(path, fullPath + "/" + newName);
     DirectoryData.update((currentData) => {
       return {
@@ -72,7 +74,7 @@
     newName = "";
   };
 
-  const createFileHandler = (e, path) => {
+  const createFileHandler = (e: KeyboardEvent, path: string): void => {
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -99,7 +101,7 @@
     newName = "";
   };
 
-  const createFolderHandler = (e, path) => {
+  const createFolderHandler = (e: KeyboardEvent, path: string): void => {
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -129,7 +131,7 @@
     newName = "";
   };
 
-  const resetRename = () => {
+  const resetRename = (): void => {
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -163,7 +165,7 @@
             <li
               on:click={toggleVisibility(path)}
               class={!fileState[path] ? "liFolderClosed" : "liFolderOpen"}
-              on:contextmenu|preventDefault={rightClickHandler(path)}
+              on:contextmenu|preventDefault={() => rightClickHandler(path)}
               on:click={activeFile || createFile || createFolder
                 ? resetRename
                 : undefined}
@@ -211,7 +213,7 @@
           </span>
         {:else}
           <li
-            on:contextmenu|preventDefault={rightClickHandler(path)}
+            on:contextmenu|preventDefault={() => rightClickHandler(path)}
             on:click={dblClickHandler(path)}
             class="liFiles"
             on:click={activeFile ? resetRename : undefined}

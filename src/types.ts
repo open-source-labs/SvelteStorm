@@ -28,6 +28,31 @@
   export interface StateObjInterface {
     [key: string]: string[];
   }
-  export interface editorCache {
+  export interface EditorCacheType {
     [key: string]: string;
   }
+
+  //fileState obj type
+export type FileState = {
+  [key: string]: boolean;
+  }
+  //state object type
+
+export type State = {
+  mainDir?: string,
+  fileTree?: string[],
+  openFilePath? :string,
+  fileRead?: boolean,
+  stateObj?: StateObjInterface,
+  activeFile?: string,
+  rename?: boolean,
+  deleteFile?: boolean,
+  activeDir?: string,
+  createFile?: boolean,
+  createFolder?: boolean,
+  createMainFile?: boolean,
+  createMainFolder?: boolean,
+  reload?: boolean,
+  activeFolder?: string,
+  fileState?: FileState
+}
