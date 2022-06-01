@@ -6,6 +6,7 @@
     codeMirrorEditor,
     currentTabFilePath,
   } from "../Utilities/DirectoryStore.js";
+  import type { NewFile, Modes } from '../types'
   import { editorCache } from "../Utilities/DirectoryStore";
 
   const { ipcRenderer } = require("electron");
@@ -22,24 +23,6 @@
   let title: string = "Svelte Storm";
   let count: number = 0;
 
-  // define typescript types for the mode obj. (used in newFile)
-  type Mode = {
-    name: string,
-    json?: boolean
-    highlightFormatting?: boolean,
-    fencedCodeBlockHighlighting?: boolean,
-    base?: string
-  }
-
-  // define typescript types for newFile
-  type NewFile = {
-    editorValue: string
-    ext: string
-    editorLang: Mode
-    filePath: string 
-    fileName: string
-    tabId: number
-  }
 
   // creates a new tab when a new file is opened
   function addTab(newFile: NewFile): void {
@@ -61,7 +44,10 @@
     activeEditor = activeTabValue;
 
     // When a new file is opened, check if the editorCache cache in DirectoryStore.js contains a key equal to the current file path. If not, assign a new key with its value being the raw code contained within that file.
-    if (!editorCache[$currentTabFilePath]) {editorCache[$currentTabFilePath] = newFile.editorValue};
+    if (!$editorCache[$currentTabFilePath]) {
+      $editorCache[$currentTabFilePath] = newFile.editorValue;
+      $codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
+    };
     console.log('addTab complete');
   };
 
@@ -108,31 +94,6 @@
     console.log("handleClick complete");
   };
 
-  type Modes = {
-    js: {
-      name: string;
-      json: boolean;
-    };
-    json: {
-      name: string;
-      json: boolean;
-    };
-    svelte: {
-      name: string;
-    }; 
-    md: {
-      name: string;
-      highlightFormatting: boolean;
-      fencedCodeBlockHighlighting: boolean;
-      base: string
-    },
-    css: {
-      name: string
-    },
-    html: {
-      name: string;
-    },
-  }
 
   const modes: Modes = {
     js: {
@@ -224,7 +185,7 @@
   });
 
 
-// </script>
+</script>
 
 <!--==========================================MARKUP==========================================-->
 <ul>
