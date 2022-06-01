@@ -131,7 +131,6 @@
       autoCloseTags: true,
     });
 
-    $codeMirrorEditor.setValue(value);
     $codeMirrorEditor.setSize("100%", "100%");
 
     if (!$editorCache[filePath]) {
@@ -149,7 +148,7 @@
       // if file hasn't been cached yet 
       if (!cacheCode) {
         // cache the file and it's value (value=the raw code that'll appear in the editor)
-        $editorCache[$currentTabFilePath] = value;
+        $editorCache[$currentTabFilePath] = await value;
         // set value of current editor to display the current code
         $codeMirrorEditor.setValue(value);
       } else {

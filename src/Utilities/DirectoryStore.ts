@@ -1,18 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
-//Move to separate TypeScript file
 
-import type { NewFile, EditorCacheType, State } from '../types';
-
-type EditorObj = {
-  getCursor?: Function
-  findWordAt?: Function
-  getRange?: Function
-  setValue?: Function
-  setSize?: Function
-  setOption?: Function
-  getValue?: Function
-}
+import type { NewFile, EditorCacheType, EditorObj, State } from '../types';
 
 const DirectoryData: Writable<State> = writable<State>({
   mainDir: '',

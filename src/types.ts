@@ -1,4 +1,4 @@
-  // define typescript types for the mode obj. (used in newFile)
+  // define typescript types for the mode obj. (used in newFile in types.ts line 40)
   export type Mode = {
     name: string;
     json?: boolean;
@@ -6,6 +6,33 @@
     fencedCodeBlockHighlighting?: boolean;
     base?: string;
   };
+
+  // used in Editor.svelte
+  export type Modes = {
+    js: {
+      name: string;
+      json: boolean;
+    };
+    json: {
+      name: string;
+      json: boolean;
+    };
+    svelte: {
+      name: string;
+    }; 
+    md: {
+      name: string;
+      highlightFormatting: boolean;
+      fencedCodeBlockHighlighting: boolean;
+      base: string
+    },
+    css: {
+      name: string
+    },
+    html: {
+      name: string;
+    },
+  }
 
   // define typescript types for newFile
   export type NewFile = {
@@ -36,8 +63,8 @@
 export type FileState = {
   [key: string]: boolean;
   }
-  //state object type
 
+  //state object type
 export type State = {
   mainDir?: string,
   fileTree?: string[],
@@ -55,4 +82,15 @@ export type State = {
   reload?: boolean,
   activeFolder?: string,
   fileState?: FileState
+}
+
+// imported in DirectoryStore.ts. EditorObj is used in 
+export type EditorObj = {
+  getCursor?: Function
+  findWordAt?: Function
+  getRange?: Function
+  setValue?: Function
+  setSize?: Function
+  setOption?: Function
+  getValue?: Function
 }
