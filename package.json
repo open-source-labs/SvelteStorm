@@ -1,6 +1,6 @@
 {
   "name": "svelte-storm",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A Svelte IDE like no other. Embrace the storm.",
   "main": "src/index.js",
   "module": "src/index.js",
@@ -11,9 +11,11 @@
   },
   "scripts": {
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"APP NAME\"",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"SvelteStorm\"",
     "package-linux": "electron-packager .  svelte-storm --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/linux/logo.png --prune=true --out=release-builds",
     "create-debian-installer": "electron-installer-debian --src release-builds/svelte-storm-linux-x64/ --arch amd64 --config debian.json",
+    "create-mac-installer": "electron-installer-dmg ./release-builds/svelte-storm-darwin-x64/svelte-storm.app SvelteStorm --out=release-builds --icon=assets/icons/mac/icon.icns --overwrite",
+    "create-win-installer": "",
     "start": "concurrently \"npm:svelte-dev\" \"electron-forge start\"",
     "package": "electron-forge package",
     "publish": "electron-forge publish",
@@ -96,6 +98,7 @@
     "electron": "^17.0.0",
     "electron-packager": "^15.4.0",
     "electron-reloader": "^1.2.3",
+    "electron-winstaller": "^5.0.0",
     "eslint": "^8.15.0",
     "mocha": "^9.2.0",
     "rollup": "^2.67.0",
