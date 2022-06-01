@@ -96,6 +96,7 @@
     "chokidar": "^3.5.3",
     "concurrently": "^7.1.0",
     "electron": "^17.0.0",
+    "electron-installer-dmg": "^4.0.0",
     "electron-packager": "^15.4.0",
     "electron-reloader": "^1.2.3",
     "electron-winstaller": "^5.0.0",
