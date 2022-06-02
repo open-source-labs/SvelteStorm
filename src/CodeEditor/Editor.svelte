@@ -1,177 +1,228 @@
-<script>
-  import CodeMirror from './CodeMirror.svelte';
-  import { DirectoryData, openTabs } from '../Utilities/DirectoryStore';
+<script lang="ts">
+  import CodeMirror from "./CodeMirror.svelte";
+  import {
+    DirectoryData,
+    openTabs,
+    codeMirrorEditor,
+    currentTabFilePath,
+  } from "../Utilities/DirectoryStore.js";
+  import type { NewFile, Modes } from '../types'
+  import { editorCache } from "../Utilities/DirectoryStore";
 
-  const { ipcRenderer } = require('electron');
-  const fs = require('fs');
-  const path = require('path');
+  const { ipcRenderer } = require("electron");
+  const fs = require("fs");
+  const path = require("path");
 
-  export let activeTabValue = 0;
-  let activeEditor = 0;
+  let activeTabValue: number = 0;
+  let activeEditor: number = 0;
 
-  let value = [''];
-  let language = 'html';
-  let [filePath, fileName, readData] = ['', '', ''];
-  let title = 'Svelte Storm';
-  let count = 0;
+  let language: string = "html";
+  let filePath: string= ""; 
+  let fileName: string= ""; 
+  let readData: string = "";
+  let title: string = "Svelte Storm";
+  let count: number = 0;
 
 
-  function addTab(newFile) {
-  
-    let duplicate = false;
-    let focusTabId = newFile.tabId;
+  // creates a new tab when a new file is opened
+  function addTab(newFile: NewFile): void {
+    let duplicate: boolean = false;
+    let focusTabId: number = newFile.tabId;
     $openTabs.map((tab) => {
       if (tab.filePath === newFile.filePath) {
         duplicate = true;
         focusTabId = tab.tabId;
       }
-    })
+    });
 
     if (!duplicate) {
-      $openTabs = [ ...$openTabs, newFile]
+      $openTabs = [...$openTabs, newFile];
       count = count + 1;
     }
 
     activeTabValue = focusTabId;
     activeEditor = activeTabValue;
+
+    // When a new file is opened, check if the editorCache cache in DirectoryStore.js contains a key equal to the current file path. If not, assign a new key with its value being the raw code contained within that file.
+    if (!$editorCache[$currentTabFilePath]) {
+      $editorCache[$currentTabFilePath] = newFile.editorValue;
+      $codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
+    };
+    console.log('addTab complete');
   };
 
 
-  // remove and reset tab order
-  function deleteTab(targetId) {
-
-    $openTabs = $openTabs.filter((t) => t.tabId != targetId).map((t, i) => ({
+  // remove and reset tab order 
+  function deleteTab(tab): void {
+    //console.log('delete tab: ', tab);
+    $openTabs = $openTabs.filter((t) => t.tabId != tab.tabId).map((t, i) => ({
       editorValue: t.editorValue,
       ext: t.ext,
       editorLang: t.editorLang,
       filePath: t.filePath,
-      fileName: t.fileName,
+      fileName: t.fileName, 
       tabId: i,
     }))
 
     count = count - 1;
-    activeTabValue = 0;
+    activeTabValue = count - 1;
     activeEditor = activeTabValue;
+
+    // if at least 1 tab still open, update currentTabFilePath to the next tab over
+    if(count > 0) {
+      $currentTabFilePath = $openTabs[activeEditor].filePath;
+    } else {
+      $currentTabFilePath = '';
+    }
   }
 
 
+  // event listener for when a tab within the editor is clicked
+  const handleClick = async (tab: NewFile) => {
+    // update current tab in DirectoryStore.js to whichever tab was just clicked
+    $currentTabFilePath = tab.filePath;
 
-  const handleClick = (tabId) => () => {
-    activeTabValue = tabId;
+    // save current code inside the editor to a variable
+    const currentUserCode: string = await $codeMirrorEditor.getValue();
+
+    // update cache in DirectoryStore to reflect current code in the editor
+    $editorCache[$openTabs[activeEditor].filePath] = currentUserCode;
+
+    activeTabValue = tab.tabId;
     activeEditor = activeTabValue;
-  }
 
-  const modes = {
-		js: {
-			name: 'javascript',
-			json: false
-		},
-		json: {
-			name: 'javascript',
-			json: true
-		},
-		svelte: {
-			name: 'htmlmixed',
-		},
-		md: {
-			name: 'markdown',
+    console.log("handleClick complete");
+  };
+
+
+  const modes: Modes = {
+    js: {
+      name: "javascript",
+      json: false,
+    },
+    json: {
+      name: "javascript",
+      json: true,
+    },
+    svelte: {
+      name: "htmlmixed",
+    },
+    md: {
+      name: "markdown",
       highlightFormatting: true,
       fencedCodeBlockHighlighting: true,
-      base: 'text/x-markdown',
-		},
+      base: "text/x-markdown",
+    },
     css: {
-      name: 'css',
+      name: "css",
     },
     html: {
-      name: 'htmlmixed',
+      name: "htmlmixed",
     },
-	};
+  };
 
 
   // render file on open and add to store
-  ipcRenderer.on('file-opened', function (evt, file, content) {
+  ipcRenderer.on("file-opened", function (evt:any, file: string, content) {
+    filePath = file;
+    process.platform === "win32"
+      ? (fileName = file.slice().split("\\").pop())
+      : (fileName = file.slice().split("/").pop());
+    language = file.slice().split(".").pop();
+    const newTab: NewFile = {
+      editorValue : "content",
+      ext : language,
+      editorLang : modes[language],
+      filePath : filePath,
+      fileName : fileName,
+      tabId : count
+    }
 
-    const newTab = {}
-    filePath = (file);
-    process.platform === "win32" ? fileName = file.slice().split('\\').pop() : fileName = file.slice().split('/').pop();
-    language = file.slice().split('.').pop();
-    newTab.editorValue = content;
-    newTab.ext = language;
-    newTab.editorLang = modes[language]; 
-    newTab.filePath = filePath;
-    newTab.fileName = fileName;
-    newTab.tabId = count;
-    console.log('NEW TAB', newTab);
+    console.log("ipcRnderer: new tab added");
     addTab(newTab);
-    if (file) { title = `${path.basename(file)} - ${title}`; }
+    if (file) {
+      title = `${path.basename(file)} - ${title}`;
+    }
   });
 
+  
   // takes care of opening a file from within the file directory
-  const unsub = DirectoryData.subscribe(data => {
-    console.log('subscribing to the store', data.openFilePath)
+    DirectoryData.subscribe(async data => {
+    console.log('subscribing to the store');
+ 
+    // if at least 1 tab is already open, grab the current code and save it to the cache before switching to a new tab
+    if($currentTabFilePath !== ''){
+    const currentUserCode = await $codeMirrorEditor.getValue();
+    // update cache in DirectoryStore to reflect current code in the editor
+    $editorCache[$openTabs[(activeEditor)].filePath] = currentUserCode;
+    }
+
+    readData = fs.readFileSync(data.openFilePath).toString();
+    fileName = data.openFilePath.slice().split('/').pop();
+    language = path.basename(data.openFilePath).split('.').pop();
+
     const newTab = {};
     if (data.fileRead) {
-      readData = fs.readFileSync(data.openFilePath).toString();
-      fileName = data.openFilePath.slice().split('/').pop();
-      language = path.basename(data.openFilePath).split('.').pop();
+      const newTab: NewFile = {
+        editorValue: '',
+        ext: language,
+        editorLang: modes[language],
+        filePath: data.openFilePath, 
+        fileName: fileName,
+        tabId: count
+      }
+
+      
       if (data.openFilePath) { title = `${path.basename(data.openFilePath)} - Svelte Storm`; }
-      newTab.editorValue = readData;
-      newTab.ext = language;
-      newTab.editorLang = modes[language]; 
-      newTab.filePath = data.openFilePath;
-      newTab.fileName = fileName;
-      newTab.tabId = count;
-      console.log('NEW TAB', newTab);
+      // if file path in cache exists then retrieve cached code, else create a new file path in cache
+      if($editorCache[data.openFilePath]) {
+        newTab.editorValue = $editorCache[data.openFilePath];
+      } else {newTab.editorValue = readData}
+
+      $currentTabFilePath = newTab.filePath;
       addTab(newTab);
     }
   });
 
+
 </script>
-
-
 
 <!--==========================================MARKUP==========================================-->
 <ul>
   {#each $openTabs as tab}
-  <li class={activeTabValue === tab.tabId ? 'active' : ''}>
-    <span class="tab-span"
-      on:click={handleClick(tab.tabId)}
-    >
-      <img src="../src/icons/file_type_{tab.ext}.svg" 
-        alt={''}
-      />
-      {tab.fileName}
-      <span
-        class="delete-button" 
-        value={tab.tabId}
-        on:click={(value) => deleteTab(tab.tabId)}
-      >
-        &times
+    <li class={activeTabValue === tab.tabId ? "active" : ""}>
+      <span class="tab-span" on:click={() => handleClick(tab)}>
+        <img src="../src/icons/file_type_{tab.ext}.svg" alt={""} />
+        {tab.fileName}
+        <span
+          class="delete-button"
+          value={tab}
+          on:click={() => deleteTab(tab)}
+        >
+          X
+        </span>
       </span>
-    </span>
-  </li>
+    </li>
   {/each}
 </ul>
 
-
 {#if $openTabs.length > 0}
   <div class="editor-body">
-      <CodeMirror
-        class="childClass current"
-        bind:value={$openTabs[(activeEditor)].editorValue}
-        bind:language={$openTabs[(activeEditor)].editorLang}
-        bind:filePath={$openTabs[(activeEditor)].filePath}
-      />
+
+    <CodeMirror
+      class="childClass current"
+      bind:value={$openTabs[activeEditor].editorValue}
+      bind:language={$openTabs[activeEditor].editorLang}
+      bind:filePath={$openTabs[activeEditor].filePath}
+    />
   </div>
 {/if}
 
-
-
 <style>
-
   .editor-body {
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
+    height: 97%; /*2022-ST-RJ modified height of editor so resize handler still shows and is not covered by editor */
     overflow: scroll;
   }
 
@@ -182,12 +233,17 @@
     overflow: auto;
     white-space: nowrap;
     scrollbar-width: thin;
+    height: 30px;
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 0;
     list-style: none;
     border-bottom: 1px solid #dee2e6;
-    background-color: rgb(27, 27, 26);
+    background-color: rgb(
+      27,
+      26,
+      26
+    ); /* this is the background color of the tab zone*/
     /* border-radius: 5px; */
   }
 
@@ -203,11 +259,12 @@
     border-top-right-radius: 0.25rem;
     display: flex;
     flex-direction: row;
+    height: 30px;
+    align-items: center;
     padding: 0 1rem;
     cursor: pointer;
     font-size: 12px;
   }
-  ç
   .tab-span:hover {
     border-color: #e9ecef #e9ecef #dee2e6;
   }
@@ -225,9 +282,16 @@
     /* margin-bottom: 0; */
   }
   .delete-button {
+    height: 10px;
+    width: 10px;
     margin-left: 5px;
+    padding-bottom: 4px;
     border-right: black;
     border-left: black;
+    color: rgb(90, 90, 90);
   }
 
+  .delete-button:hover {
+    color: #f1f1f1;
+  }
 </style>

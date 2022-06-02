@@ -1,4 +1,5 @@
 const { app, BrowserWindow, dialog, Menu } = require('electron');
+const main = require('electron-reload');
 const mainProcess = require('./index.js');
 
 const createApplicationMenu = () => {
@@ -190,7 +191,7 @@ const createApplicationMenu = () => {
         {
           label: 'Visit the SvelteStorm Website',
           click(focusedWindow) {
-            if(focusedWindow) require('electron').shell.openExternal('http://www.svelte-storm.com')
+            if(focusedWindow) require('electron').shell.openExternal('https://svelte-storm.com/')
           }
         },
         {
