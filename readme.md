@@ -1,6 +1,6 @@
 
 <h1 align="center">
- <img src="https://imgur.com/KtvNAi2">
+ <img src="https://i.imgur.com/KtvNAi2.png">
  <br/>
  SvelteStorm
 </h1>
