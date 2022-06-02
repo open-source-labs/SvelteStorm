@@ -87,7 +87,7 @@
     }      
   });
   
-  
+  //
   //method to read all the files inside the directory
   const readFileNames = (mainDir) => {
     if(mainDir) {       
