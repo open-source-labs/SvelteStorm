@@ -234,7 +234,7 @@
       e.preventDefault();
       (e.target as HTMLInputElement).value;
       value = (e.target as HTMLInputElement).value;
-      localhost = `http://127.0.0.1/${value}/`;
+      localhost = `http://localhost:${value}/`;
       return false;
     }
   };
