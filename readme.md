@@ -14,7 +14,6 @@
 - [Key Features](#key-features)
 - [Authors](#authors)
 - [Contributing](#contributing)
-- [License](#license)
  
 ## SvelteStorm 
  
@@ -80,6 +79,3 @@ There are many ways in which you can participate in this project, for example:
 - Submit bugs and feature requests, and help us verify as they are checked in
 - Review source code changes
 - Review the documentation and make pull requests for anything from typos to additional and new content
- 
-### License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
