@@ -21,7 +21,7 @@ A Svelte IDE like no other. Embrace the storm.
  
 SvelteStorm is a new and improved open-source integrated developer environment (IDE). SvelteStorm is specifically tailored to provide all of the essential tools a Svelte developer needs to build a Svelte application. The IDE contains a code editor, a terminal environment, a file directory, a browser view, developer tools, and a component state viewer. SvelteStorm was built using Svelte and Electron and is downloadable for Windows, Linux, and Mac operating systems. With the new and improved SvelteStorm, it contains a simple, dark-mode UI design, all the dev dependencies up-to-date, and the code editor has been switched from Monaco to CodeMirror. From its modernized and clean UI, to its quick loading time and component state window, SvelteStorm is a rising star for the Svelte community.
  
-![SvelteStormScreenShot](https://i.imgur.com/bWhRqzs.gif)
+![SvelteStormScreenShot](https://imgur.com/a/aaCBW1I.png)
 
 ## New Features and Improvements
 
