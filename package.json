@@ -1,7 +1,7 @@
 {
   "name": "svelte-storm",
-  "version": "3.0.0",
-  "description": "A Svelte IDE like no other. Embrace the storm.",
+  "version": "3.3.3",
+  "description": "A Svelte IDE like no other. Embrace the 'norEaster storm.",
   "main": "src/index.js",
   "module": "src/index.js",
   "exports": {
@@ -65,6 +65,7 @@
     "@codemirror/tooltip": "^0.19.16",
     "@electron/remote": "^2.0.4",
     "@rollup/plugin-commonjs": "^21.0.1",
+    "bootstrap": "^5.1.3",
     "codemirror": "^5.65.1",
     "electron-rebuild": "^3.2.7",
     "electron-reload": "^1.5.0",
@@ -78,7 +79,12 @@
     "npm-check-updates": "^12.2.1",
     "vscode-json-languageservice": "^4.2.0",
     "xterm": "^4.18.0",
-    "xterm-addon-fit": "^0.5.0"
+    "xterm-addon-fit": "^0.5.0",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.0",
+    "style-loader": "^3.3.1",
+    "svg-url-loader": "^7.1.1"
+
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
@@ -100,7 +106,7 @@
     "electron-packager": "^15.4.0",
     "electron-reloader": "^1.2.3",
     "electron-winstaller": "^5.0.0",
-    "eslint": "^8.15.0",
+    "eslint": "^8.18.0",
     "mocha": "^9.2.0",
     "rollup": "^2.67.0",
     "rollup-plugin-babel": "^4.4.0",
@@ -115,6 +121,10 @@
     "svelte": "^3.46.4",
     "svelte-check": "^2.7.1",
     "svelte-preprocess": "^4.10.6",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.2",
+    "prettier": "^2.7.1",
+    "prettier-eslint": "^15.0.1",
+    "prettier-plugin-organize-imports": "^3.0.0",
+    "prettier-plugin-packagejson": "^2.2.18"
   }
 }

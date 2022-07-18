@@ -153,6 +153,17 @@
     let horizDivider: HTMLElement =
       document.getElementById("horizontal-divider");
     let editorDivider: HTMLElement = document.getElementById("editor-divider");
+    
+    
+    /*
+    * ==================================================
+    *   Just a Test... 
+    * ==================================================
+    */
+    editorDivider.style.background = 'blue';
+
+    //* End of test
+    
     let filedirDivider: HTMLElement =
       document.getElementById("filedir-divider");
     let statemgrDivider: HTMLElement =

@@ -207,7 +207,7 @@ const createApplicationMenu = () => {
 
 
   if (process.platform === 'darwin') {
-    const name = 'Firesale';
+    const name = 'SvelteStorm 4.0';
     template.unshift({
       label: name,
       submenu: [

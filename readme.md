@@ -7,12 +7,14 @@
  
 ## Table of Contents
  
-- [Introduction](#sveltestorm)
-- [New Features](#new-features-and-improvements)
-- [How to Use](#how-to-use-sveltestorm)
+- [Table of Contents](#table-of-contents)
+- [SvelteStorm](#sveltestorm)
+- [New Features and Improvements](#new-features-and-improvements)
+- [How To Use SvelteStorm](#how-to-use-sveltestorm)
 - [Installation](#installation)
 - [Key Features](#key-features)
 - [Authors](#authors)
+- [Previous Authors](#previous-authors)
 - [Contributing](#contributing)
  
 ## SvelteStorm 
@@ -65,6 +67,13 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
  
  
 ## Authors
+ 
+[Jim White](https://github.com/HirsuteJim) | [Karen Cheung](https://www.github.com/karenc810) | [Elliott Burr](https://www.github.com/elliottburr) | 
+[Ryan Huie](https://www.github.com/8-ryan-8) | [Ian Jackson](https://github.com/irjackson) |
+ 
+ 
+ 
+## Previous Authors
  
 [Andy Jiang](https://github.com/realandygithub) | [Colton Robbins](https://www.github.com/coltonro) | [Ricky Johnson](https://www.github.com/JSJedi) | 
 [Zachary Radford](https://www.github.com/zachradf) | [Aye Moe](https://github.com/ayemmoe) |
