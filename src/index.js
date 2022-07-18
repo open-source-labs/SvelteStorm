@@ -1,3 +1,4 @@
+console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
 const {
   app,
   BrowserWindow,
@@ -23,7 +24,9 @@ require('@electron/remote/main').enable(webContents);
 //hot reload for electron development
 try {
   require('electron-reloader')(module);
-} catch (err) {console.log(err) }
+} catch (err) {
+  console.log(err);
+}
 
 let userFile = '';
 
@@ -87,6 +90,12 @@ const createWindow = (exports.createWindow = () => {
   // you have to rename the symbols in the page before including other libraries:
   //window.nodeRequire = require; in html file
 
+
+/*
+* ==================================================
+*   Create a new Browers Window for display in Electron, but don't show it yet.
+* ==================================================
+*/
   let newWindow = new BrowserWindow({
     x,
     y,
@@ -100,6 +109,12 @@ const createWindow = (exports.createWindow = () => {
   //theme for the menu bar on top
   nativeTheme.themeSource = 'dark';
 
+
+/*
+* ==================================================
+*   Load the initial HTML file into the window.
+* ==================================================
+*/
   //loading index.html into the app
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
@@ -108,7 +123,6 @@ const createWindow = (exports.createWindow = () => {
     newWindow.show();
   });
 
-  
   newWindow.on('focus', createApplicationMenu);
 
   //save changes dialog modal message
@@ -159,29 +173,29 @@ const createWindow = (exports.createWindow = () => {
     cwd: process.env.HOME,
     env: process.env,
   });
-  
+
   //2022-ST-AJ sends to renderer cwd for it to display on prompt
-  ipcMain.on('cwd',(event,data) => {
-    event.reply('cwdreply',process.env.HOME);
+  ipcMain.on('cwd', (event, data) => {
+    event.reply('cwdreply', process.env.HOME);
   });
 
   //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
   ptyProcess.onData((data) => {
     newWindow.webContents.send('terminal-incData', data);
   });
-  
-  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell  
+
+  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell
   ipcMain.on('terminal-into', (event, data) => {
     ptyProcess.write(data);
   });
 
   //2022-ST-AJ ipcMain listens to resizing event from renderer and calls resize on node-pty to align size between node-pty and xterm. They need to align otherwise there are wierd bugs everywhere.
-  ipcMain.on('terminal-resize', (event,size) => {
+  ipcMain.on('terminal-resize', (event, size) => {
     const cols = size.cols;
     const rows = size.rows;
-    console.log('pty resizing to cols and rows', cols,rows);
+    console.log('pty resizing to cols and rows', cols, rows);
     ptyProcess.resize(cols, rows);
-  })
+  });
 
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
@@ -194,7 +208,7 @@ const createWindow = (exports.createWindow = () => {
 
 //Opening docs in ide browser
 // const openDocs = (exports.openDocs = () => {
-  
+
 // })
 
 const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
@@ -285,4 +299,4 @@ ipcMain.handle('decreaseFontSize', decreaseFontSize);
 
 ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
-ipcMain.handle('testFunc', testFunc)
+ipcMain.handle('testFunc', testFunc);

@@ -32,7 +32,7 @@
             ipcRenderer.send("terminal-into", "\r");
         };
 
-        term.writeln("Welcome to SvelteStorm");
+        term.writeln("Welcome to SvelteStorm 4.0");
         // term.writeln("\b \b");
 
         term.prompt();
