@@ -2,7 +2,7 @@
 <h1 align="center">
  <img src="https://i.imgur.com/KtvNAi2.png" style="width: 50%;">
  <br/>
- SvelteStorm 3.0
+ SvelteStorm 4.0
 </h1>
  
 ## Table of Contents
