@@ -160,7 +160,7 @@
     *   Just a Test... 
     * ==================================================
     */
-    editorDivider.style.background = 'blue';
+    // editorDivider.style.background = 'blue';
 
     //* End of test
     

@@ -48,6 +48,7 @@
         });
 
         ipcRenderer.on("terminal-incData", (event, data) => {
+            console.log(data);
             term.write(data);
         });
 

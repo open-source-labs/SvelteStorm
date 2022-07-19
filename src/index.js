@@ -171,13 +171,21 @@ const createWindow = (exports.createWindow = () => {
     cols: 80,
     rows: 24,
     cwd: process.env.HOME,
+    // cwd: cwdFilePath,
     env: process.env,
   });
 
   //2022-ST-AJ sends to renderer cwd for it to display on prompt
-  ipcMain.on('cwd', (event, data) => {
-    event.reply('cwdreply', process.env.HOME);
-  });
+  // ipcMain.on('cwd', (event, data) => {
+  //   event.reply('cwdreply', process.env.PWD);
+  // });
+
+  // add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
+  ipcMain.on('openFolder', (event, data) => {
+    console.log('pty before:', ptyProcess)
+    ptyProcess.cwd = cwdFilePath[0];
+    console.log('pty after:', ptyProcess)
+  })
 
   //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
   ptyProcess.onData((data) => {
@@ -206,6 +214,25 @@ const createWindow = (exports.createWindow = () => {
   return newWindow;
 });
 
+// open browser window when user selects open brower window from file menu
+const openBrowserWindow = (exports.openBrowserWindow = () => {
+  const browser = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      experimentalFeatures: true,
+      allowRunningInsecureContent: true,
+      webSecurity: false,
+      nodeIntegrationInSubFrames: true,
+      nodeIntegrationInWorker: true,
+    },
+  })
+  browser.webContents.loadURL('http://localhost:8080');
+  browser.webContents.openDevTools();
+});
+
 //Opening docs in ide browser
 // const openDocs = (exports.openDocs = () => {
 
@@ -223,6 +250,7 @@ const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
       openFile(targetWindow, files.filePaths[0]);
     }
   }
+  
 });
 
 const openFile = (exports.openFile = (targetWindow, file) => {
@@ -232,13 +260,16 @@ const openFile = (exports.openFile = (targetWindow, file) => {
   createApplicationMenu();
 });
 
+let cwdFilePath;
+
 const getFolderFromUser = (exports.getFolderFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openDirectory'],
   });
 
   if (files) {
-    console.log(files.filePaths);
+    console.log('files.filePaths:', files.filePaths);
+    cwdFilePath = files.filePaths;
     if (files) {
       openFolder(targetWindow, files.filePaths);
     }
@@ -272,7 +303,7 @@ const openFolder = (exports.openFolder = (targetWindow, folder) => {
   const content = folder;
   console.log('contents', content);
   targetWindow.webContents.send('folder-opened', folder, content);
-  createApplicationMenu();
+  createApplicationMenu(app);
 });
 
 const saveFile = (exports.saveFile = (targetWindow) => {
