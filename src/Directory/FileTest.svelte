@@ -101,6 +101,36 @@
     newName = "";
   };
 
+  // -------------------------------------
+  const createFileHandlerTEST = (e: KeyboardEvent, path: string): void => {
+    DirectoryData.update((currentData) => {
+      return {
+        ...currentData,
+        activeDir: path,
+        activeFile: "",
+      };
+    });
+
+    if (e.key !== "Enter") return;
+
+    fs.writeFileSync(path + "/" + newName, "", (err) => {
+      if (err) throw err;
+    });
+    DirectoryData.update((currentData) => {
+      return {
+        ...currentData,
+        createFile: false,
+        rename: false,
+        activeFile: "",
+      };
+    });
+
+    fileState[path] = true;
+    newName = "";
+  };
+
+  // --------------------------------------------------------------------
+
   const createFolderHandler = (e: KeyboardEvent, path: string): void => {
     DirectoryData.update((currentData) => {
       return {
