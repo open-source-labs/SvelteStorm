@@ -2,7 +2,7 @@
 **/package-lock.json
 public/bundle.**
 public/svelte.**
-**/public
+
 release-builds
 ./public
 .DS_Store

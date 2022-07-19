@@ -4,6 +4,8 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
+  import BarChart from "./Debugger/BarChart.svelte";
+  import myData from "./Debugger/2019.js";
 
   import searchDoc from "./SearchProgram.js";
   import { onMount, SvelteComponent } from "svelte";
@@ -295,25 +297,37 @@
           {/if}
           {#if docsBool === false}
             <div class="parent grid-parent">
-              <input
+              
+              <!-- <input
                 class="child"
                 placeholder={value === "" ? "Local Host Port" : value}
                 type="text"
                 on:keyup|preventDefault={handleKeyup}
-              />
-
-              <button
+                /> -->
+          
+                <button
                 type="button"
                 class="childButton"
                 on:click={handleDocuments}>Docs?</button
-              >
+                >
+
             </div>
-            <iframe
+            <!-- <iframe
               class="webpage"
               title="local host"
               src={localhost}
               frameBorder="0"
-            />
+            /> -->
+
+            <!-- ------------------------------------------- -->
+            <!-- <div class="box c root" id="state-mgr"> -->
+            <StateManager />
+            <!-- </div> -->
+            <!-- ------------------------------------------- -->
+            <div id="dummyGraph">
+              <BarChart {myData} />
+            </div>
+
           {/if}
         </form>
       </div>
@@ -321,9 +335,9 @@
     </div>
     <div class="dividers-h" id="horizontal-divider" />
     <div class="box wrapper-bottom">
-      <div class="box c root" id="state-mgr">
+      <!-- <!-- <div class="box c root" id="state-mgr">
         <StateManager />
-      </div>
+      </div> -->
       <div class="dividers-v" id="statemgr-divider" />
       <div class="box e" id="terminal-window">
         <XTerm />
@@ -333,6 +347,13 @@
 </body>
 
 <style>
+
+  #dummyGraph {
+    background-color: pink;
+    width: 100%;
+    height: 100%;
+  }
+
   body {
     height: 100%;
     width: 100%;

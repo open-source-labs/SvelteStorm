@@ -33,6 +33,8 @@
     padding-top: 0;
     display: flex;
     flex-direction: column;
+    height: 30%;
+    width: 100%;
   }
   .h5Container {
     background-color: rgb(22, 27, 34);
