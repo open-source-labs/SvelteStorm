@@ -1,8 +1,8 @@
-const { app, BrowserWindow, dialog, Menu } = require('electron');
+const { app, BrowserWindow, dialog, Menu, ipcRenderer, webContents } = require('electron');
 const main = require('electron-reload');
 const mainProcess = require('./index.js');
 
-const createApplicationMenu = () => {
+const createApplicationMenu = (app) => {
   const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length;
   const focusedWindow = BrowserWindow.getFocusedWindow();
   const hasFilePath = !!(focusedWindow && focusedWindow.getRepresentedFilename());
@@ -54,16 +54,20 @@ const createApplicationMenu = () => {
         {
             label: 'Open Folder',
             accelerator: 'CommandOrControl+O',
-            click(item, focusedWindow) {
+            click: (item, focusedWindow) => {
               
               if (focusedWindow) {
-                return mainProcess.getFolderFromUser(focusedWindow);
+                mainProcess.getFolderFromUser(focusedWindow);
+                console.log('after getFolderFromUser')
+                // app.emit('openFolder');
+                console.log('after open folder')
+                return;
               }
   
               const newWindow = mainProcess.createWindow();
   
               newWindow.on('show', () => {
-                mainProcess.getFolderFromUser(newWindow);
+                mainProcess.getFolderFromUser(newWindow);      
               });
             },
           },
@@ -109,6 +113,12 @@ const createApplicationMenu = () => {
             }
             focusedWindow.webContents.send('open-in-default');
           },
+        },
+        {
+          label: 'Open Browser Window',
+          click(){
+            mainProcess.openBrowserWindow();
+          }
         },
       ],
     },
