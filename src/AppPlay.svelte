@@ -5,25 +5,25 @@
   import StateManager from "./StateManager/StateManager.svelte";
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
   import BarChart from "./Debugger/BarChart.svelte";
-  import IceChart from "./Debugger/IceChart.svelte";
   import myData from "./Debugger/2019.js";
 
   import searchDoc from "./SearchProgram.js";
   import { onMount, SvelteComponent } from "svelte";
 
+  import define from './636c57cd4c8f785e@309.js'
+
+import {Runtime, Library, Inspector} from "./runtime.org.js";
+
+const runtime = new Runtime();
+const main = runtime.module(define, name => {
+    if (name === "chart"){return Inspector.into(document.body)()}
+  });
 
 
 
 
   export let orientation = "columns";
   export let localhost;
-
-
-
-
-
-
-
 
   let value: string = "";
   let submit: boolean = false;
@@ -272,108 +272,200 @@
     documentation = documentation;
     return false;
   };
-
-
-
 </script>
 
 <body class:orientation>
   <main class="wrapper">
-    <div class="box wrapper-upper" id="wrapper-upper">
-      <div class="box a target" id="file-dir">
-        <FileDir />
-      </div>
-      <div class="dividers-v" id="filedir-divider" />
-      <div class="box b" id="editor-window">
-        <!-- svelte-ignore missing-declaration -->
-        <div class="editor-wrapper">
-          <Editor class="childClass" />
-        </div>
-      </div>
-      <div class="dividers-v" id="editor-divider" />
-      <div class="box d root">
-        <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
-          {#if docsBool === true}
-            <div class="parent grid-parent">
-              <input
-                class="child"
-                placeholder="Search Documentation"
-                type="text"
-                bind:value={textVal}
-              />
-              <button
-                class="searchButton"
-                on:click|preventDefault={handleKeyup2}>Search</button
-              >
-              <button class="backButton" on:click={handleDocuments}>Back</button
-              >
+
+      <div class="box wrapper-left">
+
+
+
+            <div class="box wrapper-upper" id="wrapper-upper">
+
+
+
+
+
+
+                            <div class="box a target" id="file-dir">
+                              <FileDir />
+                            </div>
+
+
+
+
+
+
+                    <div class="dividers-v" id="filedir-divider" />
+
+
+
+
+
+
+                          <div class="box b" id="editor-window">
+                            <!-- svelte-ignore missing-declaration -->
+                            <div class="editor-wrapper">
+                              <Editor class="childClass" />
+                            </div>
+                          </div>
+
+                
+
+
+                    <div class="dividers-v" id="editor-divider" />
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
-            <iframe class="docs" title="test" src={documentation} />
-          {/if}
-          {#if docsBool === false}
-            <div class="parent grid-parent">
+
+
+
+
+
+
+
+        <div class="dividers-h" id="horizontal-divider" />
+
+
+
+
+
+                <div class="box wrapper-bottom">
+
+
+
+                                <div class="box c root" id="state-mgr">
+                                  <StateManager />
+                                </div>
+
+
+
+
+                      <div class="dividers-v" id="statemgr-divider" />
+
+
+
+
+
+                                <div class="box e" id="terminal-window">
+                                  <XTerm />
+                                </div>
+
+
+
+
+                </div>
+
+
+      </div>
+
+
+
+
+  <div class="dividers-v" id="statemgr-divider" />
+
+
+
+
+
+      <div class="box wrapper-right">
               
-              <!-- <input
-                class="child"
-                placeholder={value === "" ? "Local Host Port" : value}
-                type="text"
-                on:keyup|preventDefault={handleKeyup}
-                /> -->
-          
+              
+
+        <div class="box d root">
+          <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
+            {#if docsBool === true}
+              <div class="parent grid-parent">
+                <input
+                  class="child"
+                  placeholder="Search Documentation"
+                  type="text"
+                  bind:value={textVal}
+                />
                 <button
-                type="button"
-                class="childButton"
-                on:click={handleDocuments}>Docs?</button
+                  class="searchButton"
+                  on:click|preventDefault={handleKeyup2}>Search</button
                 >
+                <button class="backButton" on:click={handleDocuments}>Back</button
+                >
+              </div>
+              <iframe class="docs" title="test" src={documentation} />
+            {/if}
+            {#if docsBool === false}
+              <div class="parent grid-parent">
+                
+                <!-- <input
+                  class="child"
+                  placeholder={value === "" ? "Local Host Port" : value}
+                  type="text"
+                  on:keyup|preventDefault={handleKeyup}
+                  /> -->
+            
+                  <button
+                  type="button"
+                  class="childButton"
+                  on:click={handleDocuments}>Docs?</button
+                  >
 
-            </div>
-            <!-- <iframe
-              class="webpage"
-              title="local host"
-              src={localhost}
-              frameBorder="0"
-            /> -->
+              </div>
+              <!-- <iframe
+                class="webpage"
+                title="local host"
+                src={localhost}
+                frameBorder="0"
+              /> -->
 
-            <!-- ------------------------------------------- -->
-            <!-- <div class="box c root" id="state-mgr"> -->
-            <StateManager />
-            <!-- </div> -->
-            <!-- ------------------------------------------- -->
-            <div id="dummyGraph">
-              <BarChart {myData} />
-            </div>
+              <!-- ------------------------------------------- -->
+              <!-- <div class="box c root" id="state-mgr"> -->
+              <StateManager />
+              <!-- </div> -->
+              <!-- ------------------------------------------- -->
+              <div id="dummyGraph">
+                <BarChart {myData} />
+              </div>
 
-          {/if}
-        </form>
+            {/if}
+          </form>
+        </div>
+
+
+
+
+
+
       </div>
-      <div />
-    </div>
-    <div class="dividers-h" id="horizontal-divider" />
-    <div class="box wrapper-bottom">
-      <!-- <!-- <div class="box c root" id="state-mgr">
-        <StateManager />
-      </div> -->
-      <div class="dividers-v" id="statemgr-divider" />
-      <div class="box e" id="terminal-window">
-        <XTerm />
-      </div>
-    </div>
+            
+            
+
+
+
+
   </main>
+
+
+
+
+
+
+
+
+
+
 </body>
 
 <style>
-:root{--syntax_normal:#1b1e23;--syntax_comment:#a9b0bc;--syntax_number:#20a5ba;--syntax_keyword:#c30771;--syntax_atom:#10a778;--syntax_string:#008ec4;--syntax_error:#ffbedc;--syntax_unknown_variable:#838383;--syntax_known_variable:#005f87;--syntax_matchbracket:#20bbfc;--syntax_key:#6636b4;--mono_fonts:82%/1.5 Menlo,Consolas,monospace}.observablehq--collapsed,.observablehq--expanded,.observablehq--function,.observablehq--gray,.observablehq--import,.observablehq--string:after,.observablehq--string:before{color:var(--syntax_normal)}.observablehq--collapsed,.observablehq--inspect a{cursor:pointer}.observablehq--field{text-indent:-1em;margin-left:1em}.observablehq--empty{color:var(--syntax_comment)}.observablehq--blue,.observablehq--keyword{color:#3182bd}.observablehq--forbidden,.observablehq--pink{color:#e377c2}.observablehq--orange{color:#e6550d}.observablehq--boolean,.observablehq--null,.observablehq--undefined{color:var(--syntax_atom)}.observablehq--bigint,.observablehq--date,.observablehq--green,.observablehq--number,.observablehq--regexp,.observablehq--symbol{color:var(--syntax_number)}.observablehq--index,.observablehq--key{color:var(--syntax_key)}.observablehq--prototype-key{color:#aaa}.observablehq--empty{font-style:oblique}.observablehq--purple,.observablehq--string{color:var(--syntax_string)}.observablehq--error,.observablehq--red{color:#e7040f}.observablehq--inspect{font:var(--mono_fonts);overflow-x:auto;display:block;white-space:pre}.observablehq--error .observablehq--inspect{word-break:break-all;white-space:pre-wrap}
-
-.container {
-  overflow-x: auto;
-}
-
-:global(.chart) {
-width: 100%;
-min-width: 200px;
-max-width: 1200px;
-}
-
 
   #dummyGraph {
     background-color: pink;

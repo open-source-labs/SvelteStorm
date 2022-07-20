@@ -39,11 +39,12 @@ if (require('electron-squirrel-startup')) {
 const windows = new Set();
 const openFiles = new Map();
 
+let newWindow;
 //app.on is a start of the main process that controls the lifecycle events
 //Fires once when app is ready..
 app.on('ready', () => {
   createApplicationMenu();
-  createWindow();
+  newWindow = createWindow();
 });
 
 //testing to see if on mac, don't close all the windows
@@ -90,12 +91,11 @@ const createWindow = (exports.createWindow = () => {
   // you have to rename the symbols in the page before including other libraries:
   //window.nodeRequire = require; in html file
 
-
-/*
-* ==================================================
-*   Create a new Browers Window for display in Electron, but don't show it yet.
-* ==================================================
-*/
+  /*
+   * ==================================================
+   *   Create a new Browers Window for display in Electron, but don't show it yet.
+   * ==================================================
+   */
   let newWindow = new BrowserWindow({
     x,
     y,
@@ -109,19 +109,15 @@ const createWindow = (exports.createWindow = () => {
   //theme for the menu bar on top
   nativeTheme.themeSource = 'dark';
 
-
-/*
-* ==================================================
-*   Load the initial HTML file into the window.
-* ==================================================
-*/
+  /*
+   * ==================================================
+   *   Load the initial HTML file into the window.
+   * ==================================================
+   */
   //loading index.html into the app
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
   newWindow.webContents.openDevTools();
-
-
-
 
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
@@ -187,10 +183,14 @@ const createWindow = (exports.createWindow = () => {
 
   // add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
   ipcMain.on('openFolder', (event, data) => {
-    console.log('pty before:', ptyProcess)
+    console.log('pty before:', ptyProcess);
     ptyProcess.cwd = cwdFilePath[0];
-    console.log('pty after:', ptyProcess)
-  })
+    console.log(
+      '🔴🟠🟡🟢🔵🟣 | file: index.js | line 192 | ipcMain.on | cwdFilePath[0]',
+      cwdFilePath[0]
+    );
+    console.log('pty after:', ptyProcess);
+  });
 
   //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
   ptyProcess.onData((data) => {
@@ -233,7 +233,7 @@ const openBrowserWindow = (exports.openBrowserWindow = () => {
       nodeIntegrationInSubFrames: true,
       nodeIntegrationInWorker: true,
     },
-  })
+  });
   browser.webContents.loadURL('http://localhost:8080');
   browser.webContents.openDevTools();
 });
@@ -255,7 +255,6 @@ const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
       openFile(targetWindow, files.filePaths[0]);
     }
   }
-  
 });
 
 const openFile = (exports.openFile = (targetWindow, file) => {
@@ -336,3 +335,13 @@ ipcMain.handle('decreaseFontSize', decreaseFontSize);
 ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
 ipcMain.handle('testFunc', testFunc);
+
+ipcMain.on('SNAPSHOT', (event, data) => {
+  console.log(BrowserWindow.getAllWindows());
+  console.log('DATA SNAPSHOT ', data);
+  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
+  console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 345 | ipcMain.on | data', data);
+  console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 351 | ipcMain.on | newWindow', newWindow);
+  newWindow.webContents.send('JIMSHOT', data);
+});

@@ -1,7 +1,20 @@
 <script>
+  const {ipcRenderer} = require('electron');
+
   import { scaleBand, scaleLinear } from "d3-scale";
 
   export let myData;
+
+
+  ipcRenderer.on('JIMSHOT', (event, data) => {
+  console.log('DATA JIMSHOT ', data)
+  console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+  console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
+  console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 345 | ipcMain.on | data', data);
+})
+
+
+
 
   console.log("0000000000000000000000000000000000000000000000000000000000000000000000000000");
   console.log("myData:", myData);
