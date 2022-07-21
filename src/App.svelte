@@ -4,7 +4,7 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
-  import BarChart from "./Debugger/BarChart.svelte";
+  import Chart from "./Debugger/Chart.svelte";
   import IceChart from "./Debugger/IceChart.svelte";
   import myData from "./Debugger/2019.js";
 
@@ -340,7 +340,7 @@
             <!-- </div> -->
             <!-- ------------------------------------------- -->
             <div id="dummyGraph">
-              <BarChart {myData} />
+              <Chart {myData} />
             </div>
 
           {/if}
@@ -376,7 +376,7 @@ max-width: 1200px;
 
 
   #dummyGraph {
-    background-color: pink;
+    background-color: whitesmoke;
     width: 100%;
     height: 100%;
   }
