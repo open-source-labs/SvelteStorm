@@ -246,24 +246,23 @@
         //2022-ST-RJ reading svelte files to help construct state management tree. storing info in the stateObj of the DirectoryStore aliased as DirectoryData
 
   
-        const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
         if (file.split('.').pop() === 'svelte'){
           
           if(path.includes('node_modules') !== true) {
             var content:string = fs.readFileSync(`${path}/${file}`).toString();                    
             var stateArr:string[] = [];
             
-      /*
-      * ==================================================
-      *   2022-07-20 Jim White & Ryan Huie
-      * 
-      *   When SvelteStorm opens a Folder ... it builds a 
-      *   file tree of all the files in the project 
-      *   (including node_modules).  As it builds this 
-      *   tree it also opens and examines all the .svelte 
-      *   files looking to identify the Svelte Data Store 
-      *   within each file (Existing feature in 
-      *   SvelteStore 3.0).  We (SvelteStorm 4.0 team) are 
+            /*
+            * ==================================================
+            *   2022-07-20 Jim White & Ryan Huie
+            * 
+            *   When SvelteStorm opens a Folder ... it builds a 
+            *   file tree of all the files in the project 
+            *   (including node_modules).  As it builds this 
+            *   tree it also opens and examines all the .svelte 
+            *   files looking to identify the Svelte Data Store 
+            *   within each file (Existing feature in 
+            *   SvelteStore 3.0).  We (SvelteStorm 4.0 team) are 
       *   piggy backing on this existing file scrapping 
       *   to also scrape for Parent Child relationships.  
       * 
@@ -275,38 +274,43 @@
       * 
       * ==================================================
       */
-       
+     
+     
+     const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
+     const importsArray = content.match(regexImports);
+     
 
-           const importsArray = content.match(regexImports);
+    if (importsArray) {
 
-          let tParentChildTree = {}
+    let tParentChildTree = {}
 
-          tParentChildTree[file] = {}
-          
-          for(let i = 0; i < importsArray.length; i++) {
-            let foundComp = (importsArray[i].split(' '));
-            let reallyFoundComp = foundComp[1];
-            tParentChildTree[file][reallyFoundComp] = {};
-          }
-          
-          console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree', tParentChildTree);
+    tParentChildTree[file] = {}
+
+    for(let i = 0; i < importsArray.length; i++) {
+      let foundComp = (importsArray[i].split(' '));
+      let reallyFoundComp = foundComp[1];
+      tParentChildTree[file][reallyFoundComp] = {};
+    }
+
+    console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree', tParentChildTree);
+
+    // parentChildTree[file] = 
+    DirectoryData.update(currentData => {
+      return {
+        ...currentData,
+        ParentChildTree: tParentChildTree
+      };
+    }) 
+
+    const thereYet = get(DirectoryData);
+    console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
+    }
             
-            // parentChildTree[file] = 
-            DirectoryData.update(currentData => {
-              return {
-                ...currentData,
-                ParentChildTree: tParentChildTree
-              };
-            }) 
-
-            const thereYet = get(DirectoryData);
-            console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
-
-
-
-
-
-
+            
+            
+            
+            
+            
             /*
             * ==================================================
             *   StelteStorm 3.0 Team
