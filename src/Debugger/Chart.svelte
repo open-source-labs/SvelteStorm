@@ -1,7 +1,8 @@
 <script>
-  const { ipcRenderer } = require("electron");
+  const { ipcRenderer, BrowserWindow } = require("electron");
   import { snapshots } from "./stores.js";
   import Snap from "./Snap.svelte";
+  import { indexes } from "d3";
   let snapshotList;
   let activeIndex = 0;
   let states = [];
@@ -27,22 +28,61 @@
     states = [...states.slice(0, data.body.cacheLength), componentStateArray]
   });
 
-  let ifClicked = false;
 
-  function handleClick(idx) {
-    activeIndex = idx;
-    ifClicked = !ifClicked;
-    console.log('*****************', compState.componentStates[0][0]['$$'].props)
+  function updateWindow (index) {
+    ipcRenderer.send('TIME_TRAVEL', index)
   }
 
-  console.log(snapshotList);
 </script>
 
-<ul>
+
   {#if snapshotList.length}
+  <div class="buttonContainer">
     {#each snapshotList as snapshot, idx}
-      <button on:click={()=>activeIndex = idx}>Snapshot {idx + 1}</button>
+      <button on:click={()=> {
+        activeIndex = idx;
+        updateWindow(activeIndex);
+        }}>Snapshot {idx + 1}</button>
     {/each}
+  </div>
+  <div class="container">
+    <div class="block">
       <Snap {compState} />
+    </div>
+  </div>
   {/if}
-</ul>
+
+
+<style>
+  .buttonContainer {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  .block {
+    /* border: 5px solid; */
+    /* border-color: aqua; */
+    width: 180px;
+    /* color: white; */
+  }
+  button{
+    color: rgb(188, 188, 188);
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #1c2737;
+    transition: .2s;
+  }
+  button:hover{
+    color: white;
+    background-color: rgb(36, 50, 71);
+    -webkit-transform: translateY(-2px);
+    -webkit-transform: translateX(-1px);
+    transform: scale(1.05,1.05);
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-evenly;
+  }
+</style>
