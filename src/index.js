@@ -219,9 +219,10 @@ const createWindow = (exports.createWindow = () => {
   return newWindow;
 });
 
+let browser;
 // open browser window when user selects open brower window from file menu
 const openBrowserWindow = (exports.openBrowserWindow = () => {
-  const browser = new BrowserWindow({
+  browser = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -345,3 +346,13 @@ ipcMain.on('SNAPSHOT', (event, data) => {
   console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 351 | ipcMain.on | newWindow', newWindow);
   newWindow.webContents.send('JIMSHOT', data);
 });
+
+ipcMain.on('TIME_TRAVEL', (event, data) => {
+  // console.log(data)
+  const instance = {
+    message: "TIME_TRAVEL",
+    ctxIndex: data
+  };
+  // Use browser window to send time-travel message
+  browser.webContents.send('TIME_TRAVEL', instance);
+})
