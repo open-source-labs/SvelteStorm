@@ -487,7 +487,7 @@
 
 <style>
   #dummyGraph {
-    background-color: whitesmoke;
+    background-color: #0d1117;
     width: 100%;
     height: 100%;
   }
@@ -561,7 +561,7 @@
       min-width: 30%;
       /* background-color: rgba(28, 28, 36, 0.678); */
       /* background-color: #070a0f; */
-      border-right: 1px solid #eb09c9;
+      border-right: 1px solid #444;
       padding: 0;
       /* margin-right: -8px; */
   
@@ -622,6 +622,7 @@
   }
   .docs {
     overflow: auto;
+    color: white;
     /* resize: vertical; */
     height: 90%;
     width: 98%;
@@ -630,7 +631,7 @@
   
   .render-wrapper {
     /* background-color: #252532; */
-    background-color: #9a9a67;
+    background-color: #0d1117;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -793,6 +794,10 @@
     height: 100%;
     width: 98%;
     color: "grey";
+  }
+
+  .parent.grid-parent button {
+    color: white;
   }
   
   .b :global(.childClass) {
