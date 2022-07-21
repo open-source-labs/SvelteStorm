@@ -4,7 +4,7 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
-  import BarChart from "./Debugger/BarChart.svelte";
+  import BarChart from "./Debugger/Chart.svelte";
   import myData from "./Debugger/2019.js";
 
   import searchDoc from "./SearchProgram.js";
