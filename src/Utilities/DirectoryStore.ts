@@ -19,6 +19,7 @@ const DirectoryData: Writable<State> = writable<State>({
   createMainFolder: false,
   reload: false,
   activeFolder: '',
+  parentChildTree: {},
 });
 
 const openTabs: Writable<NewFile[]> = writable<NewFile[]>([]);

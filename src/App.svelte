@@ -51,7 +51,7 @@
     let upperPanel: HTMLElement = document.getElementById("wrapper-upper");
     let editorPanel: HTMLElement = document.getElementById("editor-window");
     let filedirPanel: HTMLElement = document.getElementById("file-dir");
-    let statemgrPanel: HTMLElement = document.getElementById("state-mgr");
+    // let statemgrPanel: HTMLElement = document.getElementById("state-mgr");
     let mdown_posx: number;
     let mdown_posy: number;
     let x_pos: number;
@@ -60,12 +60,11 @@
       "horizontal-divider": { isResizing: false },
       // "editor-divider": { isResizing: false },
       "filedir-divider": { isResizing: false },
-      "statemgr-divider": { isResizing: false },
+      // "statemgr-divider": { isResizing: false },
       "visualization-divider": { isResizing: false },
     };
 
     function resize(e: MouseEvent, panel: string): void {
-      console.log('🔴🟠🟡🟢🔵🟣 | file: App.svelte | line 68 | resize | panel', panel);
       const dx: number = mdown_posx - e.x; //difference in x coordinates (current mouse position versus where mousedown began)
       const dy: number = mdown_posy - e.y;
 
@@ -81,9 +80,9 @@
       } else if (panel === "filedir-divider") {
         filedirPanel.style.width =
           parseInt(getComputedStyle(filedirPanel).width) - dx + "px"; //Resizing width of edit panel
-      } else if (panel === "statemgr-divider") {
-        statemgrPanel.style.width =
-          parseInt(getComputedStyle(statemgrPanel).width) - dx + "px"; //Resizing width of edit panel
+      // } else if (panel === "statemgr-divider") {
+      //   statemgrPanel.style.width =
+      //     parseInt(getComputedStyle(statemgrPanel).width) - dx + "px"; //Resizing width of edit panel
         // statemgrPanel.style.width = 500 + "px"; //Direct resize works but not with dragging---think it may be related to xterm sizing...
       } else {
       }
@@ -162,10 +161,10 @@
         if (resizeObj[panel].isResizing === true) {
           resize(e, "filedir-divider");
         }
-      } else if (panel === "statemgr-divider") {
-        if (resizeObj[panel].isResizing === true) {
-          resize(e, "statemgr-divider");
-        }
+      // } else if (panel === "statemgr-divider") {
+      //   if (resizeObj[panel].isResizing === true) {
+      //     resize(e, "statemgr-divider");
+      //   }
       } else {
       }
     }
@@ -189,7 +188,7 @@
     let horizDivider: HTMLElement = document.getElementById("horizontal-divider");
     let editorDivider: HTMLElement = document.getElementById("editor-divider");
     let filedirDivider: HTMLElement =  document.getElementById("filedir-divider");
-    let statemgrDivider: HTMLElement = document.getElementById("statemgr-divider");
+    // let statemgrDivider: HTMLElement = document.getElementById("statemgr-divider");
     let visualizationDivider: HTMLElement = document.getElementById("visualization-divider");
 
     horizDivider.addEventListener("mouseover", (e) =>
@@ -220,12 +219,12 @@
       dragStart(e, "filedir-divider")
     );
 
-    statemgrDivider.addEventListener("mouseover", (e) =>
-      chgCursor(e, "statemgr-divider")
-    );
-    statemgrDivider.addEventListener("mousedown", (e) =>
-      dragStart(e, "statemgr-divider")
-    );
+    // statemgrDivider.addEventListener("mouseover", (e) =>
+    //   chgCursor(e, "statemgr-divider")
+    // );
+    // statemgrDivider.addEventListener("mousedown", (e) =>
+    //   dragStart(e, "statemgr-divider")
+    // );
 
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
@@ -364,14 +363,14 @@
 
 
 
-                                <div class="box c root" id="state-mgr">
+                                <!-- <div class="box c root" id="state-mgr">
                                   <StateManager />
                                 </div>
 
 
 
 
-                      <div class="dividers-v" id="statemgr-divider" />
+                      <div class="dividers-v" id="statemgr-divider" /> -->
 
 
 
@@ -562,7 +561,7 @@
       min-width: 30%;
       /* background-color: rgba(28, 28, 36, 0.678); */
       /* background-color: #070a0f; */
-      border-right: 5px solid #eb09c9;
+      border-right: 1px solid #eb09c9;
       padding: 0;
       /* margin-right: -8px; */
   

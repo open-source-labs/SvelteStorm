@@ -4,6 +4,7 @@
     import { onMount, onDestroy, afterUpdate} from 'svelte';
     import { DirectoryData } from '../Utilities/DirectoryStore';
     import type { Filetree } from '../types'
+    import {get} from 'svelte/store'
     const myPath = require('node:path');
     const fs = require('fs');
     let savedTree:string[];
@@ -17,11 +18,17 @@
     let directory;
     let rename;
     let stateObj = {};
+    let parentChildTree = {};
     let resultArr:[] = [];
     let fsTimeout;
+    let removeLater;
     export let activeDir = '';
     let mainDir = '';
     export let reload = false;
+
+  DirectoryData.subscribe(data => {
+    removeLater = data.parentChildTree;
+  })
   
   const unsub = DirectoryData.subscribe(data =>{
     rename = data.rename;      
@@ -141,13 +148,13 @@
       }
 
       function updateRollupConfig (path) {
-        console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
-        console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 144 | FileTree | updateRollupConfig | path', path);
+        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
+        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 144 | FileTree | updateRollupConfig | path', path);
         // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 145 | FileTree | fs.readdirSync | file🔴🟠🟡🟢🔵🟣', file);
-        console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
+        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
         const originalConfig = path + '/rollup.config.js';
         const newConfig = path + '/rollup.config.new.js';
-        console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 149 | FileTree | updateRollupConfig | originalConfig', originalConfig);
+        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 149 | FileTree | updateRollupConfig | originalConfig', originalConfig);
           // return;
           /*
           * ==================================================
@@ -191,10 +198,10 @@
               newMyFileAsArray.push(myFileAsArray[i]);
             }
           }
-          console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 176 | FileTree | fs.readdirSync | newMyFileAsArray', newMyFileAsArray);
+          // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 176 | FileTree | fs.readdirSync | newMyFileAsArray', newMyFileAsArray);
 
           const textToWrite = newMyFileAsArray.join('\n');
-          console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 208 | FileTree | fs.readdirSync | textToWrite', textToWrite);
+          // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 208 | FileTree | fs.readdirSync | textToWrite', textToWrite);
 
 
           // const myNewFileName = myPath.resolve(__dirname, '../rollup.config.new.js');
@@ -275,13 +282,51 @@
               
         //       fs.writeFileSync(myNewFileName, textToWrite, {encoding: "utf8", flag: "w", mode: 0o666 } );
         // }
-
+        const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
         if (file.split('.').pop() === 'svelte'){
           
           if(path.includes('node_modules') !== true) {
             var content:string = fs.readFileSync(`${path}/${file}`).toString();                    
             var stateArr:string[] = [];
-            //splitting contents of svelte files at carriage returns and newline. The ? signifies once or none occurrence...look for carriage return and split if it exists, otherwise split at newline?
+            
+            
+            
+            
+            /*
+            * ==================================================
+            *   checking for svelte component imports to get 
+            *   child parent relationships
+            * ==================================================
+            */
+           
+           const importsArray = content.match(regexImports);
+
+          let tParentChildTree = {}
+
+          tParentChildTree[file] = {}
+          
+          for(let i = 0; i < importsArray.length; i++) {
+            let foundComp = (importsArray[i].split(' '));
+            let reallyFoundComp = foundComp[1];
+            tParentChildTree[file][reallyFoundComp] = {};
+          }
+          
+          console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree', tParentChildTree);
+            
+            // parentChildTree[file] = 
+            DirectoryData.update(currentData => {
+              return {
+                ...currentData,
+                ParentChildTree: tParentChildTree
+              };
+            }) 
+
+            const thereYet = get(DirectoryData);
+            console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
+
+            // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 317 | FileTree | fs.readdirSync | removeLater', removeLater);
+           
+           //splitting contents of svelte files at carriage returns and newline. The ? signifies once or none occurrence...look for carriage return and split if it exists, otherwise split at newline?
             var value = content.split(/\r?\n/);
             if(value !==[""]) {
               value.forEach( el => {
