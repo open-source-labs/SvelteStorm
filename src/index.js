@@ -103,6 +103,7 @@ const createWindow = (exports.createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      enableRemoteModule: true, 
     },
   });
 
@@ -232,6 +233,7 @@ const openBrowserWindow = (exports.openBrowserWindow = () => {
       webSecurity: false,
       nodeIntegrationInSubFrames: true,
       nodeIntegrationInWorker: true,
+      enableRemoteModule: true, 
     },
   });
   browser.webContents.loadURL('http://localhost:8080');
@@ -344,4 +346,7 @@ ipcMain.on('SNAPSHOT', (event, data) => {
   console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 345 | ipcMain.on | data', data);
   console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 351 | ipcMain.on | newWindow', newWindow);
   newWindow.webContents.send('JIMSHOT', data);
+});
+ipcMain.on('quit-app', () => {
+  app.quit();
 });

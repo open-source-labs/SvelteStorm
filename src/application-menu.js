@@ -1,6 +1,7 @@
-const { app, BrowserWindow, dialog, Menu, ipcRenderer, webContents } = require('electron');
+const { app, BrowserWindow, dialog, Menu, ipcRenderer, webContents, ipcMain } = require('electron');
 const main = require('electron-reload');
 const mainProcess = require('./index.js');
+const remote = require('electron').remote
 
 const createApplicationMenu = (app) => {
   const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length;
@@ -250,7 +251,17 @@ const createApplicationMenu = (app) => {
         {
           label: `Quit ${name}`,
           accelerator: 'Command+Q',
-          click() { app.quit(); },
+          // click() { app.quit(); },
+          // click() { app.exit(0); },
+          // click() {
+          //   if (remote.getCurrentWindow()) {
+          //     let w = remote.getCurrentWindow()
+          //     w.close()
+          //   }
+          // },
+          click() {
+            ipcRenderer.send('quit-app');
+          },
         },
       ],
     });
