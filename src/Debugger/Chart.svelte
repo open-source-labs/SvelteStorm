@@ -1,7 +1,8 @@
 <script>
-  const { ipcRenderer } = require("electron");
+  const { ipcRenderer, BrowserWindow } = require("electron");
   import { snapshots } from "./stores.js";
   import Snap from "./Snap.svelte";
+  import { indexes } from "d3";
   let snapshotList;
   let activeIndex = 0;
   let states = [];
@@ -27,21 +28,20 @@
     states = [...states.slice(0, data.body.cacheLength), componentStateArray]
   });
 
-  let ifClicked = false;
 
-  function handleClick(idx) {
-    activeIndex = idx;
-    ifClicked = !ifClicked;
-    console.log('*****************', compState.componentStates[0][0]['$$'].props)
+  function updateWindow (index) {
+    ipcRenderer.send('TIME_TRAVEL', index)
   }
 
-  console.log(snapshotList);
 </script>
 
 <ul>
   {#if snapshotList.length}
     {#each snapshotList as snapshot, idx}
-      <button on:click={()=>activeIndex = idx}>Snapshot {idx + 1}</button>
+      <button on:click={()=> {
+        activeIndex = idx;
+        updateWindow(activeIndex);
+        }}>Snapshot {idx + 1}</button>
     {/each}
       <Snap {compState} />
   {/if}
