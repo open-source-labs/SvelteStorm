@@ -4,7 +4,7 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
-  import BarChart from "./Debugger/BarChart.svelte";
+  import BarChart from "./Debugger/Chart.svelte";
   import myData from "./Debugger/2019.js";
 
   import searchDoc from "./SearchProgram.js";
@@ -12,7 +12,7 @@
 
   import define from './636c57cd4c8f785e@309.js'
 
-import {Runtime, Library, Inspector} from "./runtime.org.js";
+// import {Runtime, Library, Inspector} from "./runtime.org.js";
 
 const runtime = new Runtime();
 const main = runtime.module(define, name => {
@@ -174,7 +174,7 @@ const main = runtime.module(define, name => {
     *   Just a Test... 
     * ==================================================
     */
-    // editorDivider.style.background = 'blue';
+    editorDivider.style.background = 'blue';
 
     //* End of test
     
@@ -384,7 +384,8 @@ const main = runtime.module(define, name => {
               
               
 
-        <div class="box d root">
+        <!-- <div class="box d root"> -->
+        <div class="box root">
           <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
             {#if docsBool === true}
               <div class="parent grid-parent">
@@ -500,24 +501,34 @@ const main = runtime.module(define, name => {
     height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    /* background-color: rgb(39, 38, 38); */
+    background-color: #0d1117;
+    color: #444;
+  }
+  
+
+    .wrapper-left {
+      height: 100%;
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      /* background-color: rgb(39, 38, 38); */
+      background-color: #0d1117;
+      color: #444;
+    }
+
+  .wrapper-right {
+    height: 100%;
+    width: 40%;
+    display: flex;
+    flex-direction: row;
     /* background-color: rgb(39, 38, 38); */
     background-color: #0d1117;
     color: #444;
   }
 
-  .editor-wrapper {
-    height: 100%;
-    width: 100%;
-    z-index: 1;
-  }
-  .docs {
-    overflow: auto;
-    /* resize: vertical; */
-    height: 90%;
-    width: 98%;
-    color: "grey";
-  }
+
   .wrapper-upper {
     height: 80%;
     display: flex;
@@ -526,7 +537,7 @@ const main = runtime.module(define, name => {
     /* resize: vertical; */
     overflow: auto;
     /* background-color: rgb(39, 38, 38); */
-    background-color: #0d1117;
+    background-color: #4e947f;
     color: #444;
     /* padding: 5px; */
     z-index: 0;
@@ -539,15 +550,27 @@ const main = runtime.module(define, name => {
     flex-direction: row;
     width: 100%;
     /* background-color: rgb(39, 38, 38); */
-    background-color: #0d1117;
+    background-color: #344867;
     color: #444;
     position: relative;
     margin-top: -8px;
   }
+  .editor-wrapper {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+  }
+  .docs {
+    overflow: auto;
+    /* resize: vertical; */
+    height: 90%;
+    width: 98%;
+    color: "grey";
+  }
 
   .render-wrapper {
     /* background-color: #252532; */
-    background-color: #0d1117;
+    background-color: #9a9a67;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -560,41 +583,19 @@ const main = runtime.module(define, name => {
     /* padding-top: 3px; */
   /* padding-bottom: 3px; */
 
-  .childButton {
-    color: grey;
-    background: transparent;
-    font-size: small;
-    border: none;
-  }
-  .backButton {
-    color: lightgray;
-    background: transparent;
-    border: 1px;
-    font-size: small;
-    border-style: inset;
-    border-color: grey;
-  }
-  .searchButton {
-    color: lightgray;
-    background: transparent;
-    border: 1px;
-    font-size: small;
-    border-style: inset;
-    border-color: grey;
-  }
   /* #filedir-divider {
     height: 100%;
-    width: 2px;
+    width: 3px;
   }
 
   #editor-divider {
     height: 100%;
-    width: 2px;
+    width: 3px;
   }
 
   #statemgr-divider {
     height: 100%;
-    width: 1px;
+    width: 3px;
   } */
 
   .dividers-h {
@@ -627,7 +628,7 @@ const main = runtime.module(define, name => {
   } */
 
   .box {
-    background-color: rgb(39, 38, 38);
+    background-color: rgb(102, 217, 132);
     color: rgb(245, 242, 239);
     border-radius: 0px;
     /* padding: 5px; */
@@ -729,6 +730,30 @@ const main = runtime.module(define, name => {
     overflow: scroll;
     display: flex;
   }
+
+  .childButton {
+    color: grey;
+    background: transparent;
+    font-size: small;
+    border: none;
+  }
+  .backButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
+  }
+  .searchButton {
+    color: lightgray;
+    background: transparent;
+    border: 1px;
+    font-size: small;
+    border-style: inset;
+    border-color: grey;
+  }
+
 
   iframe:focus {
     outline: none;
