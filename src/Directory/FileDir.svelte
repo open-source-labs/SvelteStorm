@@ -4,6 +4,7 @@
     import { onMount, onDestroy, afterUpdate} from 'svelte';
     import { DirectoryData } from '../Utilities/DirectoryStore';
     import type { Filetree } from '../types'
+    import {get} from 'svelte/store'
     const myPath = require('node:path');
     const fs = require('fs');
     let savedTree:string[];
@@ -11,17 +12,20 @@
     const {ipcRenderer} = require('electron');
 
 
-
-
-
     let directory;
     let rename;
     let stateObj = {};
+    let parentChildTree = {};
     let resultArr:[] = [];
     let fsTimeout;
+    let removeLater;
     export let activeDir = '';
     let mainDir = '';
     export let reload = false;
+
+  DirectoryData.subscribe(data => {
+    removeLater = data.parentChildTree;
+  })
   
   const unsub = DirectoryData.subscribe(data =>{
     rename = data.rename;      
@@ -132,22 +136,52 @@
     }
     
     static readDir(path) {
-      console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
+      // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
       var fileArray = [];
 
-      if (!updateRollupConfigRun) {
-        updateRollupConfig(path);
-        updateRollupConfigRun = true;
-      }
-
-      function updateRollupConfig (path) {
-        console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
-        console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 144 | FileTree | updateRollupConfig | path', path);
+      /*
+      * ==================================================
+      *   2022-07-19 Jim White & Ryan Huie
+      * 
+      *   Read current rollup.config.js file and write it
+      *   to rollup.config.new.js.  
+      * 
+      *   The new file will contain two additional 
+      *   import statements:
+      *     o  One for importing a custom rollup pluging
+      *     o  One for importing path
+        * 
+        *   The new file will also contain a new
+        *   plugin section.
+        * 
+        *         banner({
+        *           prependFile: '${myPath.resolve(__dirname, 'SvelteStormdebugPrepend.js')}',
+        *           appendFile: '${myPath.resolve(__dirname, 'SvelteStormdebugAppend.js')}',
+        *           encoding: 'utf-8', // default is utf-8
+        *         }),
+        * 
+        *   This will result in SvelteStorm "wrapping" the 
+        *   app being debugged in our code which adds event 
+        *   listeners to report state changes back to 
+        *   SvelteStorm.
+        * 
+        * ==================================================
+        */
+       
+       if (!updateRollupConfigRun) {
+         updateRollupConfig(path);
+         updateRollupConfigRun = true;
+       }
+         
+       
+       function updateRollupConfig (path) {
+        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
+        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 144 | FileTree | updateRollupConfig | path', path);
         // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 145 | FileTree | fs.readdirSync | file🔴🟠🟡🟢🔵🟣', file);
-        console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
+        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
         const originalConfig = path + '/rollup.config.js';
         const newConfig = path + '/rollup.config.new.js';
-        console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 149 | FileTree | updateRollupConfig | originalConfig', originalConfig);
+        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 149 | FileTree | updateRollupConfig | originalConfig', originalConfig);
           // return;
           /*
           * ==================================================
@@ -182,19 +216,19 @@
             } else if (myFileAsArray[i].trim() === 'plugins: [') {
             newMyFileAsArray.push(myFileAsArray[i]);
             newMyFileAsArray.push(`banner({`);
-              newMyFileAsArray.push(`prependFile: '${myPath.resolve(__dirname, 'SvelteStormdebugPrepend.js')}',`);
-              newMyFileAsArray.push(`appendFile: '${myPath.resolve(__dirname, 'SvelteStormdebugAppend.js')}',`);
-              newMyFileAsArray.push(`encoding: 'utf-8', // default is utf-8`);
-              newMyFileAsArray.push(` }),`);
+            newMyFileAsArray.push(`prependFile: '${myPath.resolve(__dirname, 'SvelteStormdebugPrepend.js')}',`);
+            newMyFileAsArray.push(`appendFile: '${myPath.resolve(__dirname, 'SvelteStormdebugAppend.js')}',`);
+            newMyFileAsArray.push(`encoding: 'utf-8', // default is utf-8`);
+            newMyFileAsArray.push(` }),`);
               
             } else {
               newMyFileAsArray.push(myFileAsArray[i]);
             }
           }
-          console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 176 | FileTree | fs.readdirSync | newMyFileAsArray', newMyFileAsArray);
+          // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 176 | FileTree | fs.readdirSync | newMyFileAsArray', newMyFileAsArray);
 
           const textToWrite = newMyFileAsArray.join('\n');
-          console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 208 | FileTree | fs.readdirSync | textToWrite', textToWrite);
+          // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 208 | FileTree | fs.readdirSync | textToWrite', textToWrite);
 
 
           // const myNewFileName = myPath.resolve(__dirname, '../rollup.config.new.js');
@@ -212,76 +246,89 @@
         //2022-ST-RJ reading svelte files to help construct state management tree. storing info in the stateObj of the DirectoryStore aliased as DirectoryData
 
   
-        
-        /*
-        * ==================================================
-        *   Blah
-        * ==================================================
-        */
-
-        // function updateRollupConfig () {
-        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 145 | FileTree | fs.readdirSync | file🔴🟠🟡🟢🔵🟣', file);
-          
-        //   /*
-        //   * ==================================================
-        //   * Rename rollup.config.js to rollup.config.original.js
-        //   * 
-        //   * Make copy of projects current rollup config file
-        //   * 
-        //   * Add two lines to beginning of rollup.config.js
-        //   *   import path
-        //   *   import rollup plugin
-        //   * 
-        //   * Add banner needed lines in plugin section
-        //   * 
-        //   * ==================================================
-        //   */
-         
-        //   const myFileContent = fs.readFileSync(file, 'utf8')
-        //   const myFileAsArray = myFileContent.split('\n');
-          
-        //   // As each line is examined we either push it to a new array OR add our lines THEN continue loop and pushing to new Array
-        //   // When done new Array will be written to new file.
-        //   const newMyFileAsArray = [];
-        //   let addedImports = false;
-          
-        //   for(let i = 0; i < myFileAsArray.length; i++) {
-        //     const daLine = myFileAsArray[i].split(' ');
-        //     if (daLine[0] !== 'import' && !addedImports) {
-        //       newMyFileAsArray.push(`import banner from '${myPath.resolve(__dirname, '../src/StateManager/SvelteStormUtils/rollup-plugin-pre-app-end')}';`);
-        //       newMyFileAsArray.push(`const path = require('path');`);
-        //       newMyFileAsArray.push(myFileAsArray[i]);
-        //       addedImports = true;
-        //     } else if (myFileAsArray[i].trim() === 'plugins: [') {
-        //     newMyFileAsArray.push(myFileAsArray[i]);
-        //     newMyFileAsArray.push(`banner({`);
-        //       newMyFileAsArray.push(`prependFile: '${myPath.resolve(__dirname, 'SvelteStormdebugPrepend.js')}',`);
-        //       newMyFileAsArray.push(`appendFile: '${myPath.resolve(__dirname, 'SvelteStormdebugAppend.js')}',`);
-        //       newMyFileAsArray.push(`encoding: 'utf-8', // default is utf-8`);
-        //       newMyFileAsArray.push(` }),`);
-              
-        //     } else {
-        //       newMyFileAsArray.push(myFileAsArray[i]);
-        //     }
-        //   }
-        //   console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 176 | FileTree | fs.readdirSync | newMyFileAsArray', newMyFileAsArray);
-
-        //   const textToWrite = newMyFileAsArray.join('\n');
-        //   console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 208 | FileTree | fs.readdirSync | textToWrite', textToWrite);
-
-
-        //   const myNewFileName = myPath.resolve(__dirname, '../rollup.config.new.js');
-        //     console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 221 | FileTree | fs.readdirSync | myNewFileName', myNewFileName);
-              
-        //       fs.writeFileSync(myNewFileName, textToWrite, {encoding: "utf8", flag: "w", mode: 0o666 } );
-        // }
-
         if (file.split('.').pop() === 'svelte'){
           
           if(path.includes('node_modules') !== true) {
             var content:string = fs.readFileSync(`${path}/${file}`).toString();                    
             var stateArr:string[] = [];
-            //splitting contents of svelte files at carriage returns and newline. The ? signifies once or none occurrence...look for carriage return and split if it exists, otherwise split at newline?
+            
+            /*
+            * ==================================================
+            *   2022-07-20 Jim White & Ryan Huie
+            * 
+            *   When SvelteStorm opens a Folder ... it builds a 
+            *   file tree of all the files in the project 
+            *   (including node_modules).  As it builds this 
+            *   tree it also opens and examines all the .svelte 
+            *   files looking to identify the Svelte Data Store 
+            *   within each file (Existing feature in 
+            *   SvelteStore 3.0).  We (SvelteStorm 4.0 team) are 
+      *   piggy backing on this existing file scrapping 
+      *   to also scrape for Parent Child relationships.  
+      * 
+      *   We assume that the 'name of the file' is the 
+      *   'Parent' component and that any 
+      *   'import *.svelte' files represent the  children 
+      *   of that parent.
+      * 
+      * 
+      * ==================================================
+      */
+     
+     
+     const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
+     const importsArray = content.match(regexImports);
+     
+
+    if (importsArray) {
+
+    let tParentChildTree = {}
+
+    tParentChildTree[file] = {}
+
+    for(let i = 0; i < importsArray.length; i++) {
+      let foundComp = (importsArray[i].split(' '));
+      let reallyFoundComp = foundComp[1];
+      tParentChildTree[file][reallyFoundComp] = {};
+    }
+
+    console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree', tParentChildTree);
+
+    // parentChildTree[file] = 
+    DirectoryData.update(currentData => {
+      return {
+        ...currentData,
+        ParentChildTree: tParentChildTree
+      };
+    }) 
+
+    const thereYet = get(DirectoryData);
+    console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
+    }
+            
+            
+            
+            
+            
+            
+            /*
+            * ==================================================
+            *   StelteStorm 3.0 Team
+            * 
+            *   Looking in each .svelte file for either
+            *     export let ...
+            *     export const ... 
+            *   to determine the Data Stores in each file.
+            * 
+            *   Splitting contents of svelte files at carriage 
+            *   returns and newline. The ? signifies once or 
+            *   none occurrence...look for carriage return and 
+            *   split if it exists, otherwise split at newline?
+            * 
+            * ==================================================
+            */
+
+
             var value = content.split(/\r?\n/);
             if(value !==[""]) {
               value.forEach( el => {
@@ -317,7 +364,6 @@
           fileArray.push(fileInfo);
         }
       })
-      // fs.writeFileSync(myNewFileName, textToWrite, {encoding: "utf8", flag: "w", mode: 0o666 } );
 
     return fileArray;
     }

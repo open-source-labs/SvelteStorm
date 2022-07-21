@@ -55,6 +55,9 @@
   export interface StateObjInterface {
     [key: string]: string[];
   }
+  export interface ParentChildInterface {
+    [key: string]: {};
+  }
   export interface EditorCacheType {
     [key: string]: string;
   }
@@ -81,7 +84,8 @@ export type State = {
   createMainFolder?: boolean,
   reload?: boolean,
   activeFolder?: string,
-  fileState?: FileState
+  fileState?: FileState,
+  parentChildTree?: ParentChildInterface,
 }
 
 // imported in DirectoryStore.ts. EditorObj is used in 

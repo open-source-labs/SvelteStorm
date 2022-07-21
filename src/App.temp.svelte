@@ -4,9 +4,9 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
-  import Chart from "./Debugger/Chart.svelte";
-  // import IceChart from "./Debugger/IceChart.svelte";
-  // import myData from "./Debugger/2019.js";
+  import BarChart from "./Debugger/BarChart.svelte";
+  import IceChart from "./Debugger/IceChart.svelte";
+  import myData from "./Debugger/2019.js";
 
   import searchDoc from "./SearchProgram.js";
   import { onMount, SvelteComponent } from "svelte";
@@ -46,22 +46,22 @@
 
   onMount(async (): Promise<void> => {
     //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
+    let upperPanel: HTMLElement = document.getElementById("wrapper-upper");
     let leftPanel: HTMLElement = document.getElementById("wrapper-left");
     let rightPanel: HTMLElement = document.getElementById("wrapper-right");
-    let upperPanel: HTMLElement = document.getElementById("wrapper-upper");
     let editorPanel: HTMLElement = document.getElementById("editor-window");
     let filedirPanel: HTMLElement = document.getElementById("file-dir");
-    // let statemgrPanel: HTMLElement = document.getElementById("state-mgr");
+    let statemgrPanel: HTMLElement = document.getElementById("state-mgr");
     let mdown_posx: number;
     let mdown_posy: number;
     let x_pos: number;
     let y_pos: number;
     let resizeObj: object = {
       "horizontal-divider": { isResizing: false },
-      // "editor-divider": { isResizing: false },
-      "filedir-divider": { isResizing: false },
-      // "statemgr-divider": { isResizing: false },
+      "editor-divider": { isResizing: false },
       "visualization-divider": { isResizing: false },
+      "filedir-divider": { isResizing: false },
+      "statemgr-divider": { isResizing: false },
     };
 
     function resize(e: MouseEvent, panel: string): void {
@@ -71,18 +71,15 @@
       if (panel === "horizontal-divider") {
         upperPanel.style.height =
           parseInt(getComputedStyle(upperPanel).height) - dy + "px";
-      // } else if (panel === "editor-divider") {
-      //   editorPanel.style.width =
-      //     parseInt(getComputedStyle(editorPanel).width) - dx + "px"; //Resizing width of edit panel
       } else if (panel === "visualization-divider") {
         leftPanel.style.width =
           parseInt(getComputedStyle(leftPanel).width) - dx + "px"; //Resizing width of edit panel
       } else if (panel === "filedir-divider") {
         filedirPanel.style.width =
           parseInt(getComputedStyle(filedirPanel).width) - dx + "px"; //Resizing width of edit panel
-      // } else if (panel === "statemgr-divider") {
-      //   statemgrPanel.style.width =
-      //     parseInt(getComputedStyle(statemgrPanel).width) - dx + "px"; //Resizing width of edit panel
+      } else if (panel === "statemgr-divider") {
+        statemgrPanel.style.width =
+          parseInt(getComputedStyle(statemgrPanel).width) - dx + "px"; //Resizing width of edit panel
         // statemgrPanel.style.width = 500 + "px"; //Direct resize works but not with dragging---think it may be related to xterm sizing...
       } else {
       }
@@ -149,10 +146,6 @@
         if (resizeObj[panel].isResizing === true) {
           resize(e, "horizontal-divider");
         }
-      // } else if (panel === "editor-divider") {
-      //   if (resizeObj[panel].isResizing === true) {
-      //     resize(e, "editor-divider");
-      //   }
       } else if (panel === "visualization-divider") {
         if (resizeObj[panel].isResizing === true) {
           resize(e, "visualization-divider");
@@ -161,10 +154,10 @@
         if (resizeObj[panel].isResizing === true) {
           resize(e, "filedir-divider");
         }
-      // } else if (panel === "statemgr-divider") {
-      //   if (resizeObj[panel].isResizing === true) {
-      //     resize(e, "statemgr-divider");
-      //   }
+      } else if (panel === "statemgr-divider") {
+        if (resizeObj[panel].isResizing === true) {
+          resize(e, "statemgr-divider");
+        }
       } else {
       }
     }
@@ -174,6 +167,9 @@
       resizeObj[panel].isResizing = false;
     }
 
+    let horizDivider: HTMLElement = document.getElementById("horizontal-divider");
+    // let editorDivider: HTMLElement = document.getElementById("editor-divider");
+    let visualizationDivider: HTMLElement = document.getElementById("visualization-divider");
     
     
     /*
@@ -181,15 +177,12 @@
     *   Just a Test... 
     * ==================================================
     */
-   // editorDivider.style.background = 'blue';
-   
+    // editorDivider.style.background = 'blue';
+
     //* End of test
     
-    let horizDivider: HTMLElement = document.getElementById("horizontal-divider");
-    let editorDivider: HTMLElement = document.getElementById("editor-divider");
-    let filedirDivider: HTMLElement =  document.getElementById("filedir-divider");
-    // let statemgrDivider: HTMLElement = document.getElementById("statemgr-divider");
-    let visualizationDivider: HTMLElement = document.getElementById("visualization-divider");
+    let filedirDivider: HTMLElement = document.getElementById("filedir-divider");
+    let statemgrDivider: HTMLElement = document.getElementById("statemgr-divider");
 
     horizDivider.addEventListener("mouseover", (e) =>
       chgCursor(e, "horizontal-divider")
@@ -197,13 +190,6 @@
     horizDivider.addEventListener("mousedown", (e) =>
       dragStart(e, "horizontal-divider")
     );
-
-    // editorDivider.addEventListener("mouseover", (e) =>
-    //   chgCursor(e, "editor-divider")
-    // );
-    // editorDivider.addEventListener("mousedown", (e) =>
-    //   dragStart(e, "editor-divider")
-    // );
 
     visualizationDivider.addEventListener("mouseover", (e) =>
       chgCursor(e, "visualization-divider")
@@ -219,12 +205,12 @@
       dragStart(e, "filedir-divider")
     );
 
-    // statemgrDivider.addEventListener("mouseover", (e) =>
-    //   chgCursor(e, "statemgr-divider")
-    // );
-    // statemgrDivider.addEventListener("mousedown", (e) =>
-    //   dragStart(e, "statemgr-divider")
-    // );
+    statemgrDivider.addEventListener("mouseover", (e) =>
+      chgCursor(e, "statemgr-divider")
+    );
+    statemgrDivider.addEventListener("mousedown", (e) =>
+      dragStart(e, "statemgr-divider")
+    );
 
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
@@ -363,14 +349,14 @@
 
 
 
-                                <!-- <div class="box c root" id="state-mgr">
+                                <div class="box c root" id="state-mgr">
                                   <StateManager />
                                 </div>
 
 
 
 
-                      <div class="dividers-v" id="statemgr-divider" /> -->
+                      <div class="dividers-v" id="statemgr-divider" />
 
 
 
@@ -389,7 +375,7 @@
       </div>
 
 
-      <!-- <div class="dividers-v" id="editor-divider" /> -->
+      <div class="dividers-v" id="editor-divider" />
 
 
   <!-- <div class="dividers-v" id="statemgr-divider" /> -->
@@ -453,7 +439,7 @@
               <!-- </div> -->
               <!-- ------------------------------------------- -->
               <div id="dummyGraph">
-                <Chart />
+                <BarChart {myData} />
               </div>
 
             {/if}
@@ -486,434 +472,421 @@
 </body>
 
 <style>
-  #dummyGraph {
-    background-color: whitesmoke;
-    width: 100%;
-    height: 100%;
+:root{
+  --syntax_normal:#1b1e23;
+  --syntax_comment:#a9b0bc;
+  --syntax_number:#20a5ba;
+  --syntax_keyword:#c30771;
+  --syntax_atom:#10a778;
+  --syntax_string:#008ec4;
+  --syntax_error:#ffbedc;
+  --syntax_unknown_variable:#838383;
+  --syntax_known_variable:#005f87;
+  --syntax_matchbracket:#20bbfc;
+  --syntax_key:#6636b4;
+  --mono_fonts:82%/1.5 Menlo,Consolas,monospace
+}
+  
+  .observablehq--collapsed,.observablehq--expanded,.observablehq--function,.observablehq--gray,.observablehq--import,.observablehq--string:after,.observablehq--string:before{
+    color:var(--syntax_normal)
   }
   
-  body {
-    height: 100%;
-    width: 100%;
-  }
-  .grid-parent {
-    /* display: grid;
-    grid-template-columns: 1fr 1fr; */
-    float: left;
-  }
-  /* .inline-flex-parent {
-    display: inline-flex;
-    justify-content: flex-start;
-  }
-  .search1 {
-    justify-content: center;
-    /* padding-left: 200px; */
-  /* } */
-  /* .search2 {
-    padding-right: 150px;
-  } */
-  
-  /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
-  /* Wrapper Window - SvelteTeam */
-  .wrapper {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    /* background-color: rgb(39, 38, 38); */
-    background-color: #0d1117;
-    color: #444;
-  
-  
-  
-  
-    /* min-height: 1%;
-    height: 20%; */
-    flex-grow: 1;
-    /* display: flex;
-    flex-direction: row; */
-    /* width: 100%; */
-    /* background-color: rgb(39, 38, 38); */
-    /* background-color: #344867;
-    color: #444; */
-    position: relative;
-    /* margin-top: -8px; */
-  
+  .observablehq--collapsed,.observablehq--inspect a{
+    cursor:pointer
   }
   
+  .observablehq--field{
+    text-indent:-1em;
+    margin-left:1em
+  }
   
-    .wrapper-left {
-      height: 100%;
-      width: 60%;
-      display: flex;
-      flex-direction: column;
-      /* background-color: rgb(39, 38, 38); */
-      background-color: #0d1117;
-      color: #444;
+  .observablehq--empty{
+    color:var(--syntax_comment)
+  }
   
+  .observablehq--blue,.observablehq--keyword{
+    color:#3182bd
+  }
   
+  .observablehq--forbidden,.observablehq--pink{
+    color:#e377c2
+  }
   
+  .observablehq--orange{
+    color:#e6550d
+  }
   
-      overflow: auto;
-      max-width: 90%;
-      /* width: 15%; */
-      /* min-width: 12.8%; */
-      min-width: 30%;
-      /* background-color: rgba(28, 28, 36, 0.678); */
-      /* background-color: #070a0f; */
-      border-right: 1px solid #eb09c9;
-      padding: 0;
-      /* margin-right: -8px; */
+  .observablehq--boolean,.observablehq--null,.observablehq--undefined{
+    color:var(--syntax_atom)
+  }
   
+  .observablehq--bigint,.observablehq--date,.observablehq--green,.observablehq--number,.observablehq--regexp,.observablehq--symbol{
+    color:var(--syntax_number)
+  }
   
+  .observablehq--index,.observablehq--key{
+    color:var(--syntax_key)
+  }
   
+  .observablehq--prototype-key{
+    color:#aaa
+  }
   
-    }
+  .observablehq--empty{
+    font-style:oblique
+  }
   
-  .wrapper-right {
-    height: 100%;
-    /* width: 40%; */
-    display: flex;
-    max-width: 90%;
-      /* width: 15%; */
-      /* min-width: 12.8%; */
-      min-width: 30%;
+  .observablehq--purple,.observablehq--string{
+    color:var(--syntax_string)
+  }
+  
+  .observablehq--error,.observablehq--red{
+    color:#e7040f
+  }
+  
+  .observablehq--inspect{
+    font:var(--mono_fonts);
+    overflow-x:auto;
+    display:block;
+    white-space:pre
+  }
+  
+  .observablehq--error .observablehq--inspect{
+    word-break:break-all;
+    white-space:pre-wrap
+  }
 
-    /* flex-direction: row;   */
-    /* flex-direction: column; */
-    flex-grow: 1; /*Let render window take up remaining space in the flexbox */
-  
-    /* background-color: rgb(39, 38, 38); */
-    background-color: #0d1117;
-    color: #444;
-  }
-  
-  
-  .wrapper-upper {
-    height: 80%;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    /* resize: vertical; */
-    overflow: auto;
-    /* background-color: rgb(39, 38, 38); */
-    background-color: #4e947f;
-    color: #444;
-    /* padding: 5px; */
-    z-index: 0;
-  }
-  .wrapper-bottom {
-    min-height: 1%;
-    height: 20%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    /* background-color: rgb(39, 38, 38); */
-    background-color: #344867;
-    color: #444;
-    position: relative;
-    margin-top: -8px;
-  }
-  .editor-wrapper {
+
+#dummyGraph {
+  background-color: pink;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+}
+.grid-parent {
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+  float: left;
+}
+/* .inline-flex-parent {
+  display: inline-flex;
+  justify-content: flex-start;
+}
+.search1 {
+  justify-content: center;
+  /* padding-left: 200px; */
+/* } */
+/* .search2 {
+  padding-right: 150px;
+} */
+
+/*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
+/* Wrapper Window - SvelteTeam */
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  /* background-color: rgb(39, 38, 38); */
+  background-color: #0d1117;
+  color: #444;
+
+
+
+
+  /* min-height: 1%;
+  height: 20%; */
+  flex-grow: 1;
+  /* display: flex;
+  flex-direction: row; */
+  /* width: 100%; */
+  /* background-color: rgb(39, 38, 38); */
+  /* background-color: #344867;
+  color: #444; */
+  position: relative;
+  /* margin-top: -8px; */
+
+}
+
+
+  .wrapper-left {
     height: 100%;
-    width: 100%;
-    z-index: 1;
-  }
-  .docs {
-    overflow: auto;
-    /* resize: vertical; */
-    height: 90%;
-    width: 98%;
-    color: "grey";
-  }
-  
-  .render-wrapper {
-    /* background-color: #252532; */
-    background-color: #9a9a67;
+    width: 60%;
     display: flex;
     flex-direction: column;
-    height: 100%;
-  }
-  
-  /*Dividers used for resizing events*/
-  /* #horizontal-divider {
-    width: 100%;
-    height: 2px;
-    /* padding-top: 3px; */
-  /* padding-bottom: 3px; */
-  
-  /* #filedir-divider {
-    height: 100%;
-    width: 3px;
-  }
-  
-  #editor-divider {
-    height: 100%;
-    width: 3px;
-  }
-  
-  #statemgr-divider {
-    height: 100%;
-    width: 3px;
-  } */
-  
-  .dividers-h {
-    /* height: 1px; */
-    z-index: 9999;
-    /* background-clip: content-box; */
-    padding-top: 4px;
-    padding-bottom: 4px;
-    /* position: relative; */
-    /* top: -5px; */
-  }
-  
-  .dividers-v {
-    z-index: 9999;
-    /* background-clip: content-box; */
-    padding-left: 4px;
-    padding-right: 4px;
-    /* position: relative; */
-    height: 100%;
-  
-    /* left: -5px; */
-  }
-  
-  /* .dividers-h:hover {
-    cursor: ns-resize;
-  }
-  
-  .dividers-v:hover {
-    cursor: ew-resize;
-  } */
-  
-  .box {
-    background-color: rgb(102, 217, 132);
-    color: rgb(245, 242, 239);
-    border-radius: 0px;
-    /* padding: 5px; */
-  }
-  
-  
-  /* File Directory - SvelteTeam */
-  .a {
-    font-size: 10px;
-    overflow: auto;
-    /* resize: horizontal; */
-    max-width: 50%;
-    width: 20%;
-    /* min-width: 12.5%; */
-    min-width: 20%;
-    /* max-width: 30%; */
-    background-color: #070a0f;
-    border-right: 1px solid #3d3d3d;
-    border-bottom: 1px solid #3d3d3d;
-  }
-  
-  
-  /* Text Editor - SvelteTeam */
-  .b {
-    overflow: auto;
-    overflow: auto;
-    /* width: 100%; */
-    flex-grow: 1;
-
-    /* width: 100%; */
-    /* resize: horizontal; */
+    /* background-color: rgb(39, 38, 38); */
     background-color: #0d1117;
-    border-bottom: 1px solid #3d3d3d;
-    border-right: 1px solid #3d3d3d;
-    position: relative;
-    /* left: -8px; */
-    margin-left: -8px;
-    margin-right: -8px;
-    padding-right: 8px;
-  }
-  
-  
-  /* State Management Window - SvelteTeam */
-  .c {
-    overflow: auto;
-    max-width: 50%;
-    width: 15%;
-    /* min-width: 12.8%; */
-    min-width: 10%;
-    /* background-color: rgba(28, 28, 36, 0.678); */
-    background-color: #070a0f;
-    border-right: 1px solid #3d3d3d;
-    padding: 0;
-    margin-right: -8px;
-  }
-  
-  /* Browser Render Window - SvelteTeam */
-  .d {
-    min-width: 1%;
-    flex-direction: column;
-    flex-grow: 1; /*Let render window take up remaining space in the flexbox */
-    padding: 0px;
-    text-align: center;
-    background-color: #0d1117;
-    border-bottom: 1px solid #3d3d3d;
-    position: relative;
-  
-    /* left: -16px; */
-  }
-  
-  .d input {
-    margin: auto;
-    margin-top: 0;
-    margin-bottom: 0;
-    height: 20px;
-    font-size: 12px;
-    color: black;
-  }
-  /* Terminal Window - SvelteTeam */
-  .e {
-    font: white;
-    overflow: auto;
-    /* width: 100%; */
-    flex-grow: 1;
-    /* background-color: rgba(35, 35, 65, 0.452); */
-    background-color: #0d1117;
-    position: relative;
-  }
-  
-  /* Webpage Render - SvelteTeam */
-  .webpage {
-    /* overflow: auto; */
-    /* resize: vertical; */
-    height: 100%;
-    width: 100%;
-    background-color: #0d1117;
-    /* pointer-events: none; */
-  }
-  .docs {
-    overflow: auto;
-    /* resize: vertical; */
-    height: 100%;
-    width: 98%;
-    color: "grey";
-  }
-  
-  .b :global(.childClass) {
-    overflow: scroll;
-    display: flex;
-  }
-  
-  .childButton {
-    color: grey;
-    background: transparent;
-    font-size: small;
-    border: none;
-  }
-  .backButton {
-    color: lightgray;
-    background: transparent;
-    border: 1px;
-    font-size: small;
-    border-style: inset;
-    border-color: grey;
-  }
-  .searchButton {
-    color: lightgray;
-    background: transparent;
-    border: 1px;
-    font-size: small;
-    border-style: inset;
-    border-color: grey;
-  }
-  
-  
-  iframe:focus {
-    outline: none;
-  }
+    color: #444;
 
 
-  :root{
-    --syntax_normal:#1b1e23;
-    --syntax_comment:#a9b0bc;
-    --syntax_number:#20a5ba;
-    --syntax_keyword:#c30771;
-    --syntax_atom:#10a778;
-    --syntax_string:#008ec4;
-    --syntax_error:#ffbedc;
-    --syntax_unknown_variable:#838383;
-    --syntax_known_variable:#005f87;
-    --syntax_matchbracket:#20bbfc;
-    --syntax_key:#6636b4;
-    --mono_fonts:82%/1.5 Menlo,Consolas,monospace
-  }
-    
-    .observablehq--collapsed,.observablehq--expanded,.observablehq--function,.observablehq--gray,.observablehq--import,.observablehq--string:after,.observablehq--string:before{
-      color:var(--syntax_normal)
-    }
-    
-    .observablehq--collapsed,.observablehq--inspect a{
-      cursor:pointer
-    }
-    
-    .observablehq--field{
-      text-indent:-1em;
-      margin-left:1em
-    }
-    
-    .observablehq--empty{
-      color:var(--syntax_comment)
-    }
-    
-    .observablehq--blue,.observablehq--keyword{
-      color:#3182bd
-    }
-    
-    .observablehq--forbidden,.observablehq--pink{
-      color:#e377c2
-    }
-    
-    .observablehq--orange{
-      color:#e6550d
-    }
-    
-    .observablehq--boolean,.observablehq--null,.observablehq--undefined{
-      color:var(--syntax_atom)
-    }
-    
-    .observablehq--bigint,.observablehq--date,.observablehq--green,.observablehq--number,.observablehq--regexp,.observablehq--symbol{
-      color:var(--syntax_number)
-    }
-    
-    .observablehq--index,.observablehq--key{
-      color:var(--syntax_key)
-    }
-    
-    .observablehq--prototype-key{
-      color:#aaa
-    }
-    
-    .observablehq--empty{
-      font-style:oblique
-    }
-    
-    .observablehq--purple,.observablehq--string{
-      color:var(--syntax_string)
-    }
-    
-    .observablehq--error,.observablehq--red{
-      color:#e7040f
-    }
-    
-    .observablehq--inspect{
-      font:var(--mono_fonts);
-      overflow-x:auto;
-      display:block;
-      white-space:pre
-    }
-    
-    .observablehq--error .observablehq--inspect{
-      word-break:break-all;
-      white-space:pre-wrap
-    }
-  
-  
 
-  </style>
-  
+
+  overflow: auto;
+  max-width: 80%;
+  /* width: 15%; */
+  /* min-width: 12.8%; */
+  min-width: 40%;
+  /* background-color: rgba(28, 28, 36, 0.678); */
+  /* background-color: #070a0f; */
+  border-right: 5px solid #eb09c9;
+  padding: 0;
+  /* margin-right: -8px; */
+
+
+
+
+  }
+
+.wrapper-right {
+  height: 100%;
+  width: 40%;
+  display: flex;
+  /* flex-direction: row;   */
+  /* flex-direction: column; */
+  flex-grow: 1; /*Let render window take up remaining space in the flexbox */
+
+  /* background-color: rgb(39, 38, 38); */
+  background-color: #0d1117;
+  color: #444;
+}
+
+
+.wrapper-upper {
+  height: 80%;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  /* resize: vertical; */
+  overflow: auto;
+  /* background-color: rgb(39, 38, 38); */
+  background-color: #4e947f;
+  color: #444;
+  /* padding: 5px; */
+  z-index: 0;
+}
+.wrapper-bottom {
+  min-height: 1%;
+  height: 20%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  /* background-color: rgb(39, 38, 38); */
+  background-color: #344867;
+  color: #444;
+  position: relative;
+  margin-top: -8px;
+}
+.editor-wrapper {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+.docs {
+  overflow: auto;
+  /* resize: vertical; */
+  height: 90%;
+  width: 98%;
+  color: "grey";
+}
+
+.render-wrapper {
+  /* background-color: #252532; */
+  background-color: #9a9a67;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/*Dividers used for resizing events*/
+/* #horizontal-divider {
+  width: 100%;
+  height: 2px;
+  /* padding-top: 3px; */
+/* padding-bottom: 3px; */
+
+/* #filedir-divider {
+  height: 100%;
+  width: 3px;
+}
+
+#editor-divider {
+  height: 100%;
+  width: 3px;
+}
+
+#statemgr-divider {
+  height: 100%;
+  width: 3px;
+} */
+
+.dividers-h {
+  /* height: 1px; */
+  z-index: 9999;
+  /* background-clip: content-box; */
+  padding-top: 4px;
+  padding-bottom: 4px;
+  /* position: relative; */
+  /* top: -5px; */
+}
+
+.dividers-v {
+  z-index: 9999;
+  /* background-clip: content-box; */
+  padding-left: 4px;
+  padding-right: 4px;
+  /* position: relative; */
+  height: 100%;
+
+  /* left: -5px; */
+}
+
+/* .dividers-h:hover {
+  cursor: ns-resize;
+}
+
+.dividers-v:hover {
+  cursor: ew-resize;
+} */
+
+.box {
+  background-color: rgb(102, 217, 132);
+  color: rgb(245, 242, 239);
+  border-radius: 0px;
+  /* padding: 5px; */
+}
+
+
+/* File Directory - SvelteTeam */
+.a {
+  font-size: 10px;
+  overflow: auto;
+  /* resize: horizontal; */
+  max-width: 50%;
+  width: 20%;
+  /* min-width: 12.5%; */
+  min-width: 12.5%;
+  /* max-width: 30%; */
+  background-color: #070a0f;
+  border-right: 1px solid #3d3d3d;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+
+/* Text Editor - SvelteTeam */
+.b {
+  overflow: auto;
+  width: 100%;
+  /* resize: horizontal; */
+  background-color: #0d1117;
+  border-bottom: 1px solid #3d3d3d;
+  border-right: 1px solid #3d3d3d;
+  position: relative;
+  /* left: -8px; */
+  margin-left: -8px;
+  margin-right: -8px;
+  padding-right: 8px;
+}
+
+
+/* State Management Window - SvelteTeam */
+.c {
+  overflow: auto;
+  max-width: 50%;
+  width: 15%;
+  /* min-width: 12.8%; */
+  min-width: 10%;
+  /* background-color: rgba(28, 28, 36, 0.678); */
+  background-color: #070a0f;
+  border-right: 1px solid #3d3d3d;
+  padding: 0;
+  margin-right: -8px;
+}
+
+/* Browser Render Window - SvelteTeam */
+.d {
+  min-width: 1%;
+  flex-direction: column;
+  flex-grow: 1; /*Let render window take up remaining space in the flexbox */
+  padding: 0px;
+  text-align: center;
+  background-color: #0d1117;
+  border-bottom: 1px solid #3d3d3d;
+  position: relative;
+
+  /* left: -16px; */
+}
+
+.d input {
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 20px;
+  font-size: 12px;
+  color: black;
+}
+/* Terminal Window - SvelteTeam */
+.e {
+  font: white;
+  overflow: auto;
+  /* width: 100%; */
+  flex-grow: 1;
+  /* background-color: rgba(35, 35, 65, 0.452); */
+  background-color: #0d1117;
+  position: relative;
+}
+
+/* Webpage Render - SvelteTeam */
+.webpage {
+  /* overflow: auto; */
+  /* resize: vertical; */
+  height: 100%;
+  width: 100%;
+  background-color: #0d1117;
+  /* pointer-events: none; */
+}
+.docs {
+  overflow: auto;
+  /* resize: vertical; */
+  height: 100%;
+  width: 98%;
+  color: "grey";
+}
+
+.b :global(.childClass) {
+  overflow: scroll;
+  display: flex;
+}
+
+.childButton {
+  color: grey;
+  background: transparent;
+  font-size: small;
+  border: none;
+}
+.backButton {
+  color: lightgray;
+  background: transparent;
+  border: 1px;
+  font-size: small;
+  border-style: inset;
+  border-color: grey;
+}
+.searchButton {
+  color: lightgray;
+  background: transparent;
+  border: 1px;
+  font-size: small;
+  border-style: inset;
+  border-color: grey;
+}
+
+
+iframe:focus {
+  outline: none;
+}
+</style>
