@@ -97,13 +97,15 @@ const createWindow = (exports.createWindow = () => {
    * ==================================================
    */
   let newWindow = new BrowserWindow({
-    x,
-    y,
+    width: 1200,
+    height: 1000,
+    x: 20,
+    y: 20,
     show: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true, 
+      enableRemoteModule: true,
     },
   });
 
@@ -166,7 +168,7 @@ const createWindow = (exports.createWindow = () => {
     newWindow = null;
   });
 
-  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
+  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
 
   var ptyProcess = pty.spawn(shell, [], {
     name: 'xterm-color',
@@ -220,11 +222,15 @@ const createWindow = (exports.createWindow = () => {
   return newWindow;
 });
 
+let browser;
+
 // open browser window when user selects open brower window from file menu
 const openBrowserWindow = (exports.openBrowserWindow = () => {
-  const browser = new BrowserWindow({
-    width: 800,
+  browser = new BrowserWindow({
+    width: 600,
     height: 600,
+    x: 1240,
+    y: 20,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -233,11 +239,11 @@ const openBrowserWindow = (exports.openBrowserWindow = () => {
       webSecurity: false,
       nodeIntegrationInSubFrames: true,
       nodeIntegrationInWorker: true,
-      enableRemoteModule: true, 
+      enableRemoteModule: true,
     },
   });
   browser.webContents.loadURL('http://localhost:8080');
-  browser.webContents.openDevTools();
+  // browser.webContents.openDevTools();
 });
 
 //Opening docs in ide browser
@@ -350,3 +356,14 @@ ipcMain.on('SNAPSHOT', (event, data) => {
 ipcMain.on('quit-app', () => {
   app.quit();
 });
+
+
+ipcMain.on('TIME_TRAVEL', (event, data) => {
+  // console.log(data)
+  const instance = {
+    message: "TIME_TRAVEL",
+    ctxIndex: data
+  };
+  // Use browser window to send time-travel message
+  browser.webContents.send('TIME_TRAVEL', instance);
+})
