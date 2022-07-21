@@ -3,17 +3,16 @@
     console.log(compState);
   </script>
   
-  <span>
+  <div class="card">
     {#if compState === undefined}
     <span />
     {:else if Array.isArray(compState)}
-  
-      <ul>
+    
         {#each compState as state}
-        <li><svelte:self compState={state}/></li>
+        <p><svelte:self compState={state}/></p>
         <br>
         {/each}
-      </ul>
+      
  
     {:else if typeof compState === 'object'}
       <div class="object">
@@ -29,20 +28,32 @@
       {compState}
       <br />
     {/if}
-  </span>
+  </div>
   
   <style>
-    li {
+    .card{
       color: white;
       font-family: monospace;
-      background-color: rgb(27,26,26);
+      background-color: #0d1117;
       list-style: none;
     }
+    /* .item {
+      color: white;
+      font-family: monospace;
+      background-color: #0d1117;
+      list-style: none;
+    } */
+    /* li {
+      color: white;
+      font-family: monospace;
+      background-color: #0d1117;
+      list-style: none;
+    } */
     span {
       /* background-color: #0d1117; */
     }
 
-    span ul {
+    .card ul {
       background-color: #0d1117;
     }
 
@@ -54,6 +65,7 @@
       background-color: #0d1117;
       border: 1px solid #444;
       border-radius: 4px;
+      text-align: center;
       /* width: 90vh; */
       
       /* margin: 2px; */

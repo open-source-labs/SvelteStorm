@@ -62,7 +62,7 @@
   .block {
     /* border: 5px solid; */
     /* border-color: aqua; */
-    width: 200px;
+    width: 180px;
     /* color: white; */
   }
   button{
@@ -82,7 +82,7 @@
   .container {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: space-evenly;
   }
 </style>
