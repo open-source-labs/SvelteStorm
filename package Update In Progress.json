@@ -1,5 +1,5 @@
 {
-  "name": "svelte-storm",
+  "name": "SvelteStorm",
   "version": "3.3.3",
   "description": "A Svelte IDE like no other. Embrace the 'norEaster storm.",
   "main": "src/index.js",
@@ -12,9 +12,9 @@
   "scripts": {
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"SvelteStorm\"",
-    "package-linux": "electron-packager .  svelte-storm --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/linux/logo.png --prune=true --out=release-builds",
-    "create-debian-installer": "electron-installer-debian --src release-builds/svelte-storm-linux-x64/ --arch amd64 --config debian.json",
-    "create-mac-installer": "electron-installer-dmg ./release-builds/svelte-storm-darwin-x64/svelte-storm.app SvelteStorm --out=release-builds --icon=assets/icons/mac/icon.icns --overwrite",
+    "package-linux": "electron-packager .  SvelteStorm --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/linux/logo.png --prune=true --out=release-builds",
+    "create-debian-installer": "electron-installer-debian --src release-builds/SvelteStorm-linux-x64/ --arch amd64 --config debian.json",
+    "create-mac-installer": "electron-installer-dmg ./release-builds/SvelteStorm-darwin-x64/SvelteStorm.app SvelteStorm --out=release-builds --icon=assets/icons/mac/icon.icns --overwrite",
     "create-win-installer": "",
     "start": "concurrently \"npm:svelte-dev\" \"electron-forge start\"",
     "package": "electron-forge package",
@@ -42,9 +42,7 @@
         },
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
+          "platforms": ["darwin"]
         },
         {
           "name": "@electron-forge/maker-deb",
@@ -84,7 +82,6 @@
     "sass-loader": "^13.0.0",
     "style-loader": "^3.3.1",
     "svg-url-loader": "^7.1.1"
-
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",

@@ -6,6 +6,9 @@
     import type { Filetree } from '../types'
     import {get} from 'svelte/store'
     const myPath = require('node:path');
+    const npmAddScript = require('npm-add-script');
+    const process = require('process');
+ 
     const fs = require('fs');
     let savedTree:string[];
     let updateRollupConfigRun = false;
@@ -170,9 +173,34 @@
        
        if (!updateRollupConfigRun) {
          updateRollupConfig(path);
+         updatePackageJson(path)
          updateRollupConfigRun = true;
        }
          
+
+       function updatePackageJson(path) {
+          try {
+ 
+            // Change the directory
+            process.chdir(path);
+            console.log("directory has successfully been changed");
+            } catch (err) {
+                
+            // Printing error if occurs
+            console.error("error while changing directory");
+            }
+
+
+            try {
+            npmAddScript({key: "sdebug" , value: "rollup --config rollup.config.new.js -w"})
+            console.log("Added sdebug script to package.json");
+            } catch (err) {
+                
+            // Printing error if occurs
+            console.error("error while adding sdebug script to package.json");
+            }
+       }
+
        
        function updateRollupConfig (path) {
         // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
@@ -181,22 +209,6 @@
         // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
         const originalConfig = path + '/rollup.config.js';
         const newConfig = path + '/rollup.config.new.js';
-        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 149 | FileTree | updateRollupConfig | originalConfig', originalConfig);
-          // return;
-          /*
-          * ==================================================
-          * Rename rollup.config.js to rollup.config.original.js
-          * 
-          * Make copy of projects current rollup config file
-          * 
-          * Add two lines to beginning of rollup.config.js
-          *   import path
-          *   import rollup plugin
-          * 
-          * Add banner needed lines in plugin section
-          * 
-          * ==================================================
-          */
          
           const myFileContent = fs.readFileSync(originalConfig, 'utf8')
           const myFileAsArray = myFileContent.split('\n');

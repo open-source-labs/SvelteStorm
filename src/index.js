@@ -117,7 +117,7 @@ const createWindow = (exports.createWindow = () => {
   //loading index.html into the app
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
-  newWindow.webContents.openDevTools();
+  // newWindow.webContents.openDevTools();
 
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
