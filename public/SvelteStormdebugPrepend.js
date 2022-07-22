@@ -1,5 +1,3 @@
-
-
 /*
 * =========================================================
 *   The following is SvelteStorm 4.0 Debug Monitoring Code.
@@ -11,15 +9,9 @@ let cacheState = [];
 const components = [];
 let lastIndex = 0;
 
+// sends SNAPSHOT message to ipcMain, with all data needed for debugging visualization
 const sendMessages = (componentStates) => {
   ipcRenderer.send('SNAPSHOT', {
-    body: {
-      componentStates,
-      cacheLength: cacheState.length,
-    },
-  });
-
-  window.postMessage({
     body: {
       componentStates,
       cacheLength: cacheState.length,
@@ -50,6 +42,7 @@ function checkIfChanged(componentState, i) {
   return false;
 }
 
+// invoked whenever there is a perceived state change
 function saveAndDispatchState() {
   const curState = [];
   components.forEach((component) => {
@@ -59,10 +52,6 @@ function saveAndDispatchState() {
       component.constructor.name,
     ]);
   });
-  console.log(
-    '🔴🟠🟡🟢🔵🟣 | file: main.js | line 142 | components.forEach | components',
-    components
-  );
   // Only add to cache & send messages if any state has actually changed
 
   if (curState.some(checkIfChanged)) {
@@ -80,7 +69,6 @@ function setupListeners(root) {
   root.addEventListener('SvelteRegisterBlock', (e) => saveAndDispatchState());
   root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState());
   root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState());
-
   /*
    * These event listeners aren't being used in this version, but could provide valuable data for future versions of this product
    * root.addEventListener('SvelteDOMRemove', (e) => (e) => sendMessages(parseEvent(e.detail)));
@@ -92,8 +80,8 @@ function setupListeners(root) {
    */
 }
 
+// activate event listeners
 setTimeout(() => setupListeners(window.document));
-
 
 /*
 * =========================================================

@@ -147,9 +147,7 @@
 
   
   // takes care of opening a file from within the file directory
-    DirectoryData.subscribe(async data => {
-    console.log('subscribing to the store');
- 
+    DirectoryData.subscribe(async data => { 
     // if at least 1 tab is already open, grab the current code and save it to the cache before switching to a new tab
     if($currentTabFilePath !== ''){
     const currentUserCode = await $codeMirrorEditor.getValue();

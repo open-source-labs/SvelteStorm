@@ -7,18 +7,24 @@
   let activeIndex = 0;
   let states = [];
   $: compState = states[activeIndex];
-  // let compState = snapshotList
 
   snapshots.subscribe((arr) => {
     snapshotList = arr;
   });
 
-  ipcRenderer.on("JIMSHOT", (event, data) => {
-    console.log("DATA JIMSHOT ", data);
+/*
+   * ==================================================
+   *   When the snapshot data is received, update the snapshots in the store
+   *   Then, loop through the data to get the individual component states
+   *   States holds the component and component states
+   * ==================================================
+*/
+
+  ipcRenderer.on("SNAPSHOT", (event, data) => {
+    // console.log("DATA SNAPSHOT ", data);
     snapshots.update(() => {
       return [...snapshotList, data.body];
     });
-    console.log("after update: ", snapshotList);
     const componentStateArray = []
     data.body.componentStates.forEach(comp => {
       const componentStateObj = {}
@@ -28,7 +34,7 @@
     states = [...states.slice(0, data.body.cacheLength), componentStateArray]
   });
 
-
+// user clicks snapshot button - send message to browser to display that specific snapshot
   function updateWindow (index) {
     ipcRenderer.send('TIME_TRAVEL', index)
   }
@@ -60,10 +66,7 @@
     flex-wrap: wrap;
   }
   .block {
-    /* border: 5px solid; */
-    /* border-color: aqua; */
     width: 180px;
-    /* color: white; */
   }
   button{
     color: rgb(188, 188, 188);

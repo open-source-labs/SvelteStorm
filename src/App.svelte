@@ -5,25 +5,12 @@
   import StateManager from "./StateManager/StateManager.svelte";
   const { remote, ipcRenderer, BrowserWindow } = require("electron");
   import Chart from "./Debugger/Chart.svelte";
-  // import IceChart from "./Debugger/IceChart.svelte";
-  // import myData from "./Debugger/2019.js";
 
   import searchDoc from "./SearchProgram.js";
   import { onMount, SvelteComponent } from "svelte";
 
-
-
-
-
   export let orientation = "columns";
   export let localhost;
-
-
-
-
-
-
-
 
   let value: string = "";
   let submit: boolean = false;
@@ -149,23 +136,14 @@
         if (resizeObj[panel].isResizing === true) {
           resize(e, "horizontal-divider");
         }
-      // } else if (panel === "editor-divider") {
-      //   if (resizeObj[panel].isResizing === true) {
-      //     resize(e, "editor-divider");
-      //   }
       } else if (panel === "visualization-divider") {
-        if (resizeObj[panel].isResizing === true) {
-          resize(e, "visualization-divider");
-        }
+          if (resizeObj[panel].isResizing === true) {
+            resize(e, "visualization-divider");
+          }
       } else if (panel === "filedir-divider") {
-        if (resizeObj[panel].isResizing === true) {
-          resize(e, "filedir-divider");
-        }
-      // } else if (panel === "statemgr-divider") {
-      //   if (resizeObj[panel].isResizing === true) {
-      //     resize(e, "statemgr-divider");
-      //   }
-      } else {
+          if (resizeObj[panel].isResizing === true) {
+            resize(e, "filedir-divider");
+          }
       }
     }
 
@@ -173,22 +151,10 @@
       e.preventDefault(); //stop selection of text during mouse move / mouse down event
       resizeObj[panel].isResizing = false;
     }
-
-    
-    
-    /*
-    * ==================================================
-    *   Just a Test... 
-    * ==================================================
-    */
-   // editorDivider.style.background = 'blue';
-   
-    //* End of test
     
     let horizDivider: HTMLElement = document.getElementById("horizontal-divider");
     let editorDivider: HTMLElement = document.getElementById("editor-divider");
     let filedirDivider: HTMLElement =  document.getElementById("filedir-divider");
-    // let statemgrDivider: HTMLElement = document.getElementById("statemgr-divider");
     let visualizationDivider: HTMLElement = document.getElementById("visualization-divider");
 
     horizDivider.addEventListener("mouseover", (e) =>
@@ -197,13 +163,6 @@
     horizDivider.addEventListener("mousedown", (e) =>
       dragStart(e, "horizontal-divider")
     );
-
-    // editorDivider.addEventListener("mouseover", (e) =>
-    //   chgCursor(e, "editor-divider")
-    // );
-    // editorDivider.addEventListener("mousedown", (e) =>
-    //   dragStart(e, "editor-divider")
-    // );
 
     visualizationDivider.addEventListener("mouseover", (e) =>
       chgCursor(e, "visualization-divider")
@@ -218,13 +177,6 @@
     filedirDivider.addEventListener("mousedown", (e) =>
       dragStart(e, "filedir-divider")
     );
-
-    // statemgrDivider.addEventListener("mouseover", (e) =>
-    //   chgCursor(e, "statemgr-divider")
-    // );
-    // statemgrDivider.addEventListener("mousedown", (e) =>
-    //   dragStart(e, "statemgr-divider")
-    // );
 
     //==========END - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
 
@@ -294,116 +246,28 @@
 
 <body class:orientation>
   <main class="wrapper">
-
       <div class="box wrapper-left" id="wrapper-left">
-
-
-
             <div class="box wrapper-upper" id="wrapper-upper">
-
-
-
-
-
-
                             <div class="box a target" id="file-dir">
                               <FileDir />
                             </div>
-
-
-
-
-
-
                     <div class="dividers-v" id="filedir-divider" />
-
-
-
-
-
-
                           <div class="box b" id="editor-window">
                             <!-- svelte-ignore missing-declaration -->
                             <div class="editor-wrapper">
                               <Editor class="childClass" />
                             </div>
                           </div>
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
-
-
-
-
-
-
-
         <div class="dividers-h" id="horizontal-divider" />
-
-
-
-
-
                 <div class="box wrapper-bottom">
-
-
-
-                                <!-- <div class="box c root" id="state-mgr">
-                                  <StateManager />
-                                </div>
-
-
-
-
-                      <div class="dividers-v" id="statemgr-divider" /> -->
-
-
-
-
-
                                 <div class="box e" id="terminal-window">
                                   <XTerm />
                                 </div>
-
-
-
-
                 </div>
-
-
       </div>
-
-
-      <!-- <div class="dividers-v" id="editor-divider" /> -->
-
-
-  <!-- <div class="dividers-v" id="statemgr-divider" /> -->
-
-
-
-
   <div class="dividers-v" id="visualization-divider" />
-  
-  <div class="box wrapper-right" id="wrapper-right">
-    
-              
-
-        <!-- <div class="box d root"> -->
+  <div class="box wrapper-right" id="wrapper-right">   
         <div class="box d root">
           <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
             {#if docsBool === true}
@@ -425,14 +289,6 @@
             {/if}
             {#if docsBool === false}
               <div class="parent grid-parent">
-                
-                <!-- <input
-                  class="child"
-                  placeholder={value === "" ? "Local Host Port" : value}
-                  type="text"
-                  on:keyup|preventDefault={handleKeyup}
-                  /> -->
-            
                   <button
                   type="button"
                   class="childButton"
@@ -440,49 +296,15 @@
                   >
 
               </div>
-              <!-- <iframe
-                class="webpage"
-                title="local host"
-                src={localhost}
-                frameBorder="0"
-              /> -->
-
-              <!-- ------------------------------------------- -->
-              <!-- <div class="box c root" id="state-mgr"> -->
               <StateManager />
-              <!-- </div> -->
-              <!-- ------------------------------------------- -->
               <div id="dummyGraph">
                 <Chart />
               </div>
-
             {/if}
           </form>
         </div>
-
-
-
-
-
-
       </div>
-            
-            
-
-
-
-
   </main>
-
-
-
-
-
-
-
-
-
-
 </body>
 
 <style>
@@ -497,22 +319,10 @@
     width: 100%;
   }
   .grid-parent {
-    /* display: grid;
-    grid-template-columns: 1fr 1fr; */
+
     float: left;
   }
-  /* .inline-flex-parent {
-    display: inline-flex;
-    justify-content: flex-start;
-  }
-  .search1 {
-    justify-content: center;
-    /* padding-left: 200px; */
-  /* } */
-  /* .search2 {
-    padding-right: 150px;
-  } */
-  
+ 
   /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
   /* Wrapper Window - SvelteTeam */
   .wrapper {
@@ -520,25 +330,10 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    /* background-color: rgb(39, 38, 38); */
     background-color: #0d1117;
     color: #444;
-  
-  
-  
-  
-    /* min-height: 1%;
-    height: 20%; */
     flex-grow: 1;
-    /* display: flex;
-    flex-direction: row; */
-    /* width: 100%; */
-    /* background-color: rgb(39, 38, 38); */
-    /* background-color: #344867;
-    color: #444; */
     position: relative;
-    /* margin-top: -8px; */
-  
   }
   
   
@@ -547,27 +342,13 @@
       width: 60%;
       display: flex;
       flex-direction: column;
-      /* background-color: rgb(39, 38, 38); */
       background-color: #0d1117;
       color: #444;
-  
-  
-  
-  
       overflow: auto;
       max-width: 90%;
-      /* width: 15%; */
-      /* min-width: 12.8%; */
       min-width: 30%;
-      /* background-color: rgba(28, 28, 36, 0.678); */
-      /* background-color: #070a0f; */
       border-right: 1px solid #444;
       padding: 0;
-      /* margin-right: -8px; */
-  
-  
-  
-  
     }
   
   .wrapper-right {
@@ -638,62 +419,24 @@
     overflow-y: scroll;
   }
   
-  /*Dividers used for resizing events*/
-  /* #horizontal-divider {
-    width: 100%;
-    height: 2px;
-    /* padding-top: 3px; */
-  /* padding-bottom: 3px; */
-  
-  /* #filedir-divider {
-    height: 100%;
-    width: 3px;
-  }
-  
-  #editor-divider {
-    height: 100%;
-    width: 3px;
-  }
-  
-  #statemgr-divider {
-    height: 100%;
-    width: 3px;
-  } */
   
   .dividers-h {
-    /* height: 1px; */
     z-index: 9999;
-    /* background-clip: content-box; */
     padding-top: 4px;
     padding-bottom: 4px;
-    /* position: relative; */
-    /* top: -5px; */
   }
   
   .dividers-v {
     z-index: 9999;
-    /* background-clip: content-box; */
     padding-left: 4px;
     padding-right: 4px;
-    /* position: relative; */
     height: 100%;
-  
-    /* left: -5px; */
   }
-  
-  /* .dividers-h:hover {
-    cursor: ns-resize;
-  }
-  
-  .dividers-v:hover {
-    cursor: ew-resize;
-  } */
-  
+
   .box {
     background-color: rgb(102, 217, 132);
     color: rgb(245, 242, 239);
     border-radius: 0px;
-    /* padding: 5px; */
   }
   
   
@@ -701,12 +444,9 @@
   .a {
     font-size: 10px;
     overflow: auto;
-    /* resize: horizontal; */
     max-width: 50%;
     width: 20%;
-    /* min-width: 12.5%; */
     min-width: 20%;
-    /* max-width: 30%; */
     background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
@@ -717,16 +457,11 @@
   .b {
     overflow: auto;
     overflow: auto;
-    /* width: 100%; */
     flex-grow: 1;
-
-    /* width: 100%; */
-    /* resize: horizontal; */
     background-color: #0d1117;
     border-bottom: 1px solid #3d3d3d;
     border-right: 1px solid #3d3d3d;
     position: relative;
-    /* left: -8px; */
     margin-left: -8px;
     margin-right: -8px;
     padding-right: 8px;
@@ -738,9 +473,7 @@
     overflow: auto;
     max-width: 50%;
     width: 15%;
-    /* min-width: 12.8%; */
     min-width: 10%;
-    /* background-color: rgba(28, 28, 36, 0.678); */
     background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
     padding: 0;
@@ -757,9 +490,7 @@
     background-color: #0d1117;
     border-bottom: 1px solid #3d3d3d;
     position: relative;
-  
-    /* left: -16px; */
-  }
+    }
   
   .d input {
     margin: auto;
@@ -773,25 +504,19 @@
   .e {
     font: white;
     overflow: auto;
-    /* width: 100%; */
     flex-grow: 1;
-    /* background-color: rgba(35, 35, 65, 0.452); */
     background-color: #0d1117;
     position: relative;
   }
   
   /* Webpage Render - SvelteTeam */
   .webpage {
-    /* overflow: auto; */
-    /* resize: vertical; */
     height: 100%;
     width: 100%;
     background-color: #0d1117;
-    /* pointer-events: none; */
   }
   .docs {
     overflow: auto;
-    /* resize: vertical; */
     height: 100%;
     width: 98%;
     color: "grey";

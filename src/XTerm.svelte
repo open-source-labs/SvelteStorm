@@ -28,12 +28,10 @@
         //2022-ST-AJ immediately call resize to have proper prompt in, and have node-pty adjust to correct size.
 
         term.prompt = () => {
-
             ipcRenderer.send("terminal-into", "\r");
         };
 
         term.writeln("Welcome to SvelteStorm 4.0");
-        // term.writeln("\b \b");
 
         term.prompt();
         term.focus();
@@ -43,7 +41,6 @@
         });
 
         term.onResize((size) => {
-            // console.log("terminal resized. size:", size);
             ipcRenderer.send("terminal-resize", size);
         });
 
