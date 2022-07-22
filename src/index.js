@@ -97,12 +97,15 @@ const createWindow = (exports.createWindow = () => {
    * ==================================================
    */
   let newWindow = new BrowserWindow({
-    x,
-    y,
+    width: 1200,
+    height: 1000,
+    x: 20,
+    y: 20,
     show: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      enableRemoteModule: true,
     },
   });
 
@@ -117,7 +120,7 @@ const createWindow = (exports.createWindow = () => {
   //loading index.html into the app
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
-  newWindow.webContents.openDevTools();
+  // newWindow.webContents.openDevTools();
 
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
@@ -165,7 +168,7 @@ const createWindow = (exports.createWindow = () => {
     newWindow = null;
   });
 
-  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
+  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
 
   // this spawns the terminal window space
   var ptyProcess = pty.spawn(shell, [], {
@@ -222,8 +225,10 @@ const createWindow = (exports.createWindow = () => {
 
 const openBrowserWindow = (exports.openBrowserWindow = () => {
   browser = new BrowserWindow({
-    width: 800,
+    width: 600,
     height: 600,
+    x: 1240,
+    y: 20,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -232,10 +237,11 @@ const openBrowserWindow = (exports.openBrowserWindow = () => {
       webSecurity: false,
       nodeIntegrationInSubFrames: true,
       nodeIntegrationInWorker: true,
+      enableRemoteModule: true,
     },
   });
   browser.webContents.loadURL('http://localhost:8080');
-  browser.webContents.openDevTools();
+  // browser.webContents.openDevTools();
 });
 
 // gets and opens the file that the user selects from the File menu
@@ -343,6 +349,10 @@ const saveFile = (exports.saveFile = (targetWindow) => {
 ipcMain.on('SNAPSHOT', (event, data) => {
   newWindow.webContents.send('SNAPSHOT', data);
 });
+ipcMain.on('quit-app', () => {
+  app.quit();
+});
+
 
 /*
    * ==================================================

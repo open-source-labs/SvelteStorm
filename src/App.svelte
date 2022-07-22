@@ -3,7 +3,7 @@
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
-  const { remote, ipcRenderer, BrowserWindow } = require("electron");
+  const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
   import Chart from "./Debugger/Chart.svelte";
 
   import searchDoc from "./SearchProgram.js";
@@ -30,6 +30,8 @@
       }
     }
   }
+
+
 
   onMount(async (): Promise<void> => {
     //ST-2022-RJ==========BEGINNING - WORKING CODE FOR RESIZING DOM ELEMENTS USING DIVIDERS===========//
