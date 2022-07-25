@@ -3,6 +3,8 @@ import { writable } from "svelte/store";
 export const snapshots = writable([]);
 // To get each component, loop through snapshots[idx].componentStates
 
+// THIS IS WHAT THE DATA INSIDE SNAPSHOTS LOOKS LIKE
+
 // data.body
 // {
 //     componentStates: [ [ [Object], [Object], 'Task' ], [ [Object], [Object], 'Task' ] ],

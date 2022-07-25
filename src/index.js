@@ -7,13 +7,11 @@ const {
   nativeTheme,
   webContents,
 } = require('electron');
-// const handleDocuments = require('./App.svelte')
 const createApplicationMenu = require('./application-menu');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const pty = require('node-pty');
-// const { require } = require('@electron/remote');
 
 //dialog is basically an electron modal pop up displaying an error message
 //ipcMain is an event emitter that handles messages from the a renderer process
@@ -39,7 +37,11 @@ if (require('electron-squirrel-startup')) {
 const windows = new Set();
 const openFiles = new Map();
 
+// init newWindow - newWindow is the name of the entire Svelte Storm window (created in the creatWindow function)
 let newWindow;
+// init browser - window name of the developers app they open in Svelte Storm (created in the openBrowserWindow function)
+let browser;
+
 //app.on is a start of the main process that controls the lifecycle events
 //Fires once when app is ready..
 app.on('ready', () => {
@@ -57,7 +59,6 @@ app.on('window-all-closed', () => {
 
 //activate occurs when the application is activated or run for the first time
 //returns an event
-
 app.on('activate', (event, hasVisibleWindows) => {
   if (!hasVisibleWindows) {
     createWindow();
@@ -73,7 +74,6 @@ const decreaseFontSize = (exports.decreaseFontSize = () => {
 });
 
 //still in development mode
-
 const createWindow = (exports.createWindow = () => {
   process.env.NODE_ENV = 'development';
 
@@ -93,7 +93,7 @@ const createWindow = (exports.createWindow = () => {
 
   /*
    * ==================================================
-   *   Create a new Browers Window for display in Electron, but don't show it yet.
+   *   Create a new Browers Window for display in Electron, but don't show it yet. This function created the window the contains all of Svelte Storm
    * ==================================================
    */
   let newWindow = new BrowserWindow({
@@ -170,6 +170,7 @@ const createWindow = (exports.createWindow = () => {
 
   var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
 
+  // this spawns the terminal window space
   var ptyProcess = pty.spawn(shell, [], {
     name: 'xterm-color',
     cols: 80,
@@ -186,13 +187,7 @@ const createWindow = (exports.createWindow = () => {
 
   // add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
   ipcMain.on('openFolder', (event, data) => {
-    console.log('pty before:', ptyProcess);
     ptyProcess.cwd = cwdFilePath[0];
-    console.log(
-      '🔴🟠🟡🟢🔵🟣 | file: index.js | line 192 | ipcMain.on | cwdFilePath[0]',
-      cwdFilePath[0]
-    );
-    console.log('pty after:', ptyProcess);
   });
 
   //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
@@ -209,7 +204,6 @@ const createWindow = (exports.createWindow = () => {
   ipcMain.on('terminal-resize', (event, size) => {
     const cols = size.cols;
     const rows = size.rows;
-    console.log('pty resizing to cols and rows', cols, rows);
     ptyProcess.resize(cols, rows);
   });
 
@@ -222,9 +216,13 @@ const createWindow = (exports.createWindow = () => {
   return newWindow;
 });
 
-let browser;
+ /*
+   * ==================================================
+   *   Create a new Browers Window for displaying the users app.
+   *   Note that the web preferences allow the browser window to read and run the injected debugging script
+   * ==================================================
+ */
 
-// open browser window when user selects open brower window from file menu
 const openBrowserWindow = (exports.openBrowserWindow = () => {
   browser = new BrowserWindow({
     width: 600,
@@ -246,11 +244,7 @@ const openBrowserWindow = (exports.openBrowserWindow = () => {
   // browser.webContents.openDevTools();
 });
 
-//Opening docs in ide browser
-// const openDocs = (exports.openDocs = () => {
-
-// })
-
+// gets and opens the file that the user selects from the File menu
 const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
@@ -274,6 +268,7 @@ const openFile = (exports.openFile = (targetWindow, file) => {
 
 let cwdFilePath;
 
+// gets and opens the folder that the user selects from the File menu
 const getFolderFromUser = (exports.getFolderFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openDirectory'],
@@ -304,12 +299,12 @@ const createProjectFromUser = (exports.createProjectFromUser = async (
   }
 });
 
-const testFunc = (exports.testFunc = () => {
-  // const content = folder;
-  console.log('testFunc');
-  // targetWindow.webContents.send('folder-opened', folder, content);
-  // createApplicationMenu();
-});
+// const testFunc = (exports.testFunc = () => {
+//   // const content = folder;
+//   console.log('testFunc');
+//   // targetWindow.webContents.send('folder-opened', folder, content);
+//   // createApplicationMenu();
+// });
 
 const openFolder = (exports.openFolder = (targetWindow, folder) => {
   const content = folder;
@@ -330,36 +325,43 @@ const saveFile = (exports.saveFile = (targetWindow) => {
   });
 });
 
-ipcMain.handle('saveFileFromUser', saveFile);
+// ipcMain.handle('saveFileFromUser', saveFile);
 
-ipcMain.handle('getFileFromUser', getFileFromUser);
+// ipcMain.handle('getFileFromUser', getFileFromUser);
 
-ipcMain.handle('getFolderFromUser', getFolderFromUser);
+// ipcMain.handle('getFolderFromUser', getFolderFromUser);
 
-ipcMain.handle('increaseFontSize', increaseFontSize);
+// ipcMain.handle('increaseFontSize', increaseFontSize);
 
-ipcMain.handle('decreaseFontSize', decreaseFontSize);
+// ipcMain.handle('decreaseFontSize', decreaseFontSize);
 
-ipcMain.handle('createProjectFromUser', createProjectFromUser);
+// ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
-ipcMain.handle('testFunc', testFunc);
+// ipcMain.handle('testFunc', testFunc);
+
+/*
+   * ==================================================
+   *   The injected debugging script uses the ipcRenderer in the browser window to send snapshots when there are state changes
+   *   The snapshots are sent to ipcMain and then are fowarded to the Chart.svelte file
+   * ==================================================
+*/
 
 ipcMain.on('SNAPSHOT', (event, data) => {
-  console.log(BrowserWindow.getAllWindows());
-  console.log('DATA SNAPSHOT ', data);
-  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
-  console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-  console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 345 | ipcMain.on | data', data);
-  console.log('🔴🟠🟡🟢🔵🟣 | file: index.js | line 351 | ipcMain.on | newWindow', newWindow);
-  newWindow.webContents.send('JIMSHOT', data);
+  newWindow.webContents.send('SNAPSHOT', data);
 });
 ipcMain.on('quit-app', () => {
   app.quit();
 });
 
 
+/*
+   * ==================================================
+   *   When the user selects a specific snapshot to display, a message is sent to ipcMain called 'TIME_TRAVEL'
+   *   When that message is received, we forward the data to the browser window.
+   * ==================================================
+*/
+
 ipcMain.on('TIME_TRAVEL', (event, data) => {
-  // console.log(data)
   const instance = {
     message: "TIME_TRAVEL",
     ctxIndex: data

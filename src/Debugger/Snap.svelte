@@ -1,8 +1,8 @@
 <script>
     export let compState;
-    console.log(compState);
   </script>
   
+  <!-- The Following recurses through compState and creates different html elements based on the data type -->
   <div class="card">
     {#if compState === undefined}
     <span />

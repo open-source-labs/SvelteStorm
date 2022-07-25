@@ -3,6 +3,13 @@ const main = require('electron-reload');
 const mainProcess = require('./index.js');
 const remote = require('electron').remote
 
+/*
+   * ==================================================
+   *   This function creates the menu for the Svelte Storm app
+   *   
+   * ==================================================
+*/
+
 const createApplicationMenu = (app) => {
   const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length;
   const focusedWindow = BrowserWindow.getFocusedWindow();
@@ -59,9 +66,6 @@ const createApplicationMenu = (app) => {
               
               if (focusedWindow) {
                 mainProcess.getFolderFromUser(focusedWindow);
-                console.log('after getFolderFromUser')
-                // app.emit('openFolder');
-                console.log('after open folder')
                 return;
               }
   
