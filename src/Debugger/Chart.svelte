@@ -2,7 +2,7 @@
   const { ipcRenderer, BrowserWindow } = require("electron");
   import { snapshots } from "./stores.js";
   import Snap from "./Snap.svelte";
-  import { indexes } from "d3";
+  // import { indexes } from "d3";
   let snapshotList;
   let activeIndex = 0;
   let states = [];
