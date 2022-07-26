@@ -20,14 +20,10 @@
   let parentChildTree = {};
   let resultArr: [] = [];
   let fsTimeout;
-  let removeLater;
+  const svelteFileArray = [];
   export let activeDir = '';
   let mainDir = '';
   export let reload = false;
-
-  DirectoryData.subscribe((data) => {
-    removeLater = data.parentChildTree;
-  });
 
   const unsub = DirectoryData.subscribe((data) => {
     rename = data.rename;
@@ -150,11 +146,8 @@
     build(this: Filetree) {
       this.items = FileTree.readDir(this.path);
     }
-
     static readDir(path) {
-      // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
       var fileArray = [];
-
       /*
        * ==================================================
        *   2022-07-19 Jim White & Ryan Huie
@@ -183,10 +176,10 @@
        *
        * ==================================================
        */
-
       if (!updateRollupConfigRun) {
         updateRollupConfig(path);
         updatePackageJson(path);
+        getParentChildTree();
         updateRollupConfigRun = true;
       }
 
@@ -213,13 +206,9 @@
               console.error(`${err}error while adding sdebug script to package.json`);
             }
           }
-        }
+      }
 
       function updateRollupConfig(path) {
-        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
-        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 144 | FileTree | updateRollupConfig | path', path);
-        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 145 | FileTree | fs.readdirSync | file🔴🟠🟡🟢🔵🟣', file);
-        // console.log('🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣🔴🟠🟡🟢🔵🟣');
         const originalConfig = path + '/rollup.config.js';
         const newConfig = path + '/rollup.config.new.js';
 
@@ -288,6 +277,8 @@
           if (path.includes('node_modules') !== true) {
             var content: string = fs.readFileSync(`${path}/${file}`).toString();
             var stateArr: string[] = [];
+            const parentName = file.split(".")[0]
+            svelteFileArray.push([parentName, content]);
 
             /*
              * ==================================================
@@ -312,39 +303,39 @@
              * ==================================================
              */
 
-            const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
-            const importsArray = content.match(regexImports);
+            // const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
+            // const importsArray = content.match(regexImports);
 
-            if (importsArray) {
-              let tParentChildTree = {};
+            // if (importsArray) {
+            //   let tParentChildTree = {};
 
-              tParentChildTree[file] = {};
+            //   tParentChildTree[file] = {};
 
-              for (let i = 0; i < importsArray.length; i++) {
-                let foundComp = importsArray[i].split(' ');
-                let reallyFoundComp = foundComp[1];
-                tParentChildTree[file][reallyFoundComp] = {};
-              }
+            //   for (let i = 0; i < importsArray.length; i++) {
+            //     let foundComp = importsArray[i].split(' ');
+            //     let reallyFoundComp = foundComp[1];
+            //     tParentChildTree[file][reallyFoundComp] = {};
+            //   }
 
-              console.log(
-                '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree',
-                tParentChildTree
-              );
+              // console.log(
+              //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree',
+              //   tParentChildTree
+              // );
 
               // parentChildTree[file] =
-              DirectoryData.update((currentData) => {
-                return {
-                  ...currentData,
-                  ParentChildTree: tParentChildTree,
-                };
-              });
+              // DirectoryData.update((currentData) => {
+              //   return {
+              //     ...currentData,
+              //     ParentChildTree: tParentChildTree,
+              //   };
+              // });
 
-              const thereYet = get(DirectoryData);
-              console.log(
-                '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet',
-                thereYet
-              );
-            }
+              // const thereYet = get(DirectoryData);
+              // console.log(
+              //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet',
+              //   thereYet
+              // );
+            // }
 
             /*
              * ==================================================
@@ -397,6 +388,75 @@
           fileArray.push(fileInfo);
         }
       });
+
+      // adds parentChildTree to store
+      async function getParentChildTree() {
+        const fileArr = await svelteFileArray;
+        const parentChildTree = {};
+        const relationships = {};
+        
+        // adds all file parent child relationships to relationships array
+        fileArr.forEach((file) => {
+          const [ fileName, fileContent ] = file;
+          const newRelationship = getRelationship(fileName, fileContent);
+          if (newRelationship) {
+            relationships[fileName] = newRelationship;
+          }
+        });
+
+        // recursively starts at App to loop through relationships to build parentChildTree to be added to store
+        function buildParentChildTree(placeInTree, currFile) {
+          if (relationships.hasOwnProperty(currFile)) {
+            const insertObject = {};
+            const relationshipReference = relationships[currFile][currFile];
+            for (let element in relationshipReference) {
+              insertObject[element] = relationshipReference[element][element];
+            }
+            placeInTree[currFile] = insertObject;
+            for (let element in insertObject) {
+              console.log("Element of insertedObject", element);
+              buildParentChildTree(placeInTree[currFile], element);
+            }
+          } else {
+            placeInTree[currFile] = {};
+            return;
+          }
+        }
+        
+        // invocation of above buildParentChildTree function on App
+        buildParentChildTree(parentChildTree, "App");
+
+        // add relationship tree to store
+        DirectoryData.update((currentData) => {
+          return {
+            ...currentData,
+            parentChildTree: parentChildTree,
+          };
+        });
+
+      const thereYet = get(DirectoryData);
+      console.log( '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
+
+      }
+
+      // helper function for getParentChildTree to get parent child relationship within a Svelte component file
+      // Note: assumes that only children (not grandchildren and further) exist within a Svelte component file
+      function getRelationship(file, content) {
+        const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
+        const importsArray = content.match(regexImports);
+        if (importsArray) {
+          const relationship = {};
+          relationship[file] = {};
+
+          for (let element of importsArray) {
+            let importArray = element.split(' ');
+            let compName = importArray[1];
+            relationship[file][compName] = {};
+          }
+          return relationship;
+        }
+        else return;
+      }
 
       return fileArray;
     }
