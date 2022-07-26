@@ -30,10 +30,10 @@ export default {
 	plugins: [
 		svelte({
 			// enable run-time checks when not in production
-			dev: !production,
-			css: css => {
-				css.write('bundle.css');
-			},
+			// dev: !production,
+			// css: css => {
+			// 	css.write('bundle.css');
+			// },
 			emitCss: true,
 			preprocess: autoPreprocess()
 		}),

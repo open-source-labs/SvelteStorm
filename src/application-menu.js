@@ -10,7 +10,8 @@ const remote = require('electron').remote
    * ==================================================
 */
 
-const createApplicationMenu = (app) => {
+// const createApplicationMenu = (app) => {
+const createApplicationMenu = () => {
   const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length;
   const focusedWindow = BrowserWindow.getFocusedWindow();
   const hasFilePath = !!(focusedWindow && focusedWindow.getRepresentedFilename());
@@ -255,17 +256,7 @@ const createApplicationMenu = (app) => {
         {
           label: `Quit ${name}`,
           accelerator: 'Command+Q',
-          // click() { app.quit(); },
-          // click() { app.exit(0); },
-          // click() {
-          //   if (remote.getCurrentWindow()) {
-          //     let w = remote.getCurrentWindow()
-          //     w.close()
-          //   }
-          // },
-          click() {
-            ipcRenderer.send('quit-app');
-          },
+          click() { app.quit(); },
         },
       ],
     });

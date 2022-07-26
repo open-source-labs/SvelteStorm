@@ -152,7 +152,7 @@
     }
 
     static readDir(path) {
-      // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
       var fileArray = [];
 
       /*
@@ -194,6 +194,8 @@
         try {
           // Change the directory
           process.chdir(path);
+          ipcRenderer.send("terminal-into", `cd ${path}\r`);
+
           console.log('directory has successfully been changed');
         } catch (err) {
           // Printing error if occurs

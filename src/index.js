@@ -121,6 +121,7 @@ const createWindow = (exports.createWindow = () => {
   newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
 
   // newWindow.webContents.openDevTools();
+  let watcher;
 
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
@@ -149,15 +150,18 @@ const createWindow = (exports.createWindow = () => {
   });
 
   //chokidar is a library that watches the files
-  let watcher;
-  if (process.env.NODE_ENV === 'development') {
-    watcher = require('chokidar').watch(path.join(__dirname, '../public'), {
-      ignoreInitial: true,
-    });
-    watcher.on('change', () => {
-      newWindow.reload();
-    });
-  }
+  // let watcher;
+  // if (process.env.NODE_ENV === 'development') {
+  //   watcher = require('chokidar').watch(path.join(__dirname, '../public'), {
+  //     ignoreInitial: true,
+  //     awaitWriteFinish: {
+  //       stabilityThreshold: 15000
+  //     },
+  //   });
+  //   watcher.on('change', () => {
+  //     newWindow.reload();
+  //   });
+  // }
 
   newWindow.on('closed', () => {
     if (watcher) {
@@ -223,7 +227,7 @@ const createWindow = (exports.createWindow = () => {
    * ==================================================
  */
 
-const openBrowserWindow = (exports.openBrowserWindow = () => {
+const openBrowserWindow = (exports.openBrowserWindow = (portToOpen) => {
   browser = new BrowserWindow({
     width: 600,
     height: 600,
@@ -240,7 +244,8 @@ const openBrowserWindow = (exports.openBrowserWindow = () => {
       enableRemoteModule: true,
     },
   });
-  browser.webContents.loadURL('http://localhost:8080');
+  // browser.webContents.loadURL('http://localhost:8080');
+  browser.webContents.loadURL(`http://localhost:${portToOpen}`);
   // browser.webContents.openDevTools();
 });
 
@@ -339,6 +344,13 @@ const saveFile = (exports.saveFile = (targetWindow) => {
 
 // ipcMain.handle('testFunc', testFunc);
 
+
+ipcMain.on('openDaDebugAppWindow', (event, localhostToUse) => {
+  if(localhostToUse.length === 4) openBrowserWindow(localhostToUse);
+});
+
+
+
 /*
    * ==================================================
    *   The injected debugging script uses the ipcRenderer in the browser window to send snapshots when there are state changes
@@ -349,6 +361,8 @@ const saveFile = (exports.saveFile = (targetWindow) => {
 ipcMain.on('SNAPSHOT', (event, data) => {
   newWindow.webContents.send('SNAPSHOT', data);
 });
+
+
 ipcMain.on('quit-app', () => {
   app.quit();
 });
