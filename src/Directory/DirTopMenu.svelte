@@ -187,10 +187,12 @@
     flex-wrap: nowrap;
     justify-content: space-evenly;
     background-color: rgba(45, 45, 52, 0.678);
-    padding-right: -30px;
-    margin-right: -30px;
-    /* padding-top: 2px;
-    padding-bottom: 2px; */
+    /* padding-right: -30px; */
+    /* margin-right: -30px; */
+    margin-top: 1px;
+    /* 
+    padding-bottom: 2px; 
+    */
     /* padding: auto; */
     width: 100%;
     font-size: 10px;
@@ -201,6 +203,24 @@
     font-size: 14px;
     color: white;
   }
+
+  .refresh:hover,
+  .addFile:hover,
+  .addFolder:hover
+  {
+    background-color: rgba(175, 175, 175, 0.5);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* .addFile:hover {
+    background-color: rgba(175, 175, 175, 0.5)
+  }
+
+  .addFolder:hover {
+    background-color: rgba(175, 175, 175, 0.5)
+  } */
+
   .refresh {
     /* float: right; */
     /* height: 40px;

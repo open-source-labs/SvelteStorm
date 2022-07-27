@@ -31,10 +31,13 @@ const editorCache: Writable<EditorCacheType> = writable<EditorCacheType>({});
 //CodeMirror.fromTextArea is object being submitted in CodeMirror.svelte to this store
 const codeMirrorEditor: Writable<EditorObj> = writable<object>(undefined);
 
+let showEditorBackground: Writeable<boolean> = writable<boolean>(true);
+
 export {
   DirectoryData,
   openTabs,
   editorCache,
   codeMirrorEditor,
   currentTabFilePath,
+  showEditorBackground,
 };

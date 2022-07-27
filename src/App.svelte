@@ -6,6 +6,8 @@
   const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
   import Chart from "./Debugger/Chart.svelte";
 
+  import { showEditorBackground } from './Utilities/DirectoryStore'
+
   import {onMount} from 'svelte';
   import searchDoc from './SearchProgram.js';
 
@@ -271,12 +273,17 @@
           <FileDir />
         </div>
         <div class="dividers-v" id="filedir-divider" />
-        <div class="box b" id="editor-window">
+        <div class="box b" id="editor-window" >
           <!-- svelte-ignore missing-declaration -->
+          {#if $showEditorBackground}
+          <div class="backdrop">
+          </div>
+          {:else}
           <div class="editor-wrapper">
             <!-- <Editor class="childClass" /> -->
             <Editor />
           </div>
+        {/if}
         </div>
       </div>
       <div class="dividers-h" id="horizontal-divider" />
@@ -321,7 +328,9 @@
                     on:click={handleDocuments}>Docs?</button
                   >
                 </div>
-                <StateManager />
+                <div id="stateManager">
+                  <StateManager />
+                </div>
                 <div class="box" id="dummyGraph">
                   <Chart />
                 </div>
@@ -335,6 +344,33 @@
 <style>
 
   #dummyGraph {
+    background: url('../public/img/TimeTravel04.jpg') no-repeat center center;
+    background-size: cover;
+    /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
+    box-shadow: 15px 15px 50px 0 rgb(85, 159, 220) inset, -15px -15px 50px 0 rgb(85, 159, 220) inset;
+    background-color: #0d1117;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* #stateManager {
+    background: url('../public/img/TimeTravel10.jpg') left top no-repeat;
+    background: url('../public/img/TimeTravel10.jpg');
+    background-size: contain;
+    box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset;
+    background-color: #0d1117;
+    width: 100%;
+    height: 100%;
+  } 
+  */
+  .render-wrapper {
+    /* background: url('../public/img/TimeTravel10.jpg') left top no-repeat; */
+    background: url('../public/img/TimeTravel10.jpg') no-repeat top center;
+    background-size: cover;
+    /* background-size: 100vw 100vh; */
+    background-size: 100% 8%;
+    /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
+    box-shadow: 15px 15px 50px 0 rgb(85, 159, 220) inset, -15px -15px 50px 0 rgb(85, 159, 220) inset;
     background-color: #0d1117;
     width: 100%;
     height: 100%;
@@ -376,6 +412,11 @@
   }
 
   .wrapper-right {
+    background-image: url('../public/img/TimeTravel04.jpg');
+    background-size: contain;
+    
+    background-blend-mode: normal;
+    z-index: 9999;
     height: 100%;
     /* width: 40%; */
     display: flex;
@@ -427,6 +468,39 @@
     margin-left: 30;
     padding-left: 30;
   }
+  
+  /* .editor-wrapper::before { */
+  .backdrop::before {
+    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
+    content: "";
+    background: url('../public/img/CodeEditor01.jpeg');
+    size: contain;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: 1;   
+    }
+
+
+    /* .editor-wrapper::after { */
+    .backdrop::after {
+      box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
+    content: "";
+      background: url('../public/img/Svelte_Logo1.svg') no-repeat center;
+      size: contain;
+      opacity: 0.4;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      z-index: 2;   
+}
+
+
   .docs {
     overflow: auto;
     color: white;
@@ -520,6 +594,9 @@
 
   /* Browser Render Window - SvelteTeam */
   .d {
+    background-image: url('../public/img/TimeTravel04.jpg');
+    background-size: contain;
+
     min-width: 1%;
     flex-direction: column;
     flex-grow: 1; /*Let render window take up remaining space in the flexbox */

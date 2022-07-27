@@ -4,6 +4,8 @@
   export let fileTree: [];
   import { DirectoryData } from "../Utilities/DirectoryStore";
   import CreateMenu from "./CreateMenu.svelte";
+  import { showEditorBackground } from '../Utilities/DirectoryStore'
+
   const fs = require("fs");
   const fileState = {};
   let rename: boolean = false;
@@ -34,6 +36,12 @@
   const dblClickHandler = (path: string): void => {
     const openFilePath = path;
     console.log("openFilePath", openFilePath);
+
+    console.log('🔴🟠🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟢🔵🟣 | file: FileTest.svelte | line 41 | dblClickHandler | showEditorBackground', $showEditorBackground);
+    $showEditorBackground = false;
+    console.log('🔴🟠🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟢🔵🟣 | file: FileTest.svelte | line 41 | dblClickHandler | showEditorBackground', $showEditorBackground);
+
+
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
