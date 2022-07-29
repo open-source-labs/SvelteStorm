@@ -6,9 +6,9 @@
   import { snapshots } from "./stores.js";
   export let hierarchy = {};
   let snapshotList;
-  let states = [];
+  // let snapshotList = [];
   let activeIndex = 0;
-  $: compState = states[activeIndex];
+  $: compState = snapshotList[activeIndex];
 
   let el;
   
@@ -23,26 +23,58 @@
   // user clicks snapshot button - send message to browser to display that specific snapshot
   function updateWindow (index) {
     ipcRenderer.send('TIME_TRAVEL', index)
+    //re-render snapshot in the debugger when click on a snapshot button
+    const currentSVG = document.querySelector("svg")
+    if (currentSVG) {
+      currentSVG.remove();
+    }
+    let treeData = createD3relationship(snapshotList, 'App', activeIndex);
+    console.log('activeIndex', activeIndex);
+    // console.log('snapshotList[activeIndex]', snapshotList[activeIndex])
+    console.log('treeData', treeData);
+    drawTree(treeData);
   }
 
-  // listneing for "SNAPSHOT" message
+  // listening for "SNAPSHOT" message
   ipcRenderer.on("SNAPSHOT", (event, data) => {
-    console.log("DATA SNAPSHOT ", data);
-    snapshots.update(() => {
-      return [...snapshotList, data.body];
-    });
-    const componentStateArray = []
+    // console.log("DATA SNAPSHOT ", data);
+    const singleCapturedSnapshot = []
     data.body.componentStates.forEach(comp => {
       const componentStateObj = {}
       componentStateObj[comp[2]] = comp[1];
-      componentStateArray.push(componentStateObj)
+      singleCapturedSnapshot.push(componentStateObj)
     })
-    states = [...states.slice(0, data.body.cacheLength), componentStateArray]
+    // snapshotList = [...snapshotList.slice(0, data.body.cacheLength), singleCapturedSnapshot]
+    
+    snapshots.update(() => {
+      return [...snapshotList, singleCapturedSnapshot];
+    });
+    
+    /*             OLD ONE              */
+  // ipcRenderer.on("SNAPSHOT", (event, data) => {
+  // // console.log("DATA SNAPSHOT ", data);
+  // snapshots.update(() => {
+  //   return [...snapshotList, data.body];
+  // });
+  // const singleCapturedSnapshot = []
+  // data.body.componentStates.forEach(comp => {
+  //   const componentStateObj = {}
+  //   componentStateObj[comp[2]] = comp[1];
+  //   singleCapturedSnapshot.push(componentStateObj)
+  // })
+  // snapshotList = [...snapshotList.slice(0, data.body.cacheLength), singleCapturedSnapshot]
 
-    let treeData = createD3relationship(states, 'App', activeIndex);
+    // removes previous D3 representation from the IDE
+    const currentSVG = document.querySelector("svg")
+    if (currentSVG) {
+      currentSVG.remove();
+      activeIndex += 1;
+    }
+    let treeData = createD3relationship(snapshotList, 'App', activeIndex);
+    console.log('activeIndex', activeIndex);
+    console.log('snapshotList[activeIndex]', snapshotList[activeIndex])
     console.log('treeData', treeData);
     drawTree(treeData);
-    console.log('states', states);
   });
 
 // loops through single snpashot array (current state) 
@@ -54,8 +86,8 @@ let childrenNames;        // [Task, Stats]
 if (findChildren(hierarchy, compName)) {
   childrenNames = findChildren(hierarchy, compName)
 }
-console.log("componentArray:", componentArray);
-console.log("activeIndex inside func:", activeIndex)
+// console.log("componentArray:", componentArray);
+// console.log("activeIndex inside func:", activeIndex)
 for (let element of componentArray[activeIndex]) {
 
   for (let key in element) {
@@ -81,7 +113,7 @@ for (let element in store) {
   if (element === compName) {
     const children = [];
     for (let key in store[element]) {
-      console.log(key);
+      // console.log(key);
       children.push(key);
     }
     return children;
@@ -89,7 +121,7 @@ for (let element in store) {
 }
 
 for (let element in hierarchy) {
-  console.log(store[element]);
+  // console.log(store[element]);
   return findChildren(store[element], compName)
 }
 
