@@ -2,9 +2,9 @@
   import type { State } from "../types.js";
 
   export let fileTree: [];
-  import { DirectoryData } from "../Utilities/DirectoryStore";
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   import CreateMenu from "./CreateMenu.svelte";
-  import { showEditorBackground } from '../Utilities/DirectoryStore';
+  import { showEditorBackground } from '../DataStore/SvelteStormDataStore';
 
   const fs = require("fs");
   const fileState = {};
@@ -182,7 +182,7 @@
 <!-- Components -->
 <div class="directory">
   {#if fileTree}
-    {#each fileTree as { path, string:name, items }}
+    {#each fileTree as { path, name, items }}
       <ul>
         {#if fs.statSync(path).isDirectory()}
           {#if rename && activeFile === path}

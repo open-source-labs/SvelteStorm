@@ -2,7 +2,7 @@
     import FileTest from './FileTest.svelte';  
     import DirTopMenu from './DirTopMenu.svelte'  
     import { onMount, onDestroy, afterUpdate} from 'svelte';
-    import { DirectoryData, appBeingDebugedPath } from '../Utilities/DirectoryStore';
+    import { DirectoryData, appBeingDebugedPath } from '../DataStore/SvelteStormDataStore';
     import type { Filetree } from '../types'
     import {get} from 'svelte/store'
     const myPath = require('node:path');

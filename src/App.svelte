@@ -7,7 +7,7 @@
   const { app, ipcMain, ipcRenderer, BrowserWindow } = require("electron");
   import Chart from "./Debugger/Chart.svelte";
 
-  import { showEditorBackground } from './Utilities/DirectoryStore'
+  import { showEditorBackground } from './DataStore/SvelteStormDataStore'
 
   import {onMount} from 'svelte';
   import searchDoc from './SearchProgram.js';

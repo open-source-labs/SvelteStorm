@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DirectoryData } from "../Utilities/DirectoryStore";
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   import type { FileState } from "../types";
   import FolderPlusOutline from 'svelte-material-icons/FolderPlusOutline.svelte'
   import FilePlusOutline from 'svelte-material-icons/FilePlusOutline.svelte'

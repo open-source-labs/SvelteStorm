@@ -1,10 +1,10 @@
 <script>
-  const {ipcRenderer, BrowserWindow} = require('electron');
-  import {snapshots} from './stores.js';
   import Snap from "./Snap.svelte"
+  import {snapshots} from '../DataStore/SvelteStormDataStore.js';
+  import {saveToFileName} from '../DataStore/SvelteStormDataStore';
+  const {ipcRenderer, BrowserWindow} = require('electron');
   const fs = require('fs');
   const path = require('path');
-  import {saveToFileName} from '../Utilities/JimsStore';
   // import { indexes } from "d3";
   let snapshotList;
   let activeIndex = 0;
@@ -13,19 +13,6 @@
   let myWriteStream;
   let FileNPathNameToStoreSnapshots = '';
 
-  /*
-   * ==================================================
-   *   Open da File First...
-   * ==================================================
-   */
-
-  // const myFileHandle = fs.openSync($saveToFileName, 'a+')
-
-  // const myWriteStream = myFileHandle.createWriteStream({
-  //   encoding: 'utf8',
-  //   autoClose: false,
-  //   emitClose: false
-  // })
 
   snapshots.subscribe((arr) => {
     collectionOfAllSnapshots = arr;
@@ -44,50 +31,28 @@
    */
   ipcRenderer.on('SNAPSHOT', (event, data) => {
     console.log('🔴🟠🟡🟢🔵🟣 | OH SNAP, I BEEN CALLED ');
-    // console.log("DATA SNAPSHOT ", data);
     const singleCapturedSnapshot = createSnapshot(data);
     console.log('🔴🟠🟡🟢🔵🟣 | SNAP BE MADE ');
     // Update the store with newest snapshot
     snapshots.update(() => {
       return [...collectionOfAllSnapshots, singleCapturedSnapshot];
     });
+        console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 54 | snapshots.update | collectionOfAllSnapshots', collectionOfAllSnapshots);
+    
     console.log('🔴🟠🟡🟢🔵🟣 | BEFORE WRITE SNAP FUNC CALL ');
 
-    // const stringSnapshot = JSON.stringify(singleCapturedSnapshot)
     const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
-    console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
-    console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
-    console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
-    // // if(!daFileNPathName && saveToFileName) daFileNPathName = saveToFileName
-    // console.log(
-    //   '🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 54 | ipcRenderer.on | stringSnapshot',
-    //   stringSnapshot
-    // );
-    // console.log(
-    //   '🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 57 | ipcRenderer.on | $saveToFileName',
-    //   saveToFileName
-    // );
-    // console.log(
-    //   '🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 57 | ipcRenderer.on | daFileNPathName',
-    //   daFileNPathName
-    // );
-    // console.log(
-    //   '🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 57 | ipcRenderer.on | daFileNPathName',
-    //   daFileNPathName2
-    // );
-    // fs.writeFileSync('/Users/jimtermini/Desktop/OSPProjects/SvelteStorm4/Snaps_svelte-demo_1.0.0_2022-07-29_14-08-59.snaps', '[\n' + stringSnapshot + ']\n');
     fs.writeFileSync(FileNPathNameToStoreSnapshots, '[\n' + stringSnapshot + ']\n');
-
-    // myWriteStream = fs.createWriteStream($saveToFileName, {
-    //   encoding: 'utf8',
-    //   autoClose: true,
-    // })
-    // myWriteStream.write(stringSnapshot);
-    // writeSnapToDisk(singleCapturedSnapshot);
-    // writeSnapToDisk(collectionOfAllSnapshots);
     console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
   });
 
+
+/*
+* ==================================================
+*   Blah
+* ==================================================
+*/
   function createSnapshot(data) {
     console.log('🔴🟠🟡🟢🔵🟣 | I B IN CREATE SNAP ');
     const singleCapturedSnapshot = [];
@@ -97,9 +62,16 @@
       singleCapturedSnapshot.push(componentStateObj);
     });
     console.log('🔴🟠🟡🟢🔵🟣 | I B GONNA RETURN SNAP ');
+
     return singleCapturedSnapshot;
   }
 
+
+/*
+* ==================================================
+*   Blah
+* ==================================================
+*/
   function writeSnapToDisk(singleCapturedSnapshot) {
     console.log('🔴🟠🟡🟢🔵🟣 | WRITE STD LINE 1 ');
     // stringify the snapshot
@@ -112,10 +84,6 @@
       console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
       console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
       console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
-      // const myFileHandle = fs.openSync($saveToFileName, 'a+')
-
-      // const myWriteStream = myFileHandle.createWriteStream({
-      // myWriteStream = fs.createWriteStream($saveToFileName, {
       myWriteStream = fs.createWriteStream($saveToFileName, {
         encoding: 'utf8',
         autoClose: true,
@@ -135,49 +103,35 @@
       console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
     }
 
-    // if(fs.existsSync($saveToFileName) ){
-    //   console.log('🔴🟠🟡🟢🔵🟣 | INSIDE IF EXIST ');
-
-    //   console.log('🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 51 | INSIDE APPEND IF | saveToFileName', $saveToFileName);
-    //   // Open file for READ & WRITE and APPEND access. (WriteFileSync method)
-    //   fs.appendFileSync($saveToFileName, "," + stringSnapshot + "]\n")
-    //   console.log('🔴🟠🟡🟢🔵🟣 | APPEND COMNPLETE ');
-
-    //     // If the file DOES exist ... read the last x characters
-    //     // Looking for ",]]\n" or ",]]\r" or "]]\r" or
-
-    //     // console.log the stringified state to ensure we are storing what we think we are.
-
-    //     // write
-
-    //   } else {
-    //     console.log('🔴🟠🟡🟢🔵🟣 | INSIDE ELSE ');
-    //     // If file DOES NOT exist write "[\n" to start the file.
-    //     fs.writeFileSync($saveToFileName, "[\n" + stringSnapshot + "]\n")
-    //     console.log('🔴🟠🟡🟢🔵🟣 | POAST WFS ');
-
-    //     console.log('🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 51 | INSIDE NEW FILE IF | saveToFileName', $saveToFileName);
-    // }
-    // write single captured snapshot to the captured snapshots file in public dir and send to server
-
-    // Naming convention for file yyyy-mm-dd HH-mm-ss appname appversion.snap
-    // fs.closeSync($saveToFileName);
-
     console.log('🔴🟠🟡🟢🔵🟣 | FUNC B DONE ');
   }
-
-  // User chooses to display previously saved snapshots
+  
+  
+  /*
+  * ==================================================
+  *   User chooses to display previously saved snapshots
+  * ==================================================
+  */
   function displaySavedSnapshots(fileName) {
     const stringSavedSnapshots = fs.readFileSync(
       path.join(__dirname, `../public/CapturedSnaps/${fileName}`)
     );
-    const savedSnapshots = JSON.parse(stringSavedSnapshots);
+    collectionOfAllSnapshots = JSON.parse(stringSavedSnapshots);
+        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+    console.log(collectionOfAllSnapshots)
+        console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
     snapshots.update(() => {
-      return savedSnapshots;
+      return collectionOfAllSnapshots;
     });
   }
 
-  // user clicks snapshot button - send message to browser to display that specific snapshot
+
+/*
+* ==================================================
+*   user clicks snapshot button - send message to 
+*   browser to display that specific snapshot
+* ==================================================
+*/
   function updateWindow(index) {
     ipcRenderer.send('TIME_TRAVEL', index);
   }
@@ -191,6 +145,10 @@
 
 {#if collectionOfAllSnapshots.length}
   <div class="buttonContainer">
+    <button
+          on:click={() => {
+            displaySavedSnapshots('Snaps_svelte-demo_1.0.0_2022-07-29_17-25-20.snaps');
+          }}>Upload Snapshots</button>
     {#each collectionOfAllSnapshots as snapshot, idx}
       <button
         on:click={() => {
@@ -207,6 +165,12 @@
   </div>
 {/if}
 
+
+<!-- /*
+* ==================================================
+*   Style for this display states component
+* ==================================================
+*/ -->
 <style>
   .buttonContainer {
     display: flex;

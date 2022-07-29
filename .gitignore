@@ -2,6 +2,7 @@
 **/package-lock.json
 public/bundle.**
 public/svelte.**
+public/CapturedSnaps/**.**
 
 release-builds
 ./public
