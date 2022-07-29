@@ -3,7 +3,8 @@
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
-  const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
+  // const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
+  const { app, ipcMain, ipcRenderer, BrowserWindow } = require("electron");
   import Chart from "./Debugger/Chart.svelte";
 
   import { showEditorBackground } from './Utilities/DirectoryStore'
@@ -347,8 +348,10 @@
     background: url('../public/img/TimeTravel04.jpg') no-repeat center center;
     background-size: cover;
     /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
-    box-shadow: 15px 15px 50px 0 rgb(85, 159, 220) inset, -15px -15px 50px 0 rgb(85, 159, 220) inset;
+    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
     background-color: #0d1117;
+    /* opacity: 0.5; */
+
     width: 100%;
     height: 100%;
   }
@@ -370,8 +373,10 @@
     /* background-size: 100vw 100vh; */
     background-size: 100% 8%;
     /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
-    box-shadow: 15px 15px 50px 0 rgb(85, 159, 220) inset, -15px -15px 50px 0 rgb(85, 159, 220) inset;
+    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
     background-color: #0d1117;
+    /* opacity: 0.5; */
+
     width: 100%;
     height: 100%;
   }
@@ -672,10 +677,6 @@
     font-size: small;
     border-style: inset;
     border-color: grey;
-  }
-
-  iframe:focus {
-    /* outline: blue solid 5px; */
   }
 
 

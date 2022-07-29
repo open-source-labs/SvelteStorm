@@ -1,8 +1,9 @@
 {
     "parser": "babel-eslint",
     "parserOptions": {
-        "ecmaVersion": "latest",
-        "ecmaFeatures": {}
+      "ecmaVersion": "latest",
+      "sourceType": "module",
+      "ecmaFeatures": {}
     },
     "rules": {
         "accessor-pairs": 2,
@@ -265,7 +266,7 @@
         //     "allowTemplateLiterals": true
         // }
         // ],
-        // "eslint-env": "es6",
+        "eslint-env": "es6",
         "radix": 2,
         "require-atomic-updates": 2,
         "require-await": 2,
@@ -309,6 +310,6 @@
     "env": {
         "node": true,
         "browser": true,
-        "es2020": true
+        "es2021": true
     }
 }

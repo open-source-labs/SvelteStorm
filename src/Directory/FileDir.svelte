@@ -2,7 +2,7 @@
     import FileTest from './FileTest.svelte';  
     import DirTopMenu from './DirTopMenu.svelte'  
     import { onMount, onDestroy, afterUpdate} from 'svelte';
-    import { DirectoryData } from '../Utilities/DirectoryStore';
+    import { DirectoryData, appBeingDebugedPath } from '../Utilities/DirectoryStore';
     import type { Filetree } from '../types'
     import {get} from 'svelte/store'
     const myPath = require('node:path');
@@ -134,6 +134,7 @@
   };
 
   class FileTree {
+    
     constructor(path: string, name: string | null = null) {
       this.path = path;
       this.name = name;
@@ -187,6 +188,7 @@
       if (!updateRollupConfigRun) {
         updateRollupConfig(path);
         updatePackageJson(path);
+        $appBeingDebugedPath = path;
         updateRollupConfigRun = true;
       }
 

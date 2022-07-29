@@ -57,7 +57,7 @@ export default {
 		
 		commonjs(),
 
-                !production & serve(),
+    !production & serve(),
 		production && terser()
 	],
 	watch: {

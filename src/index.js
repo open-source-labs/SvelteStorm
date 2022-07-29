@@ -20,11 +20,11 @@ require('@electron/remote/main').initialize();
 require('@electron/remote/main').enable(webContents);
 
 //hot reload for electron development
-try {
-  require('electron-reloader')(module);
-} catch (err) {
-  console.log(err);
-}
+// try {
+//   require('electron-reloader')(module);
+// } catch (err) {
+//   console.log(err);
+// }
 
 let userFile = '';
 
@@ -93,7 +93,10 @@ const createWindow = (exports.createWindow = () => {
 
   /*
    * ==================================================
-   *   Create a new Browers Window for display in Electron, but don't show it yet. This function created the window the contains all of Svelte Storm
+   *   Create a new Browers Window for display in 
+   *   Electron, but don't show it yet. This function 
+   *   created the window the contains all of
+   *   SvelteStorm
    * ==================================================
    */
   let newWindow = new BrowserWindow({
@@ -118,10 +121,11 @@ const createWindow = (exports.createWindow = () => {
    * ==================================================
    */
   //loading index.html into the app
-  newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
+  // newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
+  newWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
   // newWindow.webContents.openDevTools();
-  let watcher;
+  // let watcher;
 
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
@@ -164,9 +168,9 @@ const createWindow = (exports.createWindow = () => {
   // }
 
   newWindow.on('closed', () => {
-    if (watcher) {
-      watcher.close();
-    }
+    // if (watcher) {
+    //   watcher.close();
+    // }
     windows.delete(newWindow);
     createApplicationMenu();
     newWindow = null;
@@ -346,7 +350,7 @@ const saveFile = (exports.saveFile = (targetWindow) => {
 
 
 ipcMain.on('openDaDebugAppWindow', (event, localhostToUse) => {
-  if(localhostToUse.length === 4) openBrowserWindow(localhostToUse);
+  if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
 });
 
 
