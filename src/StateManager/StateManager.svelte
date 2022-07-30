@@ -1,5 +1,5 @@
 <script>
-  import { DirectoryData } from "../Utilities/DirectoryStore";
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   export let stateObj = {};
 
   const unsub = DirectoryData.subscribe((data) => {

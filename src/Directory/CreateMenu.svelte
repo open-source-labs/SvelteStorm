@@ -1,6 +1,6 @@
 <script>
   export let filePath;
-  import { DirectoryData } from '../Utilities/DirectoryStore';
+  import { DirectoryData } from '../DataStore/SvelteStormDataStore';
   const fs = require('fs');
   let fileStat = fs.statSync(filePath)
   

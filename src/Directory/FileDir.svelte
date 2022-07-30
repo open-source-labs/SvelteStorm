@@ -2,7 +2,7 @@
     import FileTest from './FileTest.svelte';  
     import DirTopMenu from './DirTopMenu.svelte'  
     import { onMount, onDestroy, afterUpdate} from 'svelte';
-    import { DirectoryData } from '../Utilities/DirectoryStore';
+    import { DirectoryData, appBeingDebugedPath } from '../DataStore/SvelteStormDataStore';
     import type { Filetree } from '../types'
     import {get} from 'svelte/store'
     const myPath = require('node:path');
@@ -130,6 +130,7 @@
   };
 
   class FileTree {
+    
     constructor(path: string, name: string | null = null) {
       this.path = path;
       this.name = name;
@@ -147,6 +148,7 @@
       this.items = FileTree.readDir(this.path);
     }
     static readDir(path) {
+      console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
       var fileArray = [];
       /*
        * ==================================================
@@ -180,6 +182,7 @@
         updateRollupConfig(path);
         updatePackageJson(path);
         getParentChildTree();
+        $appBeingDebugedPath = path;
         updateRollupConfigRun = true;
       }
 
@@ -187,6 +190,8 @@
         try {
           // Change the directory
           process.chdir(path);
+          ipcRenderer.send("terminal-into", `cd ${path}\r`);
+
           console.log('directory has successfully been changed');
         } catch (err) {
           // Printing error if occurs

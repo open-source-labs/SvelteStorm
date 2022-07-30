@@ -5,9 +5,9 @@
     openTabs,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../Utilities/DirectoryStore.js";
+  } from "../DataStore/SvelteStormDataStore.js";
   import type { NewFile, Modes } from '../types'
-  import { editorCache } from "../Utilities/DirectoryStore";
+  import { editorCache } from "../DataStore/SvelteStormDataStore";
 
   const { ipcRenderer } = require("electron");
   const fs = require("fs");

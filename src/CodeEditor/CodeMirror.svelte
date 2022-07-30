@@ -27,7 +27,7 @@
     editorCache,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../Utilities/DirectoryStore.js";
+  } from "../DataStore/SvelteStormDataStore.js";
 
   export let value;
   export let language;

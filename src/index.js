@@ -20,11 +20,11 @@ require('@electron/remote/main').initialize();
 require('@electron/remote/main').enable(webContents);
 
 //hot reload for electron development
-try {
-  require('electron-reloader')(module);
-} catch (err) {
-  console.log(err);
-}
+// try {
+//   require('electron-reloader')(module);
+// } catch (err) {
+//   console.log(err);
+// }
 
 let userFile = '';
 
@@ -93,7 +93,10 @@ const createWindow = (exports.createWindow = () => {
 
   /*
    * ==================================================
-   *   Create a new Browers Window for display in Electron, but don't show it yet. This function created the window the contains all of Svelte Storm
+   *   Create a new Browers Window for display in 
+   *   Electron, but don't show it yet. This function 
+   *   created the window the contains all of
+   *   SvelteStorm
    * ==================================================
    */
   let newWindow = new BrowserWindow({
@@ -118,9 +121,11 @@ const createWindow = (exports.createWindow = () => {
    * ==================================================
    */
   //loading index.html into the app
-  newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
+  // newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
+  newWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
   // newWindow.webContents.openDevTools();
+  // let watcher;
 
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
@@ -149,20 +154,23 @@ const createWindow = (exports.createWindow = () => {
   });
 
   //chokidar is a library that watches the files
-  let watcher;
-  if (process.env.NODE_ENV === 'development') {
-    watcher = require('chokidar').watch(path.join(__dirname, '../public'), {
-      ignoreInitial: true,
-    });
-    watcher.on('change', () => {
-      newWindow.reload();
-    });
-  }
+  // let watcher;
+  // if (process.env.NODE_ENV === 'development') {
+  //   watcher = require('chokidar').watch(path.join(__dirname, '../public'), {
+  //     ignoreInitial: true,
+  //     awaitWriteFinish: {
+  //       stabilityThreshold: 15000
+  //     },
+  //   });
+  //   watcher.on('change', () => {
+  //     newWindow.reload();
+  //   });
+  // }
 
   newWindow.on('closed', () => {
-    if (watcher) {
-      watcher.close();
-    }
+    // if (watcher) {
+    //   watcher.close();
+    // }
     windows.delete(newWindow);
     createApplicationMenu();
     newWindow = null;
@@ -223,7 +231,7 @@ const createWindow = (exports.createWindow = () => {
    * ==================================================
  */
 
-const openBrowserWindow = (exports.openBrowserWindow = () => {
+const openBrowserWindow = (exports.openBrowserWindow = (portToOpen) => {
   browser = new BrowserWindow({
     width: 600,
     height: 600,
@@ -240,7 +248,8 @@ const openBrowserWindow = (exports.openBrowserWindow = () => {
       enableRemoteModule: true,
     },
   });
-  browser.webContents.loadURL('http://localhost:8080');
+  // browser.webContents.loadURL('http://localhost:8080');
+  browser.webContents.loadURL(`http://localhost:${portToOpen}`);
   // browser.webContents.openDevTools();
 });
 
@@ -339,6 +348,13 @@ const saveFile = (exports.saveFile = (targetWindow) => {
 
 // ipcMain.handle('testFunc', testFunc);
 
+
+ipcMain.on('openDaDebugAppWindow', (event, localhostToUse) => {
+  if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
+});
+
+
+
 /*
    * ==================================================
    *   The injected debugging script uses the ipcRenderer in the browser window to send snapshots when there are state changes
@@ -349,6 +365,8 @@ const saveFile = (exports.saveFile = (targetWindow) => {
 ipcMain.on('SNAPSHOT', (event, data) => {
   newWindow.webContents.send('SNAPSHOT', data);
 });
+
+
 ipcMain.on('quit-app', () => {
   app.quit();
 });

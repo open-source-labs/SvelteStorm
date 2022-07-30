@@ -2,8 +2,10 @@
   import type { State } from "../types.js";
 
   export let fileTree: [];
-  import { DirectoryData } from "../Utilities/DirectoryStore";
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   import CreateMenu from "./CreateMenu.svelte";
+  import { showEditorBackground } from '../DataStore/SvelteStormDataStore';
+
   const fs = require("fs");
   const fileState = {};
   let rename: boolean = false;
@@ -41,6 +43,9 @@
         fileRead: true,
       };
     });
+    console.log('🔴🟠🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟢🔵🟣 | file: FileTest.svelte | line 41 | dblClickHandler | showEditorBackground', $showEditorBackground);
+    $showEditorBackground = false;
+    console.log('🔴🟠🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟢🔵🟣 | file: FileTest.svelte | line 41 | dblClickHandler | showEditorBackground', $showEditorBackground);
   };
 
   const rightClickHandler = (path: string): void => {
