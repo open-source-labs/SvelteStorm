@@ -4,8 +4,9 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   // const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
-  const { app, ipcMain, ipcRenderer, BrowserWindow } = require("electron");
   import Chart from "./Debugger/Chart.svelte";
+  const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
+  import Tree from "./Debugger/Tree.svelte";
 
   import { showEditorBackground } from './DataStore/SvelteStormDataStore'
 
