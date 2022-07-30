@@ -148,7 +148,6 @@
       this.items = FileTree.readDir(this.path);
     }
     static readDir(path) {
-      console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
       var fileArray = [];
       /*
        * ==================================================
@@ -440,8 +439,8 @@
         });
 
       // console log to see if parentChildTree was updated in store
-      const thereYet = get(DirectoryData);
-      console.log( '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
+      // const thereYet = get(DirectoryData);
+      // console.log( '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
       }
 
       // helper function for getParentChildTree to get parent child relationship within a Svelte component file

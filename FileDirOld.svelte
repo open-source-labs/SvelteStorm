@@ -139,7 +139,6 @@
     }
     
     static readDir(path) {
-      // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 136 | FileTree | readDir | path', path);
       var fileArray = [];
 
       /*
