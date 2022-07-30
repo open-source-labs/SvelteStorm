@@ -1,0 +1,27 @@
+componentArray: 
+  [Array(2)]
+  0: Array(2)
+    0: {Task: {…}}
+    1: {App: {…}}
+  length: 2
+  [[Prototype]]: Array(0)
+  length: 1
+  [[Prototype]]: Array(0)
+  
+componentArray[activeIndex]: **(active index should be 0)**
+  (2) [{…}, {…}]
+  0:
+    Task: {toDoList: {…}, taskDate: '9/20/2022', task: 'apply to job', subTasksList: Array(1), idx: 0, …}
+  [[Prototype]]: Object
+  1:
+    App: {count: {…}, toDoList: {…}, playerData: {…}, name: 'world', countValue: 0, …}
+  [[Prototype]]: Object
+  length: 2
+  [[Prototype]]: Array(0)
+
+  
+componentArray:
+  [
+      {Task: {…}},
+      {App: {…}}
+  ]

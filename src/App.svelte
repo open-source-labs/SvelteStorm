@@ -3,9 +3,8 @@
   import XTerm from "./XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
-  // const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
-  import Chart from "./Debugger/Chart.svelte";
-  const { app, ipcMain, remote, ipcRenderer, BrowserWindow } = require("electron");
+  import Chart from "./Debugger/Tree.svelte";
+  const { app, ipcMain, ipcRenderer, BrowserWindow } = require("electron");
   import Tree from "./Debugger/Tree.svelte";
 
   import { showEditorBackground } from './DataStore/SvelteStormDataStore'
@@ -334,7 +333,7 @@
                   <StateManager />
                 </div>
                 <div class="box" id="dummyGraph">
-                  <Chart />
+                  <Tree />
                 </div>
               {/if}
             </form>
@@ -418,7 +417,7 @@
   }
 
   .wrapper-right {
-    background-image: url('../public/img/TimeTravel04.jpg');
+    /* background-image: url('../public/img/TimeTravel04.jpg'); */
     background-size: contain;
     
     background-blend-mode: normal;

@@ -181,6 +181,7 @@
       if (!updateRollupConfigRun) {
         updateRollupConfig(path);
         updatePackageJson(path);
+        getParentChildTree();
         $appBeingDebugedPath = path;
         updateRollupConfigRun = true;
       }
