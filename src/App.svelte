@@ -344,17 +344,45 @@
 
 <style>
 
-  #dummyGraph {
-    background: url('../public/img/TimeTravel04.jpg') no-repeat center center;
+#dummyGraph {
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+}
+
+  #wrapper-right {
+    /* background: url('../public/img/TimeTravel04.jpg') no-repeat center center;
     background-size: cover;
     /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
-    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
-    background-color: #0d1117;
-    /* opacity: 0.5; */
-
-    width: 100%;
-    height: 100%;
+    /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
+    /* background-color: #0d1117; */
+    /* opacity: 0.3; */
+    position: relative;
+    /* width: 100%;
+    height: 100%; */
   }
+  
+  
+#wrapper-right:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  /* background-image: url('../public/img/TimeTravel04.jpg') no-repeat center center;; */
+  background-image: url('../public/img/TimeTravel04.jpg');
+  box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+}
+
+.root {
+  position: relative;
+}
 
   /* #stateManager {
     background: url('../public/img/TimeTravel10.jpg') left top no-repeat;
@@ -367,18 +395,17 @@
   } 
   */
   .render-wrapper {
-    /* background: url('../public/img/TimeTravel10.jpg') left top no-repeat; */
-    background: url('../public/img/TimeTravel10.jpg') no-repeat top center;
-    background-size: cover;
-    /* background-size: 100vw 100vh; */
-    background-size: 100% 8%;
-    /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
-    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
-    background-color: #0d1117;
-    /* opacity: 0.5; */
-
     width: 100%;
     height: 100%;
+    /* background: url('../public/img/TimeTravel10.jpg') left top no-repeat; */
+    /* background: url('../public/img/TimeTravel10.jpg') no-repeat top center; */
+    /* background-size: 100vw 100vh; */
+    /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
+    /* opacity: 0.5; */
+    /* background-size: cover;
+    background-size: 100% 8%;
+    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
+    background-color: #0d1117; */
   }
 
   body {
@@ -479,7 +506,7 @@
     box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
     content: "";
     background: url('../public/img/CodeEditor01.jpeg');
-    size: contain;
+    size: cover;
     opacity: 0.5;
     top: 0;
     left: 0;
@@ -517,7 +544,7 @@
 
   .render-wrapper {
     /* background-color: #252532; */
-    background-color: #0d1117;
+    /* background-color: #0d1117; */
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -553,7 +580,7 @@
   }
 
   .box {
-    background-color: rgb(102, 217, 132);
+    /* background-color: rgb(102, 217, 132); */
     color: rgb(245, 242, 239);
     border-radius: 0px;
     overflow-y: scroll;
@@ -599,15 +626,15 @@
 
   /* Browser Render Window - SvelteTeam */
   .d {
-    background-image: url('../public/img/TimeTravel04.jpg');
+    /* background-image: url('../public/img/TimeTravel04.jpg');
     background-size: contain;
+    background-color: #0d1117; */
 
     min-width: 1%;
     flex-direction: column;
     flex-grow: 1; /*Let render window take up remaining space in the flexbox */
     padding: 0px;
     text-align: center;
-    background-color: #0d1117;
     border-bottom: 1px solid #3d3d3d;
     position: relative;
   }

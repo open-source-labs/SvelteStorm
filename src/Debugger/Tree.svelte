@@ -175,9 +175,11 @@
       '🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 169 | createD3relationship | componentArray',
       componentArray
     );
-    console.log('🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 179 | createD3relationship | activeIndex', activeIndex);
+    console.log(
+      '🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 179 | createD3relationship | activeIndex',
+      activeIndex
+    );
     for (let element of componentArray[activeIndex]) {
-
       for (let key in element) {
         for (let name of childrenNames) {
           if (key === name) {
@@ -231,9 +233,14 @@
     // };
 
     // set the dimensions and margins of the diagram
-    var margin = {top: 40, right: 90, bottom: 50, left: 90},
-      width = 660 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+    const treeParent = document.querySelector('#dummyGraph');
+    // const buttonContainer = document.querySelector('.buttonContainer')
+
+    var margin = {top: 60, right: 90, bottom: 50, left: 90},
+      // width = 100% - margin.left - margin.right,
+      // height = 100% - margin.top - margin.bottom;
+      width = treeParent.clientWidth - margin.left - margin.right,
+      height = treeParent.clientHeight - margin.top - margin.bottom;
 
     // declares a tree layout and assigns the size
     var treemap = d3.tree().size([width, height]);
@@ -265,6 +272,7 @@
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
+      .style("stroke", "cyan")
       .attr('class', 'link')
       .attr('d', function (d) {
         return (
@@ -340,71 +348,68 @@
     drawTree(treeData);
   }
 </script>
+<div id="buttonsAndTree">
 
-<!-- /*
-* ==================================================
-*   Display the State "Snapshorts"
-* ==================================================
-*/ -->
-
-{#if collectionOfAllSnapshots.length}
-  <div class="buttonContainer">
+  <!-- /*
+    * ==================================================
+    *   Display the State "Snapshorts"
+    * ==================================================
+    */ -->
+    
+    {#if collectionOfAllSnapshots.length}
+    <div class="buttonContainer">
     <button
       on:click={() => {
         displaySavedSnapshots(
           'Snaps_svelte-demo_1.0.0_2022-07-29_17-25-20.snaps'
-        );
-      }}>Upload Snapshots</button
+          );
+        }}>Upload Snapshots</button
     >
     {#each collectionOfAllSnapshots as snapshot, idx}
-      <button
-        on:click={() => {
-          activeIndex = idx;
-          updateWindow(activeIndex);
+    <button
+    on:click={() => {
+      activeIndex = idx;
+      updateWindow(activeIndex);
         }}>Snapshot {idx + 1}</button
       >
-    {/each}
+      {/each}
   </div>
   <!-- <div class="container">
     <div class="block">
       <Snap {compState} />
     </div>
   </div> -->
-{/if}
+  {/if}
 
-<!-- {#if snapshotList.length}
-<div class="buttonContainer">
-{#each snapshotList as snapshot, idx}
-  <button on:click={()=> {
-    activeIndex = idx;
-    updateWindow(activeIndex);
-    }}>Snapshot {idx + 1}</button>
-{/each}
+  
+  <!-- D3 tree -->
+  <div class="svgtree" bind:this={el} />
 </div>
-<div class="container">
-<div class="block">
-  <Snap {compState} />
-</div>
-</div> -->
-<!-- {/if} -->
-
-<!-- D3 tree -->
-<div class="svgtree" bind:this={el} />
-
-<!-- /*
-* ==================================================
+  
+  <!-- /*
+    * ==================================================
 *   Style for this display states component
 * ==================================================
 */ -->
 <style>
+
+  #buttonsAndTree {
+    display: flex;
+    flex-direction: row;
+  }
   .buttonContainer {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: start;
     flex-wrap: wrap;
   }
-  .block {
-    width: 180px;
+
+  .svgtree {
+    flex-grow: 1;
   }
+  /* .block {
+    width: 180px;
+  } */
   button {
     color: rgb(188, 188, 188);
     border: 1px solid #444;
@@ -419,19 +424,20 @@
     -webkit-transform: translateX(-1px);
     transform: scale(1.05, 1.05);
   }
-  .container {
+  /* .container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-evenly;
-  }
+  } */
 
-  :global(path) {
+  /* :global(path) {
     fill: none;
     stroke: green;
-  }
+  } */
   :global(.node circle) {
-    fill: #fff;
+    /* fill: #fff; */
+    fill: rgb(240, 10, 121);
     stroke: steelblue;
     stroke-width: 3px;
   }
