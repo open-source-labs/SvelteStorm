@@ -45,15 +45,16 @@
     //   return [...collectionOfAllSnapshots, data.body];
     // });
 
+    console.log("SNAPSHOT DATA:", data.body)
     const singleCapturedSnapshot = createSnapshot(data);
-    console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
+    // console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
     // Update the store with newest snapshot
     snapshots.update(() => {
       return [...collectionOfAllSnapshots, singleCapturedSnapshot];
     });
 
-    const currentSnapshots = get(snapshots);
-    console.log("SNAPSHOT: snapshots store:", currentSnapshots)
+    // const currentSnapshots = get(snapshots);
+    // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
 
     const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
     fs.writeFileSync(
@@ -67,9 +68,9 @@
       activeIndex += 1;
     }
 
-    console.log("SNAPSHOT: Input collection:", collectionOfAllSnapshots);
-    console.log("SNAPSHOT: Input activeIndex:", activeIndex);
-    console.log("SNAPSHOT: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
+    // console.log("SNAPSHOT: Input collection:", collectionOfAllSnapshots);
+    // console.log("SNAPSHOT: Input activeIndex:", activeIndex);
+    // console.log("SNAPSHOT: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
 
     let treeData = createD3relationship(
       collectionOfAllSnapshots,
@@ -299,9 +300,9 @@
     if (currentSVG) {
       currentSVG.remove();
     }
-    console.log("UpdateWindow: Input collection:", collectionOfAllSnapshots);
-    console.log("UpdateWindow: Input activeIndex:", activeIndex);
-    console.log("UpdateWindow: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
+    // console.log("UpdateWindow: Input collection:", collectionOfAllSnapshots);
+    // console.log("UpdateWindow: Input activeIndex:", activeIndex);
+    // console.log("UpdateWindow: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
     let treeData = createD3relationship(
       collectionOfAllSnapshots,
       'App',

@@ -5,7 +5,7 @@
 */
 const { ipcRenderer } = require('electron')
 const parse = (event) => JSON.parse(JSON.stringify(event));
-let cacheState;
+let cacheState = JSON.stringify([]);
 const components = [];
 let lastIndex = 0;
 let firstTime = true;
@@ -27,9 +27,9 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
 setTimeout(saveAndDispatchState, 0);
 
 function checkIfChanged(componentState, i) {
-  console.log("checkIfChanged: i: ", i)
-  console.log("checkIfChanged: componentState: ", componentState)
-  console.log("checkIfChanged: cacheState:", cacheState);
+  // console.log("checkIfChanged: i: ", i)
+  // console.log("checkIfChanged: componentState: ", componentState)
+  // console.log("checkIfChanged: cacheState:", cacheState);
   if (
     !cacheState.length ||
     (JSON.stringify(cacheState[cacheState.length - 1][i][1]) !==
@@ -80,14 +80,14 @@ function saveAndDispatchState() {
   });
 
   // TEST CHECK IF CHANGED 
-  console.log("first time", firstTime);
-  if (firstTime) {
-    cacheState = JSON.stringify([]);
-    console.log("cacheState in IF block", cacheState);
-  }
-  console.log("saveAndDispatchState: curState: ", firstTime, curState)
-  console.log("saveAndDispatchState: cacheState:", firstTime, cacheState);
-  firstTime = false;
+  // console.log("first time", firstTime);
+  // if (firstTime) {
+    // cacheState = JSON.stringify([]);
+    // console.log("cacheState in IF block", cacheState);
+  // }
+  // console.log("saveAndDispatchState: curState: ", firstTime, curState)
+  // console.log("saveAndDispatchState: cacheState:", firstTime, cacheState);
+  // firstTime = false;
   cacheState = JSON.parse(cacheState);
   const compCacheState = JSON.stringify(cacheState[cacheState.length - 1])
   let lastCacheStateLength;
@@ -95,12 +95,12 @@ function saveAndDispatchState() {
     lastCacheStateLength = cacheState[cacheState.length - 1].length;
   }
   cacheState = JSON.stringify(cacheState);
-  console.log("lastCacheStateLength", lastCacheStateLength);
-  console.log("curState.length", curState.length);
+  // console.log("lastCacheStateLength", lastCacheStateLength);
+  // console.log("curState.length", curState.length);
   
   if (JSON.stringify(curState) != compCacheState && lastCacheStateLength != curState.length) {
-    console.log("IF:saveAndDispatchState: curState: ", firstTime, curState)
-    console.log("IF:saveAndDispatchState: cacheState:", firstTime, cacheState);
+    // console.log("IF:saveAndDispatchState: curState: ", firstTime, curState)
+    // console.log("IF:saveAndDispatchState: cacheState:", firstTime, cacheState);
     if (cacheState.length > lastIndex) {
       cacheState = JSON.parse(cacheState);
       cacheState = cacheState.slice(0, lastIndex + 1);
@@ -111,7 +111,7 @@ function saveAndDispatchState() {
     cacheState.push([...curState]);
     lastIndex = cacheState.length - 1;
     cacheState = JSON.stringify(cacheState);
-    console.log("cacheState after push:", cacheState);
+    // console.log("cacheState after push:", cacheState);
   }
 
   // // currState = [[component 1],[component 2], etc...] | component 1 = [component, component.capture state, name]
