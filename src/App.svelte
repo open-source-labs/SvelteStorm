@@ -105,10 +105,10 @@
       //Need this so window events continue tracking on top of iframe
       let iframeList: HTMLCollection =
         document.getElementsByClassName('webpage');
-      console.log(
-        '🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 | file: App.svelte | line 99 | dragStart | iframeList',
-        iframeList
-      );
+      // console.log(
+      //   '🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 | file: App.svelte | line 99 | dragStart | iframeList',
+      //   iframeList
+      // );
       console.log(iframeList);
       for (const item of iframeList) {
         item.setAttribute('style', 'pointer-events: none');

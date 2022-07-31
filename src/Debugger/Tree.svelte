@@ -44,10 +44,8 @@
     // snapshots.update(() => {
     //   return [...collectionOfAllSnapshots, data.body];
     // });
-
-    console.log("SNAPSHOT DATA:", data.body)
     const singleCapturedSnapshot = createSnapshot(data);
-    // console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
+    console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
     // Update the store with newest snapshot
     snapshots.update(() => {
       return [...collectionOfAllSnapshots, singleCapturedSnapshot];
@@ -77,7 +75,7 @@
       'App',
       activeIndex
     );
-    console.log("SNAPSHOT: Tree Data:", treeData);
+    // console.log("SNAPSHOT: Tree Data:", treeData);
     drawTree(treeData);
   });
 
@@ -294,6 +292,7 @@
    * ==================================================
    */
   function updateWindow(index) {
+    console.log("updateWindow index:", index);
     ipcRenderer.send('TIME_TRAVEL', index);
     //re-render snapshot in the debugger when click on a snapshot button
     const currentSVG = document.querySelector('#D3Tree');
