@@ -104,10 +104,10 @@
       //Need this so window events continue tracking on top of iframe
       let iframeList: HTMLCollection =
         document.getElementsByClassName('webpage');
-      console.log(
-        '🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 | file: App.svelte | line 99 | dragStart | iframeList',
-        iframeList
-      );
+      // console.log(
+      //   '🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 | file: App.svelte | line 99 | dragStart | iframeList',
+      //   iframeList
+      // );
       console.log(iframeList);
       for (const item of iframeList) {
         item.setAttribute('style', 'pointer-events: none');
@@ -265,16 +265,16 @@
     return false;
   };
 
-  let rightPanel: HTMLElement = document.getElementById('wrapper-right');
+  // let rightPanel: HTMLElement = document.getElementById('wrapper-right');
 
-  console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
-            console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
-    setTimeout(() => {
-          console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-          console.log('Focusing now');
-      rightPanel.focus();
-    }, 15000)
+  // console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+  //       console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
+  //           console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+  //   setTimeout(() => {
+  //         console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+  //         console.log('Focusing now');
+  //     rightPanel.focus();
+  //   }, 15000)
 
 </script>
 

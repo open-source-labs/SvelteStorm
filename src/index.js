@@ -411,8 +411,9 @@ ipcMain.on('quit-app', () => {
 ipcMain.on('TIME_TRAVEL', (event, data) => {
   const instance = {
     message: "TIME_TRAVEL",
-    ctxIndex: data[0],
-    collectionOfAllSnapshots: data[1]
+    ctxIndex: data
+    // ctxIndex: data[0],
+    // collectionOfAllSnapshots: data[1]
   };
   // Use browser window to send time-travel message
   browser.webContents.send('TIME_TRAVEL', instance);

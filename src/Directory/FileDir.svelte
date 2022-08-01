@@ -346,12 +346,9 @@
           };
         });
 
-        // console log to see if parentChildTree was updated in store
-        const thereYet = get(DirectoryData);
-        console.log(
-          '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet',
-          thereYet
-        );
+      // console log to see if parentChildTree was updated in store
+      // const thereYet = get(DirectoryData);
+      // console.log( '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
       }
 
       // helper function for getParentChildTree to get parent child relationship within a Svelte component file

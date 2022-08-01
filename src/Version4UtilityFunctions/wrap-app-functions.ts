@@ -70,7 +70,7 @@ export function updateRollupConfig(path) {
     const daLine = myFileAsArray[i].split(' ');
     if (daLine[0] !== 'import' && !addedImports) {
       newMyFileAsArray.push(
-        `\timport banner from '${myPath.resolve(
+        `import banner from '${myPath.resolve(
           __dirname,
           '../src/Version4UtilityFunctions/rollup-plugin-pre-app-end'
         )}';`

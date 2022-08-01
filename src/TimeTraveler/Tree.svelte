@@ -5,6 +5,7 @@
     saveToFileName,
     snapshots,
   } from '../DataStore/SvelteStormDataStore';
+  import {get} from 'svelte/store'
   export let hierarchy = {};
 
   const {ipcRenderer, BrowserWindow} = require('electron');
@@ -44,22 +45,15 @@
     // snapshots.update(() => {
     //   return [...collectionOfAllSnapshots, data.body];
     // });
-    console.log('🔴🟠🟡🟢🔵🟣 | OH SNAP, I BEEN CALLED ');
-
     const singleCapturedSnapshot = createSnapshot(data);
-
-    console.log('🔴🟠🟡🟢🔵🟣 | SNAP BE MADE ');
+    console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
     // Update the store with newest snapshot
     snapshots.update(() => {
       return [...collectionOfAllSnapshots, singleCapturedSnapshot];
     });
-    console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
-    console.log(
-      '🔴🟠🟡🟢🔵🟣 | file: Chart.svelte | line 54 | snapshots.update | collectionOfAllSnapshots',
-      collectionOfAllSnapshots
-    );
 
-    console.log('🔴🟠🟡🟢🔵🟣 | BEFORE WRITE SNAP FUNC CALL ');
+    // const currentSnapshots = get(snapshots);
+    // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
 
     // const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
     
@@ -75,26 +69,25 @@
 
 
 
-    fs.writeFileSync(
-      FileNPathNameToStoreSnapshots, stringSnapshot);
-    console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
+    fs.writeFileSync(FileNPathNameToStoreSnapshots, stringSnapshot);
+      console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
 
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
       currentSVG.remove();
       activeIndex += 1;
     }
+
+    // console.log("SNAPSHOT: Input collection:", collectionOfAllSnapshots);
+    // console.log("SNAPSHOT: Input activeIndex:", activeIndex);
+    // console.log("SNAPSHOT: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
+
     let treeData = createD3relationship(
       collectionOfAllSnapshots,
       'App',
       activeIndex
     );
-    console.log('activeIndex', activeIndex);
-    console.log(
-      'collectionOfAllSnapshots[activeIndex]',
-      collectionOfAllSnapshots[activeIndex]
-    );
-    console.log('treeData', treeData);
+    // console.log("SNAPSHOT: Tree Data:", treeData);
     drawTree(treeData);
   });
 
@@ -104,14 +97,12 @@
    * ==================================================
    */
   function createSnapshot(data) {
-    console.log('🔴🟠🟡🟢🔵🟣 | I B IN CREATE SNAP ');
     const singleCapturedSnapshot = [];
     data.body.componentStates.forEach((comp) => {
       const componentStateObj = {};
       componentStateObj[comp[2]] = comp[1];
       singleCapturedSnapshot.push(componentStateObj);
     });
-    console.log('🔴🟠🟡🟢🔵🟣 | I B GONNA RETURN SNAP ');
 
     return singleCapturedSnapshot;
   }
@@ -122,7 +113,6 @@
    * ==================================================
    */
   function writeSnapToDisk(singleCapturedSnapshot) {
-    console.log('🔴🟠🟡🟢🔵🟣 | WRITE STD LINE 1 ');
     // stringify the snapshot
     const stringSnapshot = JSON.stringify(singleCapturedSnapshot);
     console.log('🔴🟠🟡🟢🔵🟣 | BEEN STRINGED ');
@@ -134,29 +124,15 @@
     // fs.existsSync(path) -> returns boolean
 
     if ($saveToFileName && !myWriteStream) {
-      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
-      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
-      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
       myWriteStream = fs.createWriteStream($saveToFileName, {
         encoding: 'utf8',
         autoClose: true,
       });
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
     }
 
     if ($saveToFileName && myWriteStream) {
-      console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
-      console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
-      console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
       myWriteStream.write(stringSnapshot);
-      console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-      console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-      console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
     }
-
-    console.log('🔴🟠🟡🟢🔵🟣 | FUNC B DONE ');
   }
 
   /*
@@ -169,9 +145,6 @@
       path.join(__dirname, `../public/CapturedSnaps/${fileName}`)
     );
     collectionOfAllSnapshots = JSON.parse(stringSavedSnapshots);
-    console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-    console.log(collectionOfAllSnapshots);
-    console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
     snapshots.update(() => {
       return collectionOfAllSnapshots;
     });
@@ -185,16 +158,7 @@
     if (findChildren(hierarchy, compName)) {
       childrenNames = findChildren(hierarchy, compName);
     }
-    // console.log("componentArray:", componentArray);
-    // console.log("activeIndex inside func:", activeIndex)
-    console.log(
-      '🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 169 | createD3relationship | componentArray',
-      componentArray
-    );
-    console.log(
-      '🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 179 | createD3relationship | activeIndex',
-      activeIndex
-    );
+    
     for (let element of componentArray[activeIndex]) {
       for (let key in element) {
         for (let name of childrenNames) {
@@ -215,20 +179,18 @@
 
   // find children of component
   function findChildren(store, compName) {
-    console.log('****store:', store);
     for (let element in store) {
       if (element === compName) {
         const children = [];
         for (let key in store[element]) {
-          // console.log(key);
           children.push(key);
         }
         return children;
       }
     }
 
-    for (let element in hierarchy) {
-      // console.log(store[element]);
+    // delete count later
+    for (let element in store) {
       return findChildren(store[element], compName);
     }
   }
@@ -347,20 +309,22 @@
    * ==================================================
    */
   function updateWindow(index) {
+    console.log("updateWindow index:", index);
     ipcRenderer.send('TIME_TRAVEL', index);
     //re-render snapshot in the debugger when click on a snapshot button
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
       currentSVG.remove();
     }
+    // console.log("UpdateWindow: Input collection:", collectionOfAllSnapshots);
+    // console.log("UpdateWindow: Input activeIndex:", activeIndex);
+    // console.log("UpdateWindow: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
     let treeData = createD3relationship(
       collectionOfAllSnapshots,
       'App',
       activeIndex
     );
-    console.log('activeIndex', activeIndex);
-    // console.log('snapshotList[activeIndex]', snapshotList[activeIndex])
-    console.log('treeData', treeData);
+    console.log("UpdateWindow: treeData", treeData)
     drawTree(treeData);
   }
 </script>
@@ -414,6 +378,7 @@
     flex-direction: row;
   }
   .buttonContainer {
+    margin-left: 10px;
     display: flex;
     flex-direction: column;
     justify-content: start;
