@@ -25,8 +25,12 @@ const sendMessages = (componentStates) => {
 window.document.addEventListener('SvelteRegisterComponent', (e) => {
 
   const currentComponent = e.detail.component;
-  const stringifiedEventComp = JSON.stringify(e.detail.component.$$.ctx);
+  // const stringifiedEventComp = JSON.stringify(e.detail.component.$$.ctx);
+  const stringifiedEventComp = JSON.stringify(e.detail.component);
 
+  console.log("compComponents", compComponents);
+  console.log("stringifiedEventComp", stringifiedEventComp);
+  console.log("=============================================")
   if (!compComponents.includes(stringifiedEventComp)) {
     compComponents.push(stringifiedEventComp);
     components.push(currentComponent)
