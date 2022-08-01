@@ -10,8 +10,10 @@ ipcRenderer.on('TIME_TRAVEL', (event, data) => {
   if (data.message === 'TIME_TRAVEL') {
       const i = data.ctxIndex;
       lastIndex = i;
+      console.log("TIME_TRAVEL =======================");
       if (cacheState[i]) {
         cacheState[i].forEach((componentState) => {
+          console.log("componentState:", componentState);
           componentState[0].$inject_state(componentState[1]);
         });
       }

@@ -8,6 +8,7 @@ const parse = (event) => JSON.parse(JSON.stringify(event));
 let cacheState = [];
 const components = [];
 const compComponents = [];
+const compCTX = [];
 let lastIndex = 0;
 let firstTime = true;
 
@@ -25,15 +26,19 @@ const sendMessages = (componentStates) => {
 window.document.addEventListener('SvelteRegisterComponent', (e) => {
 
   const currentComponent = e.detail.component;
-  // const stringifiedEventComp = JSON.stringify(e.detail.component.$$.ctx);
+  let strippedCTX = parse(e.detail.component.$$.ctx);
   const stringifiedEventComp = JSON.stringify(e.detail.component);
+  console.log("Component CTX:", e.detail.component.$$.ctx);
 
-  console.log("compComponents", compComponents);
-  console.log("stringifiedEventComp", stringifiedEventComp);
-  console.log("=============================================")
-  if (!compComponents.includes(stringifiedEventComp)) {
+  strippedCTX = strippedCTX.filter((element) => typeof(element) === 'number' || typeof(element) === 'string');
+  console.log("====================");
+  console.log("strippedCTX", strippedCTX);
+  console.log("compCTX:", compCTX);
+  if (!compComponents.includes(stringifiedEventComp) && !compCTX.includes(JSON.stringify(strippedCTX))) {
+    console.log("got into IF ... adding new stripped CTX")
     compComponents.push(stringifiedEventComp);
-    components.push(currentComponent)
+    components.push(currentComponent);
+    compCTX.push(JSON.stringify(strippedCTX));
   }
 
 });
@@ -41,32 +46,6 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
 setTimeout(saveAndDispatchState, 0);
 
 function checkIfChanged(componentState, i) {
-  // console.log("checkIfChanged: i: ", i)
-  // console.log("checkIfChanged: componentState: ", componentState)
-  // console.log("checkIfChanged: cacheState:", cacheState);
-  if (
-    !cacheState.length ||
-    (JSON.stringify(cacheState[cacheState.length - 1][i][1]) !==
-      JSON.stringify(componentState[1]) &&
-      JSON.stringify(cacheState[lastIndex][i][1]) !==
-        JSON.stringify(componentState[1]))
-  ) {
-    return true;
-  }
-  return false;
-  // if (
-  //   !cacheState.length ||
-  //   (JSON.stringify(cacheState[cacheState.length - 1][i][1]) !==
-  //     JSON.stringify(componentState[1]) &&
-  //     JSON.stringify(cacheState[lastIndex][i][1]) !==
-  //       JSON.stringify(componentState[1]))
-  // ) {
-  //   return true;
-  // }
-  // return false;
-}
-
-function checkIfChanged2(componentState, i) {
   // console.log("checkIfChanged: i: ", i)
   // console.log("checkIfChanged: componentState: ", componentState)
   // console.log("checkIfChanged: cacheState:", cacheState);
