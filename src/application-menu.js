@@ -62,7 +62,7 @@ const createApplicationMenu = () => {
         },
         {
             label: 'Open Folder',
-            accelerator: 'CommandOrControl+O',
+            accelerator: 'CommandOrControl+F',
             click: (item, focusedWindow) => {
               
               if (focusedWindow) {

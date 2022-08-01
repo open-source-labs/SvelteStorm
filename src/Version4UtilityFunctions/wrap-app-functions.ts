@@ -81,9 +81,9 @@ export function updateRollupConfig(path) {
     } else if (myFileAsArray[i].trim() === 'plugins: [') {
       newMyFileAsArray.push(myFileAsArray[i]);
       newMyFileAsArray.push(`    banner({`);
-      newMyFileAsArray.push(`      tprependFile: '${myPath.resolve(__dirname, 'SvelteStormdebugPrepend.js')}',` );
-      newMyFileAsArray.push(`      tappendFile: '${myPath.resolve(__dirname, 'SvelteStormdebugAppend.js')}',`);
-      newMyFileAsArray.push(`      tencoding: 'utf-8', // default is utf-8`);
+      newMyFileAsArray.push(`      prependFile: '${myPath.resolve(__dirname, 'SvelteStormdebugPrepend.js')}',` );
+      newMyFileAsArray.push(`      appendFile: '${myPath.resolve(__dirname, 'SvelteStormdebugAppend.js')}',`);
+      newMyFileAsArray.push(`      encoding: 'utf-8', // default is utf-8`);
       newMyFileAsArray.push(`    }),`);
     } else {
       newMyFileAsArray.push(myFileAsArray[i]);

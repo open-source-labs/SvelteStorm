@@ -7,7 +7,7 @@
   } from '../DataStore/SvelteStormDataStore';
   export let hierarchy = {};
 
-  const {ipcRenderer, BrowserWindow} = require('electron');
+  const {ipcRenderer, dialog, BrowserWindow} = require('electron');
   const fs = require('fs');
   const path = require('path');
   // import { indexes } from "d3";
@@ -45,15 +45,12 @@
     // });
     console.log('🔴🟠🟡🟢🔵🟣 | OH SNAP, I BEEN CALLED ');
 
-    // const singleCapturedSnapshot = createSnapshot(data);
+    const singleCapturedSnapshot = createSnapshot(data);
 
-    // console.log('🔴🟠🟡🟢🔵🟣 | SNAP BE MADE ');
-    // // Update the store with newest snapshot
-    // snapshots.update(() => {
-    //   return [...collectionOfAllSnapshots, singleCapturedSnapshot];
-    // });
+    console.log('🔴🟠🟡🟢🔵🟣 | SNAP BE MADE ');
+    // Update the store with newest snapshot
     snapshots.update(() => {
-      return [...collectionOfAllSnapshots, data.body.componentStates];
+      return [...collectionOfAllSnapshots, singleCapturedSnapshot];
     });
     console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
     console.log(
@@ -64,9 +61,7 @@
     console.log('🔴🟠🟡🟢🔵🟣 | BEFORE WRITE SNAP FUNC CALL ');
 
     const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
-    fs.writeFileSync(
-      FileNPathNameToStoreSnapshots, stringSnapshot
-    );
+    fs.writeFileSync(FileNPathNameToStoreSnapshots, stringSnapshot);
     console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
 
     const currentSVG = document.querySelector('#D3Tree');
@@ -116,10 +111,6 @@
     // stringify the snapshot
     const stringSnapshot = JSON.stringify(singleCapturedSnapshot);
     console.log('🔴🟠🟡🟢🔵🟣 | BEEN STRINGED ');
-
-    
-
-
     // Check if file exists is yes, set 'fileExists = true'
     // fs.existsSync(path) -> returns boolean
 
@@ -278,7 +269,7 @@
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
-      .style("stroke", "cyan")
+      .style('stroke', 'cyan')
       .attr('class', 'link')
       .attr('d', function (d) {
         return (
@@ -337,8 +328,7 @@
    * ==================================================
    */
   function updateWindow(index) {
-    // ipcRenderer.send('TIME_TRAVEL', index);
-    ipcRenderer.send('TIME_TRAVEL', [index, collectionOfAllSnapshots]);
+    ipcRenderer.send('TIME_TRAVEL', index);
     //re-render snapshot in the debugger when click on a snapshot button
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
@@ -354,52 +344,58 @@
     console.log('treeData', treeData);
     drawTree(treeData);
   }
-</script>
-<div id="buttonsAndTree">
 
+  function chooseSnapsFile() {
+    const files = dialog.showOpenDialogSync({
+      properties: ['openFile'],
+    });
+    return files;
+  }
+</script>
+
+<div id="buttonsAndTree">
   <!-- /*
     * ==================================================
     *   Display the State "Snapshorts"
     * ==================================================
     */ -->
-    
-    {#if collectionOfAllSnapshots.length}
+
+  {#if collectionOfAllSnapshots.length}
     <div class="buttonContainer">
-    <button
-      on:click={() => {
-        displaySavedSnapshots(
-          'Snaps_svelte-demo_1.0.0_2022-07-30_13-29-03.snaps'
-          );
+      <button
+        on:click={() => {
+          chooseSnapsFile();
+          // displaySavedSnapshots(
+          //   'Snaps_svelte-demo_1.0.0_2022-07-29_17-25-20.snaps'
+          //   );
         }}>Upload Snapshots</button
-    >
-    {#each collectionOfAllSnapshots as snapshot, idx}
-    <button
-    on:click={() => {
-      activeIndex = idx;
-      updateWindow(activeIndex);
-        }}>Snapshot {idx + 1}</button
       >
+      {#each collectionOfAllSnapshots as snapshot, idx}
+        <button
+          on:click={() => {
+            activeIndex = idx;
+            updateWindow(activeIndex);
+          }}>Snapshot {idx + 1}</button
+        >
       {/each}
-  </div>
-  <!-- <div class="container">
+    </div>
+    <!-- <div class="container">
     <div class="block">
       <Snap {compState} />
     </div>
   </div> -->
   {/if}
 
-  
   <!-- D3 tree -->
   <div class="svgtree" bind:this={el} />
 </div>
-  
-  <!-- /*
+
+<!-- /*
     * ==================================================
 *   Style for this display states component
 * ==================================================
 */ -->
 <style>
-
   #buttonsAndTree {
     display: flex;
     flex-direction: row;

@@ -4,11 +4,10 @@
 * =========================================================
 */
 
-
 // once the TIME_TRAVEL message is recieved, then loop through cache state and inject the specified state into each component
 
 ipcRenderer.on('TIME_TRAVEL', (event, data) => {
-  if(data.message === 'TIME_TRAVEL') {
+  if (data.message === 'TIME_TRAVEL') {
       const i = data.ctxIndex;
       lastIndex = i;
       if (cacheState[i]) {
