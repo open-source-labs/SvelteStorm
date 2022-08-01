@@ -28,12 +28,12 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
   const currentComponent = e.detail.component;
   let strippedCTX = parse(e.detail.component.$$.ctx);
   const stringifiedEventComp = JSON.stringify(e.detail.component);
-  console.log("Component CTX:", e.detail.component.$$.ctx);
+  // console.log("Component CTX:", e.detail.component.$$.ctx);
 
   strippedCTX = strippedCTX.filter((element) => typeof(element) === 'number' || typeof(element) === 'string');
-  console.log("====================");
-  console.log("strippedCTX", strippedCTX);
-  console.log("compCTX:", compCTX);
+  // console.log("====================");
+  // console.log("strippedCTX", strippedCTX);
+  // console.log("compCTX:", compCTX);
   if (!compComponents.includes(stringifiedEventComp) && !compCTX.includes(JSON.stringify(strippedCTX))) {
     console.log("got into IF ... adding new stripped CTX")
     compComponents.push(stringifiedEventComp);
