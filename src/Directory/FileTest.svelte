@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { State } from "../types.js";
 
-  export let fileTree: [];
+  export let fileTree: typeof fileTree = [];
   import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   import CreateMenu from "./CreateMenu.svelte";
   import { showEditorBackground } from '../DataStore/SvelteStormDataStore';
@@ -259,10 +259,7 @@
               src={fs.existsSync(
                 `src/icons/file_type_${name.split(".").pop().toLowerCase()}.svg`
               )
-                ? `../src/icons/file_type_${name
-                    .split(".")
-                    .pop()
-                    .toLowerCase()}.svg`
+                ? `../src/icons/file_type_${name.split(".").pop().toLowerCase()}.svg`
                 : "../src/icons/file_type_exclam.png"}
               alt={""}
             />

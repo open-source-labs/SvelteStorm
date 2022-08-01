@@ -108,6 +108,11 @@ const createWindow = (exports.createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      experimentalFeatures: true,
+      allowRunningInsecureContent: true,
+      webSecurity: false,
+      nodeIntegrationInSubFrames: true,
+      nodeIntegrationInWorker: true,
       enableRemoteModule: true,
     },
   });
@@ -130,6 +135,22 @@ const createWindow = (exports.createWindow = () => {
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
     newWindow.show();
+    newWindow.selectPreviousTab();
+    newWindow.focusOnWebView();
+    // let rightPanel = newWindow.selectPreviousTab();
+    
+    // document.getElementById('wrapper-right');
+
+    console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+    console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
+    console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+    setTimeout(() => {
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+      console.log('Focusing now');
+      newWindow.focusOnWebView();
+        // rightPanel.focus();
+      }, 15000)
+  
   });
 
   newWindow.on('focus', createApplicationMenu);
@@ -308,12 +329,12 @@ const createProjectFromUser = (exports.createProjectFromUser = async (
   }
 });
 
-// const testFunc = (exports.testFunc = () => {
-//   // const content = folder;
-//   console.log('testFunc');
-//   // targetWindow.webContents.send('folder-opened', folder, content);
-//   // createApplicationMenu();
-// });
+const testFunc = (exports.testFunc = () => {
+  // const content = folder;
+  console.log('testFunc');
+  // targetWindow.webContents.send('folder-opened', folder, content);
+  // createApplicationMenu();
+});
 
 const openFolder = (exports.openFolder = (targetWindow, folder) => {
   const content = folder;
@@ -334,19 +355,19 @@ const saveFile = (exports.saveFile = (targetWindow) => {
   });
 });
 
-// ipcMain.handle('saveFileFromUser', saveFile);
+ipcMain.handle('saveFileFromUser', saveFile);
 
-// ipcMain.handle('getFileFromUser', getFileFromUser);
+ipcMain.handle('getFileFromUser', getFileFromUser);
 
-// ipcMain.handle('getFolderFromUser', getFolderFromUser);
+ipcMain.handle('getFolderFromUser', getFolderFromUser);
 
-// ipcMain.handle('increaseFontSize', increaseFontSize);
+ipcMain.handle('increaseFontSize', increaseFontSize);
 
-// ipcMain.handle('decreaseFontSize', decreaseFontSize);
+ipcMain.handle('decreaseFontSize', decreaseFontSize);
 
-// ipcMain.handle('createProjectFromUser', createProjectFromUser);
+ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
-// ipcMain.handle('testFunc', testFunc);
+ipcMain.handle('testFunc', testFunc);
 
 
 ipcMain.on('openDaDebugAppWindow', (event, localhostToUse) => {
@@ -379,10 +400,20 @@ ipcMain.on('quit-app', () => {
    * ==================================================
 */
 
+// ipcMain.on('TIME_TRAVEL', (event, data) => {
+//   const instance = {
+//     message: "TIME_TRAVEL",
+//     ctxIndex: data
+//   };
+//   // Use browser window to send time-travel message
+//   browser.webContents.send('TIME_TRAVEL', instance);
+// })
 ipcMain.on('TIME_TRAVEL', (event, data) => {
   const instance = {
     message: "TIME_TRAVEL",
     ctxIndex: data
+    // ctxIndex: data[0],
+    // collectionOfAllSnapshots: data[1]
   };
   // Use browser window to send time-travel message
   browser.webContents.send('TIME_TRAVEL', instance);

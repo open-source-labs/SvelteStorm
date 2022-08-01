@@ -11,6 +11,7 @@
   const {ipcRenderer, BrowserWindow} = require('electron');
   const fs = require('fs');
   const path = require('path');
+  const SerAny = require('serialize-anything');
   // import { indexes } from "d3";
   // let snapshotList;
   let activeIndex = 0;
@@ -54,11 +55,22 @@
     // const currentSnapshots = get(snapshots);
     // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
 
-    const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
-    fs.writeFileSync(
-      FileNPathNameToStoreSnapshots,
-      '[\n' + stringSnapshot + ']\n'
-    );
+    // const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
+    
+    
+        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+        let stringSnapshot = SerAny.serialize(collectionOfAllSnapshots, {maxDepth: 500, pretty: true});
+        console.log('🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 71 | ipcRenderer.on | stringSnapshot', stringSnapshot);
+        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+
+
+
+    fs.writeFileSync(FileNPathNameToStoreSnapshots, stringSnapshot);
+      console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
 
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
@@ -103,6 +115,11 @@
   function writeSnapToDisk(singleCapturedSnapshot) {
     // stringify the snapshot
     const stringSnapshot = JSON.stringify(singleCapturedSnapshot);
+    console.log('🔴🟠🟡🟢🔵🟣 | BEEN STRINGED ');
+
+    
+
+
     // Check if file exists is yes, set 'fileExists = true'
     // fs.existsSync(path) -> returns boolean
 
@@ -324,7 +341,7 @@
     <button
       on:click={() => {
         displaySavedSnapshots(
-          'Snaps_svelte-demo_1.0.0_2022-07-29_17-25-20.snaps'
+          'Snaps_svelte-demo_1.0.0_2022-07-30_12-40-45.snaps'
           );
         }}>Upload Snapshots</button
     >
@@ -361,6 +378,7 @@
     flex-direction: row;
   }
   .buttonContainer {
+    margin-left: 10px;
     display: flex;
     flex-direction: column;
     justify-content: start;

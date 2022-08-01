@@ -1,11 +1,10 @@
 <script lang="ts">
   import FileDir from "./Directory/FileDir.svelte";
-  import XTerm from "./XTerm.svelte";
+  import XTerm from "./Terminal/XTerm.svelte";
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
-  import Chart from "./Debugger/Tree.svelte";
   const { app, ipcMain, ipcRenderer, BrowserWindow } = require("electron");
-  import Tree from "./Debugger/Tree.svelte";
+  import Tree from "./TimeTraveler/Tree.svelte";
 
   import { showEditorBackground } from './DataStore/SvelteStormDataStore'
 
@@ -230,6 +229,7 @@
     xtermSetWidth();
     //Need to trigger this after resize so that it follows xterm's fittaddon resize
     window.addEventListener('resize', xtermSetWidth);
+    // rightPanel.focus();
   }); //End of onMount
 
   const handleSubmit = (): boolean => {
@@ -264,6 +264,18 @@
     documentation = documentation;
     return false;
   };
+
+  // let rightPanel: HTMLElement = document.getElementById('wrapper-right');
+
+  // console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+  //       console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
+  //           console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+  //   setTimeout(() => {
+  //         console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+  //         console.log('Focusing now');
+  //     rightPanel.focus();
+  //   }, 15000)
+
 </script>
 
 <body class:orientation>
@@ -592,7 +604,7 @@
     overflow: auto;
     max-width: 50%;
     width: 20%;
-    min-width: 120px;
+    min-width: 150px;
     background-color: #070a0f;
     border-right: 1px solid #3d3d3d;
     border-bottom: 1px solid #3d3d3d;
@@ -716,7 +728,7 @@
   padding-top: 20px;
 }
 #terminal-window::-webkit-scrollbar-thumb , #dummyGraph::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar_box_color);
+  background-color: var(--scrollbar_scrollybit_color);
   border: var(--scrollbar_box_border);
 }
 
@@ -728,7 +740,8 @@
 
 #terminal-window::-webkit-scrollbar-track-piece, #dummyGraph::-webkit-scrollbar-track-piece {
   border: var(--scrollbar_border);
-  background-color: rgb(105, 225, 244);
+  /* background-color: rgb(105, 225, 244); */
+  background-color: var(--scrollbar_box_color);
 }
 
 #terminal-window::-webkit-scrollbar-corner, #dummyGraph::-webkit-scrollbar-corner {
@@ -746,6 +759,14 @@
   
 }
 
+#wrapper-upper {
+  margin: -1px;
+  /* margin-left: -1px; */
+  /* margin-top: -1px; */
+  /* margin-bottom: -1px; */
+  /* margin-right: 0px; */
+  /* padding-right: 5px; */
 
+}
 
 </style>

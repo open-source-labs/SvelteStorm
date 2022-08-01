@@ -1,29 +1,28 @@
 <script lang="ts">
-    import FileTest from './FileTest.svelte';  
-    import DirTopMenu from './DirTopMenu.svelte'  
-    import { onMount, onDestroy, afterUpdate} from 'svelte';
-    import { DirectoryData, appBeingDebugedPath } from '../DataStore/SvelteStormDataStore';
-    import type { Filetree } from '../types'
-    import {get} from 'svelte/store'
-    const myPath = require('node:path');
-    const npmAddScript = require('npm-add-script');
-    const process = require('process');
+  import FileTest from './FileTest.svelte';  
+  import DirTopMenu from './DirTopMenu.svelte'  
+  import { afterUpdate, onDestroy } from 'svelte';
+  import {get} from 'svelte/store';
+  import {DirectoryData, appBeingDebugedPath} from '../DataStore/SvelteStormDataStore';
+  import type { Filetree } from '../types';
+  import { updatePackageJson, updateRollupConfig } from '../Version4UtilityFunctions/wrap-app-functions'
+  
 
+  const {ipcRenderer} = require('electron');
   const fs = require('fs');
+  
+  
+  export let activeDir = '';
+  export let reload = false;
+  
   let savedTree: string[];
   let updateRollupConfigRun = false;
-  const {ipcRenderer} = require('electron');
-
   let directory;
   let rename;
   let stateObj = {};
-  let parentChildTree = {};
-  let resultArr: [] = [];
   let fsTimeout;
   const svelteFileArray = [];
-  export let activeDir = '';
   let mainDir = '';
-  export let reload = false;
 
   const unsub = DirectoryData.subscribe((data) => {
     rename = data.rename;
@@ -31,6 +30,9 @@
     mainDir = data.mainDir;
     reload = data.reload;
   });
+
+
+
 
   afterUpdate(() => {
     if (reload) {
@@ -68,18 +70,13 @@
       directory = Array.isArray(content) ? content[0] : content;
       if (directory) {
         fs.readdir(directory, (error, readfiles) => {
-          let files: string = readfiles.filter((file) => file !== '.git');
+          let files: string = readfiles.filter((file) => file !== '.git' && file !== '.DS_Store');
           if (files.length) {
             var fileTree: Filetree = new FileTree(directory);
             fileTree.build();
             savedTree = fileTree.items;
             savedTree.sort((a: any, b: any) => {
-              return fs.statSync(a.path).isDirectory() ===
-                fs.statSync(b.path).isDirectory()
-                ? 0
-                : fs.statSync(a.path).isDirectory()
-                ? -1
-                : 1;
+              return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
             });
 
             DirectoryData.update((currentData) => {
@@ -88,8 +85,8 @@
                 fileTree: savedTree,
                 currentDir: directory,
                 mainDir: directory,
-              };
-            });
+              }
+            })
           } else {
             DirectoryData.update((currentData) => {
               return {
@@ -112,12 +109,7 @@
       fileTree.build();
       savedTree = fileTree.items;
       savedTree.sort((a: any, b: any) => {
-        return fs.statSync(a.path).isDirectory() ===
-          fs.statSync(b.path).isDirectory()
-          ? 0
-          : fs.statSync(a.path).isDirectory()
-          ? -1
-          : 1;
+        return (fs.statSync(a.path).isDirectory() === fs.statSync(b.path).isDirectory() ? 0 : fs.statSync(a.path).isDirectory() ? -1 : 1)
       });
 
       DirectoryData.update((currentData) => {
@@ -130,8 +122,8 @@
   };
 
   class FileTree {
-    
-    constructor(path: string, name: string | null = null) {
+
+      constructor(path: string, name: string | null = null) {
       this.path = path;
       this.name = name;
       this.items = [];
@@ -143,6 +135,8 @@
         isOpen: false,
       };
     }
+
+
     //method to build file tree
     build(this: Filetree) {
       this.items = FileTree.readDir(this.path);
@@ -185,95 +179,9 @@
         updateRollupConfigRun = true;
       }
 
-      function updatePackageJson(path) {
-        try {
-          // Change the directory
-          process.chdir(path);
-          ipcRenderer.send("terminal-into", `cd ${path}\r`);
-
-          console.log('directory has successfully been changed');
-        } catch (err) {
-          // Printing error if occurs
-          console.error('error while changing directory');
-        }
-        var content: string = fs.readFileSync(`package.json`).toString();
-        if(!content.match(/sdebug/gm)){
-
-            try {
-              npmAddScript({
-                key: 'sdebug',
-                value: 'rollup --config rollup.config.new.js -w',
-                force: true,
-              });
-              console.log('Added sdebug script to package.json');
-            } catch (err) {
-              console.error(`${err}error while adding sdebug script to package.json`);
-            }
-          }
-      }
-
-      function updateRollupConfig(path) {
-        const originalConfig = path + '/rollup.config.js';
-        const newConfig = path + '/rollup.config.new.js';
-
-        const myFileContent = fs.readFileSync(originalConfig, 'utf8');
-        const myFileAsArray = myFileContent.split('\n');
-
-        // As each line is examined we either push it to a new array OR add our lines THEN continue loop and pushing to new Array
-        // When done new Array will be written to new file.
-        const newMyFileAsArray = [];
-        let addedImports = false;
-
-        for (let i = 0; i < myFileAsArray.length; i++) {
-          const daLine = myFileAsArray[i].split(' ');
-          if (daLine[0] !== 'import' && !addedImports) {
-            newMyFileAsArray.push(
-              `import banner from '${myPath.resolve(
-                __dirname,
-                '../src/StateManager/SvelteStormUtils/rollup-plugin-pre-app-end'
-              )}';`
-            );
-            newMyFileAsArray.push(`const path = require('path');`);
-            newMyFileAsArray.push(myFileAsArray[i]);
-            addedImports = true;
-          } else if (myFileAsArray[i].trim() === 'plugins: [') {
-            newMyFileAsArray.push(myFileAsArray[i]);
-            newMyFileAsArray.push(`banner({`);
-            newMyFileAsArray.push(
-              `prependFile: '${myPath.resolve(
-                __dirname,
-                'SvelteStormdebugPrepend.js'
-              )}',`
-            );
-            newMyFileAsArray.push(
-              `appendFile: '${myPath.resolve(
-                __dirname,
-                'SvelteStormdebugAppend.js'
-              )}',`
-            );
-            newMyFileAsArray.push(`encoding: 'utf-8', // default is utf-8`);
-            newMyFileAsArray.push(` }),`);
-          } else {
-            newMyFileAsArray.push(myFileAsArray[i]);
-          }
-        }
-        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 176 | FileTree | fs.readdirSync | newMyFileAsArray', newMyFileAsArray);
-
-        const textToWrite = newMyFileAsArray.join('\n');
-        // console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 208 | FileTree | fs.readdirSync | textToWrite', textToWrite);
-
-        // const myNewFileName = myPath.resolve(__dirname, '../rollup.config.new.js');
-        //   console.log('🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 221 | FileTree | fs.readdirSync | myNewFileName', myNewFileName);
-
-        fs.writeFileSync(newConfig, textToWrite, {
-          encoding: 'utf8',
-          flag: 'w',
-          mode: 0o666,
-        });
-      }
 
       fs.readdirSync(path).forEach((file) => {
-        var fileInfo: Filetree = new FileTree(`${path}/${file}`, file);
+        var fileInfo:Filetree = new FileTree(`${path}/${file}`, file);
         var stat = fs.statSync(fileInfo.path);
         //2022-ST-RJ reading svelte files to help construct state management tree. storing info in the stateObj of the DirectoryStore aliased as DirectoryData
 
@@ -281,7 +189,7 @@
           if (path.includes('node_modules') !== true) {
             var content: string = fs.readFileSync(`${path}/${file}`).toString();
             var stateArr: string[] = [];
-            const parentName = file.split(".")[0]
+            const parentName = file.split('.')[0];
             svelteFileArray.push([parentName, content]);
 
             /*
@@ -321,24 +229,24 @@
             //     tParentChildTree[file][reallyFoundComp] = {};
             //   }
 
-              // console.log(
-              //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree',
-              //   tParentChildTree
-              // );
+            // console.log(
+            //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree',
+            //   tParentChildTree
+            // );
 
-              // parentChildTree[file] =
-              // DirectoryData.update((currentData) => {
-              //   return {
-              //     ...currentData,
-              //     ParentChildTree: tParentChildTree,
-              //   };
-              // });
+            // parentChildTree[file] =
+            // DirectoryData.update((currentData) => {
+            //   return {
+            //     ...currentData,
+            //     ParentChildTree: tParentChildTree,
+            //   };
+            // });
 
-              // const thereYet = get(DirectoryData);
-              // console.log(
-              //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet',
-              //   thereYet
-              // );
+            // const thereYet = get(DirectoryData);
+            // console.log(
+            //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet',
+            //   thereYet
+            // );
             // }
 
             /*
@@ -388,7 +296,7 @@
           fileInfo.items = FileTree.readDir(fileInfo.path);
         }
 
-        if (fileInfo.name !== '.git') {
+        if (fileInfo.name !== '.git' && fileInfo.name !== '.DS_Store') {
           fileArray.push(fileInfo);
         }
       });
@@ -398,10 +306,10 @@
         const fileArr = await svelteFileArray;
         const parentChildTree = {};
         const relationships = {};
-        
+
         // adds all file parent child relationships to relationships array
         fileArr.forEach((file) => {
-          const [ fileName, fileContent ] = file;
+          const [fileName, fileContent] = file;
           const newRelationship = getRelationship(fileName, fileContent);
           if (newRelationship) {
             relationships[fileName] = newRelationship;
@@ -418,7 +326,7 @@
             }
             placeInTree[currFile] = insertObject;
             for (let element in insertObject) {
-              console.log("Element of insertedObject", element);
+              console.log('Element of insertedObject', element);
               buildParentChildTree(placeInTree[currFile], element);
             }
           } else {
@@ -428,7 +336,7 @@
         }
 
         // invocation of above buildParentChildTree function on App
-        buildParentChildTree(parentChildTree, "App");
+        buildParentChildTree(parentChildTree, 'App');
 
         // add relationship tree to store
         DirectoryData.update((currentData) => {
@@ -458,8 +366,7 @@
             relationship[file][compName] = {};
           }
           return relationship;
-        }
-        else return;
+        } else return;
       }
 
       return fileArray;

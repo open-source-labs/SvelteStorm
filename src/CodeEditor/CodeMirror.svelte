@@ -32,6 +32,7 @@
   export let value;
   export let language;
   export let filePath;
+  
   let lastWord: string;
   let tipContent: string = "";
   let messageObj: MessageObj;
