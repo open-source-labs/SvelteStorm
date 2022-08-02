@@ -11,8 +11,17 @@ let compComponents = [];
 let compCTX = [];
 let lastIndex = 0;
 
+let eventCounter = 0;
+
 // sends SNAPSHOT message to ipcMain, with all data needed for debugging visualization
 const sendMessages = (componentStates) => {
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 21 | sendMessages | eventCounter', eventCounter);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 22 | sendMessages | componentStates', componentStates);
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+
   ipcRenderer.send('SNAPSHOT', {
     body: {
       componentStates,
@@ -53,7 +62,15 @@ function checkIfChanged(componentState, i) {
 }
 
 // invoked whenever there is a perceived state change
-function saveAndDispatchState() {
+function saveAndDispatchState(e) {
+  eventCounter++;
+  console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+  console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+  console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 69 | saveAndDispatchState | eventCounter', eventCounter);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 68 | saveAndDispatchState | e', e);
+      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+  
   const curState = [];
   components.forEach((component) => {
     // console.log('COMPONENT', component)
@@ -106,8 +123,8 @@ function setupListeners(root) {
   root.addEventListener('SvelteRegisterBlock', (e) => {
     saveAndDispatchState()
   });
-  root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState());
-  root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState());
+  root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState(e));
+  root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState(e));
   // root.addEventListener('SvelteDOMRemove', (e) => {
   //   // console.log("SvelteDOMRemove", e);
   //   saveAndDispatchState()
@@ -131,4 +148,3 @@ setTimeout(() => setupListeners(window.document));
 *   The Above is SvelteStorm 4.0 Debug Monitoring Code.
 * =========================================================
 */
-

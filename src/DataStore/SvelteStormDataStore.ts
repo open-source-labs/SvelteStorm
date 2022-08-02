@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 
-import type { NewFile, EditorCacheType, EditorObj, State } from '../types';
+import type { NewFile, EditorCacheType, EditorObj, State, componentStateObj } from '../types';
 
 const DirectoryData: Writable<State> = writable<State>({
   mainDir: '',
@@ -35,9 +35,19 @@ const snapshots = writable([]);
 
 let showEditorBackground: Writable<boolean> = writable<boolean>(true);
 
-let appBeingDebugedPath: Writable<string> = writable<string>('')
+let appBeingDebugedPath: Writable<string> = writable<string>('');
 
 let saveToFileName: Writable<string> = writable<string>('');
+
+// const collectedSnap: Writable<SnapForPassingAround> = writable<SnapForPassingAround>([]);
+
+const collectionOfSnaps: Writable<State> = writable<State>({
+
+})
+
+// const collectionOfAllSnaps: Writable<Array> = writable<Array>([]);
+// const collectionOfAllSnaps: Writable = writable([]);
+const collectionOfAllSnaps = writable([]);
 
 
 export {
@@ -50,6 +60,8 @@ export {
   appBeingDebugedPath,
   saveToFileName,
   snapshots,
+  collectionOfSnaps,
+  collectionOfAllSnaps,
 };
 
 

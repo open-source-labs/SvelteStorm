@@ -5,10 +5,23 @@
     saveToFileName,
     snapshots,
   } from '../DataStore/SvelteStormDataStore';
-  import {get} from 'svelte/store'
+  // import { createSnapshotCards } from '../Version4UtilityFunctions/createSnapshotCards.svelte'
+  import CardHolder from '../Version4UtilityFunctions/CardHolder.svelte'
+  // import SnapButtonList from '../Version4UtilityFunctions/SnapButtonList.svelte'
+  // import Card from '../Version4UtilityFunctions/Card.svelte'
   export let hierarchy = {};
 
   const {ipcRenderer, BrowserWindow} = require('electron');
+
+  // function handleMessage(event) {
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵${event.detail.index}🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   updateWindow(event.detail.index);
+
+  // }
+
+
   const fs = require('fs');
   const path = require('path');
   const SerAny = require('serialize-anything');
@@ -33,6 +46,17 @@
   saveToFileName.subscribe((pathNFileName) => {
     FileNPathNameToStoreSnapshots = pathNFileName;
   });
+
+
+  // ipcRenderer.on('PleaseUpdateWindowFromSnapButton', (data) => {
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵${data}🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   updateWindow(data);
+  // })
+
+
+
 
   /*
    * ==================================================
@@ -155,7 +179,7 @@
     if (findChildren(hierarchy, compName)) {
       childrenNames = findChildren(hierarchy, compName);
     }
-    
+
     for (let element of componentArray[activeIndex]) {
       for (let key in element) {
         for (let name of childrenNames) {
@@ -247,7 +271,7 @@
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
-      .style("stroke", "cyan")
+      .style('stroke', 'cyan')
       .attr('class', 'link')
       .attr('d', function (d) {
         return (
@@ -349,6 +373,10 @@
   }
 
 </script>
+<!-- <SnapButtonList {collectionOfAllSnapshots} /> -->
+
+<!-- <SnapButtonList {collectionOfAllSnapshots} /> -->
+
 <div id="buttonsAndTree">
 
   <!-- /*
@@ -364,34 +392,28 @@
         refresh();
         }}>Reset</button
     >
-    {#each collectionOfAllSnapshots as snapshot, idx}
-    <button
-    on:click={() => {
-      activeIndex = idx;
-      updateWindow(activeIndex);
-        }}>Snapshot {idx + 1}</button
-      >
-      {/each}
-  </div>
-  <!-- <div class="container">
-    <div class="block">
-      <Snap {compState} />
+                      {#each collectionOfAllSnapshots as snapshot, idx}
+                        <button
+                          on:click={() => {
+                            activeIndex = idx;
+                            updateWindow(activeIndex);
+                          }}>Snapshot {idx + 1}</button
+                        >
+                        <CardHolder {snapshot} />
+                      {/each}
     </div>
-  </div> -->
   {/if}
-
   
   <!-- D3 tree -->
   <div class="svgtree" bind:this={el} />
 </div>
-  
-  <!-- /*
-    * ==================================================
+
+<!-- /*
+* ==================================================
 *   Style for this display states component
 * ==================================================
 */ -->
 <style>
-
   #buttonsAndTree {
     display: flex;
     flex-direction: row;

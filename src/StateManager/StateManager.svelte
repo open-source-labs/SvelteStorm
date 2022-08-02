@@ -11,7 +11,7 @@
 
 <div class="state-container">
   <div class="h5Container">
-    <h5 class="title">STATE</h5>
+    <h5 class="title">COMPONENTS & PROPS</h5>
   </div>
   <ul>
     {#each Object.entries(stateObj) as [file, state]}

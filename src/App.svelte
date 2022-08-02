@@ -40,16 +40,13 @@
     let upperPanel: HTMLElement = document.getElementById('wrapper-upper');
     let editorPanel: HTMLElement = document.getElementById('editor-window');
     let filedirPanel: HTMLElement = document.getElementById('file-dir');
-    // let statemgrPanel: HTMLElement = document.getElementById("state-mgr");
     let mdown_posx: number;
     let mdown_posy: number;
     let x_pos: number;
     let y_pos: number;
     let resizeObj: object = {
       'horizontal-divider': {isResizing: false},
-      // "editor-divider": { isResizing: false },
       'filedir-divider': {isResizing: false},
-      // "statemgr-divider": { isResizing: false },
       'visualization-divider': {isResizing: false},
     };
 
@@ -60,9 +57,6 @@
       if (panel === 'horizontal-divider') {
         upperPanel.style.height =
           parseInt(getComputedStyle(upperPanel).height) - dy + 'px';
-        // } else if (panel === "editor-divider") {
-        //   editorPanel.style.width =
-        //     parseInt(getComputedStyle(editorPanel).width) - dx + "px"; //Resizing width of edit panel
       } else if (panel === 'visualization-divider') {
         leftPanel.style.width =
           parseInt(getComputedStyle(leftPanel).width) - dx + 'px'; //Resizing width of edit panel
@@ -104,22 +98,16 @@
       //Need this so window events continue tracking on top of iframe
       let iframeList: HTMLCollection =
         document.getElementsByClassName('webpage');
-      // console.log(
-      //   '🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴 | file: App.svelte | line 99 | dragStart | iframeList',
-      //   iframeList
-      // );
       console.log(iframeList);
       for (const item of iframeList) {
         item.setAttribute('style', 'pointer-events: none');
       }
       //defining function here so can remove event listener (unable to remove it with parameters - here it'll have closure access to panel)
       const trackMouseMove = (e: MouseEvent) => {
-        // console.log(`ex: ${e.x}`)
         dragMovement(e, panel);
       };
 
       const trackMouseUp = (e: MouseEvent): void => {
-        // console.log('Mouse Up');
         dragEnd(e, panel);
         window.removeEventListener('mousemove', trackMouseMove, true);
         window.removeEventListener('mouseup', trackMouseUp, true);
@@ -168,19 +156,12 @@
       resizeObj[panel].isResizing = false;
     }
 
-
-    
-    
     
     let horizDivider: HTMLElement = document.getElementById('horizontal-divider');
     let editorDivider: HTMLElement = document.getElementById('editor-divider');
     let filedirDivider: HTMLElement = document.getElementById('filedir-divider');
     let visualizationDivider: HTMLElement = document.getElementById('visualization-divider');
       
-    // horizDivider.style.background = 'blue';
-    // filedirDivider.style.background = 'blue';
-    // visualizationDivider.style.background = 'blue';
-
     horizDivider.addEventListener('mouseover', (e) =>
       chgCursor(e, 'horizontal-divider')
     );
@@ -229,7 +210,6 @@
     xtermSetWidth();
     //Need to trigger this after resize so that it follows xterm's fittaddon resize
     window.addEventListener('resize', xtermSetWidth);
-    // rightPanel.focus();
   }); //End of onMount
 
   const handleSubmit = (): boolean => {
@@ -237,10 +217,8 @@
     return false;
   };
   export const handleDocuments = () => {
-    // submit = false;
     console.log('the handleDocs is firing');
     docsBool = !docsBool;
-    // return false;
   };
 
   const handleKeyup = (e: KeyboardEvent) => {
@@ -265,16 +243,6 @@
     return false;
   };
 
-  // let rightPanel: HTMLElement = document.getElementById('wrapper-right');
-
-  // console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-  //       console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
-  //           console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
-  //   setTimeout(() => {
-  //         console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-  //         console.log('Focusing now');
-  //     rightPanel.focus();
-  //   }, 15000)
 
 </script>
 
@@ -287,13 +255,11 @@
         </div>
         <div class="dividers-v" id="filedir-divider" />
         <div class="box b" id="editor-window" >
-          <!-- svelte-ignore missing-declaration -->
           {#if $showEditorBackground}
           <div class="backdrop">
           </div>
           {:else}
           <div class="editor-wrapper">
-            <!-- <Editor class="childClass" /> -->
             <Editor />
           </div>
         {/if}
@@ -363,15 +329,7 @@
 }
 
   #wrapper-right {
-    /* background: url('../public/img/TimeTravel04.jpg') no-repeat center center;
-    background-size: cover;
-    /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
-    /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
-    /* background-color: #0d1117; */
-    /* opacity: 0.3; */
     position: relative;
-    /* width: 100%;
-    height: 100%; */
   }
   
   
@@ -384,7 +342,6 @@
   width: 100%;
   height: 100%;
   opacity: 0.3;
-  /* background-image: url('../public/img/TimeTravel04.jpg') no-repeat center center;; */
   background-image: url('../public/img/TimeTravel04.jpg');
   box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
   background-repeat: no-repeat;
@@ -396,28 +353,9 @@
   position: relative;
 }
 
-  /* #stateManager {
-    background: url('../public/img/TimeTravel10.jpg') left top no-repeat;
-    background: url('../public/img/TimeTravel10.jpg');
-    background-size: contain;
-    box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset;
-    background-color: #0d1117;
-    width: 100%;
-    height: 100%;
-  } 
-  */
   .render-wrapper {
     width: 100%;
     height: 100%;
-    /* background: url('../public/img/TimeTravel10.jpg') left top no-repeat; */
-    /* background: url('../public/img/TimeTravel10.jpg') no-repeat top center; */
-    /* background-size: 100vw 100vh; */
-    /* box-shadow: 15px 15px 50px 0 rgb(15, 14, 14) inset, -15px -15px 50px 0 rgb(66, 65, 65) inset; */
-    /* opacity: 0.5; */
-    /* background-size: cover;
-    background-size: 100% 8%;
-    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
-    background-color: #0d1117; */
   }
 
   body {
@@ -443,7 +381,7 @@
 
   .wrapper-left {
     height: 100%;
-    width: 60%;
+    width: 40%;
     display: flex;
     flex-direction: column;
     background-color: #0d1117;
@@ -456,24 +394,14 @@
   }
 
   .wrapper-right {
-    /* background-image: url('../public/img/TimeTravel04.jpg'); */
     background-size: contain;
-    
     background-blend-mode: normal;
     z-index: 9999;
     height: 100%;
-    /* width: 40%; */
     display: flex;
     max-width: 90%;
-    /* width: 15%; */
-    /* min-width: 12.8%; */
     min-width: 30%;
-
-    /* flex-direction: row;   */
-    /* flex-direction: column; */
     flex-grow: 1; /*Let render window take up remaining space in the flexbox */
-
-    /* background-color: rgb(39, 38, 38); */
     background-color: #0d1117;
     color: #444;
   }
@@ -483,12 +411,9 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    /* resize: vertical; */
     overflow: auto;
-    /* background-color: rgb(39, 38, 38); */
     background-color: #4e947f;
     color: #444;
-    /* padding: 5px; */
     z-index: 0;
   }
   .wrapper-bottom {
@@ -498,7 +423,6 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    /* background-color: rgb(39, 38, 38); */
     background-color: #344867;
     color: #444;
     position: relative;
@@ -548,15 +472,12 @@
   .docs {
     overflow: auto;
     color: white;
-    /* resize: vertical; */
     height: 90%;
     width: 98%;
     color: 'grey';
   }
 
   .render-wrapper {
-    /* background-color: #252532; */
-    /* background-color: #0d1117; */
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -592,7 +513,6 @@
   }
 
   .box {
-    /* background-color: rgb(102, 217, 132); */
     color: rgb(245, 242, 239);
     border-radius: 0px;
     overflow-y: scroll;
@@ -619,24 +539,10 @@
     border-bottom: 1px solid #3d3d3d;
     border-right: 1px solid #3d3d3d;
     position: relative;
-    /* margin-left: -8px; */
     margin-right: -8px;
     padding-right: 8px;
   }
 
-  /* State Management Window - SvelteTeam */
-  /* .c {
-    overflow: auto;
-    max-width: 50%;
-    width: 15%;
-    min-width: 10%;
-    background-color: #070a0f;
-    border-right: 1px solid #3d3d3d;
-    padding: 0;
-    margin-right: -8px;
-  } */
-
-  /* Browser Render Window - SvelteTeam */
   .d {
     /* background-image: url('../public/img/TimeTravel04.jpg');
     background-size: contain;

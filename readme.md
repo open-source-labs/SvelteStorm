@@ -1,6 +1,7 @@
 
 <h1 align="center">
- <img src="https://i.imgur.com/KtvNAi2.png" style="width: 50%;">
+ <!-- <img src="https://imgur.com/a/IoGHuJU" style="width: 50%;"> -->
+ <img src="./public/img/SvelteStorm4Logos/SvelteStorm4Logo10x1024.png" style="width: 50%;">
  <br/>
  SvelteStorm 4.0
 </h1>

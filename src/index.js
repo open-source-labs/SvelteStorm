@@ -100,8 +100,8 @@ const createWindow = (exports.createWindow = () => {
    * ==================================================
    */
   let newWindow = new BrowserWindow({
-    width: 1200,
-    height: 1000,
+    width: 1400,
+    height: 1300,
     x: 20,
     y: 20,
     show: false,
@@ -141,15 +141,6 @@ const createWindow = (exports.createWindow = () => {
     
     // document.getElementById('wrapper-right');
 
-    console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-    console.log(`\n🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠`);
-    console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
-    setTimeout(() => {
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-      console.log('Focusing now');
-      newWindow.focusOnWebView();
-        // rightPanel.focus();
-      }, 15000)
   
   });
 
@@ -254,9 +245,9 @@ const createWindow = (exports.createWindow = () => {
 
 const openBrowserWindow = (exports.openBrowserWindow = (portToOpen) => {
   browser = new BrowserWindow({
-    width: 600,
-    height: 600,
-    x: 1240,
+    width: 650,
+    height: 1100,
+    x: 1440,
     y: 20,
     webPreferences: {
       nodeIntegration: true,
@@ -426,4 +417,10 @@ ipcMain.on('REFRESH', (event, data) => {
   };
   // Use browser window to send REFRESH message
   browser.webContents.send('REFRESH', instance);
+})
+
+ipcMain.on('PleaseUpdateWindowFromSnapButton', (data) => {
+  console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴${data}🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+      console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+  browser.webContents.send('PleaseUpdateWindowFromSnapButton', data);
 })

@@ -98,3 +98,14 @@ export type EditorObj = {
   setOption?: Function
   getValue?: Function
 }
+
+// export type SnapForPassingAround = {
+//   componentStateObj: {},
+// };
+export type componentStateObj = {
+  componentName: {}
+}
+
+// export type SnapForPassingAround = [
+//   componentStateObj
+// ]
