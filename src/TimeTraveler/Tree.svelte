@@ -42,35 +42,29 @@
    * ==================================================
    */
   ipcRenderer.on('SNAPSHOT', (event, data) => {
+    console.log("Hierarchy:", hierarchy);
     // snapshots.update(() => {
     //   return [...collectionOfAllSnapshots, data.body];
     // });
     const singleCapturedSnapshot = createSnapshot(data);
     console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
-    // Update the store with newest snapshot
-    snapshots.update(() => {
-      return [...collectionOfAllSnapshots, singleCapturedSnapshot];
-    });
-
+    // Update the store with newest snapshot if actually different
+    if(JSON.stringify(collectionOfAllSnapshots[collectionOfAllSnapshots.length - 1]) !== JSON.stringify(singleCapturedSnapshot)) {
+      snapshots.update(() => {
+        return [...collectionOfAllSnapshots, singleCapturedSnapshot];
+      });
+    }
     // const currentSnapshots = get(snapshots);
     // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
 
     // const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
     
     
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
         let stringSnapshot = SerAny.serialize(collectionOfAllSnapshots, {maxDepth: 500, pretty: true});
-        console.log('🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 71 | ipcRenderer.on | stringSnapshot', stringSnapshot);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
 
 
-
-    fs.writeFileSync(FileNPathNameToStoreSnapshots, stringSnapshot);
-      console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
+    // fs.writeFileSync(FileNPathNameToStoreSnapshots, stringSnapshot);
+      // console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
 
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
@@ -87,7 +81,7 @@
       'App',
       activeIndex
     );
-    // console.log("SNAPSHOT: Tree Data:", treeData);
+    console.log("SNAPSHOT: Tree Data:", treeData);
     drawTree(treeData);
   });
 
@@ -112,43 +106,43 @@
    *   Blah
    * ==================================================
    */
-  function writeSnapToDisk(singleCapturedSnapshot) {
-    // stringify the snapshot
-    const stringSnapshot = JSON.stringify(singleCapturedSnapshot);
-    console.log('🔴🟠🟡🟢🔵🟣 | BEEN STRINGED ');
+  // function writeSnapToDisk(singleCapturedSnapshot) {
+  //   // stringify the snapshot
+  //   const stringSnapshot = JSON.stringify(singleCapturedSnapshot);
+  //   console.log('🔴🟠🟡🟢🔵🟣 | BEEN STRINGED ');
 
     
 
 
-    // Check if file exists is yes, set 'fileExists = true'
-    // fs.existsSync(path) -> returns boolean
+  //   // Check if file exists is yes, set 'fileExists = true'
+  //   // fs.existsSync(path) -> returns boolean
 
-    if ($saveToFileName && !myWriteStream) {
-      myWriteStream = fs.createWriteStream($saveToFileName, {
-        encoding: 'utf8',
-        autoClose: true,
-      });
-    }
+  //   // if ($saveToFileName && !myWriteStream) {
+  //   //   myWriteStream = fs.createWriteStream($saveToFileName, {
+  //   //     encoding: 'utf8',
+  //   //     autoClose: true,
+  //   //   });
+  //   // }
 
-    if ($saveToFileName && myWriteStream) {
-      myWriteStream.write(stringSnapshot);
-    }
-  }
+  //   if ($saveToFileName && myWriteStream) {
+  //     myWriteStream.write(stringSnapshot);
+  //   }
+  // }
 
   /*
    * ==================================================
    *   User chooses to display previously saved snapshots
    * ==================================================
    */
-  function displaySavedSnapshots(fileName) {
-    const stringSavedSnapshots = fs.readFileSync(
-      path.join(__dirname, `../public/CapturedSnaps/${fileName}`)
-    );
-    collectionOfAllSnapshots = JSON.parse(stringSavedSnapshots);
-    snapshots.update(() => {
-      return collectionOfAllSnapshots;
-    });
-  }
+  // function displaySavedSnapshots(fileName) {
+  //   const stringSavedSnapshots = fs.readFileSync(
+  //     path.join(__dirname, `../public/CapturedSnaps/${fileName}`)
+  //   );
+  //   collectionOfAllSnapshots = JSON.parse(stringSavedSnapshots);
+  //   snapshots.update(() => {
+  //     return collectionOfAllSnapshots;
+  //   });
+  // }
 
   function createD3relationship(componentArray, compName, activeIndex) {
     const d3FormatTree = {};
@@ -327,6 +321,14 @@
     console.log("UpdateWindow: treeData", treeData)
     drawTree(treeData);
   }
+
+  function refresh(){
+    snapshots.update(() => {
+      return [collectionOfAllSnapshots[0]];
+    });
+    ipcRenderer.send('REFRESH', 0);
+  }
+
 </script>
 <div id="buttonsAndTree">
 
@@ -340,10 +342,8 @@
     <div class="buttonContainer">
     <button
       on:click={() => {
-        displaySavedSnapshots(
-          'Snaps_svelte-demo_1.0.0_2022-07-30_12-40-45.snaps'
-          );
-        }}>Upload Snapshots</button
+        refresh();
+        }}>Refresh</button
     >
     {#each collectionOfAllSnapshots as snapshot, idx}
     <button

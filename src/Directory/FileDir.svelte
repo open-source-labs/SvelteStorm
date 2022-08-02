@@ -326,7 +326,6 @@
             }
             placeInTree[currFile] = insertObject;
             for (let element in insertObject) {
-              console.log('Element of insertedObject', element);
               buildParentChildTree(placeInTree[currFile], element);
             }
           } else {
@@ -354,9 +353,11 @@
       // helper function for getParentChildTree to get parent child relationship within a Svelte component file
       // Note: assumes that only children (not grandchildren and further) exist within a Svelte component file
       function getRelationship(file, content) {
-        const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
+        // const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
+        const regexImports = /\bimport\s+.+\.svelte\'\;*$/gm
         const importsArray = content.match(regexImports);
         if (importsArray) {
+          console.log("IMPORTS ARRAY", importsArray);
           const relationship = {};
           relationship[file] = {};
 

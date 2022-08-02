@@ -418,3 +418,12 @@ ipcMain.on('TIME_TRAVEL', (event, data) => {
   // Use browser window to send time-travel message
   browser.webContents.send('TIME_TRAVEL', instance);
 })
+
+ipcMain.on('REFRESH', (event, data) => {
+  const instance = {
+    message: "REFRESH",
+    ctxIndex: data
+  };
+  // Use browser window to send REFRESH message
+  browser.webContents.send('REFRESH', instance);
+})
