@@ -28,7 +28,7 @@ export function createSnapshotCards(receivedSingleAppSnapshot) {
 <div>
   {#each receivedSingleAppSnapshot as component, idx}
    <Card
-    componentName = {Objects.keys(component)[0]}
+    componentName = {Object.keys(component)[0]}
    />
   {/each}
 </div>

@@ -7,10 +7,21 @@
   } from '../DataStore/SvelteStormDataStore';
   // import { createSnapshotCards } from '../Version4UtilityFunctions/createSnapshotCards.svelte'
   import CardHolder from '../Version4UtilityFunctions/CardHolder.svelte'
-  import Card from '../Version4UtilityFunctions/Card.svelte'
+  // import SnapButtonList from '../Version4UtilityFunctions/SnapButtonList.svelte'
+  // import Card from '../Version4UtilityFunctions/Card.svelte'
   export let hierarchy = {};
 
   const {ipcRenderer, BrowserWindow} = require('electron');
+
+  // function handleMessage(event) {
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵${event.detail.index}🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   updateWindow(event.detail.index);
+
+  // }
+
+
   const fs = require('fs');
   const path = require('path');
   const SerAny = require('serialize-anything');
@@ -35,6 +46,17 @@
   saveToFileName.subscribe((pathNFileName) => {
     FileNPathNameToStoreSnapshots = pathNFileName;
   });
+
+
+  // ipcRenderer.on('PleaseUpdateWindowFromSnapButton', (data) => {
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵${data}🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
+  //   updateWindow(data);
+  // })
+
+
+
 
   /*
    * ==================================================
@@ -332,6 +354,9 @@
   }
 
 </script>
+<!-- <SnapButtonList {collectionOfAllSnapshots} /> -->
+
+<!-- <SnapButtonList {collectionOfAllSnapshots} /> -->
 
 <div id="buttonsAndTree">
 

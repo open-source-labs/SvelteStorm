@@ -1,19 +1,19 @@
 <script>
-    export let component;
+    // export let component;
 
-    // let component = {Task: {
-    //   idx: 1,
-    //   ifSubTask: false,
-    //   list: [
-    //     {date: '9/20/2022', task: 'apply to job', subTasksList: []},
-    //     {subTasksList: []},
-    //     {subTasksList: []}
-    //   ],
-    //   subTasksList: [],
-    //   task: "apply to job",
-    //   taskDate: "9/20/2022",
-    //   toDoList: {}
-    // }}
+    let component = {Task: {
+      idx: 1,
+      ifSubTask: false,
+      list: [
+        {date: '9/20/2022', task: 'apply to job', subTasksList: []},
+        {subTasksList: []},
+        {subTasksList: []}
+      ],
+      subTasksList: [],
+      task: "apply to job",
+      taskDate: "9/20/2022",
+      toDoList: {}
+    }}
 
     let listOfKeys = Object.keys(component[Object.keys(component)[0]]);
     // console.log(listOfKeys) 
@@ -30,9 +30,9 @@
     </div>
 
     <div class="componentProps">
-    {#each listOfKeys as key}
+    {#each listOfKeys as key} -->
 
-  
+<!--   
     {compState =  component[Object.keys(component)[0]][key]} -->
   
     <!-- <span>
@@ -44,20 +44,18 @@
       <div>
        {#each component[Object.keys(component)[0]][key] as state}
        {state}
-       <div><svelte:self component[Object.keys(component)[0]][key]={state}/> </div>
+       <div>{state} </div>
        {/each}  
        <span>]</span>
-      </div> 
-      
-      
+      </div>  -->
 
-      {:else if typeof component[Object.keys(component)[0]][key] === 'object'}
+      <!-- {:else if typeof component[Object.keys(component)[0]][key] === 'object'}
         <div class="object">
         {#each Object.entries(component[Object.keys(component)[0]][key]) as [key, value]}
           <strong>{key}:</strong> {value}
         {/each}
-        </div> 
-
+        </div>   -->
+<!-- 
       {:else}
       <strong>{key}:</strong> : {component[Object.keys(component)[0]][key]}
         <br />
@@ -65,11 +63,10 @@
     </span>
 
     {/each}
- 
   </div>
     
- </div>
-  -->
+ </div> -->
+
 
 
 
@@ -79,9 +76,9 @@
     </div>
     <div class="componentStates">
         {#each listOfKeys as key}
-        <p>
+    <div>
             {key}: {component[Object.keys(component)[0]][key]}
-        </p>
+    </div>
         
         {/each}
     </div>
@@ -93,20 +90,20 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: rgba(28, 17, 59, 0.524);
+        background-color: rgba(51, 34, 97, 0.524);
         opacity: 80%;
         color: whitesmoke;
         border: 1px solid rgb(253, 252, 252);
         border-radius: 5px;
         padding: 3px;
         margin: 3px;
-
     }
 
 
     .componentStates {
-        text-align: center;
-        border: 1px solid white;
+        /* text-align: center; */
+        word-break: break-all; 
+        border-top: 1px solid white;
         margin: 0;
 
     }

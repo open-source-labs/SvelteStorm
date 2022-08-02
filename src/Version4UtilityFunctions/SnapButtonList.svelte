@@ -1,15 +1,30 @@
 <script>
   import {
-    collectionOfAllSnaps,
+    snapshots,
   } from '../DataStore/SvelteStormDataStore';
+  import { createEventDispatcher } from 'svelte';
 
   // import Card from './Card.svelte';
   import CardHolder from './CardHolder.svelte';
+
+  export let collectionOfAllSnapshots;
+
+  // export function updateWindow();
+  export let updateWindow = () => {}
+  const {ipcRenderer, BrowserWindow} = require('electron');
+
+const dispatch = createEventDispatcher();
 // let $collectionOfAllSnaps;
-  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
-  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
-  // console.log('🔴🟠🟡🟢🔵🟣 | file: CardHolder.svelte | line 5 | snapshot', snapshot);
-      
+// console.log('🔴🟠🟡🟢🔵🟣 | file: CardHolder.svelte | line 5 | snapshot', snapshot);
+
+function sendWindowUpdateRequest(idx) {
+  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣READY TO SEND WIN UPDATE🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
+  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣${idx}🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
+  dispatch('PleaseUpdateWindowFromSnapButton', {index: idx});
+    // ipcRenderer.send('PleaseUpdateWindowFromSnapButton', (event, idx));
+  }; 
+  
+  
 </script>
 
 <div id="buttonsAndTree">
@@ -19,17 +34,25 @@
     * ==================================================
     */ -->
 
-  {#if $collectionOfAllSnaps.length}
+    {#if collectionOfAllSnapshots.length}
     <div class="buttonContainer">
-      {#each $collectionOfAllSnaps as snapshot, idx}
-        <button
-          on:click={() => {
-            // activeIndex = idx;
-            // updateWindow(activeIndex);
-          }}>Snapshot {idx + 1}</button
-        >
-        <CardHolder {snapshot} />
-      {/each}
+    <button
+      on:click={() => {
+        // refresh();
+        }}>Refresh</button
+    >
+                      {#each collectionOfAllSnapshots as snapshot, idx}
+                        <button
+                          on:click={() => {
+                            // activeIndex = idx;
+                            {updateWindow(idx)};
+                            // ipcRenderer.send('PleaseUpdateWindowFromSnapButton', idx);
+
+                            // sendWindowUpdateRequest(idx);
+                          }}>Snapshot {idx + 1}</button
+                        >
+                        <CardHolder {snapshot} />
+                      {/each}
     </div>
   {/if}
 </div>
