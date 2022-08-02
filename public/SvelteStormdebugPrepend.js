@@ -23,8 +23,6 @@ const sendMessages = (componentStates) => {
 
 // Add all Svelte components to array
 window.document.addEventListener('SvelteRegisterComponent', (e) => {
-  console.log("register component", parse(e.detail));
-  console.log("register component", parse(e));
 
   const currentComponent = e.detail.component;
   let strippedCTX = parse(e.detail.component.$$.ctx);
@@ -75,7 +73,7 @@ function saveAndDispatchState() {
   if (cacheState[cacheState.length - 1]) {
     lastCacheStateLength = cacheState[cacheState.length - 1].length;
   }
-  // add check so that if not on last index and new element comes in but not time travel then get in here
+
   if (JSON.stringify(curState) != compCacheState && lastCacheStateLength != curState.length) {
     // if (cacheState.length > lastIndex) {
     //   cacheState = cacheState.slice(0, lastIndex + 1);
@@ -86,6 +84,7 @@ function saveAndDispatchState() {
     sendMessages(parse(curState));
     cacheState.push([...curState]);
     lastIndex = cacheState.length - 1;
+    console.log("cacheState after snapshot added:", cacheState);
   }
 
   // // currState = [[component 1],[component 2], etc...] | component 1 = [component, component.capture state, name]
