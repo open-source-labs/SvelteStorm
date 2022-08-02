@@ -5,7 +5,9 @@
     saveToFileName,
     snapshots,
   } from '../DataStore/SvelteStormDataStore';
-  import {get} from 'svelte/store'
+  // import { createSnapshotCards } from '../Version4UtilityFunctions/createSnapshotCards.svelte'
+  import CardHolder from '../Version4UtilityFunctions/CardHolder.svelte'
+  import Card from '../Version4UtilityFunctions/Card.svelte'
   export let hierarchy = {};
 
   const {ipcRenderer, BrowserWindow} = require('electron');
@@ -46,31 +48,29 @@
     //   return [...collectionOfAllSnapshots, data.body];
     // });
     const singleCapturedSnapshot = createSnapshot(data);
-    console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
+    // console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
     // Update the store with newest snapshot
     snapshots.update(() => {
       return [...collectionOfAllSnapshots, singleCapturedSnapshot];
     });
+    // createSnapshotCards(singleCapturedSnapshot);
+    console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+    console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
+    console.log('collectionOfAllSnapshots: ', collectionOfAllSnapshots);
 
     // const currentSnapshots = get(snapshots);
     // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
 
     // const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
-    
-    
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        let stringSnapshot = SerAny.serialize(collectionOfAllSnapshots, {maxDepth: 500, pretty: true});
-        console.log('🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 71 | ipcRenderer.on | stringSnapshot', stringSnapshot);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-        console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
 
-
+    let stringSnapshot = SerAny.serialize(collectionOfAllSnapshots, {
+      maxDepth: 500,
+      pretty: true,
+    });
+    // console.log('🔴🟠🟡🟢🔵🟣 | file: Tree.svelte | line 71 | ipcRenderer.on | stringSnapshot', stringSnapshot);
 
     fs.writeFileSync(FileNPathNameToStoreSnapshots, stringSnapshot);
-      console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
+    console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
 
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
@@ -117,9 +117,6 @@
     const stringSnapshot = JSON.stringify(singleCapturedSnapshot);
     console.log('🔴🟠🟡🟢🔵🟣 | BEEN STRINGED ');
 
-    
-
-
     // Check if file exists is yes, set 'fileExists = true'
     // fs.existsSync(path) -> returns boolean
 
@@ -158,7 +155,7 @@
     if (findChildren(hierarchy, compName)) {
       childrenNames = findChildren(hierarchy, compName);
     }
-    
+
     for (let element of componentArray[activeIndex]) {
       for (let key in element) {
         for (let name of childrenNames) {
@@ -250,7 +247,7 @@
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
-      .style("stroke", "cyan")
+      .style('stroke', 'cyan')
       .attr('class', 'link')
       .attr('d', function (d) {
         return (
@@ -309,7 +306,7 @@
    * ==================================================
    */
   function updateWindow(index) {
-    console.log("updateWindow index:", index);
+    console.log('updateWindow index:', index);
     ipcRenderer.send('TIME_TRAVEL', index);
     //re-render snapshot in the debugger when click on a snapshot button
     const currentSVG = document.querySelector('#D3Tree');
@@ -324,55 +321,44 @@
       'App',
       activeIndex
     );
-    console.log("UpdateWindow: treeData", treeData)
+    console.log('UpdateWindow: treeData', treeData);
     drawTree(treeData);
   }
 </script>
+
 <div id="buttonsAndTree">
 
-  <!-- /*
-    * ==================================================
-    *   Display the State "Snapshorts"
-    * ==================================================
-    */ -->
-    
-    {#if collectionOfAllSnapshots.length}
+  {#if collectionOfAllSnapshots.length}
     <div class="buttonContainer">
-    <button
-      on:click={() => {
-        displaySavedSnapshots(
-          'Snaps_svelte-demo_1.0.0_2022-07-30_12-40-45.snaps'
+      <button
+        on:click={() => {
+          displaySavedSnapshots(
+            'Snaps_svelte-demo_1.0.0_2022-07-30_12-40-45.snaps'
           );
         }}>Upload Snapshots</button
-    >
-    {#each collectionOfAllSnapshots as snapshot, idx}
-    <button
-    on:click={() => {
-      activeIndex = idx;
-      updateWindow(activeIndex);
-        }}>Snapshot {idx + 1}</button
       >
+      {#each collectionOfAllSnapshots as snapshot, idx}
+        <button
+          on:click={() => {
+            activeIndex = idx;
+            updateWindow(activeIndex);
+          }}>Snapshot {idx + 1}</button
+        >
+        <CardHolder {snapshot} />
       {/each}
-  </div>
-  <!-- <div class="container">
-    <div class="block">
-      <Snap {compState} />
     </div>
-  </div> -->
   {/if}
-
   
   <!-- D3 tree -->
   <div class="svgtree" bind:this={el} />
 </div>
-  
-  <!-- /*
-    * ==================================================
+
+<!-- /*
+* ==================================================
 *   Style for this display states component
 * ==================================================
 */ -->
 <style>
-
   #buttonsAndTree {
     display: flex;
     flex-direction: row;

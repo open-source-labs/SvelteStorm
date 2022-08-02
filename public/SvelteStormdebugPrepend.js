@@ -8,11 +8,21 @@ const parse = (event) => JSON.parse(JSON.stringify(event));
 let cacheState = [];
 const components = [];
 const compComponents = [];
+const compCTX = [];
 let lastIndex = 0;
 let firstTime = true;
 
+let eventCounter = 0;
+
 // sends SNAPSHOT message to ipcMain, with all data needed for debugging visualization
 const sendMessages = (componentStates) => {
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 21 | sendMessages | eventCounter', eventCounter);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 22 | sendMessages | componentStates', componentStates);
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
+
   ipcRenderer.send('SNAPSHOT', {
     body: {
       componentStates,
@@ -25,15 +35,19 @@ const sendMessages = (componentStates) => {
 window.document.addEventListener('SvelteRegisterComponent', (e) => {
 
   const currentComponent = e.detail.component;
-  // const stringifiedEventComp = JSON.stringify(e.detail.component.$$.ctx);
+  let strippedCTX = parse(e.detail.component.$$.ctx);
   const stringifiedEventComp = JSON.stringify(e.detail.component);
-
-  console.log("compComponents", compComponents);
-  console.log("stringifiedEventComp", stringifiedEventComp);
-  console.log("=============================================")
-  if (!compComponents.includes(stringifiedEventComp)) {
+  console.log("SvelteRegisterComponent Event:", e);
+  strippedCTX = strippedCTX.filter((element) => typeof(element) === 'number' || typeof(element) === 'string');
+  // console.log("====================");
+  // console.log("strippedCTX", strippedCTX);
+  // console.log("compCTX:", compCTX);
+  if (!compComponents.includes(stringifiedEventComp) && !compCTX.includes(JSON.stringify(strippedCTX))) {
+    console.log("got into IF ... adding new stripped CTX");
+    console.log("components after svelteRegisterComponent");
     compComponents.push(stringifiedEventComp);
-    components.push(currentComponent)
+    components.push(currentComponent);
+    compCTX.push(JSON.stringify(strippedCTX));
   }
 
 });
@@ -54,36 +68,18 @@ function checkIfChanged(componentState, i) {
     return true;
   }
   return false;
-  // if (
-  //   !cacheState.length ||
-  //   (JSON.stringify(cacheState[cacheState.length - 1][i][1]) !==
-  //     JSON.stringify(componentState[1]) &&
-  //     JSON.stringify(cacheState[lastIndex][i][1]) !==
-  //       JSON.stringify(componentState[1]))
-  // ) {
-  //   return true;
-  // }
-  // return false;
-}
-
-function checkIfChanged2(componentState, i) {
-  // console.log("checkIfChanged: i: ", i)
-  // console.log("checkIfChanged: componentState: ", componentState)
-  // console.log("checkIfChanged: cacheState:", cacheState);
-  if (
-    !cacheState.length ||
-    (JSON.stringify(cacheState[cacheState.length - 1][i][1]) !==
-      JSON.stringify(componentState[1]) &&
-      JSON.stringify(cacheState[lastIndex][i][1]) !==
-        JSON.stringify(componentState[1]))
-  ) {
-    return true;
-  }
-  return false;
 }
 
 // invoked whenever there is a perceived state change
-function saveAndDispatchState() {
+function saveAndDispatchState(e) {
+  eventCounter++;
+  console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+  console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+  console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 69 | saveAndDispatchState | eventCounter', eventCounter);
+      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 68 | saveAndDispatchState | e', e);
+      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
+  
   const curState = [];
   components.forEach((component) => {
     curState.push([
@@ -124,13 +120,18 @@ function saveAndDispatchState() {
 }
 
 function setupListeners(root) {
-  root.addEventListener('SvelteRegisterBlock', (e) => saveAndDispatchState());
-  root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState());
-  root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState());
+  root.addEventListener('SvelteRegisterBlock', (e) => {
+    // somthing(e)
+    saveAndDispatchState()
+  });
+  root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState(e));
+  root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState(e));
+  root.addEventListener('SvelteDOMRemove', (e) => saveAndDispatchState(e));
+  root.addEventListener('SvelteDOMAddEventListener', (e) => saveAndDispatchState(e));
+  
   /*
    * These event listeners aren't being used in this version, but could provide valuable data for future versions of this product
    * root.addEventListener('SvelteDOMRemove', (e) => (e) => sendMessages(parseEvent(e.detail)));
-   * root.addEventListener('SvelteDOMAddEventListener', (e) => sendMessages(parseEvent(e.detail)));
    * root.addEventListener('SvelteDOMRemoveEventListener',(e) => sendMessages(parseEvent(e.detail)));
    * root.addEventListener('SvelteDOMSetProperty', (e) => sendMessages(parseEvent(e.detail)));
    * root.addEventListener('SvelteDOMSetAttribute', (e) => sendMessages(parseEvent(e.detail)));
@@ -146,4 +147,3 @@ setTimeout(() => setupListeners(window.document));
 *   The Above is SvelteStorm 4.0 Debug Monitoring Code.
 * =========================================================
 */
-
