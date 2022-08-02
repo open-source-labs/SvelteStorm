@@ -28,14 +28,14 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
   const currentComponent = e.detail.component;
   let strippedCTX = parse(e.detail.component.$$.ctx);
   const stringifiedEventComp = JSON.stringify(e.detail.component);
-  // console.log("Component CTX:", e.detail.component.$$.ctx);
-
+  console.log("SvelteRegisterComponent Event:", e);
   strippedCTX = strippedCTX.filter((element) => typeof(element) === 'number' || typeof(element) === 'string');
   // console.log("====================");
   // console.log("strippedCTX", strippedCTX);
   // console.log("compCTX:", compCTX);
   if (!compComponents.includes(stringifiedEventComp) && !compCTX.includes(JSON.stringify(strippedCTX))) {
-    console.log("got into IF ... adding new stripped CTX")
+    console.log("got into IF ... adding new stripped CTX");
+    console.log("components after svelteRegisterComponent");
     compComponents.push(stringifiedEventComp);
     components.push(currentComponent);
     compCTX.push(JSON.stringify(strippedCTX));
@@ -62,7 +62,8 @@ function checkIfChanged(componentState, i) {
 }
 
 // invoked whenever there is a perceived state change
-function saveAndDispatchState() {
+function saveAndDispatchState(e) {
+  console.log(e)
   const curState = [];
   components.forEach((component) => {
     curState.push([
@@ -103,13 +104,18 @@ function saveAndDispatchState() {
 }
 
 function setupListeners(root) {
-  root.addEventListener('SvelteRegisterBlock', (e) => saveAndDispatchState());
-  root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState());
-  root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState());
+  root.addEventListener('SvelteRegisterBlock', (e) => {
+    // somthing(e)
+    saveAndDispatchState()
+  });
+  root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState(e));
+  root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState(e));
+  root.addEventListener('SvelteDOMRemove', (e) => saveAndDispatchState(e));
+  root.addEventListener('SvelteDOMAddEventListener', (e) => saveAndDispatchState(e));
+  
   /*
    * These event listeners aren't being used in this version, but could provide valuable data for future versions of this product
    * root.addEventListener('SvelteDOMRemove', (e) => (e) => sendMessages(parseEvent(e.detail)));
-   * root.addEventListener('SvelteDOMAddEventListener', (e) => sendMessages(parseEvent(e.detail)));
    * root.addEventListener('SvelteDOMRemoveEventListener',(e) => sendMessages(parseEvent(e.detail)));
    * root.addEventListener('SvelteDOMSetProperty', (e) => sendMessages(parseEvent(e.detail)));
    * root.addEventListener('SvelteDOMSetAttribute', (e) => sendMessages(parseEvent(e.detail)));
