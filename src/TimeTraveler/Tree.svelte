@@ -66,18 +66,21 @@
    * ==================================================
    */
   ipcRenderer.on('SNAPSHOT', (event, data) => {
-    console.log("Hierarchy:", hierarchy);
     // snapshots.update(() => {
     //   return [...collectionOfAllSnapshots, data.body];
     // });
     const singleCapturedSnapshot = createSnapshot(data);
+    console.log("SNAPSHOT INVOKED");
     console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
     // Update the store with newest snapshot if actually different
     if(JSON.stringify(collectionOfAllSnapshots[collectionOfAllSnapshots.length - 1]) !== JSON.stringify(singleCapturedSnapshot)) {
+      console.log('SNAP IF: SINGLE CAPTURED SNAP:', singleCapturedSnapshot)
+      console.log('SNAP IF: LAST COLLECTION OF SNAPS:', collectionOfAllSnapshots[collectionOfAllSnapshots.length - 1])
       snapshots.update(() => {
         return [...collectionOfAllSnapshots, singleCapturedSnapshot];
       });
     }
+    console.log("SNAPSHOT:collectionOfAllSnapshots", collectionOfAllSnapshots);
     // const currentSnapshots = get(snapshots);
     // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
 
@@ -105,7 +108,7 @@
       'App',
       activeIndex
     );
-    console.log("SNAPSHOT: Tree Data:", treeData);
+    // console.log("SNAPSHOT: Tree Data:", treeData);
     drawTree(treeData);
   });
 
@@ -327,7 +330,8 @@
    * ==================================================
    */
   function updateWindow(index) {
-    console.log('updateWindow index:', index);
+    console.log("updateWindow index:", index);
+    console.log("updateWindow:collectionOfAllSnapshots", collectionOfAllSnapshots);
     ipcRenderer.send('TIME_TRAVEL', index);
     //re-render snapshot in the debugger when click on a snapshot button
     const currentSVG = document.querySelector('#D3Tree');
@@ -342,15 +346,30 @@
       'App',
       activeIndex
     );
-    console.log('UpdateWindow: treeData', treeData);
     drawTree(treeData);
   }
 
   function refresh(){
+    // update snapshots to include only the initial snapshot
     snapshots.update(() => {
       return [collectionOfAllSnapshots[0]];
     });
+    // send refresh message to main process
     ipcRenderer.send('REFRESH', 0);
+
+    // redraw tree
+    const currentSVG = document.querySelector('#D3Tree');
+    currentSVG.remove();
+    activeIndex = 0;
+
+    let treeData = createD3relationship(
+      collectionOfAllSnapshots,
+      'App',
+      activeIndex
+    );
+    // console.log("SNAPSHOT: Tree Data:", treeData);
+    drawTree(treeData);
+
   }
 
 </script>
@@ -360,12 +379,18 @@
 
 <div id="buttonsAndTree">
 
-  {#if collectionOfAllSnapshots.length}
+  <!-- /*
+    * ==================================================
+    *   Display the State "Snapshots"
+    * ==================================================
+    */ -->
+    
+    {#if collectionOfAllSnapshots.length}
     <div class="buttonContainer">
     <button
       on:click={() => {
         refresh();
-        }}>Refresh</button
+        }}>Reset</button
     >
                       {#each collectionOfAllSnapshots as snapshot, idx}
                         <button

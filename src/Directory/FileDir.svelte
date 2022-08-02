@@ -32,8 +32,6 @@
   });
 
 
-
-
   afterUpdate(() => {
     if (reload) {
       console.log('reloading now');

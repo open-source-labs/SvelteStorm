@@ -9,8 +9,6 @@
   const fs = require("fs");
   const fileState = {};
   let rename: boolean = false;
-  // let deleteFile = false;
-  // let rightClickStatus = false;
   let activeFile: string = "";
   let newName: string = "";
   let createFile: boolean = false;
@@ -43,9 +41,15 @@
         fileRead: true,
       };
     });
-    console.log('🔴🟠🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟢🔵🟣 | file: FileTest.svelte | line 41 | dblClickHandler | showEditorBackground', $showEditorBackground);
+        
+    /*
+    * ==================================================
+    *   SvelteStorm 4.0 Team
+    * 
+    *   The following is used to tr
+    * ==================================================
+    */
     $showEditorBackground = false;
-    console.log('🔴🟠🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟢🔵🟣 | file: FileTest.svelte | line 41 | dblClickHandler | showEditorBackground', $showEditorBackground);
   };
 
   const rightClickHandler = (path: string): void => {

@@ -1,19 +1,19 @@
 <script>
-    // export let component;
+    export let component;
 
-    let component = {Task: {
-      idx: 1,
-      ifSubTask: false,
-      list: [
-        {date: '9/20/2022', task: 'apply to job', subTasksList: []},
-        {subTasksList: []},
-        {subTasksList: []}
-      ],
-      subTasksList: [],
-      task: "apply to job",
-      taskDate: "9/20/2022",
-      toDoList: {}
-    }}
+    // let component = {Task: {
+    //   idx: 1,
+    //   ifSubTask: false,
+    //   list: [
+    //     {date: '9/20/2022', task: 'apply to job', subTasksList: []},
+    //     {subTasksList: []},
+    //     {subTasksList: []}
+    //   ],
+    //   subTasksList: [],
+    //   task: "apply to job",
+    //   taskDate: "9/20/2022",
+    //   toDoList: {}
+    // }}
 
     let listOfKeys = Object.keys(component[Object.keys(component)[0]]);
     // console.log(listOfKeys) 
