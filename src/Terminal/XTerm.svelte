@@ -31,7 +31,7 @@
           //   '🔴🟠🟡🟢🔵🟣 | file: XTerm.svelte | line 23 | m.forEach | match, group',
           //   `${groupIndex}: ${match}`
           // );
-          console.log(`Found match, group ${groupIndex}: ${match}`);
+          // console.log(`Found match, group ${groupIndex}: ${match}`);
           localhostToUse = match;
           const pjson = require(`${$appBeingDebugedPath}/package.json`);
 
