@@ -48,11 +48,12 @@
     // });
     const singleCapturedSnapshot = createSnapshot(data);
     console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
-    // Update the store with newest snapshot
-    snapshots.update(() => {
-      return [...collectionOfAllSnapshots, singleCapturedSnapshot];
-    });
-
+    // Update the store with newest snapshot if actually different
+    if(JSON.stringify(collectionOfAllSnapshots[collectionOfAllSnapshots.length - 1]) !== JSON.stringify(singleCapturedSnapshot)) {
+      snapshots.update(() => {
+        return [...collectionOfAllSnapshots, singleCapturedSnapshot];
+      });
+    }
     // const currentSnapshots = get(snapshots);
     // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
 
@@ -320,6 +321,14 @@
     console.log("UpdateWindow: treeData", treeData)
     drawTree(treeData);
   }
+
+  function refresh(){
+    snapshots.update(() => {
+      return [collectionOfAllSnapshots[0]];
+    });
+    ipcRenderer.send('REFRESH', 0);
+  }
+
 </script>
 <div id="buttonsAndTree">
 
@@ -331,13 +340,11 @@
     
     {#if collectionOfAllSnapshots.length}
     <div class="buttonContainer">
-    <!-- <button
+    <button
       on:click={() => {
-        displaySavedSnapshots(
-          'Snaps_svelte-demo_1.0.0_2022-07-30_12-40-45.snaps'
-          );
-        }}>Upload Snapshots</button
-    > -->
+        refresh();
+        }}>Refresh</button
+    >
     {#each collectionOfAllSnapshots as snapshot, idx}
     <button
     on:click={() => {
