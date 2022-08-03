@@ -7,11 +7,9 @@
   import type { Filetree } from '../types';
   import { updatePackageJson, updateRollupConfig } from '../Version4UtilityFunctions/wrap-app-functions'
   
-
   const {ipcRenderer} = require('electron');
   const fs = require('fs');
-  
-  
+    
   export let activeDir = '';
   export let reload = false;
   
@@ -31,10 +29,8 @@
     reload = data.reload;
   });
 
-
   afterUpdate(() => {
     if (reload) {
-      console.log('reloading now');
       readFileNames(directory);
       DirectoryData.update((currentData) => {
         return {
@@ -45,7 +41,6 @@
     }
     if (activeDir) {
       fs.watch(activeDir, (eventType) => {
-        console.log('directory', directory);
         if (eventType === 'rename' && !fsTimeout) {
           readFileNames(mainDir);
         }
@@ -99,7 +94,6 @@
     }
   );
 
-  //
   //method to read all the files inside the directory
   const readFileNames = (mainDir) => {
     if (mainDir) {
@@ -141,38 +135,14 @@
     }
     static readDir(path) {
       var fileArray = [];
-      /*
-       * ==================================================
-       *   2022-07-19 Jim White & Ryan Huie
-       *
-       *   Read current rollup.config.js file and write it
-       *   to rollup.config.new.js.
-       *
-       *   The new file will contain two additional
-       *   import statements:
-       *     o  One for importing a custom rollup pluging
-       *     o  One for importing path
-       *
-       *   The new file will also contain a new
-       *   plugin section.
-       *
-       *         banner({
-       *           prependFile: '${myPath.resolve(__dirname, 'SvelteStormdebugPrepend.js')}',
-       *           appendFile: '${myPath.resolve(__dirname, 'SvelteStormdebugAppend.js')}',
-       *           encoding: 'utf-8', // default is utf-8
-       *         }),
-       *
-       *   This will result in SvelteStorm "wrapping" the
-       *   app being debugged in our code which adds event
-       *   listeners to report state changes back to
-       *   SvelteStorm.
-       *
-       * ==================================================
-       */
+
       if (!updateRollupConfigRun) {
+        // Reads current rollup.config.js file and writes it to rollup.config.new.js with two additions: 1-imports custom rollup plug-in and path 2-adds banner to plugin section
+        // The purpose of this is to "wrap" the app being debugged in our code with adds event listeners to reports state changes back to Svelte Storm
         updateRollupConfig(path);
         updatePackageJson(path);
-        getParentChildTree();
+        // Builds componentRelationships (nested objects to represent what components are imported into each component) which is used to build the d3 representation of state
+        getComponentRelationships();
         $appBeingDebugedPath = path;
         updateRollupConfigRun = true;
       }
@@ -189,63 +159,6 @@
             var stateArr: string[] = [];
             const parentName = file.split('.')[0];
             svelteFileArray.push([parentName, content]);
-
-            /*
-             * ==================================================
-             *   2022-07-20 Jim White & Ryan Huie
-             *
-             *   When SvelteStorm opens a Folder ... it builds a
-             *   file tree of all the files in the project
-             *   (including node_modules).  As it builds this
-             *   tree it also opens and examines all the .svelte
-             *   files looking to identify the Svelte Data Store
-             *   within each file (Existing feature in
-             *   SvelteStore 3.0).  We (SvelteStorm 4.0 team) are
-             *   piggy backing on this existing file scrapping
-             *   to also scrape for Parent Child relationships.
-             *
-             *   We assume that the 'name of the file' is the
-             *   'Parent' component and that any
-             *   'import *.svelte' files represent the  children
-             *   of that parent.
-             *
-             *
-             * ==================================================
-             */
-
-            // const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
-            // const importsArray = content.match(regexImports);
-
-            // if (importsArray) {
-            //   let tParentChildTree = {};
-
-            //   tParentChildTree[file] = {};
-
-            //   for (let i = 0; i < importsArray.length; i++) {
-            //     let foundComp = importsArray[i].split(' ');
-            //     let reallyFoundComp = foundComp[1];
-            //     tParentChildTree[file][reallyFoundComp] = {};
-            //   }
-
-            // console.log(
-            //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 30 | FileTree | fs.readdirSync | tParentChildTree',
-            //   tParentChildTree
-            // );
-
-            // parentChildTree[file] =
-            // DirectoryData.update((currentData) => {
-            //   return {
-            //     ...currentData,
-            //     ParentChildTree: tParentChildTree,
-            //   };
-            // });
-
-            // const thereYet = get(DirectoryData);
-            // console.log(
-            //   '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet',
-            //   thereYet
-            // );
-            // }
 
             /*
              * ==================================================
@@ -299,10 +212,10 @@
         }
       });
 
-      // adds parentChildTree to store
-      async function getParentChildTree() {
+      // adds componentRelationships to store
+      async function getComponentRelationships() {
         const fileArr = await svelteFileArray;
-        const parentChildTree = {};
+        const componentRelationships = {};
         const relationships = {};
 
         // adds all file parent child relationships to relationships array
@@ -314,8 +227,8 @@
           }
         });
 
-        // recursively starts at App to loop through relationships to build parentChildTree to be added to store
-        function buildParentChildTree(placeInTree, currFile) {
+        // recursively starts at App to loop through relationships to build componentRelationships to be added to store
+        function buildComponentRelationships(placeInTree, currFile) {
           if (relationships.hasOwnProperty(currFile)) {
             const insertObject = {};
             const relationshipReference = relationships[currFile][currFile];
@@ -324,7 +237,7 @@
             }
             placeInTree[currFile] = insertObject;
             for (let element in insertObject) {
-              buildParentChildTree(placeInTree[currFile], element);
+              buildComponentRelationships(placeInTree[currFile], element);
             }
           } else {
             placeInTree[currFile] = {};
@@ -332,30 +245,24 @@
           }
         }
 
-        // invocation of above buildParentChildTree function on App
-        buildParentChildTree(parentChildTree, 'App');
+        // invocation of above buildComponentRelationships function on App
+        buildComponentRelationships(componentRelationships, 'App');
 
         // add relationship tree to store
         DirectoryData.update((currentData) => {
           return {
             ...currentData,
-            parentChildTree: parentChildTree,
+            componentRelationships: componentRelationships,
           };
         });
-
-      // console log to see if parentChildTree was updated in store
-      // const thereYet = get(DirectoryData);
-      // console.log( '🔴🟠🟡🟢🔵🟣 | file: FileDir.svelte | line 325 | FileTree | fs.readdirSync | thereYet', thereYet);
       }
 
-      // helper function for getParentChildTree to get parent child relationship within a Svelte component file
+      // helper function for buildComponentRelationships to get parent child relationship within a Svelte component file
       // Note: assumes that only children (not grandchildren and further) exist within a Svelte component file
       function getRelationship(file, content) {
-        // const regexImports = /\bimport\s+.+\.svelte\'\;$/gm;
         const regexImports = /\bimport\s+.+\.svelte\'\;*$/gm
         const importsArray = content.match(regexImports);
         if (importsArray) {
-          console.log("IMPORTS ARRAY", importsArray);
           const relationship = {};
           relationship[file] = {};
 

@@ -92,7 +92,7 @@ const createWindow = (exports.createWindow = () => {
   //window.nodeRequire = require; in html file
 
   /*
-   * ==================================================
+   * =================== SS4 ==========================
    *   Create a new Browers Window for display in 
    *   Electron, but don't show it yet. This function 
    *   created the window the contains all of
@@ -165,24 +165,7 @@ const createWindow = (exports.createWindow = () => {
     }
   });
 
-  //chokidar is a library that watches the files
-  // let watcher;
-  // if (process.env.NODE_ENV === 'development') {
-  //   watcher = require('chokidar').watch(path.join(__dirname, '../public'), {
-  //     ignoreInitial: true,
-  //     awaitWriteFinish: {
-  //       stabilityThreshold: 15000
-  //     },
-  //   });
-  //   watcher.on('change', () => {
-  //     newWindow.reload();
-  //   });
-  // }
-
   newWindow.on('closed', () => {
-    // if (watcher) {
-    //   watcher.close();
-    // }
     windows.delete(newWindow);
     createApplicationMenu();
     newWindow = null;
@@ -260,9 +243,7 @@ const openBrowserWindow = (exports.openBrowserWindow = (portToOpen) => {
       enableRemoteModule: true,
     },
   });
-  // browser.webContents.loadURL('http://localhost:8080');
   browser.webContents.loadURL(`http://localhost:${portToOpen}`);
-  // browser.webContents.openDevTools();
 });
 
 // gets and opens the file that the user selects from the File menu
@@ -296,7 +277,6 @@ const getFolderFromUser = (exports.getFolderFromUser = async (targetWindow) => {
   });
 
   if (files) {
-    console.log('files.filePaths:', files.filePaths);
     cwdFilePath = files.filePaths;
     if (files) {
       openFolder(targetWindow, files.filePaths);
@@ -307,7 +287,6 @@ const getFolderFromUser = (exports.getFolderFromUser = async (targetWindow) => {
 const createProjectFromUser = (exports.createProjectFromUser = async (
   targetWindow
 ) => {
-  console.log('running createProject method');
   const folderName = await dialog.showSaveDialog(targetWindow, {
     title: 'Create Project',
     properties: ['createDirectory'],
@@ -320,16 +299,8 @@ const createProjectFromUser = (exports.createProjectFromUser = async (
   }
 });
 
-const testFunc = (exports.testFunc = () => {
-  // const content = folder;
-  console.log('testFunc');
-  // targetWindow.webContents.send('folder-opened', folder, content);
-  // createApplicationMenu();
-});
-
 const openFolder = (exports.openFolder = (targetWindow, folder) => {
   const content = folder;
-  console.log('contents', content);
   targetWindow.webContents.send('folder-opened', folder, content);
   createApplicationMenu(app);
 });
@@ -346,6 +317,7 @@ const saveFile = (exports.saveFile = (targetWindow) => {
   });
 });
 
+// handlers for various operations
 ipcMain.handle('saveFileFromUser', saveFile);
 
 ipcMain.handle('getFileFromUser', getFileFromUser);
@@ -358,14 +330,9 @@ ipcMain.handle('decreaseFontSize', decreaseFontSize);
 
 ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
-ipcMain.handle('testFunc', testFunc);
-
-
-ipcMain.on('openDaDebugAppWindow', (event, localhostToUse) => {
+ipcMain.on('openDebugAppWindow', (event, localhostToUse) => {
   if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
 });
-
-
 
 /*
    * ==================================================
@@ -378,11 +345,10 @@ ipcMain.on('SNAPSHOT', (event, data) => {
   newWindow.webContents.send('SNAPSHOT', data);
 });
 
-
+// close app when quiting
 ipcMain.on('quit-app', () => {
   app.quit();
 });
-
 
 /*
    * ==================================================
@@ -391,24 +357,21 @@ ipcMain.on('quit-app', () => {
    * ==================================================
 */
 
-// ipcMain.on('TIME_TRAVEL', (event, data) => {
-//   const instance = {
-//     message: "TIME_TRAVEL",
-//     ctxIndex: data
-//   };
-//   // Use browser window to send time-travel message
-//   browser.webContents.send('TIME_TRAVEL', instance);
-// })
 ipcMain.on('TIME_TRAVEL', (event, data) => {
   const instance = {
     message: "TIME_TRAVEL",
     ctxIndex: data
-    // ctxIndex: data[0],
-    // collectionOfAllSnapshots: data[1]
   };
   // Use browser window to send time-travel message
   browser.webContents.send('TIME_TRAVEL', instance);
 })
+
+/*
+   * ==================================================
+   *   When the user selects reset button, a message is sent to ipcMain called 'REFRESH'
+   *   When that message is received, we forward the data to the browser window.
+   * ==================================================
+*/
 
 ipcMain.on('REFRESH', (event, data) => {
   const instance = {
@@ -417,10 +380,4 @@ ipcMain.on('REFRESH', (event, data) => {
   };
   // Use browser window to send REFRESH message
   browser.webContents.send('REFRESH', instance);
-})
-
-ipcMain.on('PleaseUpdateWindowFromSnapButton', (data) => {
-  console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴${data}🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
-      console.log(`\n🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴`);
-  browser.webContents.send('PleaseUpdateWindowFromSnapButton', data);
 })

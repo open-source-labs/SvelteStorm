@@ -137,7 +137,6 @@
     if (!$editorCache[filePath]) {
       $editorCache[$currentTabFilePath] = value;
     }
-    console.log("onMount complete");
   });
 
   afterUpdate(async (): Promise<void> => {
@@ -177,13 +176,11 @@
     noUpdate = false;
     showToolTripTransition = false;
 
-    console.log("afterUpdate complete");
   });
 
   ipcRenderer.on("save-markdown", function (): void {
     messageObj = { content: $codeMirrorEditor.getValue(), file: filePath };
     ipcRenderer.send("synchronous-message", messageObj);
-    console.log("ipcRenderer complete");
   });
 
   function handleMouseMove(e): void {
@@ -212,7 +209,6 @@
   }
   function onType(): void {
     hoverCounter += 13;
-    console.log("this is from onType hoverCounter is now", hoverCounter);
   }
 </script>
 

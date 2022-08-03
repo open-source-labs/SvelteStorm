@@ -1,28 +1,17 @@
 <script>
     export let component;
-
-    // let component = {Task: {
-    //   idx: 1,
-    //   ifSubTask: false,
-    //   list: [
-    //     {date: '9/20/2022', task: 'apply to job', subTasksList: []},
-    //     {subTasksList: []},
-    //     {subTasksList: []}
-    //   ],
-    //   subTasksList: [],
-    //   task: "apply to job",
-    //   taskDate: "9/20/2022",
-    //   toDoList: {}
-    // }}
+    let ifOpened = false;
 
     let listOfKeys = Object.keys(component[Object.keys(component)[0]]);
-    // console.log(listOfKeys) 
-
     let componentName = Object.keys(component)[0];
+
+    function openCardInfo(){
+        ifOpened = !ifOpened;
+    }
   
 </script>
 
-
+<!-- THE FOLLOW CODE ATTEMPS TO DISPLAY MORE INFOR FORM COMPONENT CARD. COULD BE USEFUL FOR FUTURE ITERATIONS -->
 <!-- <div class="cardContainer"> 
 
     <div class="componentName">    
@@ -69,22 +58,24 @@
 
 
 
-
 <div class="cardContainer">
-    <div class="componentName">    
-        <strong>{componentName}<strong/>
-    </div>
-    <div class="componentStates">
-        {#each listOfKeys as key}
-    <div>
-            {key}: {component[Object.keys(component)[0]][key]}
-    </div>
-        
-        {/each}
-    </div>
+  <div class="componentName">    
+    <button class="compName" on:click={openCardInfo}> <strong>{componentName}<strong/> </button>
+  </div>
 
+  
+    <div class="componentStates">
+      {#each listOfKeys as key}
+      {#if ifOpened}
+      <div>
+          {key}: {component[Object.keys(component)[0]][key]}
+      </div> 
+      {/if}   
+      {/each}
+    </div>
+ 
 </div>
-    
+
 <style>
     .cardContainer {
         display: flex;
@@ -99,6 +90,15 @@
         margin: 3px;
     }
 
+    .compName {
+      background: none;
+      color: inherit;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+      outline: inherit;
+    }
 
     .componentStates {
         /* text-align: center; */

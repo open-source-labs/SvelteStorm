@@ -48,7 +48,6 @@
       $editorCache[$currentTabFilePath] = newFile.editorValue;
       $codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
     };
-    console.log('addTab complete');
   };
 
 
@@ -91,7 +90,6 @@
     activeTabValue = tab.tabId;
     activeEditor = activeTabValue;
 
-    console.log("handleClick complete");
   };
 
 
@@ -121,7 +119,6 @@
     },
   };
 
-
   // render file on open and add to store
   ipcRenderer.on("file-opened", function (evt:any, file: string, content) {
     filePath = file;
@@ -138,7 +135,6 @@
       tabId : count
     }
 
-    console.log("ipcRnderer: new tab added");
     addTab(newTab);
     if (file) {
       title = `${path.basename(file)} - ${title}`;

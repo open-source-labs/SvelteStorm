@@ -19,7 +19,6 @@ export function updatePackageJson(path) {
     process.chdir(path);
     ipcRenderer.send('terminal-into', `cd ${path}\r`);
 
-    console.log('directory has successfully been changed');
   } catch (err) {
     // Printing error if occurs
     console.error('error while changing directory');
@@ -32,7 +31,6 @@ export function updatePackageJson(path) {
         value: 'rollup --config rollup.config.new.js -w',
         force: true,
       });
-      console.log('Added sdebug script to package.json');
     } catch (err) {
       console.error(`${err}error while adding sdebug script to package.json`);
     }
