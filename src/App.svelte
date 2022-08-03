@@ -304,7 +304,7 @@
                 <div id="stateManager">
                   <StateManager />
                 </div>
-                <div class="box" id="d3Tree">
+                <div class="box" id="treeParent">
                   <Tree />
                 </div>
               {/if}
@@ -316,7 +316,7 @@
 
 <style>
 
-  #d3Tree {
+  #treeParent {
     flex-grow: 1;
     width: 100%;
     height: 100%;
@@ -468,9 +468,9 @@
     
     /* .editor-wrapper::before { */
     .backdrop::before {
-      box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
+      /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
       content: "";
-      background: url('../public/img/CodeEditor01.jpeg');
+      /* background: url('../public/img/CodeEditor01.jpeg'); */
       size: cover;
       opacity: 0.5;
       top: 0;
@@ -484,10 +484,11 @@
   
       /* .editor-wrapper::after { */
       .backdrop::after {
-        box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
+        /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
       content: "";
         background: url('../public/img/Svelte_Logo1.svg') no-repeat center;
-        size: contain;
+        /* size: contain; */
+        background-size: 50%;
         opacity: 0.4;
         top: 0;
         left: 0;
@@ -654,7 +655,7 @@
     }
   
   
-    #terminal-window::-webkit-scrollbar , #dummyGraph::-webkit-scrollbar {
+    #terminal-window::-webkit-scrollbar , #treeParent::-webkit-scrollbar {
     display: block;
     width: 15px;
     overflow: auto;
@@ -662,31 +663,31 @@
     margin-top: 20px;
     padding-top: 20px;
   }
-  #terminal-window::-webkit-scrollbar-thumb , #dummyGraph::-webkit-scrollbar-thumb {
+  #terminal-window::-webkit-scrollbar-thumb , #treeParent::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar_scrollybit_color);
     border: var(--scrollbar_box_border);
   }
   
-  #terminal-window::-webkit-scrollbar-track, #dummyGraph::-webkit-scrollbar-track {
+  #terminal-window::-webkit-scrollbar-track, #treeParent::-webkit-scrollbar-track {
     background-color: rgb(209, 159, 59);
     margin-top: 2px;
     /* padding-top: 20px; */
   }
   
-  #terminal-window::-webkit-scrollbar-track-piece, #dummyGraph::-webkit-scrollbar-track-piece {
+  #terminal-window::-webkit-scrollbar-track-piece, #treeParent::-webkit-scrollbar-track-piece {
     border: var(--scrollbar_border);
     /* background-color: rgb(105, 225, 244); */
     background-color: var(--scrollbar_box_color);
   }
   
-  #terminal-window::-webkit-scrollbar-corner, #dummyGraph::-webkit-scrollbar-corner {
+  #terminal-window::-webkit-scrollbar-corner, #treeParent::-webkit-scrollbar-corner {
     width: 20px;
     height: 20px;
     border: 3px solid white;
     background-color: rgb(209, 59, 179);
   }
   
-  #terminal-window::-webkit-resizer, #dummyGraph::-webkit-resizer {
+  #terminal-window::-webkit-resizer, #treeParent::-webkit-resizer {
     width: 20px;
     height: 20px;
     background-color: rgb(59, 104, 209);

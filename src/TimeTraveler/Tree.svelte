@@ -171,7 +171,7 @@
   function drawTree(treeData) {
 
     // set the dimensions and margins of the diagram
-    const treeParent = document.querySelector('#d3Tree');
+    const treeParent = document.querySelector('#treeParent');
     // const buttonContainer = document.querySelector('.buttonContainer')
 
     var margin = {top: 60, right: 90, bottom: 50, left: 90},
@@ -196,7 +196,7 @@
     var svg = d3
         .select(el)
         .append('svg')
-        .attr('id', 'd3Tree')
+        .attr('id', 'D3Tree')
         // var svg = d3.select("body").append("svg")
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom),
@@ -210,7 +210,7 @@
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
-      .style('stroke', 'cyan')
+      .style('stroke', 'rgb(152, 133, 176)')
       .attr('class', 'link')
       .attr('d', function (d) {
         return (
@@ -394,7 +394,7 @@
   } */
   :global(.node circle) {
     /* fill: #fff; */
-    fill: whitesmoke;
+    fill: #FFFFFF;
     stroke: dark rgb(30, 30, 118);
     stroke-width: 3px;
   }
