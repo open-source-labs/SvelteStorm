@@ -210,7 +210,7 @@
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
-      .style('stroke', 'rgb(152, 133, 176)')
+      .style('stroke', '#9300ff')
       .attr('class', 'link')
       .attr('d', function (d) {
         return (
@@ -395,7 +395,7 @@
   :global(.node circle) {
     /* fill: #fff; */
     fill: #FFFFFF;
-    stroke: dark rgb(30, 30, 118);
+    stroke: dark rgb(38, 38, 119);
     stroke-width: 3px;
   }
 

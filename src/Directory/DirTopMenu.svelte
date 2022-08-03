@@ -9,7 +9,7 @@
   export let size = "40px";
   export let width = size;
   export let height = size;
-  export let color = "white";
+  export let color = "#9300ff";
   export let viewBox = "-8 -8 40 40";
 
   const fs = require('fs');

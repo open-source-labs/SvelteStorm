@@ -88,6 +88,8 @@
         border-radius: 5px;
         padding: 3px;
         margin: 3px;
+        min-width: 200px;
+        max-width: 300px;
     }
 
     .compName {
