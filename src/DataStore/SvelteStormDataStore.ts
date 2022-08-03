@@ -29,7 +29,7 @@ const currentTabFilePath: Writable<string> = writable<string>('');
 const editorCache: Writable<EditorCacheType> = writable<EditorCacheType>({});
 
 //CodeMirror.fromTextArea is object being submitted in CodeMirror.svelte to this store
-const codeMirrorEditor: Writable<EditorObj> = writable<object>(undefined);
+const codeMirrorEditor: Writable<EditorObj> = writable<object>({});
 
 const snapshots = writable([]);
 

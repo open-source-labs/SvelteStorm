@@ -80,7 +80,6 @@ function saveAndDispatchState(e) {
     sendMessages(parse(curState));
     cacheState.push([...curState]);
     lastIndex = cacheState.length - 1;
-    console.log("cacheState after snapshot added:", cacheState);
   }
 
 }

@@ -1,3 +1,7 @@
+    <!-- * ==================================================
+    *   Unused Skeleton component to hold snapshot buttons. Could be used in future iterations
+    * ================================================== -->
+
 <script>
   import {
     snapshots,
@@ -15,11 +19,8 @@
 
 const dispatch = createEventDispatcher();
 // let $collectionOfAllSnaps;
-// console.log('🔴🟠🟡🟢🔵🟣 | file: CardHolder.svelte | line 5 | snapshot', snapshot);
 
 function sendWindowUpdateRequest(idx) {
-  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣READY TO SEND WIN UPDATE🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
-  console.log(`\n🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣${idx}🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣🟣`);
   dispatch('PleaseUpdateWindowFromSnapButton', {index: idx});
     // ipcRenderer.send('PleaseUpdateWindowFromSnapButton', (event, idx));
   }; 
@@ -27,12 +28,7 @@ function sendWindowUpdateRequest(idx) {
   
 </script>
 
-<div id="buttonsAndTree">
-  <!-- /*
-    * ==================================================
-    *   Display the State "Snapshorts"
-    * ==================================================
-    */ -->
+<div id="buttonsAndTree"></div>
 
     {#if collectionOfAllSnapshots.length}
     <div class="buttonContainer">

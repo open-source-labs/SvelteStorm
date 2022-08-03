@@ -15,7 +15,6 @@
 
 <style>
     .cardHolder {
-        /* background-color: rgb(37, 81, 137); */
         padding: 3px;
         margin: 3px;
     }

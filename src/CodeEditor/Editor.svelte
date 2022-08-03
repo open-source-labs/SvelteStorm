@@ -5,7 +5,7 @@
     openTabs,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../DataStore/SvelteStormDataStore.js";
+  } from "../DataStore/SvelteStormDataStore";
   import type { NewFile, Modes } from '../types'
   import { editorCache } from "../DataStore/SvelteStormDataStore";
 
@@ -53,7 +53,6 @@
 
   // remove and reset tab order 
   function deleteTab(tab): void {
-    //console.log('delete tab: ', tab);
     $openTabs = $openTabs.filter((t) => t.tabId != tab.tabId).map((t, i) => ({
       editorValue: t.editorValue,
       ext: t.ext,

@@ -27,7 +27,7 @@
     editorCache,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../DataStore/SvelteStormDataStore.js";
+  } from "../DataStore/SvelteStormDataStore";
 
   export let value;
   export let language;
@@ -163,7 +163,6 @@
         // if (!cacheCode) {
         //   // cache the file and it's value (value=the raw code that'll appear in the editor)
         //   $editorCache[$currentTabFilePath] = value;
-        //   console.log("afterUpdate If: value: ", value);
         //   // set value of current editor to display the current code
         //   $codeMirrorEditor.setValue(value);
         // } else {
