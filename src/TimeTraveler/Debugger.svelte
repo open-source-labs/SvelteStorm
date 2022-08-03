@@ -1,4 +1,4 @@
-<!-- This file contains the Snapshots,  -->
+<!-- This is the main container for the debugger. It contains the snahoshots and d3 tree. -->
 <script>
   import * as d3 from 'd3';
   import {
@@ -6,7 +6,7 @@
     saveToFileName,
     snapshots,
   } from '../DataStore/SvelteStormDataStore';
-  import CardHolder from '../Version4UtilityFunctions/CardHolder.svelte'
+  import CardHolder from './CardHolder.svelte'
   export let hierarchy = {};
 
   const {ipcRenderer, BrowserWindow} = require('electron');

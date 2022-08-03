@@ -138,7 +138,7 @@
 
       if (!updateRollupConfigRun) {
         // Reads current rollup.config.js file and writes it to rollup.config.new.js with two additions: 1-imports custom rollup plug-in and path 2-adds banner to plugin section
-        // The purpose of this is to "wrap" the app being debugged in our code with adds event listeners to reports state changes back to Svelte Storm
+        // The purpose of this is to "wrap" the app being debugged in our code to add event listeners to report state changes back to Svelte Storm (using append and prepend files within pubic)
         updateRollupConfig(path);
         updatePackageJson(path);
         // Builds componentRelationships (nested objects to represent what components are imported into each component) which is used to build the d3 representation of state
@@ -218,7 +218,7 @@
         const componentRelationships = {};
         const relationships = {};
 
-        // adds all file parent child relationships to relationships array
+        // adds all component relationships to relationships array
         fileArr.forEach((file) => {
           const [fileName, fileContent] = file;
           const newRelationship = getRelationship(fileName, fileContent);
@@ -258,7 +258,6 @@
       }
 
       // helper function for buildComponentRelationships to get parent child relationship within a Svelte component file
-      // Note: assumes that only children (not grandchildren and further) exist within a Svelte component file
       function getRelationship(file, content) {
         const regexImports = /\bimport\s+.+\.svelte\'\;*$/gm
         const importsArray = content.match(regexImports);

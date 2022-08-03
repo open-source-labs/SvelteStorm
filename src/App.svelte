@@ -4,7 +4,7 @@
   import Editor from "./CodeEditor/Editor.svelte";
   import StateManager from "./StateManager/StateManager.svelte";
   const { app, ipcMain, ipcRenderer, BrowserWindow } = require("electron");
-  import Tree from "./TimeTraveler/Tree.svelte";
+  import Debugger from "./TimeTraveler/Debugger.svelte";
 
   import { showEditorBackground } from './DataStore/SvelteStormDataStore'
 
@@ -305,7 +305,7 @@
                   <StateManager />
                 </div>
                 <div class="box" id="treeParent">
-                  <Tree />
+                  <Debugger />
                 </div>
               {/if}
             </form>
