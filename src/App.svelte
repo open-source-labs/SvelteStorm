@@ -408,7 +408,7 @@
   
     .wrapper-left {
       height: 100%;
-      width: 40%;
+      width: 50%;
       display: flex;
       flex-direction: column;
       /* background-color: #0d1117; */
