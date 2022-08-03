@@ -5,18 +5,12 @@
   import FilePlusOutline from 'svelte-material-icons/FilePlusOutline.svelte'
   import FolderRefreshOutline from 'svelte-material-icons/FolderRefreshOutline.svelte'
   import { get } from "svelte/store";
-  // import type { KeyboardEvent, KeyboardInputEvent } from "electron";
-
 
   export let size = "40px";
   export let width = size;
   export let height = size;
-  export let color = "cyan";
+  export let color = "#9300ff";
   export let viewBox = "-8 -8 40 40";
-
-
-
-
 
   const fs = require('fs');
   let mainDir: string = '';
@@ -34,7 +28,6 @@
     fileState = data.fileState;
   });
   const refreshDir = (): void => {
-    console.log('clickig now');
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -43,7 +36,6 @@
     });
   };
   const addFolder = (): void => {
-    console.log('clicking addFolder', DirectoryData);
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -51,10 +43,8 @@
         activeFile: '',
       };
     });
-    console.log('Directory Data after update ', DirectoryData);
   };
   const addFile = (): void => {
-    console.log('clicking addFile');
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -72,7 +62,6 @@
       };
     });
     if (e.key !== 'Enter') return;
-    // (e.target as HTMLInputElement).value;
     newName = (e.target as HTMLInputElement).value;
 
     fs.writeFileSync(path + '/' + newName, '', (err) => {
@@ -130,16 +119,6 @@
 
 <div class="fileMenu">
 
-  <!-- <div
-    class="fileArea"
-    on:click={createMainFile || createMainFolder ? resetStatus : undefined}
-  >
-
-    {process.platform === 'win32'
-      ? mainDir.substring(mainDir.lastIndexOf('\\') + 1)
-      : mainDir.substring(mainDir.lastIndexOf('/') + 1)}
-  </div> -->
-
   <div class="refresh" on:click={refreshDir}>
     <FolderRefreshOutline {color} {size} {width} {height} {viewBox} />
   </div>
@@ -186,23 +165,17 @@
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-evenly;
-    background-color: rgba(45, 45, 52, 0.678);
-    /* padding-right: -30px; */
-    /* margin-right: -30px; */
+    background-color: #27263a;
     margin-top: 1px;
-    /* 
-    padding-bottom: 2px; 
-    */
-    /* padding: auto; */
     width: 100%;
     font-size: 10px;
   }
-  .fileArea {
+  /* .fileArea {
     float: left;
     height: 30px;
     font-size: 14px;
     color: white;
-  }
+  } */
 
   .refresh:hover,
   .addFile:hover,
@@ -212,14 +185,6 @@
     border-radius: 8px;
     cursor: pointer;
   }
-
-  /* .addFile:hover {
-    background-color: rgba(175, 175, 175, 0.5)
-  }
-
-  .addFolder:hover {
-    background-color: rgba(175, 175, 175, 0.5)
-  } */
 
   .refresh {
     /* float: right; */

@@ -27,11 +27,7 @@
       // The result can be accessed through the `m`-variable.
       if(!$saveToFileName){
       m.forEach((match, groupIndex) => {
-          // console.log(
-          //   '🔴🟠🟡🟢🔵🟣 | file: XTerm.svelte | line 23 | m.forEach | match, group',
-          //   `${groupIndex}: ${match}`
-          // );
-          // console.log(`Found match, group ${groupIndex}: ${match}`);
+
           localhostToUse = match;
           const pjson = require(`${$appBeingDebugedPath}/package.json`);
 
@@ -42,8 +38,7 @@
 
           // Set the name of the file in which we will store our states for THIS debug session.
           $saveToFileName = path.resolve(__dirname, `./CapturedSnaps/${filename}`);
-          ipcRenderer.send('openDaDebugAppWindow', localhostToUse);
-          // console.log('🔴🟠🟡🟢🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🟣 | file: XTerm.svelte | line 44 | m.forEach | saveToFileName', $saveToFileName);
+          ipcRenderer.send('openDebugAppWindow', localhostToUse);
         });
       }
     }

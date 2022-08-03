@@ -5,28 +5,14 @@
     saveToFileName,
     snapshots,
   } from '../DataStore/SvelteStormDataStore';
-  // import { createSnapshotCards } from '../Version4UtilityFunctions/createSnapshotCards.svelte'
   import CardHolder from '../Version4UtilityFunctions/CardHolder.svelte'
-  // import SnapButtonList from '../Version4UtilityFunctions/SnapButtonList.svelte'
-  // import Card from '../Version4UtilityFunctions/Card.svelte'
   export let hierarchy = {};
 
   const {ipcRenderer, BrowserWindow} = require('electron');
 
-  // function handleMessage(event) {
-  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵${event.detail.index}🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-  //   updateWindow(event.detail.index);
-
-  // }
-
-
   const fs = require('fs');
   const path = require('path');
   const SerAny = require('serialize-anything');
-  // import { indexes } from "d3";
-  // let snapshotList;
   let activeIndex = 0;
   let collectionOfAllSnapshots;
   $: compState = collectionOfAllSnapshots[activeIndex];
@@ -36,7 +22,7 @@
   let el;
 
   DirectoryData.subscribe((data) => {
-    hierarchy = data.parentChildTree;
+    hierarchy = data.componentRelationships;
   });
 
   snapshots.subscribe((arr) => {
@@ -47,17 +33,6 @@
     FileNPathNameToStoreSnapshots = pathNFileName;
   });
 
-
-  // ipcRenderer.on('PleaseUpdateWindowFromSnapButton', (data) => {
-  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵${data}🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-  //   console.log(`\n🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵🔵`);
-  //   updateWindow(data);
-  // })
-
-
-
-
   /*
    * ==================================================
    *   When the snapshot data is received, update the snapshots in the store
@@ -66,32 +41,13 @@
    * ==================================================
    */
   ipcRenderer.on('SNAPSHOT', (event, data) => {
-    // snapshots.update(() => {
-    //   return [...collectionOfAllSnapshots, data.body];
-    // });
     const singleCapturedSnapshot = createSnapshot(data);
-    console.log("SNAPSHOT INVOKED");
-    console.log("SNAPSHOT: singleCapturedSnapshot", singleCapturedSnapshot);
     // Update the store with newest snapshot if actually different
     if(JSON.stringify(collectionOfAllSnapshots[collectionOfAllSnapshots.length - 1]) !== JSON.stringify(singleCapturedSnapshot)) {
-      console.log('SNAP IF: SINGLE CAPTURED SNAP:', singleCapturedSnapshot)
-      console.log('SNAP IF: LAST COLLECTION OF SNAPS:', collectionOfAllSnapshots[collectionOfAllSnapshots.length - 1])
       snapshots.update(() => {
         return [...collectionOfAllSnapshots, singleCapturedSnapshot];
       });
-    }
-    console.log("SNAPSHOT:collectionOfAllSnapshots", collectionOfAllSnapshots);
-    // const currentSnapshots = get(snapshots);
-    // console.log("SNAPSHOT: snapshots store:", currentSnapshots)
-
-    // const stringSnapshot = JSON.stringify(collectionOfAllSnapshots);
-    
-    
-        let stringSnapshot = SerAny.serialize(collectionOfAllSnapshots, {maxDepth: 500, pretty: true});
-
-
-    // fs.writeFileSync(FileNPathNameToStoreSnapshots, stringSnapshot);
-      // console.log('🔴🟠🟡🟢🔵🟣 | AFTER WRITE SNAP FUNC CALL ');
+    } ; 
 
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
@@ -99,24 +55,14 @@
       activeIndex += 1;
     }
 
-    // console.log("SNAPSHOT: Input collection:", collectionOfAllSnapshots);
-    // console.log("SNAPSHOT: Input activeIndex:", activeIndex);
-    // console.log("SNAPSHOT: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
-
     let treeData = createD3relationship(
       collectionOfAllSnapshots,
       'App',
       activeIndex
     );
-    // console.log("SNAPSHOT: Tree Data:", treeData);
     drawTree(treeData);
   });
 
-  /*
-   * ==================================================
-   *   Blah
-   * ==================================================
-   */
   function createSnapshot(data) {
     const singleCapturedSnapshot = [];
     data.body.componentStates.forEach((comp) => {
@@ -130,16 +76,15 @@
 
   /*
    * ==================================================
-   *   Blah
+   *   The following code intends to write and save snapshots
+   *   for developers to save their sanpshots and replay them.
+   *   We ran into an issue where we were unable to inject state into
+   *   Svelte components before they exist.
    * ==================================================
    */
   // function writeSnapToDisk(singleCapturedSnapshot) {
   //   // stringify the snapshot
   //   const stringSnapshot = JSON.stringify(singleCapturedSnapshot);
-  //   console.log('🔴🟠🟡🟢🔵🟣 | BEEN STRINGED ');
-
-    
-
 
   //   // Check if file exists is yes, set 'fileExists = true'
   //   // fs.existsSync(path) -> returns boolean
@@ -170,6 +115,13 @@
   //     return collectionOfAllSnapshots;
   //   });
   // }
+
+  /*
+   * ==================================================
+   *   End write and save snapshots feature
+   * ==================================================
+   */
+
 
   function createD3relationship(componentArray, compName, activeIndex) {
     const d3FormatTree = {};
@@ -217,22 +169,9 @@
   }
 
   function drawTree(treeData) {
-    // var treeData = {
-    //   "name": "Top Level",
-    //   "children": [
-    //     {
-    //   "name": "Level 2: A",
-    //       "children": [
-    //         { "name": "Son of A" },
-    //         { "name": "Daughter of A" }
-    //       ]
-    //     },
-    //     { "name": "Level 2: B" }
-    //   ]
-    // };
 
     // set the dimensions and margins of the diagram
-    const treeParent = document.querySelector('#dummyGraph');
+    const treeParent = document.querySelector('#treeParent');
     // const buttonContainer = document.querySelector('.buttonContainer')
 
     var margin = {top: 60, right: 90, bottom: 50, left: 90},
@@ -271,7 +210,7 @@
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
-      .style('stroke', 'cyan')
+      .style('stroke', '#9300ff')
       .attr('class', 'link')
       .attr('d', function (d) {
         return (
@@ -330,17 +269,12 @@
    * ==================================================
    */
   function updateWindow(index) {
-    console.log("updateWindow index:", index);
-    console.log("updateWindow:collectionOfAllSnapshots", collectionOfAllSnapshots);
     ipcRenderer.send('TIME_TRAVEL', index);
     //re-render snapshot in the debugger when click on a snapshot button
     const currentSVG = document.querySelector('#D3Tree');
     if (currentSVG) {
       currentSVG.remove();
     }
-    // console.log("UpdateWindow: Input collection:", collectionOfAllSnapshots);
-    // console.log("UpdateWindow: Input activeIndex:", activeIndex);
-    // console.log("UpdateWindow: collection[activeIndex]", collectionOfAllSnapshots[activeIndex]);
     let treeData = createD3relationship(
       collectionOfAllSnapshots,
       'App',
@@ -367,15 +301,10 @@
       'App',
       activeIndex
     );
-    // console.log("SNAPSHOT: Tree Data:", treeData);
     drawTree(treeData);
-
   }
 
 </script>
-<!-- <SnapButtonList {collectionOfAllSnapshots} /> -->
-
-<!-- <SnapButtonList {collectionOfAllSnapshots} /> -->
 
 <div id="buttonsAndTree">
 
@@ -387,20 +316,22 @@
     
     {#if collectionOfAllSnapshots.length}
     <div class="buttonContainer">
-    <button
+    <button class="refreshbtn"
       on:click={() => {
         refresh();
         }}>Reset</button
     >
-                      {#each collectionOfAllSnapshots as snapshot, idx}
-                        <button
-                          on:click={() => {
-                            activeIndex = idx;
-                            updateWindow(activeIndex);
-                          }}>Snapshot {idx + 1}</button
-                        >
-                        <CardHolder {snapshot} />
-                      {/each}
+    {#each collectionOfAllSnapshots as snapshot, idx}
+      <button
+        on:click={() => {
+          activeIndex = idx;
+          updateWindow(activeIndex);
+        }}>Snapshot {idx + 1}</button
+      >
+      {#if idx === activeIndex}
+      <CardHolder {snapshot} />
+      {/if}
+    {/each}
     </div>
   {/if}
   
@@ -414,6 +345,10 @@
 * ==================================================
 */ -->
 <style>
+  .refreshbtn{
+    background-color: #3632a2;
+    color: whitesmoke;
+  }
   #buttonsAndTree {
     display: flex;
     flex-direction: row;
@@ -459,8 +394,8 @@
   } */
   :global(.node circle) {
     /* fill: #fff; */
-    fill: rgb(240, 10, 121);
-    stroke: steelblue;
+    fill: #FFFFFF;
+    stroke: dark rgb(38, 38, 119);
     stroke-width: 3px;
   }
 
@@ -479,7 +414,7 @@
 
   :global(.link) {
     fill: none;
-    stroke: #ccc;
+    stroke: rgb(38, 38, 134);
     stroke-width: 2px;
   }
 </style>

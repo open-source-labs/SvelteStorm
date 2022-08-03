@@ -10,18 +10,10 @@ let components = [];
 let compComponents = [];
 let compCTX = [];
 let lastIndex = 0;
-
 let eventCounter = 0;
 
 // sends SNAPSHOT message to ipcMain, with all data needed for debugging visualization
 const sendMessages = (componentStates) => {
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 21 | sendMessages | eventCounter', eventCounter);
-      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 22 | sendMessages | componentStates', componentStates);
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-      console.log(`\n🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡`);
-
   ipcRenderer.send('SNAPSHOT', {
     body: {
       componentStates,
@@ -64,18 +56,10 @@ function checkIfChanged(componentState, i) {
 // invoked whenever there is a perceived state change
 function saveAndDispatchState(e) {
   eventCounter++;
-  console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
-  console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
-  console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 69 | saveAndDispatchState | eventCounter', eventCounter);
-      console.log('🔴🟠🟡🟢🔵🟣 | file: SvelteStormdebugPrepend.js | line 68 | saveAndDispatchState | e', e);
-      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
-      console.log(`\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`);
   
   const curState = [];
   components.forEach((component) => {
-    // console.log('COMPONENT', component)
-    // console.log('CAPTURE STATE:', component.$capture_state())
-    // if(component.$$.on_destroy === null) console.log('destoryed comp:', component)
+    // only push components to curState if they are still on the page (ensures removed elements are removed from the snapshot)
     if(component.$$.on_destroy !== null){
       curState.push([
         component,
@@ -92,11 +76,6 @@ function saveAndDispatchState(e) {
   }
 
   if (JSON.stringify(curState) != compCacheState && lastCacheStateLength != curState.length) {
-    // if (cacheState.length > lastIndex) {
-    //   cacheState = cacheState.slice(0, lastIndex + 1);
-    //   const lastSnapshot
-    //   for (cacheState[cacheState.length - 1])
-    // }
 
     sendMessages(parse(curState));
     cacheState.push([...curState]);
@@ -104,40 +83,15 @@ function saveAndDispatchState(e) {
     console.log("cacheState after snapshot added:", cacheState);
   }
 
-  // // currState = [[component 1],[component 2], etc...] | component 1 = [component, component.capture state, name]
-  // if (curState.some(checkIfChanged)) {
-  //   console.log("DELOREAN RECOGNIZED STATE CHANGE");
-  //   console.log("DELOREAN curState: ", curState);
-  //   // If cacheState is logner than the last index, we are back in time and should start a new branch
-  //   if (cacheState.length > lastIndex) {
-  //     // cacheState = cacheState.slice(0, lastIndex);
-  //     cacheState = cacheState.slice(0, lastIndex + 1);
-  //   }
-  //   sendMessages(parse(curState));
-  //   cacheState.push([...curState]);
-  //   lastIndex = cacheState.length - 1;
-  // }
 }
 
+// listeners that detect state changes in svelte components.
 function setupListeners(root) {
   root.addEventListener('SvelteRegisterBlock', (e) => {
     saveAndDispatchState()
   });
   root.addEventListener('SvelteDOMSetData', (e) => saveAndDispatchState(e));
   root.addEventListener('SvelteDOMInsert', (e) => saveAndDispatchState(e));
-  // root.addEventListener('SvelteDOMRemove', (e) => {
-  //   // console.log("SvelteDOMRemove", e);
-  //   saveAndDispatchState()
-  // });
-  
-  /*
-   * These event listeners aren't being used in this version, but could provide valuable data for future versions of this product
-   * root.addEventListener('SvelteDOMRemove', (e) => (e) => sendMessages(parseEvent(e.detail)));
-   * root.addEventListener('SvelteDOMRemoveEventListener',(e) => sendMessages(parseEvent(e.detail)));
-   * root.addEventListener('SvelteDOMSetProperty', (e) => sendMessages(parseEvent(e.detail)));
-   * root.addEventListener('SvelteDOMSetAttribute', (e) => sendMessages(parseEvent(e.detail)));
-   * root.addEventListener('SvelteDOMRemoveAttribute', (e) => sendMessages(parseEvent(e.detail)));
-   */
 }
 
 // activate event listeners

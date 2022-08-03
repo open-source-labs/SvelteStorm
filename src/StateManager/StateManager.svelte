@@ -46,7 +46,7 @@
   }
 
   .title {
-    color: rgb(139, 148, 158);
+    color: whitesmoke;
     margin-bottom: 0;
     margin-top: 0;
     padding-top: 0;

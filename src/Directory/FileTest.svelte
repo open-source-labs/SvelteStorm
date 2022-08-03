@@ -33,7 +33,6 @@
 
   const dblClickHandler = (path: string): void => {
     const openFilePath = path;
-    console.log("openFilePath", openFilePath);
     DirectoryData.update((currentData) => {
       return {
         ...currentData,

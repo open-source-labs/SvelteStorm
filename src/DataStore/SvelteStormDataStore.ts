@@ -19,7 +19,7 @@ const DirectoryData: Writable<State> = writable<State>({
   createMainFolder: false,
   reload: false,
   activeFolder: '',
-  parentChildTree: {},
+  componentRelationships: {},
 });
 
 const openTabs: Writable<NewFile[]> = writable<NewFile[]>([]);
@@ -39,16 +39,9 @@ let appBeingDebugedPath: Writable<string> = writable<string>('');
 
 let saveToFileName: Writable<string> = writable<string>('');
 
-// const collectedSnap: Writable<SnapForPassingAround> = writable<SnapForPassingAround>([]);
+const collectionOfSnaps: Writable<State> = writable<State>({})
 
-const collectionOfSnaps: Writable<State> = writable<State>({
-
-})
-
-// const collectionOfAllSnaps: Writable<Array> = writable<Array>([]);
-// const collectionOfAllSnaps: Writable = writable([]);
 const collectionOfAllSnaps = writable([]);
-
 
 export {
   DirectoryData,
@@ -63,7 +56,6 @@ export {
   collectionOfSnaps,
   collectionOfAllSnaps,
 };
-
 
 /*
 * ==================================================
