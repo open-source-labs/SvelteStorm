@@ -5,8 +5,10 @@ const {
   ipcMain,
   nativeTheme,
   webContents,
+  Menu
 } = require('electron');
 const createApplicationMenu = require('./application-menu');
+// const Menu = electron.Menu;
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -44,7 +46,7 @@ let browser;
 //app.on is a start of the main process that controls the lifecycle events
 //Fires once when app is ready..
 app.on('ready', () => {
-  createApplicationMenu();
+  // createApplicationMenu();
   newWindow = createWindow();
 });
 
@@ -63,6 +65,30 @@ app.on('activate', (event, hasVisibleWindows) => {
     createWindow();
   }
 });
+
+const menu = Menu.buildFromTemplate([
+  {
+      label: 'SvelteStorm',
+      submenu: [
+          {
+              label: 'About SvelteStorm',
+              click: () =>
+                  openAboutWindow({
+                      icon_path: '../public/img/SvelteStorm4Logos/SvelteStorm4Logo10x128.png',
+                      package_json_dir: __dirname,
+                      use_version_info: [
+                          ['Version Number', '4.0.0'],
+                      ],
+                      description: 'World\'s First Dedicated Svelte IDE.\nVersion 4.0.0 includes a Time Travel Debugging tool.\nThis application uses Open Source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.\nProject: Delorean https://github.com/oslabs-beta/DeLorean\nCopyright (c) 2022 OSLabs Beta\nLicense (MIT) https://github.com/oslabs-beta/DeLorean/blob/main/LICENSE'
+                  }),
+          },
+          {
+              role: 'quit',
+          },
+      ],
+  },
+]);
+app.applicationMenu = menu;
 
 const increaseFontSize = (exports.increaseFontSize = () => {
   fontSize++;
