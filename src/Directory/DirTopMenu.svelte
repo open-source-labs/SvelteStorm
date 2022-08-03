@@ -165,7 +165,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-evenly;
-    background-color: rgba(45, 45, 52, 0.678);
+    background-color: #27263a;
     margin-top: 1px;
     width: 100%;
     font-size: 10px;

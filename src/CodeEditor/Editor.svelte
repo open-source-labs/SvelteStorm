@@ -233,17 +233,13 @@
     margin-bottom: 0;
     list-style: none;
     border-bottom: 1px solid #dee2e6;
-    background-color: rgb(
-      27,
-      26,
-      26
-    ); /* this is the background color of the tab zone*/
+    background-color: #27263a; /* this is the background color of the tab zone*/
     /* border-radius: 5px; */
   }
 
   li {
     margin-bottom: -1px;
-    background-color: rgb(37, 37, 37);
+    background-color: #1f2330;
     color: #fff;
   }
 
@@ -265,7 +261,7 @@
 
   li.active > span {
     color: #ffffff;
-    background-color: rgb(53, 50, 50);
+    background-color: #282a36;
     border-color: #dee2e6 #dee2e6 #fff;
   }
 

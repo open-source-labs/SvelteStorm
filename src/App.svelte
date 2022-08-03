@@ -298,7 +298,7 @@
                   <button
                     type="button"
                     class="childButton"
-                    on:click={handleDocuments}>Documentation <span class="material-symbols-outlined">manage_search</span></button
+                    on:click={handleDocuments}>Docs <span class="material-symbols-outlined">manage_search</span></button
                   >         
                 </div>
                 <div id="stateManager">
@@ -391,9 +391,7 @@
       height: 100%;
       width: 100%;
     }
-    .grid-parent {
-      /* float: left; */
-    }
+   
   
     /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
     /* Wrapper Window - SvelteTeam */
@@ -487,8 +485,9 @@
         /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
       content: "";
         background: url('../public/img/Svelte_Logo1.svg') no-repeat center;
+        /* background: url('../public/img/SvelteStorm4.0.png') no-repeat center; */
         /* size: contain; */
-        background-size: 50%;
+        background-size: 40%;
         opacity: 0.4;
         top: 0;
         left: 0;
@@ -528,7 +527,7 @@
       z-index: 9999;
       padding-left: 1px;
       padding-right: 1px;
-      width: 0.3px;
+      width: 1px;
       height: 100%;
       background-color: rgb(152, 133, 176);
     }
@@ -537,7 +536,7 @@
       z-index: 9999;
       padding-left: 1px;
       padding-right: 1px;
-      width: 0.3px;
+      width: 1px;
       height: 100%;
       background-color: rgb(152, 133, 176);
     }
@@ -562,7 +561,6 @@
   
     /* Text Editor - SvelteTeam */
     .b {
-      overflow: auto;
       overflow: auto;
       flex-grow: 1;
       background-color: #0d1117;
@@ -642,16 +640,27 @@
       background: transparent;
       border: 1px;
       font-size: small;
-      border-style: inset;
+      /* border-style: inset; */
       border-color: grey;
+      cursor: pointer;
     }
     .searchButton {
       color: lightgray;
       background: transparent;
       border: 1px;
       font-size: small;
-      border-style: inset;
+      /* border-style: inset; */
       border-color: grey;
+      cursor: pointer;
+    }
+
+    .backButton:hover{
+      text-decoration: underline;
+    }
+
+
+    .searchButton:hover{
+      text-decoration: underline;
     }
   
   
@@ -669,14 +678,15 @@
   }
   
   #terminal-window::-webkit-scrollbar-track, #treeParent::-webkit-scrollbar-track {
-    background-color: rgb(209, 159, 59);
+    /* background-color: rgb(209, 159, 59); */
+    background-color: #27263a;
     margin-top: 2px;
     /* padding-top: 20px; */
   }
   
   #terminal-window::-webkit-scrollbar-track-piece, #treeParent::-webkit-scrollbar-track-piece {
     border: var(--scrollbar_border);
-    /* background-color: rgb(105, 225, 244); */
+    background-color: rgb(105, 225, 244);
     background-color: var(--scrollbar_box_color);
   }
   
