@@ -371,8 +371,8 @@
     width: 100%;
     height: 100%;
     opacity: 0.3;
-    background-image: url('../public/img/OSPbackground5.webp');
-    /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
+    background-image: url('../public/img/bg4.webp');
+    box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
     background-repeat: no-repeat;
     background-position: 50% 0;
     background-size: cover;
@@ -466,11 +466,11 @@
     
     /* .editor-wrapper::before { */
     .backdrop::before {
-      /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
+      box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
       content: "";
-      /* background: url('../public/img/CodeEditor01.jpeg'); */
+      background: url('../public/img/CodeEditor01.jpeg');
       size: cover;
-      opacity: 0.5;
+      opacity: 0.3;
       top: 0;
       left: 0;
       bottom: 0;
@@ -482,7 +482,7 @@
   
       /* .editor-wrapper::after { */
       .backdrop::after {
-        /* box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset; */
+        box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
       content: "";
         background: url('../public/img/Svelte_Logo1.svg') no-repeat center;
         /* background: url('../public/img/SvelteStorm4.0.png') no-repeat center; */

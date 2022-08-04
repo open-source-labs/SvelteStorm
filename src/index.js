@@ -5,6 +5,7 @@ const {
   ipcMain,
   nativeTheme,
   webContents,
+  Menu
 } = require('electron');
 const createApplicationMenu = require('./application-menu');
 const path = require('path');
