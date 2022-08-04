@@ -5,9 +5,9 @@
     openTabs,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../Utilities/DirectoryStore.js";
+  } from "../DataStore/SvelteStormDataStore";
   import type { NewFile, Modes } from '../types'
-  import { editorCache } from "../Utilities/DirectoryStore";
+  import { editorCache } from "../DataStore/SvelteStormDataStore";
 
   const { ipcRenderer } = require("electron");
   const fs = require("fs");
@@ -48,13 +48,11 @@
       $editorCache[$currentTabFilePath] = newFile.editorValue;
       $codeMirrorEditor.setValue($editorCache[$currentTabFilePath]);
     };
-    console.log('addTab complete');
   };
 
 
   // remove and reset tab order 
   function deleteTab(tab): void {
-    //console.log('delete tab: ', tab);
     $openTabs = $openTabs.filter((t) => t.tabId != tab.tabId).map((t, i) => ({
       editorValue: t.editorValue,
       ext: t.ext,
@@ -91,7 +89,6 @@
     activeTabValue = tab.tabId;
     activeEditor = activeTabValue;
 
-    console.log("handleClick complete");
   };
 
 
@@ -121,7 +118,6 @@
     },
   };
 
-
   // render file on open and add to store
   ipcRenderer.on("file-opened", function (evt:any, file: string, content) {
     filePath = file;
@@ -138,7 +134,6 @@
       tabId : count
     }
 
-    console.log("ipcRnderer: new tab added");
     addTab(newTab);
     if (file) {
       title = `${path.basename(file)} - ${title}`;
@@ -147,9 +142,7 @@
 
   
   // takes care of opening a file from within the file directory
-    DirectoryData.subscribe(async data => {
-    console.log('subscribing to the store');
- 
+    DirectoryData.subscribe(async data => { 
     // if at least 1 tab is already open, grab the current code and save it to the cache before switching to a new tab
     if($currentTabFilePath !== ''){
     const currentUserCode = await $codeMirrorEditor.getValue();
@@ -239,17 +232,13 @@
     margin-bottom: 0;
     list-style: none;
     border-bottom: 1px solid #dee2e6;
-    background-color: rgb(
-      27,
-      26,
-      26
-    ); /* this is the background color of the tab zone*/
+    background-color: #27263a; /* this is the background color of the tab zone*/
     /* border-radius: 5px; */
   }
 
   li {
     margin-bottom: -1px;
-    background-color: rgb(37, 37, 37);
+    background-color: #1f2330;
     color: #fff;
   }
 
@@ -271,7 +260,7 @@
 
   li.active > span {
     color: #ffffff;
-    background-color: rgb(53, 50, 50);
+    background-color: #282a36;
     border-color: #dee2e6 #dee2e6 #fff;
   }
 

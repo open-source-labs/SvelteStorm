@@ -38,7 +38,6 @@ describe('Test Example', function () {
 
   it("shows an initial window", async () => {
     const windowCount = await app.client.getWindowCount();
-    console.log(windowCount)
     expect(windowCount).to.equal(1);
   });
 

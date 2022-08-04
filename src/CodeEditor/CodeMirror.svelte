@@ -27,11 +27,12 @@
     editorCache,
     codeMirrorEditor,
     currentTabFilePath,
-  } from "../Utilities/DirectoryStore.js";
+  } from "../DataStore/SvelteStormDataStore";
 
   export let value;
   export let language;
   export let filePath;
+  
   let lastWord: string;
   let tipContent: string = "";
   let messageObj: MessageObj;
@@ -136,7 +137,6 @@
     if (!$editorCache[filePath]) {
       $editorCache[$currentTabFilePath] = value;
     }
-    console.log("onMount complete");
   });
 
   afterUpdate(async (): Promise<void> => {
@@ -163,7 +163,6 @@
         // if (!cacheCode) {
         //   // cache the file and it's value (value=the raw code that'll appear in the editor)
         //   $editorCache[$currentTabFilePath] = value;
-        //   console.log("afterUpdate If: value: ", value);
         //   // set value of current editor to display the current code
         //   $codeMirrorEditor.setValue(value);
         // } else {
@@ -176,13 +175,11 @@
     noUpdate = false;
     showToolTripTransition = false;
 
-    console.log("afterUpdate complete");
   });
 
   ipcRenderer.on("save-markdown", function (): void {
     messageObj = { content: $codeMirrorEditor.getValue(), file: filePath };
     ipcRenderer.send("synchronous-message", messageObj);
-    console.log("ipcRenderer complete");
   });
 
   function handleMouseMove(e): void {
@@ -211,7 +208,6 @@
   }
   function onType(): void {
     hoverCounter += 13;
-    console.log("this is from onType hoverCounter is now", hoverCounter);
   }
 </script>
 
@@ -252,4 +248,5 @@
     position: relative;
     z-index: 0;
   }
+
 </style>

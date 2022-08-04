@@ -55,6 +55,9 @@
   export interface StateObjInterface {
     [key: string]: string[];
   }
+  export interface ComponentRelationshipsInterface {
+    [key: string]: {};
+  }
   export interface EditorCacheType {
     [key: string]: string;
   }
@@ -81,7 +84,8 @@ export type State = {
   createMainFolder?: boolean,
   reload?: boolean,
   activeFolder?: string,
-  fileState?: FileState
+  fileState?: FileState,
+  componentRelationships?: ComponentRelationshipsInterface,
 }
 
 // imported in DirectoryStore.ts. EditorObj is used in 
@@ -94,3 +98,14 @@ export type EditorObj = {
   setOption?: Function
   getValue?: Function
 }
+
+// export type SnapForPassingAround = {
+//   componentStateObj: {},
+// };
+export type componentStateObj = {
+  componentName: {}
+}
+
+// export type SnapForPassingAround = [
+//   componentStateObj
+// ]

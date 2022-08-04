@@ -1,3 +1,23 @@
+:root{
+  --syntax_normal:#1b1e23;
+  --syntax_comment:#a9b0bc;
+  --syntax_number:#20a5ba;
+  --syntax_keyword:#c30771;
+  --syntax_atom:#10a778;
+  --syntax_string:#008ec4;
+  --syntax_error:#ffbedc;
+  --syntax_unknown_variable:#838383;
+  --syntax_known_variable:#005f87;
+  --syntax_matchbracket:#20bbfc;
+  --syntax_key:#6636b4;
+  --mono_fonts:82%/1.5 Menlo,Consolas,monospace;
+  /* --scrollbar_border: 2px solid #0918e7; */
+  --scrollbar_border: 1px solid #383136;
+  --scrollbar_box_border: 1px solid #3843e3;
+  --scrollbar_box_color: rgba(99, 99, 99, 0.942);
+  --scrollbar_scrollybit_color: rgba(183, 183, 183, 0.942);
+}
+
 html,
 body {
   position: relative;
