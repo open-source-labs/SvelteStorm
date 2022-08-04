@@ -4,11 +4,8 @@ SvelteStorm 4.0
 </h1>
 
 ## Table of Contents
-- [Installation](#installation)
- - [Installing SvelteStorm 4 as a Svelte IDE](#installing-sveltestrorm-4-as-a-svelte-ide)
-   - [macOS](#macos)
-   - [Linux](#linux)
-   - [Windows](#windows)
+ - [New Features and Improvements](#new-features-and-improvements)
+ - [How To Use SvelteStorm](#how-to-use-sveltestorm)
  - [Installing SvelteStorm 4 for the Purpose of Enhancing SvelteStorm as an IDE](#installing-sveltestorm-4-for-the-purpose-of-enhancing-sveltestorm-as-an-ide)
    - [macOS](#macos-1)
    - [Windows (using WSL 2)](#windows-using-wsl-2)
@@ -29,8 +26,6 @@ SvelteStorm is a new and improved open-source integrated developer environment (
 3. Updated Browser window and Terminal
 4. Quality of Life changes
 5. A Cleaner & Bold Theme Style
- 
-# Installation
 
 ## How To Use SvelteStorm
 1. Click on the 'File' menu button in the top-left corner, then open a file or folder to begin editing. (You can also use CTRL+F to open a folder with a shortcut)
