@@ -117,7 +117,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 [Ryan Huie](https://www.github.com/8-ryan-8) | [Ian Jackson](https://github.com/irjackson) |
 ## Previous Authors
 [Andy Jiang](https://github.com/realandygithub) | [Colton Robbins](https://www.github.com/coltonro) | [Ricky Johnson](https://www.github.com/JSJedi) |
-[Zachary Radford](https://www.github.com/zachradf) | [Aye Moe](https://github.com/ayemmoe) |
+[Zachary Radford](https://www.github.com/zachradf) | [Arron Nestor](https://github.com/NesTar6) | [Aye Moe](https://github.com/ayemmoe) |
 [Frank Stepanski](https://github.com/frankstepanski) | [Kevin Sarchi](https://github.com/Svrchi) |
 [Sam Filip](https://github.com/samfilip) | [Cayla Co](https://github.com/caycodes) | [Swetha Kunda](http://github.com/swethakunda) |
 [Miller Johnston](https://github.com/MillerJ20) | [Sina Kahrobaei](https://github.com/Skaybee)
