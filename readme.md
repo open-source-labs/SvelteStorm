@@ -3,6 +3,8 @@
 SvelteStorm 4.0
 </h1>
 
+![SvelteStorm Homepage](./public/img/SvelteStormDemoPics/SS4.png)
+
 ## Table of Contents
  - [New Features and Improvements](#new-features-and-improvements)
  - [How To Use SvelteStorm](#how-to-use-sveltestorm)
@@ -36,8 +38,9 @@ SvelteStorm is a new and improved open-source integrated developer environment (
 6. For more information, click on SvelteStorm's Website via the 'Help' button
 for VSCode users the link below can provide insight to potential installation issues:
 https://github.com/open-source-labs/SvelteStorm/issues/57
- 
 
+![SvelteStorm Demo](./public/img/SvelteStormDemoPics/ssdemo.gif)
+ 
 ## Installing SvelteStorm 4 for the Purpose of Enhancing SvelteStorm as an IDE
  
 ### macOS
