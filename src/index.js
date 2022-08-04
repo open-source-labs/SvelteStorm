@@ -135,13 +135,6 @@ const createWindow = (exports.createWindow = () => {
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
     newWindow.show();
-    newWindow.selectPreviousTab();
-    newWindow.focusOnWebView();
-    // let rightPanel = newWindow.selectPreviousTab();
-    
-    // document.getElementById('wrapper-right');
-
-  
   });
 
   newWindow.on('focus', createApplicationMenu);
