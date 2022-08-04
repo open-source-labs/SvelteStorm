@@ -2,6 +2,8 @@ const { app, BrowserWindow, dialog, Menu, ipcRenderer, webContents, ipcMain } = 
 const main = require('electron-reload');
 const mainProcess = require('./index.js');
 const remote = require('electron').remote
+const path = require('path');
+const openAboutWindow = require('about-window').default;
 
 /*
    * ==================================================
@@ -216,7 +218,22 @@ const createApplicationMenu = () => {
           click(item, focusedWindow) {
             if (focusedWindow) focusedWindow.webContents.toggleDevTools();
           }
-        }
+        },
+        { type: 'separator' },
+        {
+            label: 'About SvelteStorm',
+            click: () => 
+                openAboutWindow({
+                    icon_path: path.resolve(__dirname,'../public/img/SvelteStorm4Logos/SvelteStorm4Logo10x64.png'),
+                    use_version_info: [
+                        ['Version Number', '4.0.0'],
+                    ],
+                    description: 'World\'s First Dedicated Svelte IDE.\nVersion 4.0.0 now includes a Time Travel Debugging tool.\n\nThis applicationuses Open Source components. You can find the source code oftheir open source projects along with license informationbelow. We acknowledge and are grateful to these developersfor their contributions to open source.\n\nProject: Delorean https://github.com/oslabs-beta/DeLorean\nCopyright (c) 2022 OSLabs Beta\n\nLicense (MIT) https://github.com/oslabs-betaDeLorean/blob/main/LICENSE'
+                })
+        },
+        {
+            role: 'quit',
+        },
       ],
     }
   ];
