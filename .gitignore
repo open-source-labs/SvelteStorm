@@ -2,7 +2,8 @@
 **/package-lock.json
 public/bundle.**
 public/svelte.**
-**/public
+public/CapturedSnaps/**.**
+
 release-builds
 ./public
 .DS_Store

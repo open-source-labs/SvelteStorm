@@ -5,14 +5,13 @@ const {
   ipcMain,
   nativeTheme,
   webContents,
+  Menu
 } = require('electron');
-// const handleDocuments = require('./App.svelte')
 const createApplicationMenu = require('./application-menu');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const pty = require('node-pty');
-// const { require } = require('@electron/remote');
 
 //dialog is basically an electron modal pop up displaying an error message
 //ipcMain is an event emitter that handles messages from the a renderer process
@@ -21,9 +20,11 @@ require('@electron/remote/main').initialize();
 require('@electron/remote/main').enable(webContents);
 
 //hot reload for electron development
-try {
-  require('electron-reloader')(module);
-} catch (err) {console.log(err) }
+// try {
+//   require('electron-reloader')(module);
+// } catch (err) {
+//   console.log(err);
+// }
 
 let userFile = '';
 
@@ -36,11 +37,16 @@ if (require('electron-squirrel-startup')) {
 const windows = new Set();
 const openFiles = new Map();
 
+// init newWindow - newWindow is the name of the entire Svelte Storm window (created in the creatWindow function)
+let newWindow;
+// init browser - window name of the developers app they open in Svelte Storm (created in the openBrowserWindow function)
+let browser;
+
 //app.on is a start of the main process that controls the lifecycle events
 //Fires once when app is ready..
 app.on('ready', () => {
   createApplicationMenu();
-  createWindow();
+  newWindow = createWindow();
 });
 
 //testing to see if on mac, don't close all the windows
@@ -53,7 +59,6 @@ app.on('window-all-closed', () => {
 
 //activate occurs when the application is activated or run for the first time
 //returns an event
-
 app.on('activate', (event, hasVisibleWindows) => {
   if (!hasVisibleWindows) {
     createWindow();
@@ -69,7 +74,6 @@ const decreaseFontSize = (exports.decreaseFontSize = () => {
 });
 
 //still in development mode
-
 const createWindow = (exports.createWindow = () => {
   process.env.NODE_ENV = 'development';
 
@@ -87,28 +91,52 @@ const createWindow = (exports.createWindow = () => {
   // you have to rename the symbols in the page before including other libraries:
   //window.nodeRequire = require; in html file
 
+  /*
+   * =================== SS4 ==========================
+   *   Create a new Browers Window for display in 
+   *   Electron, but don't show it yet. This function 
+   *   created the window the contains all of
+   *   SvelteStorm
+   * ==================================================
+   */
   let newWindow = new BrowserWindow({
-    x,
-    y,
+    width: 1400,
+    height: 1300,
+    x: 20,
+    y: 20,
     show: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      experimentalFeatures: true,
+      allowRunningInsecureContent: true,
+      webSecurity: false,
+      nodeIntegrationInSubFrames: true,
+      nodeIntegrationInWorker: true,
+      enableRemoteModule: true,
     },
   });
 
   //theme for the menu bar on top
   nativeTheme.themeSource = 'dark';
 
+  /*
+   * ==================================================
+   *   Load the initial HTML file into the window.
+   * ==================================================
+   */
   //loading index.html into the app
-  newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
+  // newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
+  newWindow.loadFile(path.join(__dirname, '../public/index.html'));
+
+  // newWindow.webContents.openDevTools();
+  // let watcher;
 
   //show window by calling the listener once
   newWindow.once('ready-to-show', () => {
     newWindow.show();
   });
 
-  
   newWindow.on('focus', createApplicationMenu);
 
   //save changes dialog modal message
@@ -130,58 +158,50 @@ const createWindow = (exports.createWindow = () => {
     }
   });
 
-  //chokidar is a library that watches the files
-  let watcher;
-  if (process.env.NODE_ENV === 'development') {
-    watcher = require('chokidar').watch(path.join(__dirname, '../public'), {
-      ignoreInitial: true,
-    });
-    watcher.on('change', () => {
-      newWindow.reload();
-    });
-  }
-
   newWindow.on('closed', () => {
-    if (watcher) {
-      watcher.close();
-    }
     windows.delete(newWindow);
     createApplicationMenu();
     newWindow = null;
   });
 
-  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
+  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
 
+  // this spawns the terminal window space
   var ptyProcess = pty.spawn(shell, [], {
     name: 'xterm-color',
     cols: 80,
     rows: 24,
     cwd: process.env.HOME,
+    // cwd: cwdFilePath,
     env: process.env,
   });
-  
+
   //2022-ST-AJ sends to renderer cwd for it to display on prompt
-  ipcMain.on('cwd',(event,data) => {
-    event.reply('cwdreply',process.env.HOME);
+  // ipcMain.on('cwd', (event, data) => {
+  //   event.reply('cwdreply', process.env.PWD);
+  // });
+
+  // add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
+  ipcMain.on('openFolder', (event, data) => {
+    ptyProcess.cwd = cwdFilePath[0];
   });
 
   //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
   ptyProcess.onData((data) => {
     newWindow.webContents.send('terminal-incData', data);
   });
-  
-  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell  
+
+  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell
   ipcMain.on('terminal-into', (event, data) => {
     ptyProcess.write(data);
   });
 
   //2022-ST-AJ ipcMain listens to resizing event from renderer and calls resize on node-pty to align size between node-pty and xterm. They need to align otherwise there are wierd bugs everywhere.
-  ipcMain.on('terminal-resize', (event,size) => {
+  ipcMain.on('terminal-resize', (event, size) => {
     const cols = size.cols;
     const rows = size.rows;
-    console.log('pty resizing to cols and rows', cols,rows);
     ptyProcess.resize(cols, rows);
-  })
+  });
 
   require('electron-reload')(__dirname, {
     electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
@@ -192,11 +212,34 @@ const createWindow = (exports.createWindow = () => {
   return newWindow;
 });
 
-//Opening docs in ide browser
-// const openDocs = (exports.openDocs = () => {
-  
-// })
+ /*
+   * ==================================================
+   *   Create a new Browers Window for displaying the users app.
+   *   Note that the web preferences allow the browser window to read and run the injected debugging script
+   * ==================================================
+ */
 
+const openBrowserWindow = (exports.openBrowserWindow = (portToOpen) => {
+  browser = new BrowserWindow({
+    width: 650,
+    height: 1100,
+    x: 1440,
+    y: 20,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      experimentalFeatures: true,
+      allowRunningInsecureContent: true,
+      webSecurity: false,
+      nodeIntegrationInSubFrames: true,
+      nodeIntegrationInWorker: true,
+      enableRemoteModule: true,
+    },
+  });
+  browser.webContents.loadURL(`http://localhost:${portToOpen}`);
+});
+
+// gets and opens the file that the user selects from the File menu
 const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
@@ -218,13 +261,16 @@ const openFile = (exports.openFile = (targetWindow, file) => {
   createApplicationMenu();
 });
 
+let cwdFilePath;
+
+// gets and opens the folder that the user selects from the File menu
 const getFolderFromUser = (exports.getFolderFromUser = async (targetWindow) => {
   const files = await dialog.showOpenDialog(targetWindow, {
     properties: ['openDirectory'],
   });
 
   if (files) {
-    console.log(files.filePaths);
+    cwdFilePath = files.filePaths;
     if (files) {
       openFolder(targetWindow, files.filePaths);
     }
@@ -234,7 +280,6 @@ const getFolderFromUser = (exports.getFolderFromUser = async (targetWindow) => {
 const createProjectFromUser = (exports.createProjectFromUser = async (
   targetWindow
 ) => {
-  console.log('running createProject method');
   const folderName = await dialog.showSaveDialog(targetWindow, {
     title: 'Create Project',
     properties: ['createDirectory'],
@@ -247,18 +292,10 @@ const createProjectFromUser = (exports.createProjectFromUser = async (
   }
 });
 
-const testFunc = (exports.testFunc = () => {
-  // const content = folder;
-  console.log('testFunc');
-  // targetWindow.webContents.send('folder-opened', folder, content);
-  // createApplicationMenu();
-});
-
 const openFolder = (exports.openFolder = (targetWindow, folder) => {
   const content = folder;
-  console.log('contents', content);
   targetWindow.webContents.send('folder-opened', folder, content);
-  createApplicationMenu();
+  createApplicationMenu(app);
 });
 
 const saveFile = (exports.saveFile = (targetWindow) => {
@@ -273,6 +310,7 @@ const saveFile = (exports.saveFile = (targetWindow) => {
   });
 });
 
+// handlers for various operations
 ipcMain.handle('saveFileFromUser', saveFile);
 
 ipcMain.handle('getFileFromUser', getFileFromUser);
@@ -285,4 +323,54 @@ ipcMain.handle('decreaseFontSize', decreaseFontSize);
 
 ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
-ipcMain.handle('testFunc', testFunc)
+ipcMain.on('openDebugAppWindow', (event, localhostToUse) => {
+  if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
+});
+
+/*
+   * ==================================================
+   *   The injected debugging script uses the ipcRenderer in the browser window to send snapshots when there are state changes
+   *   The snapshots are sent to ipcMain and then are fowarded to the Chart.svelte file
+   * ==================================================
+*/
+
+ipcMain.on('SNAPSHOT', (event, data) => {
+  newWindow.webContents.send('SNAPSHOT', data);
+});
+
+// close app when quiting
+ipcMain.on('quit-app', () => {
+  app.quit();
+});
+
+/*
+   * ==================================================
+   *   When the user selects a specific snapshot to display, a message is sent to ipcMain called 'TIME_TRAVEL'
+   *   When that message is received, we forward the data to the browser window.
+   * ==================================================
+*/
+
+ipcMain.on('TIME_TRAVEL', (event, data) => {
+  const instance = {
+    message: "TIME_TRAVEL",
+    ctxIndex: data
+  };
+  // Use browser window to send time-travel message
+  browser.webContents.send('TIME_TRAVEL', instance);
+})
+
+/*
+   * ==================================================
+   *   When the user selects reset button, a message is sent to ipcMain called 'REFRESH'
+   *   When that message is received, we forward the data to the browser window.
+   * ==================================================
+*/
+
+ipcMain.on('REFRESH', (event, data) => {
+  const instance = {
+    message: "REFRESH",
+    ctxIndex: data
+  };
+  // Use browser window to send REFRESH message
+  browser.webContents.send('REFRESH', instance);
+})

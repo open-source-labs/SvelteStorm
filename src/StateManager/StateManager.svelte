@@ -1,5 +1,5 @@
 <script>
-  import { DirectoryData } from "../Utilities/DirectoryStore";
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   export let stateObj = {};
 
   const unsub = DirectoryData.subscribe((data) => {
@@ -11,7 +11,7 @@
 
 <div class="state-container">
   <div class="h5Container">
-    <h5 class="title">STATE</h5>
+    <h5 class="title">COMPONENTS & PROPS</h5>
   </div>
   <ul>
     {#each Object.entries(stateObj) as [file, state]}
@@ -33,6 +33,8 @@
     padding-top: 0;
     display: flex;
     flex-direction: column;
+    height: 30%;
+    width: 100%;
   }
   .h5Container {
     background-color: rgb(22, 27, 34);
@@ -44,7 +46,7 @@
   }
 
   .title {
-    color: rgb(139, 148, 158);
+    color: whitesmoke;
     margin-bottom: 0;
     margin-top: 0;
     padding-top: 0;

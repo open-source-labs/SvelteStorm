@@ -1,7 +1,18 @@
-const { app, BrowserWindow, dialog, Menu } = require('electron');
+const { app, BrowserWindow, dialog, Menu, ipcRenderer, webContents, ipcMain } = require('electron');
 const main = require('electron-reload');
 const mainProcess = require('./index.js');
+const remote = require('electron').remote
+const path = require('path');
+const openAboutWindow = require('about-window').default;
 
+/*
+   * ==================================================
+   *   This function creates the menu for the Svelte Storm app
+   *   
+   * ==================================================
+*/
+
+// const createApplicationMenu = (app) => {
 const createApplicationMenu = () => {
   const hasOneOrMoreWindows = !!BrowserWindow.getAllWindows().length;
   const focusedWindow = BrowserWindow.getFocusedWindow();
@@ -53,17 +64,18 @@ const createApplicationMenu = () => {
         },
         {
             label: 'Open Folder',
-            accelerator: 'CommandOrControl+O',
-            click(item, focusedWindow) {
+            accelerator: 'CommandOrControl+F',
+            click: (item, focusedWindow) => {
               
               if (focusedWindow) {
-                return mainProcess.getFolderFromUser(focusedWindow);
+                mainProcess.getFolderFromUser(focusedWindow);
+                return;
               }
   
               const newWindow = mainProcess.createWindow();
   
               newWindow.on('show', () => {
-                mainProcess.getFolderFromUser(newWindow);
+                mainProcess.getFolderFromUser(newWindow);      
               });
             },
           },
@@ -109,6 +121,12 @@ const createApplicationMenu = () => {
             }
             focusedWindow.webContents.send('open-in-default');
           },
+        },
+        {
+          label: 'Open Browser Window',
+          click(){
+            mainProcess.openBrowserWindow();
+          }
         },
       ],
     },
@@ -200,14 +218,29 @@ const createApplicationMenu = () => {
           click(item, focusedWindow) {
             if (focusedWindow) focusedWindow.webContents.toggleDevTools();
           }
-        }
+        },
+        { type: 'separator' },
+        {
+            label: 'About SvelteStorm',
+            click: () => 
+                openAboutWindow({
+                    icon_path: path.resolve(__dirname,'../public/img/SvelteStorm4Logos/SvelteStorm4Logo10x64.png'),
+                    use_version_info: [
+                        ['Version Number', '4.0.0'],
+                    ],
+                    description: 'World\'s First Dedicated Svelte IDE.\nVersion 4.0.0 now includes a Time Travel Debugging tool.\n\nThis applicationuses Open Source components. You can find the source code oftheir open source projects along with license informationbelow. We acknowledge and are grateful to these developersfor their contributions to open source.\n\nProject: Delorean https://github.com/oslabs-beta/DeLorean\nCopyright (c) 2022 OSLabs Beta\n\nLicense (MIT) https://github.com/oslabs-betaDeLorean/blob/main/LICENSE'
+                })
+        },
+        {
+            role: 'quit',
+        },
       ],
     }
   ];
 
 
   if (process.platform === 'darwin') {
-    const name = 'Firesale';
+    const name = 'SvelteStorm 4.0';
     template.unshift({
       label: name,
       submenu: [

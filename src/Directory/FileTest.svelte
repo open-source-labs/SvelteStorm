@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { State } from "../types.js";
 
-  export let fileTree: [];
-  import { DirectoryData } from "../Utilities/DirectoryStore";
+  export let fileTree: typeof fileTree = [];
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   import CreateMenu from "./CreateMenu.svelte";
+  import { showEditorBackground } from '../DataStore/SvelteStormDataStore';
+
   const fs = require("fs");
   const fileState = {};
   let rename: boolean = false;
-  // let deleteFile = false;
-  // let rightClickStatus = false;
   let activeFile: string = "";
   let newName: string = "";
   let createFile: boolean = false;
@@ -33,7 +33,6 @@
 
   const dblClickHandler = (path: string): void => {
     const openFilePath = path;
-    console.log("openFilePath", openFilePath);
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -41,6 +40,15 @@
         fileRead: true,
       };
     });
+        
+    /*
+    * ==================================================
+    *   SvelteStorm 4.0 Team
+    * 
+    *   The following is used to tr
+    * ==================================================
+    */
+    $showEditorBackground = false;
   };
 
   const rightClickHandler = (path: string): void => {
@@ -100,6 +108,36 @@
     fileState[path] = true;
     newName = "";
   };
+
+  // -------------------------------------
+  const createFileHandlerTEST = (e: KeyboardEvent, path: string): void => {
+    DirectoryData.update((currentData) => {
+      return {
+        ...currentData,
+        activeDir: path,
+        activeFile: "",
+      };
+    });
+
+    if (e.key !== "Enter") return;
+
+    fs.writeFileSync(path + "/" + newName, "", (err) => {
+      if (err) throw err;
+    });
+    DirectoryData.update((currentData) => {
+      return {
+        ...currentData,
+        createFile: false,
+        rename: false,
+        activeFile: "",
+      };
+    });
+
+    fileState[path] = true;
+    newName = "";
+  };
+
+  // --------------------------------------------------------------------
 
   const createFolderHandler = (e: KeyboardEvent, path: string): void => {
     DirectoryData.update((currentData) => {
@@ -224,10 +262,7 @@
               src={fs.existsSync(
                 `src/icons/file_type_${name.split(".").pop().toLowerCase()}.svg`
               )
-                ? `../src/icons/file_type_${name
-                    .split(".")
-                    .pop()
-                    .toLowerCase()}.svg`
+                ? `../src/icons/file_type_${name.split(".").pop().toLowerCase()}.svg`
                 : "../src/icons/file_type_exclam.png"}
               alt={""}
             />

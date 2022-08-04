@@ -1,14 +1,23 @@
 <script lang="ts">
-  import { DirectoryData } from "../Utilities/DirectoryStore";
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
   import type { FileState } from "../types";
+  import FolderPlusOutline from 'svelte-material-icons/FolderPlusOutline.svelte'
+  import FilePlusOutline from 'svelte-material-icons/FilePlusOutline.svelte'
+  import FolderRefreshOutline from 'svelte-material-icons/FolderRefreshOutline.svelte'
   import { get } from "svelte/store";
-  // import type { KeyboardEvent, KeyboardInputEvent } from "electron";
-  const fs = require("fs");
-  let mainDir: string = "";
+
+  export let size = "40px";
+  export let width = size;
+  export let height = size;
+  export let color = "#9300ff";
+  export let viewBox = "-8 -8 40 40";
+
+  const fs = require('fs');
+  let mainDir: string = '';
   let createMainFile: boolean = false;
   let createMainFolder: boolean = false;
   let reload: boolean = false;
-  let newName: string = "";
+  let newName: string = '';
   let fileState: FileState = {};
   let fileName;
   const unsub = DirectoryData.subscribe((data) => {
@@ -19,7 +28,6 @@
     fileState = data.fileState;
   });
   const refreshDir = (): void => {
-    console.log("clickig now");
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
@@ -28,23 +36,20 @@
     });
   };
   const addFolder = (): void => {
-    console.log("clicking addFolder", DirectoryData);
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
         createMainFolder: true,
-        activeFile: "",
+        activeFile: '',
       };
     });
-    console.log("Directory Data after update ", DirectoryData);
   };
   const addFile = (): void => {
-    console.log("clicking addFile");
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
         createMainFile: true,
-        activeFile: "",
+        activeFile: '',
       };
     });
   };
@@ -53,14 +58,13 @@
       return {
         ...currentData,
         activeDir: path,
-        activeFile: "",
+        activeFile: '',
       };
     });
-    if (e.key !== "Enter") return;
-    // (e.target as HTMLInputElement).value;
+    if (e.key !== 'Enter') return;
     newName = (e.target as HTMLInputElement).value;
 
-    fs.writeFileSync(path + "/" + newName, "", (err) => {
+    fs.writeFileSync(path + '/' + newName, '', (err) => {
       if (err) throw err;
     });
     DirectoryData.update((currentData) => {
@@ -68,25 +72,25 @@
         ...currentData,
         createMainFile: false,
         rename: false,
-        activeFile: "",
+        activeFile: '',
       };
     });
 
-    newName = "";
+    newName = '';
   };
   const createFolderHandler = (e: KeyboardEvent, path: string): void => {
     DirectoryData.update((currentData) => {
       return {
         ...currentData,
         activeDir: path,
-        activeFile: "",
+        activeFile: '',
       };
     });
-    if (e.key !== "Enter") return;
+    if (e.key !== 'Enter') return;
 
     try {
-      if (!fs.existsSync(path + "/" + newName)) {
-        fs.mkdirSync(path + "/" + newName);
+      if (!fs.existsSync(path + '/' + newName)) {
+        fs.mkdirSync(path + '/' + newName);
       }
     } catch (err) {
       console.error(err);
@@ -96,11 +100,11 @@
         ...currentData,
         createMainFolder: false,
         rename: false,
-        activeFile: "",
+        activeFile: '',
       };
     });
 
-    newName = "";
+    newName = '';
   };
   const resetStatus = (): void => {
     DirectoryData.update((currentData) => {
@@ -114,18 +118,21 @@
 </script>
 
 <div class="fileMenu">
-  <div
-    class="fileArea"
-    on:click={createMainFile || createMainFolder ? resetStatus : undefined}
-  >
-    {process.platform === "win32"
-      ? mainDir.substring(mainDir.lastIndexOf("\\") + 1)
-      : mainDir.substring(mainDir.lastIndexOf("/") + 1)}
+
+  <div class="refresh" on:click={refreshDir}>
+    <FolderRefreshOutline {color} {size} {width} {height} {viewBox} />
   </div>
-  <div class="refresh" on:click={refreshDir} />
-  <div class="addFile" on:click={addFile} />
-  <div class="addFolder" on:click={addFolder} />
+
+  <div class="addFile" on:click={addFile}>
+    <FilePlusOutline {color} {size} {width} {height} {viewBox} />
+  </div>
+
+  <div class="addFolder" on:click={addFolder}>
+    <FolderPlusOutline {color} {size} {width} {height} {viewBox} />
+  </div>
+
 </div>
+
 {#if createMainFile}
   <span>
     <input
@@ -154,49 +161,67 @@
 
 <style>
   .fileMenu {
-    background-color: rgba(28, 28, 36, 0.678);
-    padding-right: 10px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    background-color: #27263a;
+    margin-top: 1px;
     width: 100%;
     font-size: 10px;
   }
-  .fileArea {
+  /* .fileArea {
     float: left;
-    height: 20px;
+    height: 30px;
     font-size: 14px;
     color: white;
+  } */
+
+  .refresh:hover,
+  .addFile:hover,
+  .addFolder:hover
+  {
+    background-color: rgba(175, 175, 175, 0.5);
+    border-radius: 8px;
+    cursor: pointer;
   }
+
   .refresh {
-    float: right;
-    background-image: url("../src/icons/refresh.png");
-    height: 20px;
-    width: 20px;
+    /* float: right; */
+    /* height: 40px;
+   width: 40px;
+   position: center center; */
+    /* 
     background-repeat: no-repeat;
-    background-size: 20px;
+    background-size: 24px; */
+    /* filter: hue-rotate(180deg); */
+    /* filter: brightness(255);
+    filter:hue-rotate(25); */
   }
   .addFile {
-    float: right;
-    background-image: url("../src/icons/addFile.png");
-    height: 20px;
-    width: 20px;
+    /* float: right; */
+    /* background-image: url("../src/icons/addFile.png"); */
+    /* height: 30px;
+    width: 30px;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: 20px;
-    margin-right: 5px;
+    background-size: 24px;
+    filter: brightness(255);
+    color: white; */
+    /* margin-right: 5px; */
   }
   .addFolder {
-    float: right;
-    background-image: url("../src/icons/add_folder2.png");
-    height: 20px;
-    width: 20px;
+    /* float: right; */
+    /* import CreateNewFolderTwoToneIcon from '@mui/icons-material/CreateNewFolderTwoTone'; */
+    /* background-image: url("@mui/icons-material/CreateNewFolderTwoTone"); */
+    /* background-image: url("../src/icons/add_folder2.svg"); */
+    /* height: 30px;
+    width: 30px;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: 20px;
-    margin-right: 5px;
-  }
-  .textBox {
-    margin-left: 10px;
-    padding: 10px 10px 10px 10px;
-    font-size: 12px;
-    width: 150px;
+    background-size: 24px;
+    filter: brightness(255);
+    fill: blue; */
+    /* margin-right: 5px; */
   }
 </style>
