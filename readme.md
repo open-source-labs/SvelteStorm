@@ -19,7 +19,7 @@ SvelteStorm 4.0
    
 ## SvelteStorm
 A Svelte IDE like no other. Embrace the storm.
-SvelteStorm is a new and improved open-source integrated developer environment (IDE). SvelteStorm is specifically tailored to provide all of the essential tools a Svelte developer needs to build a Svelte application. The IDE contains a code editor, a terminal environment, a file directory, a browser view, developer tools, and a component state viewer. SvelteStorm was built using Svelte and Electron and is downloadable for Windows, Linux, and Mac operating systems. With the new and improved SvelteStorm, developers can now observe state changes in their applications using the Time Travel Debugger tool. From its modernized and clean UI, to its quick loading time and component state window, SvelteStorm is a rising star for the Svelte community.
+SvelteStorm is a new and improved open-source integrated developer environment (IDE). SvelteStorm is specifically tailored to provide all of the essential tools a Svelte developer needs to build a Svelte application. The IDE contains a code editor, a terminal environment, a file directory, a browser view, developer tools, and a component state viewer. SvelteStorm was built using Svelte and Electron and is downloadable for Windows and Mac operating systems. With the new and improved SvelteStorm, developers can now observe state changes in their applications using the Time Travel Debugger tool. From its modernized and clean UI, to its quick loading time and component state window, SvelteStorm is a rising star for the Svelte community.
  
 ## New Features and Improvements
  
