@@ -14,7 +14,7 @@ const os = require('os');
 const pty = require('node-pty');
 
 //dialog is basically an electron modal pop up displaying an error message
-//ipcMain is an event emitter that handles messages from the a renderer process
+//ipcMain is an event emitter that handles messages from the renderer processes
 //pty returns a terminal object which allows reading and writing (used with xterm)
 require('@electron/remote/main').initialize();
 require('@electron/remote/main').enable(webContents);
@@ -327,6 +327,7 @@ ipcMain.on('openDebugAppWindow', (event, localhostToUse) => {
   if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
 });
 
+
 /*
    * ==================================================
    *   The injected debugging script uses the ipcRenderer in the browser window to send snapshots when there are state changes
@@ -373,4 +374,31 @@ ipcMain.on('REFRESH', (event, data) => {
   };
   // Use browser window to send REFRESH message
   browser.webContents.send('REFRESH', instance);
+})
+
+//--------------- FOR TESTING -----------------
+ipcMain.on('new-window', () => {
+  createWindow()
+})
+
+// testing main synchronous data passing
+function mainSynchronousData() {
+  return 'Main Synchronous Data'
+}
+
+ipcMain.on('main-synchronous-data', (event, arg) => {
+  return mainSynchronousData()
+})
+
+// testing main asynchronous data passing
+async function mainAsynchronousData() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('Main Asynchronous Data')
+    }, 1000)
+  })
+}
+
+ipcMain.on('main-asynchronous-data', async (event, arg) => {
+  return await mainAsynchronousData() 
 })
