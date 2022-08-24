@@ -14,7 +14,7 @@ const os = require('os');
 const pty = require('node-pty');
 
 //dialog is basically an electron modal pop up displaying an error message
-//ipcMain is an event emitter that handles messages from the a renderer process
+//ipcMain is an event emitter that handles messages from the renderer processes
 //pty returns a terminal object which allows reading and writing (used with xterm)
 require('@electron/remote/main').initialize();
 require('@electron/remote/main').enable(webContents);
