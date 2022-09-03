@@ -10,6 +10,7 @@
 
   import {onMount} from 'svelte';
   import searchDoc from './SearchProgram.js';
+  import PerformanceDashboard from "./PerformanceDashboard/PerformanceDashboard.svelte";
 
   export let orientation = 'columns';
   export let localhost;
@@ -17,6 +18,7 @@
   let value: string = '';
   let submit: boolean = false;
   let docsBool: boolean = false;
+  let performanceBool: boolean = false; 
 
   let documentation: string;
   let url: string;
@@ -218,6 +220,10 @@
     docsBool = !docsBool;
   };
 
+  export const handlePerformance = () => {
+    performanceBool = !performanceBool; 
+  }
+
   const handleKeyup = (e: KeyboardEvent) => {
     submit = false;
 
@@ -293,12 +299,35 @@
                 </div>
                 <iframe class="docs" title="test" src={documentation} />
               {/if}
-              {#if docsBool === false}
-                <div class="parent grid-parent">              
+              {#if performanceBool === true}
+                <div>
+                  <PerformanceDashboard />
+                </div>
+                <div>
+                  WEB VITALS HERE
+                </div>
+                <div>
+                  Re-Render Data HERE
+                </div>
+                <footer>
+                  <span>
+                    <button class="backButton" on:click={handlePerformance}>Back</button>
+                  </span>
+                </footer>
+
+              {/if}
+              {#if docsBool === false && performanceBool === false}
+                <div class="parent grid-parent"> 
+                  <span>
                   <button
                     type="button"
                     class="childButton"
-                    on:click={handleDocuments}>Docs <span class="material-symbols-outlined">manage_search</span></button
+                    on:click={handlePerformance}> <span class="material-symbols-outlined"></span> Performance DashBoard</button>   
+                </span>          
+                  <button
+                    type="button"
+                    class="childButton"
+                    on:click={handleDocuments}> <span class="material-symbols-outlined"> manage_search</span></button
                   >         
                 </div>
                 <div id="stateManager">
