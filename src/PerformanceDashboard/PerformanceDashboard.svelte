@@ -1,13 +1,17 @@
 <script> 
 //importingh DirectoryData from DataStore to access stateObj & componenetRElationships
-  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
+  import { DirectoryData } from "../DataStore/SvelteStormDataStore"; 
   import { performanceBool, handlePerformance } from '../App.svelte'; 
 
 const startSession = () => {
+    //invoking start session will wrap application with performance functionality and launch the application 
+    //provides an alert instructing user to interact with their application for at least 30 seconds
+    //should update in real time 
 
 }
 
 const endSession = () => {
+    //will close out the session 
 
 }
 

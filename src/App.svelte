@@ -322,12 +322,12 @@
                   <button
                     type="button"
                     class="childButton"
-                    on:click={handlePerformance}> <span class="material-symbols-outlined"></span> Performance DashBoard</button>   
+                    on:click={handlePerformance}> Performance Dash<span class="material-symbols-outlined"> speed</span> </button>   
                 </span>          
                   <button
                     type="button"
                     class="childButton"
-                    on:click={handleDocuments}> <span class="material-symbols-outlined"> manage_search</span></button
+                    on:click={handleDocuments}> Docs<span class="material-symbols-outlined"> manage_search</span></button
                   >         
                 </div>
                 <div id="stateManager">
