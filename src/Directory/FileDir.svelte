@@ -3,7 +3,7 @@
   import DirTopMenu from './DirTopMenu.svelte'  
   import { afterUpdate, onDestroy } from 'svelte';
   import {get} from 'svelte/store';
-  import {DirectoryData, appBeingDebugedPath} from '../DataStore/SvelteStormDataStore';
+  import {DirectoryData, appBeingDebugedPath, appPerformanceMonitoredPath} from '../DataStore/SvelteStormDataStore';
   import type { Filetree } from '../types';
   import { updatePackageJson, updateRollupConfig } from '../Version4UtilityFunctions/wrap-app-functions'
   
@@ -144,6 +144,7 @@
         // Builds componentRelationships (nested objects to represent what components are imported into each component) which is used to build the d3 representation of state
         getComponentRelationships();
         $appBeingDebugedPath = path;
+        $appPerformanceMonitoredPath = path; 
         updateRollupConfigRun = true;
       }
 

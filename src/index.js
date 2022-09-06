@@ -93,7 +93,7 @@ const createWindow = (exports.createWindow = () => {
 
   /*
    * =================== SS4 ==========================
-   *   Create a new Browers Window for display in 
+   *   Create a new Browser Window for display in 
    *   Electron, but don't show it yet. This function 
    *   created the window the contains all of
    *   SvelteStorm
@@ -324,6 +324,10 @@ ipcMain.handle('decreaseFontSize', decreaseFontSize);
 ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
 ipcMain.on('openDebugAppWindow', (event, localhostToUse) => {
+  if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
+});
+
+ipcMain.on('openPerforamnceAppWindow',(event, localhostToUse) => {
   if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
 });
 

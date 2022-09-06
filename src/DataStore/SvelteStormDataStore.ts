@@ -43,6 +43,8 @@ const collectionOfSnaps: Writable<State> = writable<State>({})
 
 const collectionOfAllSnaps = writable([]);
 
+let appPerformanceMonitoredPath: Writable<boolean> = writable<boolean>(true);
+
 export {
   DirectoryData,
   openTabs,
@@ -55,6 +57,7 @@ export {
   snapshots,
   collectionOfSnaps,
   collectionOfAllSnaps,
+  appPerformanceMonitoredPath,
 };
 
 /*
