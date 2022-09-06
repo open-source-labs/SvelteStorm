@@ -327,11 +327,6 @@ ipcMain.on('openDebugAppWindow', (event, localhostToUse) => {
   if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
 });
 
-ipcMain.on('openPerforamnceAppWindow',(event, localhostToUse) => {
-  if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
-});
-
-
 /*
    * ==================================================
    *   The injected debugging script uses the ipcRenderer in the browser window to send snapshots when there are state changes

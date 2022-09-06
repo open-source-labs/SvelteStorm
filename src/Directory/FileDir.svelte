@@ -144,7 +144,7 @@
         // Builds componentRelationships (nested objects to represent what components are imported into each component) which is used to build the d3 representation of state
         getComponentRelationships();
         $appBeingDebugedPath = path;
-        $appPerformanceMonitoredPath = path; 
+        // $appPerformanceMonitoredPath = path; 
         updateRollupConfigRun = true;
       }
 

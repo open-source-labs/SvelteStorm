@@ -1,17 +1,33 @@
 <script> 
 //importingh DirectoryData from DataStore to access stateObj & componenetRElationships
-  import { DirectoryData } from "../DataStore/SvelteStormDataStore"; 
-  import { performanceBool, handlePerformance } from '../App.svelte'; 
+  import { appBeingDebugedPath } from "../DataStore/SvelteStormDataStore"; 
+  const cmd = require('node-cmd');
+  const process = require('process');
+  const {ipcRenderer} = require('electron');
 
-const startSession = () => {
-    //invoking start session will wrap application with performance functionality and launch the application 
-    //provides an alert instructing user to interact with their application for at least 30 seconds
-    //should update in real time 
+
+  const path = appBeingDebugedPath; 
+  console.log('Performance Dashboard Path is: ', path)
+
+const startSession = (err, data, stderr) => {
+  console.log('Start session has been clicked!')
+  try {
+    // Change the directory
+    process.chdir(path);
+    ipcRenderer.send('terminal-into', `cd ${path}\r`);
+
+  } catch (err) {
+    // Printing error if occurs
+    console.error('error while changing directory in PeformanceDashboard: ', {err});
+  }
+  
+  cmd.run(`npm run performanceSS`, (err) => console.log('An error occurred while starting Perf Monitoring: ', {err})); 
 
 }
 
-const endSession = () => {
-    //will close out the session 
+const endSession = (err, data, stderr) => {
+  console.log('Peformance endSession has been clicked!');
+  cmd.run('^C', () => console.log('An error occurred while ending Performance Monitoring: ', {err}))
 
 }
 
