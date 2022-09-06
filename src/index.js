@@ -339,6 +339,11 @@ ipcMain.on('SNAPSHOT', (event, data) => {
   newWindow.webContents.send('SNAPSHOT', data);
 });
 
+// Javi 9/6 attempt to get web-vitals to console log
+ipcMain.on('web-vitals', (event, args) => {
+  console.log(args);
+})
+
 // close app when quiting
 ipcMain.on('quit-app', () => {
   app.quit();
