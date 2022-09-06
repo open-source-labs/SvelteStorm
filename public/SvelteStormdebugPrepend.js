@@ -98,6 +98,18 @@ function setupListeners(root) {
 // activate event listeners
 setTimeout(() => setupListeners(window.document));
 
+/*
+* =========================================================
+*   The Above is SvelteStorm 4.0 Debug Monitoring Code.
+* =========================================================
+*/
+
+/*
+* =========================================================
+*   The Below is SvelteStorm 5.0 App Health Monitoring Code.
+* =========================================================
+*/
+
 // sendMetrics helper function for web-vitals functions
 function sendMetrics({ name, value }) {
   ipcRenderer.send('web-vitals', { name, value });
@@ -110,8 +122,9 @@ onCLS(sendMetrics);
 onFCP(sendMetrics);
 onTTFB(sendMetrics);
 onINP(sendMetrics);
+
 /*
 * =========================================================
-*   The Above is SvelteStorm 4.0 Debug Monitoring Code.
+*   The Above is SvelteStorm 5.0 App Health Monitoring Code.
 * =========================================================
 */

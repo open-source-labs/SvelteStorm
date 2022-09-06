@@ -338,7 +338,12 @@ ipcMain.on('SNAPSHOT', (event, data) => {
   newWindow.webContents.send('SNAPSHOT', data);
 });
 
-// Javi 9/6 attempt to get web-vitals to console log
+/*
+   * ==================================================
+   *   The injected app health monitoring script uses the ipcRenderer in the browser window to emit a signal with web-vitals data.
+   *   The results of those web-vitals functions are sent to ipcMain and then are fowarded to the appropriate component in PerformanceDashboard
+   * ==================================================
+*/
 ipcMain.on('web-vitals', (event, args) => {
   console.log(args);
 })
