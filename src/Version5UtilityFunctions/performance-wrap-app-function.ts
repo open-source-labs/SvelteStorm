@@ -32,7 +32,7 @@ export function updatePackageJson(path) {
         force: true,
       });
     } catch (err) {
-      console.error(`${err}error while adding sdebug script to package.json`);
+      console.error(`${err}error while adding performance script to package.json`);
     }
   }
   process.chdir(currentDir);
@@ -53,6 +53,7 @@ export function updatePackageJson(path) {
  * ==================================================
  */
 export function updateRollupConfig(path) {
+  console.log('Performance wrap: Path is: ', path)
   const originalConfig = path + '/rollup.config.js';
   const newConfig = path + '/rollup.config.new.js';
 
