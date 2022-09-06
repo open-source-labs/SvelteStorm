@@ -3,7 +3,9 @@
 *   The following is SvelteStorm 4.0 Debug Monitoring Code.
 * =========================================================
 */
+const { on } = require('codemirror');
 const { ipcRenderer } = require('electron')
+const { onLCP, onTTFB, onCLS, onFCP, onFID, onINP } = require('web-vitals')
 const parse = (event) => JSON.parse(JSON.stringify(event));
 let cacheState = [];
 let components = [];
@@ -99,5 +101,30 @@ setTimeout(() => setupListeners(window.document));
 /*
 * =========================================================
 *   The Above is SvelteStorm 4.0 Debug Monitoring Code.
+* =========================================================
+*/
+
+/*
+* =========================================================
+*   The Below is SvelteStorm 5.0 App Health Monitoring Code.
+* =========================================================
+*/
+
+// sendMetrics helper function for web-vitals functions
+function sendMetrics({ name, value }) {
+  ipcRenderer.send('web-vitals', { name, value });
+};
+
+// JO 9/3 attempt to call the web vitals - we'll need to store these if we can get them
+onLCP(sendMetrics);
+onFID(sendMetrics);
+onCLS(sendMetrics);
+onFCP(sendMetrics);
+onTTFB(sendMetrics);
+onINP(sendMetrics);
+
+/*
+* =========================================================
+*   The Above is SvelteStorm 5.0 App Health Monitoring Code.
 * =========================================================
 */
