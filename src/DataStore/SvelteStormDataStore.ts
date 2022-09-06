@@ -56,7 +56,6 @@ export {
   snapshots,
   collectionOfSnaps,
   collectionOfAllSnaps,
-  appPerformanceMonitoredPath,
 };
 
 /*
