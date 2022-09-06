@@ -1,7 +1,7 @@
 <script lang="ts">
   import {onMount} from 'svelte';
   import {FitAddon} from 'xterm-addon-fit';
-  import { appBeingDebugedPath, saveToFileName } from '../DataStore/SvelteStormDataStore';
+  import { appBeingDebugedPath, appPerformanceMonitoredPath, saveToFileName } from '../DataStore/SvelteStormDataStore';
   import moment from 'moment';
   const path = require('path');
 

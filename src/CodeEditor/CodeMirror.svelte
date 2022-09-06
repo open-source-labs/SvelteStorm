@@ -16,7 +16,7 @@
   import "codemirror/addon/hint/html-hint.js";
   import "codemirror/addon/hint/show-hint.css";
   import "codemirror/addon/edit/matchbrackets.js";
-  import "codemirror/addon/edit/closebrackets.js";
+  import "codemirror/addon/edit/closebrackets.js"; 
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
   import searchDoc from "../SearchProgram.js";
