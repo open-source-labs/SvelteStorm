@@ -5,7 +5,7 @@
   import { quintOut } from "svelte/easing";
   import "codemirror/lib/codemirror.css";
   import "codemirror/theme/dracula.css";
-  import "codemirror/mode/javascript/javascript.js";
+  import "codemirror/mode/javascript/javascript";
   import "codemirror/mode/handlebars/handlebars.js";
   import "codemirror/mode/css/css.js";
   import "codemirror/mode/htmlmixed/htmlmixed.js";
@@ -19,19 +19,41 @@
   import "codemirror/addon/edit/closebrackets.js";
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
+  // add linters
+  import "codemirror/addon/lint/lint";
+  import "codemirror/addon/lint/lint.css"
+  import "codemirror/addon/lint/javascript-lint";
+  import "codemirror/addon/lint/css-lint"
+  import "codemirror/addon/lint/html-lint"
+  const JSHINT = require('jshint').JSHINT;
+  (window as any).JSHINT = JSHINT;
+  //(window as any).JSHINT = require('jshint').JSHINT;
+  // const CSSLINT = require('csshint'); 
+  // (window as any).CSSLint = CSSLINT;
+  
+  const HTMLHINT = require('htmlhint');
+  (window as any).HTMLHint = HTMLHINT;
+
   import searchDoc from "../SearchProgram.js";
 
   const { ipcRenderer } = require("electron");
-
+  //console.log('****JSHINT is something: ', JSHINT, ' *****');
+  //console.log('** ', (window as any).JSHINT)
+  //console.log('** ', (window as any).JSHINT)
+  //console.log('** htmlHint: ', (window as any).HTMLHint)
+  //console.log('** cssLint: ', (window as any).CSSLint)
   import {
     editorCache,
     codeMirrorEditor,
     currentTabFilePath,
   } from "../DataStore/SvelteStormDataStore";
+import { lang } from "moment";
 
   export let value;
   export let language;
   export let filePath;
+  //const lintBool = (language.name ===  'javascript')||(language.name === 'htmlmixed') ? true : false;
+  console.log('language is: ', language, ' and linting is: true')//, lintBool)
   
   let lastWord: string;
   let tipContent: string = "";
@@ -127,9 +149,12 @@
       extraKeys: {
         "Ctrl-Space": "autocomplete",
       },
+      lineWrapping: true,
       autoCloseBrackets: true,
       matchTags: true,
       autoCloseTags: true,
+//      gutters: ['Codemirror-lint-markers'],
+      lint: true,
     });
 
     $codeMirrorEditor.setSize("100%", "100%");
@@ -139,8 +164,9 @@
     }
   });
 
-  afterUpdate(async (): Promise<void> => {
+  afterUpdate(async (): Promise<void> => { // this runs 3x when a file is opened
     if (!noUpdate && !showToolTripTransition) {
+      //console.log('**** codeMirrorEditor is: ', codeMirrorEditor, '****')
       if (codeMirrorEditor) {
       // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
       let cacheCode: string;
@@ -153,6 +179,7 @@
         $codeMirrorEditor.setValue(value);
       } else {
         // if file already exists in the cache
+        //console.log('**** language is: ', language, '****')
         $codeMirrorEditor.setValue(cacheCode);
         $codeMirrorEditor.setOption("mode", language);
         // // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
@@ -204,7 +231,7 @@
       `${src}`,
       "_blank",
       "top=900,left=200,frame=true,nodeIntegration=no"
-    );
+    ); 
   }
   function onType(): void {
     hoverCounter += 13;
