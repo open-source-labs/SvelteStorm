@@ -1,6 +1,7 @@
 <script> 
 //importingh DirectoryData from DataStore to access stateObj & componenetRElationships
   import { appBeingDebugedPath } from "../DataStore/SvelteStormDataStore"; 
+  import RerenderTracker from "./RerenderTracker.svelte";
   const cmd = require('node-cmd');
   const process = require('process');
   const {ipcRenderer} = require('electron');
@@ -25,30 +26,22 @@ const startSession = (err, data, stderr) => {
 
 }
 
-const endSession = (err, data, stderr) => {
-  console.log('Peformance endSession has been clicked!');
-  cmd.run('^C', () => console.log('An error occurred while ending Performance Monitoring: ', {err}))
+// const endSession = (err, data, stderr) => {
+//   console.log('Peformance endSession has been clicked!');
+//   cmd.run('^C', () => console.log('An error occurred while ending Performance Monitoring: ', {err}))
 
-}
+// }
 
 </script>
 
 <main> 
     <div class="state-container">
         <div class="h5Container">
-          <h5 class="title">PERFORMANCE DASHBOARD</h5>
+          <h4 class="title">PERFORMANCE DASHBOARD</h4>
         </div>
+
         <div>
-            <span>
-                <button
-                type="button"
-                class="childButton"
-                on:click={startSession}>Start</button>
-                <button
-                type="button"
-                class="childButton"
-                on:click={endSession}>Stop</button>
-            </span>
+          <RerenderTracker />
         </div>
     </div>
 </main>
