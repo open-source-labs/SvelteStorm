@@ -34,13 +34,12 @@
   import searchDoc from "../SearchProgram.js";
 
   const { ipcRenderer } = require("electron");
-  
+
   import {
     editorCache,
     codeMirrorEditor,
     currentTabFilePath,
   } from "../DataStore/SvelteStormDataStore";
-import { lang } from "moment";
 
   export let value;
   export let language;
@@ -154,7 +153,7 @@ import { lang } from "moment";
     }
   });
 
-  afterUpdate(async (): Promise<void> => { // this runs 3x when a file is opened
+  afterUpdate(async (): Promise<void> => {
     if (!noUpdate && !showToolTripTransition) {
       if (codeMirrorEditor) {
       // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
