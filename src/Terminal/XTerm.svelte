@@ -73,7 +73,7 @@
       ipcRenderer.send('terminal-into', '\r');
     };
 
-    term.writeln('Welcome to SvelteStorm 4.0');
+    term.writeln('Welcome to SvelteStorm 5.0');
     // ipcRenderer.send("terminal-into", "ls -ila\r");
 
     term.prompt();

@@ -3,7 +3,7 @@
   import DirTopMenu from './DirTopMenu.svelte'  
   import { afterUpdate, onDestroy } from 'svelte';
   import {get} from 'svelte/store';
-  import {DirectoryData, appBeingDebugedPath} from '../DataStore/SvelteStormDataStore';
+  import {DirectoryData, appBeingDebugedPath } from '../DataStore/SvelteStormDataStore';
   import type { Filetree } from '../types';
   import { updatePackageJson, updateRollupConfig } from '../Version4UtilityFunctions/wrap-app-functions'
   
