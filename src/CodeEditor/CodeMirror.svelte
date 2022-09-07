@@ -25,12 +25,9 @@
   import "codemirror/addon/lint/javascript-lint";
   import "codemirror/addon/lint/css-lint"
   import "codemirror/addon/lint/html-lint"
+
   const JSHINT = require('jshint').JSHINT;
-  (window as any).JSHINT = JSHINT;
-  //(window as any).JSHINT = require('jshint').JSHINT;
-  // const CSSLINT = require('csshint'); 
-  // (window as any).CSSLint = CSSLINT;
-  
+  (window as any).JSHINT = JSHINT;  
   const HTMLHINT = require('htmlhint');
   (window as any).HTMLHint = HTMLHINT;
 
@@ -52,8 +49,6 @@ import { lang } from "moment";
   export let value;
   export let language;
   export let filePath;
-  //const lintBool = (language.name ===  'javascript')||(language.name === 'htmlmixed') ? true : false;
-  console.log('language is: ', language, ' and linting is: true')//, lintBool)
   
   let lastWord: string;
   let tipContent: string = "";
@@ -153,7 +148,6 @@ import { lang } from "moment";
       autoCloseBrackets: true,
       matchTags: true,
       autoCloseTags: true,
-//      gutters: ['Codemirror-lint-markers'],
       lint: true,
     });
 
@@ -166,7 +160,6 @@ import { lang } from "moment";
 
   afterUpdate(async (): Promise<void> => { // this runs 3x when a file is opened
     if (!noUpdate && !showToolTripTransition) {
-      //console.log('**** codeMirrorEditor is: ', codeMirrorEditor, '****')
       if (codeMirrorEditor) {
       // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
       let cacheCode: string;
@@ -179,7 +172,6 @@ import { lang } from "moment";
         $codeMirrorEditor.setValue(value);
       } else {
         // if file already exists in the cache
-        //console.log('**** language is: ', language, '****')
         $codeMirrorEditor.setValue(cacheCode);
         $codeMirrorEditor.setOption("mode", language);
         // // retrieve code from DirectoryStore.js and store cached code of the tab that the user clicked on
