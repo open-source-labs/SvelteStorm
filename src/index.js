@@ -341,12 +341,13 @@ ipcMain.on('SNAPSHOT', (event, data) => {
 /*
    * ==================================================
    *   The injected app health monitoring script uses the ipcRenderer in the browser window to emit a signal with web-vitals data.
-   *   The results of those web-vitals functions are sent to ipcMain and then are fowarded to the appropriate component in PerformanceDashboard
+   *   That data is then sent to ipcMain (received below) and is then fowarded to the WebVitals component where an 
+   *   ipcRenderer listens for the "web-vitals" signal to take in the web-vitals data.
    * ==================================================
 */
 ipcMain.on('web-vitals', (event, args) => {
-  console.log(args);
-})
+  newWindow.webContents.send('web-vitals', args)
+});
 
 // close app when quiting
 ipcMain.on('quit-app', () => {
