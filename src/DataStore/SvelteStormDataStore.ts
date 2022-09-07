@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 
-import type { NewFile, EditorCacheType, EditorObj, State, componentStateObj } from '../types';
+import type { NewFile, EditorCacheType, EditorObj, State, componentStateObj, VitalObject } from '../types';
 
 const DirectoryData: Writable<State> = writable<State>({
   mainDir: '',
@@ -43,6 +43,8 @@ const collectionOfSnaps: Writable<State> = writable<State>({})
 
 const collectionOfAllSnaps = writable([]);
 
+// SStorm 5.0 Update - Adding object to hold values of web-vitals 
+const vitals: Writable<VitalObject> = writable<VitalObject>({})
 
 export {
   DirectoryData,
@@ -56,6 +58,7 @@ export {
   snapshots,
   collectionOfSnaps,
   collectionOfAllSnaps,
+  vitals,
 };
 
 /*
