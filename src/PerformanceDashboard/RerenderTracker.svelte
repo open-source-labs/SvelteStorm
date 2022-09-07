@@ -1,38 +1,7 @@
 <script>
-  // import {ipcRenderer, BrowserWindow} from 'electron'
-  // import { claim_text } from 'svelte/internal';
-  import { DirectoryData } from "../DataStore/SvelteStormDataStore";
-  import * as d3 from "d3";
-  import { scaleLinear } from "d3-scale";
+	import { scaleLinear } from 'd3-scale';
 
-  export const stateObj = {};
-  
-  // const renderCountObj = {};
-
-  //function to create keys in renderCountObj for each component of applciation. Each key initialized to 0.
-  // const populateRenderCountObj = (stateObj) => {
-  //     for (const key in stateObj) {
-  //         renderCountObj[key] = 0; 
-  //         console.log("renderCountObj in RerenderTracker: ", renderCountObj)
-  //     }
-  // }
-  
-  //suscribe to DirectoryData to receive updates to stateObj
-  // const suscribeToStateUpdates = DirectoryData.subscribe((data) => {
-  //   stateObj = data.stateObj;
-  //   populateRenderCountObj(stateObj);
-  // });
-  
-  //for every reload, increment relevant key of renderCountObj
-  // const handleReloads = (data) => {
-  //     if (data) {
-  
-  //     }
-  // }
-  
-
-  //Creating the bar chart visualization: 
-  const testDataObj = [
+	const points = [
     { component: 'Answer', count: 5},
     { component: 'App', count: 5},
     { component: 'Bank', count: 15},
@@ -42,68 +11,116 @@
     { component: 'Team', count: 9}
   ];
 
-const createRenderBarChart = (data) => {
-  let margin = {top: 20, right: 30, bottom: 40, left: 90},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-  
-  let svg = d3.select("#rerender-graph")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+	const xTicks = ['Answer', 'App', 'Bank', 'Board', 'Guess', 'Question', 'Team'];
+	const yTicks = [0, 5, 10, 15, 20, 25];
+	const padding = { top: 20, right: 15, bottom: 20, left: 25 };
 
-   d3.select("#rerender-graph")
-    .selectAll("p")
-    .data(data)
-    .join("p")
-    .attr("class", "#rerender-graph")
-    .text((d) => d)
-  
-  const y_scale = d3.scaleLinear()
-    .range([ 0, height ])
-    .domain(0, data.length)
-  svg.append("g")
-    .call(d3.axisLeft(y))
+	let width = 500;
+	let height = 200;
 
-  let x = d3.scaleLinear()
-    .domain([0, 25])
-    .range([ 0, width]);
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "translate(-10,0)rotate(-45)")
-    .style("text-anchor", "end");
+	function formatMobile(tick) {
+		return "'" + tick.toString().slice(-2);
+	}
 
-  svg.selectAll("myRect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.component); })
-    .attr("width", function(d) { return x(d.count); })
-    .attr("height", y.bandwidth() )
-    .attr("fill", "#69b3a2")
-  }
+	$: xScale = scaleLinear()
+		.domain([0, xTicks.length])
+		.range([padding.left, width - padding.right]);
 
-createRenderBarChart(testDataObj); 
+	$: yScale = scaleLinear()
+		.domain([0, Math.max.apply(null, yTicks)])
+		.range([height - padding.bottom, padding.top]);
 
+	$: innerWidth = width - (padding.left + padding.right);
+	$: barWidth = innerWidth / xTicks.length;
 </script>
 
 <main>
-  <h2>Component Render Tracker</h2>
-  <div id="rerender-graph"></div>
+  <h5 class="title">Component Rerender Tracker</h5>
+<div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
+	<svg>
+		<!-- y axis -->
+		<g class="axis y-axis">
+			{#each yTicks as tick}
+				<g class="tick tick-{tick}" transform="translate(0, {yScale(tick)})">
+					<line x2="100%"></line>
+					<text y="-4">{tick}</text>
+				</g>
+			{/each}
+		</g>
+
+		<!-- x axis -->
+		<g class="axis x-axis">
+			{#each points as point, i}
+				<g class="tick" transform="translate({xScale(i)},{height})">
+					<text x="{barWidth/2}" y="-4">{width > 380 ? point.component : formatMobile(point.component)}</text>
+				</g>
+			{/each}
+		</g>
+
+		<g class='bars'>
+			{#each points as point, i}
+				<rect
+					x="{xScale(i) + 2}"
+					y="{yScale(point.count)}"
+					width="{barWidth - 4}"
+					height="{yScale(0) - yScale(point.count)}"
+				></rect>
+			{/each}
+		</g>
+	</svg>
+</div>
 </main>
 
 <style>
-  #rerender-graph {
-    width: 100%;
-    height: 100%;
-    resize: horizontal;
-    overflow: auto;
+    .title {
+    color: whitesmoke;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-top: 50px; 
+    font-size: 16px;
   }
 
+	.chart {
+		width: 100%;
+		max-width: 500px;
+		margin: 0 auto;
+	}
+
+	svg {
+		position: relative;
+		width: 100%;
+		height: 200px;
+	}
+
+	.tick {
+		font-family: Helvetica, Arial;
+		font-size: .725em;
+		font-weight: 200;
+	}
+
+	.tick line {
+		stroke: #e2e2e2;
+		stroke-dasharray: 2;
+	}
+
+	.tick text {
+		fill: #ccc;
+		text-anchor: start;
+	}
+
+	.tick.tick-0 line {
+		stroke-dasharray: 0;
+	}
+
+	.x-axis .tick text {
+		text-anchor: middle;
+	}
+
+	.bars rect {
+		fill: #8031a7;
+        border: 10px solid; 
+        border-color: #070608;
+		stroke: none;
+		opacity: 0.65;
+	}
 </style>

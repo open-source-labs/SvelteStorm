@@ -39,18 +39,7 @@ const startSession = (err, data, stderr) => {
         <div class="h5Container">
           <h5 class="title">PERFORMANCE DASHBOARD</h5>
         </div>
-        <!-- <div>
-            <span>
-                <button
-                type="button"
-                class="childButton"
-                on:click={startSession}>Start</button>
-                <button
-                type="button"
-                class="childButton"
-                on:click={endSession}>Stop</button>
-            </span>
-        </div> -->
+
         <div>
           <RerenderTracker />
         </div>
