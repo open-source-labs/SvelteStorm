@@ -5,9 +5,7 @@
   import StateManager from "./StateManager/StateManager.svelte";
   const { app, ipcMain, ipcRenderer, BrowserWindow } = require("electron");
   import Debugger from "./TimeTraveler/Debugger.svelte";
-
-  import { showEditorBackground } from './DataStore/SvelteStormDataStore'
-
+  import { showEditorBackground } from './DataStore/SvelteStormDataStore';
   import {onMount} from 'svelte';
   import searchDoc from './SearchProgram.js';
   import PerformanceDashboard from "./PerformanceDashboard/PerformanceDashboard.svelte";
@@ -303,12 +301,7 @@
                 <div>
                   <PerformanceDashboard />
                 </div>
-                <div>
-                  WEB VITALS HERE
-                </div>
-                <div>
-                  Re-Render Data HERE
-                </div>
+              
                 <footer>
                   <span>
                     <button class="backButton" on:click={handlePerformance}>Back</button>
