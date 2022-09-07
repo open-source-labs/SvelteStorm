@@ -11,7 +11,7 @@
 
 <div class="state-container">
   <div class="h5Container">
-    <h5 class="title">COMPONENTS & PROPS</h5>
+    <h4 class="title">COMPONENTS & PROPS</h4>
   </div>
   <ul>
     {#each Object.entries(stateObj) as [file, state]}
@@ -49,8 +49,8 @@
     color: whitesmoke;
     margin-bottom: 0;
     margin-top: 0;
-    padding-top: 0px; 
-    font-size: 16px;
+    padding-top: 0;
+    font-size: 12px;
   }
 
   span {

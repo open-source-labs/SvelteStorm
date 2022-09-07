@@ -37,7 +37,7 @@ const startSession = (err, data, stderr) => {
 <main> 
     <div class="state-container">
         <div class="h5Container">
-          <h5 class="title">PERFORMANCE DASHBOARD</h5>
+          <h4 class="title">PERFORMANCE DASHBOARD</h4>
         </div>
 
         <div>

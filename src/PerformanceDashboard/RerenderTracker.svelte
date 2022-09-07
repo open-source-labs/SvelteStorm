@@ -35,7 +35,7 @@
 </script>
 
 <main>
-  <h5 class="title">Component Rerender Tracker</h5>
+  <h5 class="graph-title">Component Rerender Tracker</h5>
 <div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
 	<svg>
 		<!-- y axis -->
@@ -72,12 +72,12 @@
 </main>
 
 <style>
-    .title {
+  .graph-title {
     color: whitesmoke;
     margin-bottom: 0;
     margin-top: 0;
-    padding-top: 50px; 
-    font-size: 16px;
+    padding-top: 50px;
+    font-size: 12px;
   }
 
 	.chart {
