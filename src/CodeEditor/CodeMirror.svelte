@@ -34,11 +34,7 @@
   import searchDoc from "../SearchProgram.js";
 
   const { ipcRenderer } = require("electron");
-  //console.log('****JSHINT is something: ', JSHINT, ' *****');
-  //console.log('** ', (window as any).JSHINT)
-  //console.log('** ', (window as any).JSHINT)
-  //console.log('** htmlHint: ', (window as any).HTMLHint)
-  //console.log('** cssLint: ', (window as any).CSSLint)
+  
   import {
     editorCache,
     codeMirrorEditor,
