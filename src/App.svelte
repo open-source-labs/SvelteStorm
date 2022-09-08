@@ -16,8 +16,8 @@
   let value: string = '';
   let submit: boolean = false;
   let docsBool: boolean = false;
-  let performanceBool: boolean = false; 
-
+  let performanceBool: boolean = false;
+  let editorBool: boolean = false;
   let documentation: string;
   let url: string;
   $: documentation = `https://svelte.dev/docs#${url}`;
@@ -154,12 +154,12 @@
       resizeObj[panel].isResizing = false;
     }
 
-    
+
     let horizDivider: HTMLElement = document.getElementById('horizontal-divider');
     let editorDivider: HTMLElement = document.getElementById('editor-divider');
     let filedirDivider: HTMLElement = document.getElementById('filedir-divider');
     let visualizationDivider: HTMLElement = document.getElementById('visualization-divider');
-      
+
     horizDivider.addEventListener('mouseover', (e) =>
       chgCursor(e, 'horizontal-divider')
     );
@@ -217,9 +217,12 @@
   export const handleDocuments = () => {
     docsBool = !docsBool;
   };
+  export const handleEditorToggle = () => {
+    editorBool = !editorBool;
+  }
 
   export const handlePerformance = () => {
-    performanceBool = !performanceBool; 
+    performanceBool = !performanceBool;
   }
 
   const handleKeyup = (e: KeyboardEvent) => {
@@ -276,7 +279,7 @@
     <div class="dividers-v" id="visualization-divider" />
 
 
-    
+
         <div class="box wrapper-right" id="wrapper-right">
           <div class="box d root">
             <form class="render-wrapper" on:submit|preventDefault={handleSubmit}>
@@ -301,7 +304,7 @@
                 <div>
                   <PerformanceDashboard />
                 </div>
-              
+
                 <footer>
                   <span>
                     <button class="backButton" on:click={handlePerformance}>Back</button>
@@ -309,19 +312,36 @@
                 </footer>
 
               {/if}
-              {#if docsBool === false && performanceBool === false}
-                <div class="parent grid-parent"> 
+              <!-- the editor for the Split-View -->
+              {#if editorBool === true}
+                <div class="editor-wrapper">
+                  <Editor />
+                  </div>
+                  <span>
+                    <button class="backButton" on:click={handleEditorToggle}>Back</button>
+                  </span>
+            {/if}
+
+              {#if docsBool === false && performanceBool === false && editorBool === false}
+                <div class="parent grid-parent">
                   <span>
                   <button
                     type="button"
                     class="childButton"
-                    on:click={handlePerformance}> Performance Dash<span class="material-symbols-outlined"> speed</span> </button>   
-                </span>          
+                    on:click={handlePerformance}> Performance Dash<span class="material-symbols-outlined"> speed</span> </button>
+                </span>
                   <button
                     type="button"
                     class="childButton"
                     on:click={handleDocuments}> Docs<span class="material-symbols-outlined"> manage_search</span></button
-                  >         
+                  >
+                  <!-- button to access Split-View -->
+                  <span>
+                  <button
+                    type="button"
+                    class="childButton"
+                    on:click={handleEditorToggle}> Split View <span class="material-symbols-outlined"> vertical_split</span> </button>
+                </span>
                 </div>
                 <div id="stateManager">
                   <StateManager />
@@ -369,21 +389,21 @@
     #file-dir {
       background-color: #1f2330;
     }
-    
+
     #editor-window {
       background-color: #27263a;
     }
-    
+
     #terminal-window {
       background-color: black;
     }
-  
+
     #wrapper-right {
       position: relative;
       background-color: #27263a;
     }
-    
-    
+
+
   #wrapper-right:before {
     content: ' ';
     display: block;
@@ -399,22 +419,22 @@
     background-position: 50% 0;
     background-size: cover;
   }
-  
+
   .root {
     position: relative;
   }
-  
+
     .render-wrapper {
       width: 100%;
       height: 100%;
     }
-  
+
     body {
       height: 100%;
       width: 100%;
     }
-   
-  
+
+
     /*2022-ST-RJ Restructured CSS to use flex rather than grid so dynamic window resizing works appropriately /*
     /* Wrapper Window - SvelteTeam */
     .wrapper {
@@ -427,7 +447,7 @@
       flex-grow: 1;
       position: relative;
     }
-  
+
     .wrapper-left {
       height: 100%;
       width: 50%;
@@ -441,7 +461,7 @@
       border-right: 1px solid #444;
       padding: 0;
     }
-  
+
     .wrapper-right {
       background-size: contain;
       background-blend-mode: normal;
@@ -454,7 +474,7 @@
       background-color: #27263a;
       color: #444;
     }
-  
+
     .wrapper-upper {
       height: 80%;
       display: flex;
@@ -485,7 +505,7 @@
       margin-left: 30;
       padding-left: 30;
     }
-    
+
     /* .editor-wrapper::before { */
     .backdrop::before {
       box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
@@ -498,10 +518,10 @@
       bottom: 0;
       right: 0;
       position: absolute;
-      z-index: 1;   
+      z-index: 1;
       }
-  
-  
+
+
       /* .editor-wrapper::after { */
       .backdrop::after {
         box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
@@ -516,10 +536,10 @@
         bottom: 0;
         right: 0;
         position: absolute;
-        z-index: 2;   
+        z-index: 2;
   }
-  
-  
+
+
     .docs {
       overflow: auto;
       color: white;
@@ -527,14 +547,14 @@
       width: 98%;
       color: 'grey';
     }
-  
+
     .render-wrapper {
       display: flex;
       flex-direction: column;
       height: 100%;
       overflow-y: scroll;
     }
-  
+
     .dividers-h {
       z-index: 9999;
       padding-top: 1px;
@@ -544,7 +564,7 @@
       /* margin-top: 20px; */
       margin-bottom: 6px;
     }
-  
+
     .dividers-v {
       z-index: 9999;
       padding-left: 1px;
@@ -553,7 +573,7 @@
       height: 100%;
       background-color: rgb(152, 133, 176);
     }
-  
+
     #visualization-divider {
       z-index: 9999;
       padding-left: 1px;
@@ -562,13 +582,13 @@
       height: 100%;
       background-color: rgb(152, 133, 176);
     }
-  
+
     .box {
       color: rgb(245, 242, 239);
       border-radius: 0px;
       overflow-y: scroll;
     }
-  
+
     /* File Directory - SvelteTeam */
     .a {
       font-size: 10px;
@@ -580,7 +600,7 @@
       border-right: 1px solid #3d3d3d;
       border-bottom: 1px solid #3d3d3d;
     }
-  
+
     /* Text Editor - SvelteTeam */
     .b {
       overflow: auto;
@@ -592,12 +612,12 @@
       margin-right: -8px;
       padding-right: 8px;
     }
-  
+
     .d {
       /* background-image: url('../public/img/TimeTravel04.jpg');
       background-size: contain;
       background-color: #0d1117; */
-  
+
       min-width: 1%;
       flex-direction: column;
       flex-grow: 1; /*Let render window take up remaining space in the flexbox */
@@ -606,7 +626,7 @@
       border-bottom: 1px solid #3d3d3d;
       position: relative;
     }
-  
+
     .d input {
       margin: auto;
       margin-top: 0;
@@ -626,9 +646,9 @@
       /* margin-top: 20px; */
       padding-top: 10px;
       padding-left: 10px;
-  
+
     }
-  
+
     /* Webpage Render - SvelteTeam */
     /* .webpage {
       height: 100%;
@@ -641,16 +661,16 @@
       width: 98%;
       color: 'grey';
     }
-  
+
     .parent.grid-parent button {
       color: white;
     }
-  
+
     .b :global(.childClass) {
       overflow: scroll;
       display: flex;
     }
-  
+
     .childButton {
       color: grey;
       background: transparent;
@@ -684,8 +704,8 @@
     .searchButton:hover{
       text-decoration: underline;
     }
-  
-  
+
+
     #terminal-window::-webkit-scrollbar , #treeParent::-webkit-scrollbar {
     display: block;
     width: 15px;
@@ -698,35 +718,35 @@
     background-color: var(--scrollbar_scrollybit_color);
     border: var(--scrollbar_box_border);
   }
-  
+
   #terminal-window::-webkit-scrollbar-track, #treeParent::-webkit-scrollbar-track {
     /* background-color: rgb(209, 159, 59); */
     background-color: #27263a;
     margin-top: 2px;
     /* padding-top: 20px; */
   }
-  
+
   #terminal-window::-webkit-scrollbar-track-piece, #treeParent::-webkit-scrollbar-track-piece {
     border: var(--scrollbar_border);
     background-color: rgb(105, 225, 244);
     background-color: var(--scrollbar_box_color);
   }
-  
+
   #terminal-window::-webkit-scrollbar-corner, #treeParent::-webkit-scrollbar-corner {
     width: 20px;
     height: 20px;
     border: 3px solid white;
     background-color: rgb(209, 59, 179);
   }
-  
+
   #terminal-window::-webkit-resizer, #treeParent::-webkit-resizer {
     width: 20px;
     height: 20px;
     background-color: rgb(59, 104, 209);
     border: 3px solid white;
-    
+
   }
-  
+
   #wrapper-upper {
     margin: -1px;
     /* margin-left: -1px; */
@@ -734,7 +754,7 @@
     /* margin-bottom: -1px; */
     /* margin-right: 0px; */
     /* padding-right: 5px; */
-  
+
   }
-  
+
   </style>
