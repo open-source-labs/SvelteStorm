@@ -2,6 +2,7 @@
 //importingh DirectoryData from DataStore to access stateObj & componenetRElationships
   import { appBeingDebugedPath } from "../DataStore/SvelteStormDataStore"; 
   import RerenderTracker from "./RerenderTracker.svelte";
+  import WebVitals from "./WebVitals.svelte";
   const cmd = require('node-cmd');
   const process = require('process');
   const {ipcRenderer} = require('electron');
@@ -42,6 +43,10 @@ const startSession = (err, data, stderr) => {
 
         <div>
           <RerenderTracker />
+        </div>
+
+        <div>
+          <WebVitals />
         </div>
     </div>
 </main>
