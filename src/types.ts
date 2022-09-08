@@ -109,3 +109,13 @@ export type componentStateObj = {
 // export type SnapForPassingAround = [
 //   componentStateObj
 // ]
+
+// used for web vitals objects
+export interface VitalObject {
+  LCP?: number,
+  FID?: number,
+  CLS?: number,
+  FCP?: number,
+  TTFB?: number,
+  INP?: number,
+}
