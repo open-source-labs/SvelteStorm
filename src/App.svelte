@@ -141,6 +141,8 @@
       } else if (panel === 'visualization-divider') {
         if (resizeObj[panel].isResizing === true) {
           resize(e, 'visualization-divider');
+          // SS 5.0 JO - The below event dispatcher allows resizing when the d3 tree is populated
+          window.dispatchEvent(new Event('resize'));
         }
       } else if (panel === 'filedir-divider') {
         if (resizeObj[panel].isResizing === true) {
