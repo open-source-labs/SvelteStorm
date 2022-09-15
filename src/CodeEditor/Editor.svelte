@@ -119,14 +119,17 @@
   };
 
   // render file on open and add to store
-  ipcRenderer.on("file-opened", function (evt:any, file: string, content) {
+  // SS5.0 Note - File opened wasn't working in v4 - root cause seems to be b/c the Editor has to exist in order for 
+  // the following ipc fxn to be listening for a file-opened signal - additionally the editorValue value was "content" 
+  // before so I updated that to content. If this comment is still here - this issue still needs to be fixed.  
+  ipcRenderer.on('file-opened', function (evt:any, file: string, content) {
     filePath = file;
     process.platform === "win32"
       ? (fileName = file.slice().split("\\").pop())
       : (fileName = file.slice().split("/").pop());
     language = file.slice().split(".").pop();
     const newTab: NewFile = {
-      editorValue : "content",
+      editorValue : content,
       ext : language,
       editorLang : modes[language],
       filePath : filePath,
