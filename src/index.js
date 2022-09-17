@@ -355,7 +355,8 @@ ipcMain.on('web-vitals', (event, args) => {
 });
 
 ipcMain.on('PERFORMANCE', (event, args) => {
-  newWindow.webContents.send('PERFORMANCE', args)
+  console.log('index.js ipcMain: ', args)
+  newWindow.webContents.send('PERFORMANCE', args);
 });
 
 // close app when quiting

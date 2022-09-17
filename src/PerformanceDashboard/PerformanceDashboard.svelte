@@ -8,8 +8,7 @@
   const {ipcRenderer} = require('electron');
 
 
-  const path = appBeingDebugedPath; 
-  console.log('Performance Dashboard Path is: ', path)
+const path = appBeingDebugedPath; 
 
 const startSession = (err, data, stderr) => {
   console.log('Start session has been clicked!')

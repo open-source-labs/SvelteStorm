@@ -18,7 +18,6 @@ let eventCounter = 0;
 let nextId = 1;
 let first = true; 
 let isFirstAfterUpdate = true;
-const componentsForRenderCount = [];
 const compCounts = {};
 const compInstance = {}; 
 
@@ -38,7 +37,6 @@ const sendCounts = (compObj) => {1
     body: {
       compCounts, 
       compInstance,
-      componentsForRenderCount, 
     },
   });
 };
@@ -65,11 +63,9 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
   component.$$['id'] = tagName + nextId;
   component.$$['renderCount'] = 0; 
   nextId += 1; 
-  console.log('nextID is now: ', nextId); 
   const curId = component.$$.id;
   compCounts[curId] = 1;
-  componentsForRenderCount.push({component: e.detail.component.$$.id, count: e.detail.component.$$.renderCount})
-  // console.log('componentsForRenderCount is now: ', componentsForRenderCount);
+ 
   // capturing all instance of components
   if(!compInstance[tagName]){
     compInstance[tagName] = 1;
@@ -97,8 +93,6 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
     if (isFirstAfterUpdate) { return isFirstAfterUpdate = false;}
     compCounts[curId] += 1;
     component.$$.renderCount += 1
-    // console.log('after_update comp renderCount is now: ', {comp: component.$$.id, renderCount: component.$$.renderCount})
-    // console.log('componentsForRenderCount after update is now: ', componentsForRenderCount);
     
   });
 
@@ -149,7 +143,7 @@ function saveAndDispatchState(e) {
     lastIndex = cacheState.length - 1;
   }
 
-    sendCounts({compCounts, compInstance, componentsForRenderCount}); 
+    sendCounts({compCounts, compInstance}); 
 
 }
 
