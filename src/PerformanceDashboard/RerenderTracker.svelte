@@ -18,7 +18,8 @@
     const populateRerenderCountArr = (obj) => {
 		console.log('Entered populateRerenderCountArr')
 		const yAxisStarterMax = yTicks[yTicks.length-1]; 
-		let newMax = yAxisStarterMax; 
+		let newMaxYAxis = yAxisStarterMax; 
+		console.log('newMax to start is: ', newMaxYAxis);
 		const tempRenderCountArr = []; 
 		const newYTicks = [...yTicks]; 
 		const newXTicks = []; 
@@ -30,7 +31,8 @@
         	      count: obj[key],
         	  });
 			  newXTicks.push(key);
-			if (obj[key] > yAxisStarterMax) newMax = Number(obj[key]); 
+			if (Number(obj[key]) > yAxisStarterMax) newMaxYAxis = Number(obj[key]); 
+			console.log('updated newMax', newMaxYAxis); 
 		}
 
 		componentRerenderCountArr = [...tempRenderCountArr];
@@ -38,24 +40,26 @@
 		console.log({componentRerenderCountArr}); 
 		console.log({xTicks})
 
-		if (newMax > yAxisStarterMax) {
+		if (newMaxYAxis > yAxisStarterMax) {
 			console.log('entered newmax conditional')
-			const newMax = Math.cieling(component.count/10)*10 + 5; 
+			newMaxYAxis = Math.ceil(newMaxYAxis/10)*10 + 5;
+			console.log('newmax after Math.ceiling: ', newMaxYAxis); 
 			let i = yAxisStarterMax + 5;
 
-			while (i < newMax) {
+			while (i <= newMaxYAxis) {
 				newYTicks.push(i); 
 				i += 5; 
 			}
-			yTicks = [...newYTicks];
+			yTicks = [yTicks, ...newYTicks];
+
 			console.log('yTicks is now: ', yTicks)
 		}
 	}
 
-	const padding = { top: 20, right: 15, bottom: 20, left: 25 };
+	const padding = { top: 20, right: 15, bottom: 40, left: 40 };
 
-	let width = 500;
-	let height = 200;
+	let width = 700;
+	let height = 400;
 
 	function formatMobile(tick) {
 		return "'" + tick.toString().slice(-2);
@@ -71,6 +75,12 @@
 
 	$: innerWidth = width - (padding.left + padding.right);
 	$: barWidth = innerWidth / xTicks.length;
+
+	// text-anchor="end"
+	// 				dx="-.8em"
+	// 				dy=".15em"
+	// 				transform="rotate(-65)"
+
 </script>
 
 <main>
@@ -91,7 +101,13 @@
 		<g class="axis x-axis">
 			{#each componentRerenderCountArr as point, i}
 				<g class="tick" transform="translate({xScale(i)},{height})">
-					<text x="{barWidth/2}" y="-4">{width > 380 ? point.component : formatMobile(point.component)}</text>
+					<text 
+					x="{barWidth/2}" 
+					y="-4"
+
+					>
+					{width > 380 ? point.component : formatMobile(point.component)}
+				</text>
 				</g>
 			{/each}
 		</g>
