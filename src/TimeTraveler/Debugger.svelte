@@ -61,7 +61,7 @@
       'App',
       activeIndex
     );
-    drawTree(treeData);
+    // drawTree(treeData);
   });
 
   function createSnapshot(data) {
@@ -281,7 +281,7 @@
       'App',
       activeIndex
     );
-    drawTree(treeData);
+    // drawTree(treeData);
   }
 
   function refresh(){
@@ -302,7 +302,7 @@
       'App',
       activeIndex
     );
-    drawTree(treeData);
+    // drawTree(treeData);
   }
 
 </script>

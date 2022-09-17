@@ -255,10 +255,14 @@ const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
 });
 
 const openFile = (exports.openFile = (targetWindow, file) => {
+  try { 
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file);
   targetWindow.webContents.send('file-opened', file, content);
   createApplicationMenu();
+  } catch (err) {
+    console.log('Error occured while opening the file: ', {err})
+  }
 });
 
 let cwdFilePath;
@@ -348,6 +352,11 @@ ipcMain.on('SNAPSHOT', (event, data) => {
 ipcMain.on('web-vitals', (event, args) => {
   // console.log(args);
   newWindow.webContents.send('web-vitals', args)
+});
+
+ipcMain.on('PERFORMANCE', (event, args) => {
+  console.log("PERFORMANCE ARGS IN index.js are: ", args);
+  newWindow.webContents.send('PERFORMANCE', args)
 });
 
 // close app when quiting

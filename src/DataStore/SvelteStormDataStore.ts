@@ -46,6 +46,9 @@ const collectionOfAllSnaps = writable([]);
 // SStorm 5.0 Update - Adding object to hold values of web-vitals 
 const vitals: Writable<VitalObject> = writable<VitalObject>({})
 
+const componentRerenderCount: Writable<{component: string, count: number}[]> = writable<{component: string, count: number}[]>([]);
+
+
 export {
   DirectoryData,
   openTabs,

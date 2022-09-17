@@ -1,5 +1,17 @@
 <script>
-	import { scaleLinear } from 'd3-scale';
+  import { scaleLinear } from 'd3-scale';
+  import { DirectoryData, componentRerenderCount } from "../DataStore/SvelteStormDataStore";
+
+  const { ipcRenderer } = require('electron');
+
+	ipcRenderer.on('PERFORMANCE', (event, args) => {
+
+		///use compCounts being sent, will be an object. 
+		console.log('ipcRenderer in RerenderTracker has fired')
+		console.log('RerenderTracker received args: ', args)
+
+		//update componentRenderCount in store 
+    });
 
 	const points = [
     { component: 'Answer', count: 5},
