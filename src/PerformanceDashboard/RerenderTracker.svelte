@@ -3,36 +3,17 @@
   const { ipcRenderer } = require('electron');
 
   let componentRerenderCount = []; 
+  let countObj;
+  const xTicks = [];
+  const yTicks = [0, 5, 10, 15, 20, 25]; 
+
 
 	ipcRenderer.on('PERFORMANCE', (event, args) => {
-		console.log('Args received rerendertracker: ', args)
-		console.log('Args.compCount received rerendertracker: ', args.compCounts)
-		console.log('Args.body.compCount received rerendertracker: ', args.body.compCounts)
-		console.log('Args.body[compCount] received rerendertracker: ', args.body[compCounts])
-		console.log('Args.body is: ', args.body)
-		console.log('Args[body] is: ', args[body])
-		console.log('Args[body].compCount is: ', args[body].compCounts)
+		countObj = args.body.compCounts; 
+		console.log({countObj})
     });
-
-	// console.log({componentRerenderCount});
-
-	// 	{Answer5: 2
-	// Answer6: 2
-	// Answer7: 2
-	// Answer8: 2
-	// Answer9: 2
-	// Answer10: 2
-	// App1: 4
-	// Bank3: 2
-	// Board12: 2
-	// Guess13: 2
-	// Guess14: 7
-	// Question4: 2
-	// Team2: 1
-	// Team11: 2}
-
-	//{component: e.detail.$$.id, count: e.detail.$$.renderCount}
-
+	
+	console.log('countObj outside of renderer ', countObj)
 	const points = [
     { component: 'Answer', count: 5},
     { component: 'App', count: 5},
@@ -43,8 +24,7 @@
     { component: 'Team', count: 9}
   ];
 
-	const xTicks = ['Answer', 'App', 'Bank', 'Board', 'Guess', 'Question', 'Team'];
-	const yTicks = [0, 5, 10, 15, 20, 25];
+
 	const padding = { top: 20, right: 15, bottom: 20, left: 25 };
 
 	let width = 500;
