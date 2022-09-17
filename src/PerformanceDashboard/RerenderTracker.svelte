@@ -1,17 +1,42 @@
 <script>
   import { scaleLinear } from 'd3-scale';
-  import { DirectoryData, componentRerenderCount } from "../DataStore/SvelteStormDataStore";
+//   import { componentRerenderCount } from "../DataStore/SvelteStormDataStore";
+
+  const componentRerenderCounts = []
+
+let componentRerenderCount = []; 
+
+  //two options: 
+  // Reassign entire variable in the STore -- take all the sdata
+  // Reassign only the data that was updated (will need to only send that component name and count to the store )
 
   const { ipcRenderer } = require('electron');
 
+
 	ipcRenderer.on('PERFORMANCE', (event, args) => {
-
 		///use compCounts being sent, will be an object. 
-		console.log('ipcRenderer in RerenderTracker has fired')
-		console.log('RerenderTracker received args: ', args)
-
-		//update componentRenderCount in store 
+		console.logs('Args received rerendertracker: ', args)
+		componentRerenderCount = [...args.compCounts]
     });
+
+	console.log({componentRerenderCount});
+
+	// 	{Answer5: 2
+	// Answer6: 2
+	// Answer7: 2
+	// Answer8: 2
+	// Answer9: 2
+	// Answer10: 2
+	// App1: 4
+	// Bank3: 2
+	// Board12: 2
+	// Guess13: 2
+	// Guess14: 7
+	// Question4: 2
+	// Team2: 1
+	// Team11: 2}
+
+	//{component: e.detail.$$.id, count: e.detail.$$.renderCount}
 
 	const points = [
     { component: 'Answer', count: 5},

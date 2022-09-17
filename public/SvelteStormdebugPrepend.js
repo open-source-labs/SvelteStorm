@@ -38,7 +38,7 @@ const sendCounts = (compObj) => {1
     body: {
       compCounts, 
       compInstance,
-      componentsForRenderCount
+      componentsForRenderCount, 
     },
   });
 };
@@ -149,8 +149,7 @@ function saveAndDispatchState(e) {
     lastIndex = cacheState.length - 1;
   }
 
-    console.log('sADS value of compCounts, compInstance, componentsForRenderCount: ', {compCounts, compInstance, componentsForRenderCount})
-    sendCounts({compCounts}); 
+    sendCounts({compCounts, compInstance, componentsForRenderCount}); 
 
 }
 

@@ -355,7 +355,6 @@ ipcMain.on('web-vitals', (event, args) => {
 });
 
 ipcMain.on('PERFORMANCE', (event, args) => {
-  console.log("PERFORMANCE ARGS IN index.js are: ", args);
   newWindow.webContents.send('PERFORMANCE', args)
 });
 
