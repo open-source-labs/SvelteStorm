@@ -286,7 +286,4 @@
     color: #f1f1f1;
   }
 
-  .cm-searching {
-    color: #465188 !important;
-  }
 </style>
