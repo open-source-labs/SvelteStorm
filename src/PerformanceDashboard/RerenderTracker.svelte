@@ -2,28 +2,39 @@
   import { scaleLinear } from 'd3-scale';
   const { ipcRenderer } = require('electron');
 
-  let componentRerenderCount = []; 
+  const componentRerenderCountArr = []; 
   let countObj;
   const xTicks = [];
   const yTicks = [0, 5, 10, 15, 20, 25]; 
 
+    //Uses countObj data to populate componentRerenderCountArr, yTicks, and xTicks for D3 chart 
+    const populateRerenderCountArr = (obj) => {
+		const yAxisStarterMax = yTicks[yTicks.length-1]; 
+		let newMax = yAxisStarterMax; 
+		
+		for (const key in obj) {
+        	componentRerenderCountArr.push({
+        	      component: key, 
+        	      count: obj[key],
+        	  });
+        	xTicks.push(key);
+			if (obj[key] > yAxisStarterMax) newMax = Number(obj[key]); 
+		}
+		if (newMax > yAxisStarterMax) {
+			const newMax = Math.cieling(component.count/10)*10 + 5; 
+			let i = yAxisStarterMax + 5;
+
+			while (i < newMax) {
+				yTicks.push(i); 
+				i += 5; 
+			}
+		}
+	}
 
 	ipcRenderer.on('PERFORMANCE', (event, args) => {
-		countObj = args.body.compCounts; 
-		console.log({countObj})
+		countObj = args.body.compCounts;
+		populateRerenderCountArr(countObj); 
     });
-	
-	console.log('countObj outside of renderer ', countObj)
-	const points = [
-    { component: 'Answer', count: 5},
-    { component: 'App', count: 5},
-    { component: 'Bank', count: 15},
-    { component: 'Board', count: 5},
-    { component: 'Guess', count: 8}, 
-    { component: 'Question', count: 9}, 
-    { component: 'Team', count: 9}
-  ];
-
 
 	const padding = { top: 20, right: 15, bottom: 20, left: 25 };
 
@@ -62,7 +73,7 @@
 
 		<!-- x axis -->
 		<g class="axis x-axis">
-			{#each points as point, i}
+			{#each componentRerenderCountArr as point, i}
 				<g class="tick" transform="translate({xScale(i)},{height})">
 					<text x="{barWidth/2}" y="-4">{width > 380 ? point.component : formatMobile(point.component)}</text>
 				</g>
@@ -70,7 +81,7 @@
 		</g>
 
 		<g class='bars'>
-			{#each points as point, i}
+			{#each componentRerenderCountArr as point, i}
 				<rect
 					x="{xScale(i) + 2}"
 					y="{yScale(point.count)}"
