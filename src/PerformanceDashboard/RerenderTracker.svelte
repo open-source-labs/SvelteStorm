@@ -2,39 +2,55 @@
   import { scaleLinear } from 'd3-scale';
   const { ipcRenderer } = require('electron');
 
-  const componentRerenderCountArr = []; 
+	ipcRenderer.on('PERFORMANCE', (event, args) => {
+		countObj = args.body.compCounts;
+		console.log('renderer - before populate')
+		populateRerenderCountArr(countObj); 
+		console.log('renderer - after populate')
+	});
+
+  let componentRerenderCountArr = []; 
   let countObj;
-  const xTicks = [];
-  const yTicks = [0, 5, 10, 15, 20, 25]; 
+  let xTicks = [];
+  let yTicks = [0, 5, 10, 15, 20, 25]; 
 
     //Uses countObj data to populate componentRerenderCountArr, yTicks, and xTicks for D3 chart 
     const populateRerenderCountArr = (obj) => {
+		console.log('Entered populateRerenderCountArr')
 		const yAxisStarterMax = yTicks[yTicks.length-1]; 
 		let newMax = yAxisStarterMax; 
-		
+		const tempRenderCountArr = []; 
+		const newYTicks = [...yTicks]; 
+		const newXTicks = []; 
+
 		for (const key in obj) {
-        	componentRerenderCountArr.push({
+			console.log('entered countObj for loop')
+        	tempRenderCountArr.push({
         	      component: key, 
         	      count: obj[key],
         	  });
-        	xTicks.push(key);
+			  newXTicks.push(key);
 			if (obj[key] > yAxisStarterMax) newMax = Number(obj[key]); 
 		}
+
+		componentRerenderCountArr = [...tempRenderCountArr];
+		xTicks = [...newXTicks]; 
+		console.log({componentRerenderCountArr}); 
+		console.log({xTicks})
+
 		if (newMax > yAxisStarterMax) {
+			console.log('entered newmax conditional')
 			const newMax = Math.cieling(component.count/10)*10 + 5; 
 			let i = yAxisStarterMax + 5;
 
 			while (i < newMax) {
-				yTicks.push(i); 
+				newYTicks.push(i); 
 				i += 5; 
 			}
+			yTicks = [...newYTicks];
+			console.log('yTicks is now: ', yTicks)
 		}
 	}
-
-	ipcRenderer.on('PERFORMANCE', (event, args) => {
-		countObj = args.body.compCounts;
-		populateRerenderCountArr(countObj); 
-    });
 
 	const padding = { top: 20, right: 15, bottom: 20, left: 25 };
 
