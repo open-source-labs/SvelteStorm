@@ -1,6 +1,6 @@
  <h1 align = center>
 <img src="./public/img/SvelteStorm4Logos/SvelteStorm4Logo10x1024.png" style="width: 70%"><br>
-SvelteStorm 4.0
+SvelteStorm 5.0
 </h1>
 
 ![SvelteStorm Homepage](./public/img/SvelteStormDemoPics/SS4.png)
@@ -8,7 +8,7 @@ SvelteStorm 4.0
 ## Table of Contents
  - [New Features and Improvements](#new-features-and-improvements)
  - [How To Use SvelteStorm](#how-to-use-sveltestorm)
- - [Installing SvelteStorm 4 for the Purpose of Enhancing SvelteStorm as an IDE](#installing-sveltestorm-4-for-the-purpose-of-enhancing-sveltestorm-as-an-ide)
+ - [Installing SvelteStorm 5 for the Purpose of Enhancing SvelteStorm as an IDE](#installing-sveltestorm-4-for-the-purpose-of-enhancing-sveltestorm-as-an-ide)
    - [macOS](#macos-1)
    - [Windows (using WSL 2)](#windows-using-wsl-2)
  - [Key Features](#key-features)
@@ -41,7 +41,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 
 ![SvelteStorm Demo](./public/img/SvelteStormDemoPics/ssdemo.gif)
  
-## Installing SvelteStorm 4 for the Purpose of Enhancing SvelteStorm as an IDE
+## Installing SvelteStorm 5 for the Purpose of Enhancing SvelteStorm as an IDE
  
 ### macOS
  
@@ -50,7 +50,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
      - `nvm install 16.16.0`
      - `nvm use 16.16.0`
      - `nvm alias default 16.16.0`
-2. Clone this **SvelteStorm 4.0** repo to your code editor of choice (VS Code works best)
+2. Clone this **SvelteStorm 5.0** repo to your code editor of choice (VS Code works best)
 3. Run `npm install` to install dependencies
 4. Run `npm start` and SvelteStorm will open up and be ready for use!
  
@@ -90,7 +90,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
            - Remote Containers
       1.  [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
       2.  [C/C++ Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack)
-11. Clone this **SvelteStorm 4.0** repo to your code editor of choice (VS Code works best)
+11. Clone this **SvelteStorm 5.0** repo to your code editor of choice (VS Code works best)
 12. Run `npm install` to install dependencies
 13. Run `npm start` and SvelteStorm will open up and be ready for use!
 

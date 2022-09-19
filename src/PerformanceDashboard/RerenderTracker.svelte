@@ -2,11 +2,15 @@
   import { scaleLinear } from 'd3-scale';
   const { ipcRenderer } = require('electron');
 
+  //next steps: how to auto resize graph or increase the size at least
+	// get the labels to be 45 * 
+	//conditional formatting = if y axis exceeds 50, increment axis by 10s, if exeeds 200, increment by 50 
+	//lighten the dotted lines (maybe make transparent)
+	// IDEAL WORLD: flip x and y axis
+
 	ipcRenderer.on('PERFORMANCE', (event, args) => {
 		countObj = args.body.compCounts;
-		console.log('renderer - before populate')
 		populateRerenderCountArr(countObj); 
-		console.log('renderer - after populate')
 	});
 
   let componentRerenderCountArr = []; 
@@ -16,50 +20,40 @@
 
     //Uses countObj data to populate componentRerenderCountArr, yTicks, and xTicks for D3 chart 
     const populateRerenderCountArr = (obj) => {
-		console.log('Entered populateRerenderCountArr')
 		const yAxisStarterMax = yTicks[yTicks.length-1]; 
 		let newMaxYAxis = yAxisStarterMax; 
-		console.log('newMax to start is: ', newMaxYAxis);
 		const tempRenderCountArr = []; 
 		const newYTicks = [...yTicks]; 
 		const newXTicks = []; 
 
 		for (const key in obj) {
-			console.log('entered countObj for loop')
         	tempRenderCountArr.push({
         	      component: key, 
         	      count: obj[key],
         	  });
 			  newXTicks.push(key);
 			if (Number(obj[key]) > yAxisStarterMax) newMaxYAxis = Number(obj[key]); 
-			console.log('updated newMax', newMaxYAxis); 
 		}
 
 		componentRerenderCountArr = [...tempRenderCountArr];
 		xTicks = [...newXTicks]; 
-		console.log({componentRerenderCountArr}); 
-		console.log({xTicks})
-
+		
 		if (newMaxYAxis > yAxisStarterMax) {
-			console.log('entered newmax conditional')
-			newMaxYAxis = Math.ceil(newMaxYAxis/10)*10 + 5;
-			console.log('newmax after Math.ceiling: ', newMaxYAxis); 
+			newMaxYAxis = Math.ceil(newMaxYAxis/10)*10;
 			let i = yAxisStarterMax + 5;
 
 			while (i <= newMaxYAxis) {
 				newYTicks.push(i); 
 				i += 5; 
 			}
-			yTicks = [yTicks, ...newYTicks];
-
-			console.log('yTicks is now: ', yTicks)
+			yTicks = [...newYTicks];
 		}
 	}
 
-	const padding = { top: 20, right: 15, bottom: 40, left: 40 };
+	const padding = { top: 20, right: 15, bottom: 40, left: 30 };
 
-	let width = 700;
-	let height = 400;
+	let width = 800;
+	let height = 600;
 
 	function formatMobile(tick) {
 		return "'" + tick.toString().slice(-2);
@@ -75,11 +69,6 @@
 
 	$: innerWidth = width - (padding.left + padding.right);
 	$: barWidth = innerWidth / xTicks.length;
-
-	// text-anchor="end"
-	// 				dx="-.8em"
-	// 				dy=".15em"
-	// 				transform="rotate(-65)"
 
 </script>
 
@@ -104,7 +93,8 @@
 					<text 
 					x="{barWidth/2}" 
 					y="-4"
-
+					text-anchor="end"
+	 				transform="rotate(-65)"
 					>
 					{width > 380 ? point.component : formatMobile(point.component)}
 				</text>
