@@ -97,4 +97,6 @@
   window.addEventListener('resize', fitOnTheGo);
 </script>
 
-<div id="xterm" />
+<main>
+  <div id="xterm" />
+</main>

@@ -46,7 +46,7 @@ let browser;
 //Fires once when app is ready..
 app.on('ready', () => {
   createApplicationMenu();
-  newWindow = createWindow();
+  createWindow();
 });
 
 //testing to see if on mac, don't close all the windows
@@ -99,7 +99,7 @@ const createWindow = (exports.createWindow = () => {
    *   SvelteStorm
    * ==================================================
    */
-  let newWindow = new BrowserWindow({
+  newWindow = new BrowserWindow({
     width: 1400,
     height: 1300,
     x: 20,
@@ -161,6 +161,7 @@ const createWindow = (exports.createWindow = () => {
   newWindow.on('closed', () => {
     windows.delete(newWindow);
     createApplicationMenu();
+    // ptyProcess = null;
     newWindow = null;
   });
 
@@ -185,7 +186,7 @@ const createWindow = (exports.createWindow = () => {
   ipcMain.on('openFolder', (event, data) => {
     ptyProcess.cwd = cwdFilePath[0];
   });
-
+  
   //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
   ptyProcess.onData((data) => {
     newWindow.webContents.send('terminal-incData', data);
@@ -209,7 +210,7 @@ const createWindow = (exports.createWindow = () => {
   });
 
   windows.add(newWindow);
-  return newWindow;
+  // return newWindow;
 });
 
  /*
