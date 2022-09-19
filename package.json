@@ -1,6 +1,6 @@
 {
   "name": "SvelteStorm",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "private": true,
   "description": "A Svelte IDE like no other. Embrace the 'norEaster storm.",
   "license": "ISC",
@@ -135,6 +135,7 @@
     "rollup": "^2.77.2",
     "rollup-plugin-import-css": "^3.0.3",
     "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-polyfill-node": "^0.10.2",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",

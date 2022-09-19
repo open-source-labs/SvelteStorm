@@ -1,22 +1,59 @@
 <script>
-	import { scaleLinear } from 'd3-scale';
+  import { scaleLinear } from 'd3-scale';
+  const { ipcRenderer } = require('electron');
 
-	const points = [
-    { component: 'Answer', count: 5},
-    { component: 'App', count: 5},
-    { component: 'Bank', count: 15},
-    { component: 'Board', count: 5},
-    { component: 'Guess', count: 8}, 
-    { component: 'Question', count: 9}, 
-    { component: 'Team', count: 9}
-  ];
+  //next steps: how to auto resize graph or increase the size at least
+	// get the labels to be 45 * 
+	//conditional formatting = if y axis exceeds 50, increment axis by 10s, if exeeds 200, increment by 50 
+	//lighten the dotted lines (maybe make transparent)
+	// IDEAL WORLD: flip x and y axis
 
-	const xTicks = ['Answer', 'App', 'Bank', 'Board', 'Guess', 'Question', 'Team'];
-	const yTicks = [0, 5, 10, 15, 20, 25];
-	const padding = { top: 20, right: 15, bottom: 20, left: 25 };
+	ipcRenderer.on('PERFORMANCE', (event, args) => {
+		countObj = args.body.compCounts;
+		populateRerenderCountArr(countObj); 
+	});
 
-	let width = 500;
-	let height = 200;
+  let componentRerenderCountArr = []; 
+  let countObj;
+  let xTicks = [];
+  let yTicks = [0, 5, 10, 15, 20, 25]; 
+
+    //Uses countObj data to populate componentRerenderCountArr, yTicks, and xTicks for D3 chart 
+    const populateRerenderCountArr = (obj) => {
+		const yAxisStarterMax = yTicks[yTicks.length-1]; 
+		let newMaxYAxis = yAxisStarterMax; 
+		const tempRenderCountArr = []; 
+		const newYTicks = [...yTicks]; 
+		const newXTicks = []; 
+
+		for (const key in obj) {
+        	tempRenderCountArr.push({
+        	      component: key, 
+        	      count: obj[key],
+        	  });
+			  newXTicks.push(key);
+			if (Number(obj[key]) > yAxisStarterMax) newMaxYAxis = Number(obj[key]); 
+		}
+
+		componentRerenderCountArr = [...tempRenderCountArr];
+		xTicks = [...newXTicks]; 
+		
+		if (newMaxYAxis > yAxisStarterMax) {
+			newMaxYAxis = Math.ceil(newMaxYAxis/10)*10;
+			let i = yAxisStarterMax + 5;
+
+			while (i <= newMaxYAxis) {
+				newYTicks.push(i); 
+				i += 5; 
+			}
+			yTicks = [...newYTicks];
+		}
+	}
+
+	const padding = { top: 20, right: 15, bottom: 40, left: 30 };
+
+	let width = 800;
+	let height = 600;
 
 	function formatMobile(tick) {
 		return "'" + tick.toString().slice(-2);
@@ -32,6 +69,7 @@
 
 	$: innerWidth = width - (padding.left + padding.right);
 	$: barWidth = innerWidth / xTicks.length;
+
 </script>
 
 <main>
@@ -50,15 +88,22 @@
 
 		<!-- x axis -->
 		<g class="axis x-axis">
-			{#each points as point, i}
+			{#each componentRerenderCountArr as point, i}
 				<g class="tick" transform="translate({xScale(i)},{height})">
-					<text x="{barWidth/2}" y="-4">{width > 380 ? point.component : formatMobile(point.component)}</text>
+					<text 
+					x="{barWidth/2}" 
+					y="-4"
+					text-anchor="end"
+	 				transform="rotate(-65)"
+					>
+					{width > 380 ? point.component : formatMobile(point.component)}
+				</text>
 				</g>
 			{/each}
 		</g>
 
 		<g class='bars'>
-			{#each points as point, i}
+			{#each componentRerenderCountArr as point, i}
 				<rect
 					x="{xScale(i) + 2}"
 					y="{yScale(point.count)}"
