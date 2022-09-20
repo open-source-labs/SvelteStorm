@@ -98,7 +98,7 @@
 	}
 
   .line {
-    stroke: "#e2e2e261"; 
+    stroke: #e2e2e261; 
     stroke-dasharray: 3
   }
 
