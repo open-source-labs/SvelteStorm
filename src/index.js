@@ -45,7 +45,6 @@ let browser;
 //app.on is a start of the main process that controls the lifecycle events
 //Fires once when app is ready..
 app.on('ready', () => {
-  // createApplicationMenu();
   createWindow();
 });
 
@@ -99,6 +98,7 @@ const createWindow = (exports.createWindow = () => {
    *   SvelteStorm
    * ==================================================
    */
+  console.log('new win beinc created')
   newWindow = new BrowserWindow({
     width: 1400,
     height: 1300,
@@ -162,20 +162,14 @@ const createWindow = (exports.createWindow = () => {
     newWindow = null;
   });
   windows.add(newWindow);
-  // return newWindow;
+
 });
 
-
-
-// newWindow.on('show', () => {
-//   setTimeout(() => {
-//     newWindow.focus();
-//   }, 200);
-// });
-
-
-
-
+/* 
+  * Below code (shell and ptyProcess) was previously inside createWindow fxn but 
+  * was causing issues w/ re-activation. Moving it outside of the fxn below
+  * allows re-activation app but still not perfect implementation
+*/
 const shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
 // this spawns the terminal window space
 const ptyProcess = pty.spawn(shell, [], {
