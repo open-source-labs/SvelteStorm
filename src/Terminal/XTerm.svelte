@@ -38,9 +38,10 @@
 
           // Set the name of the file in which we will store our states for THIS debug session.
           $saveToFileName = path.resolve(__dirname, `./CapturedSnaps/${filename}`);
-          ipcRenderer.send('openDebugAppWindow', localhostToUse);
+          // ipcRenderer.send('openDebugAppWindow', localhostToUse);
         });
       }
+      ipcRenderer.send('openDebugAppWindow', localhostToUse);
     }
   }
 
