@@ -1,7 +1,7 @@
 <script> 
 //importingh DirectoryData from DataStore to access stateObj & componenetRElationships
   import { appBeingDebugedPath } from "../DataStore/SvelteStormDataStore"; 
-  import RerenderTracker from "./RerenderTracker.svelte";
+  import RerenderChart from "./RerenderChart.svelte";
   import WebVitals from "./WebVitals.svelte";
   const cmd = require('node-cmd');
   const process = require('process');
@@ -41,7 +41,7 @@ const startSession = (err, data, stderr) => {
         </div>
 
         <div class="component-holder">
-          <RerenderTracker />
+          <RerenderChart />
         </div>
 
         <div class="component-holder">
