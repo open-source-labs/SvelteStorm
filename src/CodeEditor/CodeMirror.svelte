@@ -1,6 +1,6 @@
 <script lang="ts">
   import { afterUpdate, onMount } from "svelte";
-  import CodeMirror from "codemirror";
+  import * as CodeMirror from "codemirror";
   import { scale } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import "codemirror/lib/codemirror.css";
@@ -19,12 +19,22 @@
   import "codemirror/addon/edit/closebrackets.js"; 
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
+  // SS 5.0 SEARCH ATTEMPTS - JAVI
+  // import "codemirror/addon/search/search.js";
+  import "codemirror/addon/search/searchcursor.js";
+  import "codemirror/addon/search/jump-to-line.js";
+  import "codemirror/addon/display/panel.js";
+  import "./CustomDialog/newDialog.js";
+  import "./CustomDialog/newDialog.css";
+  import "./CustomSearch/newSearch.js";
+  
+  
   // add linters
   import "codemirror/addon/lint/lint";
-  import "codemirror/addon/lint/lint.css"
+  import "codemirror/addon/lint/lint.css";
   import "codemirror/addon/lint/javascript-lint";
-  import "codemirror/addon/lint/css-lint"
-  import "codemirror/addon/lint/html-lint"
+  import "codemirror/addon/lint/css-lint";
+  import "codemirror/addon/lint/html-lint";
 
   const JSHINT = require('jshint').JSHINT;
   (window as any).JSHINT = JSHINT;  

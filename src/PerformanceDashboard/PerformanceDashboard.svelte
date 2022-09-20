@@ -8,8 +8,7 @@
   const {ipcRenderer} = require('electron');
 
 
-  const path = appBeingDebugedPath; 
-  console.log('Performance Dashboard Path is: ', path)
+const path = appBeingDebugedPath; 
 
 const startSession = (err, data, stderr) => {
   console.log('Start session has been clicked!')
@@ -41,11 +40,11 @@ const startSession = (err, data, stderr) => {
           <h4 class="title">PERFORMANCE DASHBOARD</h4>
         </div>
 
-        <div>
+        <div class="component-holder">
           <RerenderTracker />
         </div>
 
-        <div>
+        <div class="component-holder">
           <WebVitals />
         </div>
     </div>
@@ -79,5 +78,9 @@ const startSession = (err, data, stderr) => {
     margin-top: 0;
     padding-top: 0;
     font-size: 12px;
+  }
+
+  .component-holder {
+    padding: 10px; 
   }
 </style>
