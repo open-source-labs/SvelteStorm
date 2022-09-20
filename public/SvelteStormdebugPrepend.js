@@ -32,7 +32,7 @@ const sendMessages = (componentStates) => {
 };
 
 //sends PERFORMANCE to IPCMain with the component count object
-const sendCounts = (compObj) => {1
+const sendCounts = (compObj) => {
   ipcRenderer.send('PERFORMANCE', {
     body: {
       compCounts, 
@@ -78,7 +78,6 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
       const curId = component.$$.id;
       compCounts[curId] = 1;
       component.$$.renderCount +=1; 
-      // console.log('renderCount onMount is: ', {comp: component.$$.id, renderCount: component.$$.renderCount})
     })
   }
 
@@ -93,7 +92,6 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
     if (isFirstAfterUpdate) { return isFirstAfterUpdate = false;}
     compCounts[curId] += 1;
     component.$$.renderCount += 1
-    
   });
 
 });

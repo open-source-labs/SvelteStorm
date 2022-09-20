@@ -162,7 +162,6 @@
 	.x-axis .tick text {
 		transform: translate(0, -20px) rotate(-30deg);
 		text-anchor: end;
-		margin-inline-start: 5px;
 	}
 
 	.bars rect {
