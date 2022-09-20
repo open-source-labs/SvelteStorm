@@ -314,7 +314,7 @@
               {/if}
               <!-- the editor for the Split-View -->
               {#if editorBool === true}
-                <div class="editor-wrapper">
+                <div class="editor-wrapper-split">
                   <Editor />
                   </div>
                   <span>
@@ -504,6 +504,14 @@
       z-index: 1;
       margin-left: 30;
       padding-left: 30;
+    }
+     .editor-wrapper-split {
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+      margin-left: 30;
+      padding-left: 30;
+      text-align: left;
     }
 
     /* .editor-wrapper::before { */
