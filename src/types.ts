@@ -119,7 +119,3 @@ export interface VitalObject {
   TTFB?: number,
   INP?: number,
 }
-
-export type ComponentCount = {
-  [key: string]: number; 
-}

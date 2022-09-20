@@ -1,11 +1,13 @@
 <script>
   import { scaleLinear } from 'd3-scale';
+  import { slide } from 'svelte/transition';
   const { ipcRenderer } = require('electron');
 
   //next steps: how to auto resize graph or increase the size at least
-	// get the labels to be 45 * 
+    //adjust chart size so labels aren't cut off 
 	//conditional formatting = if y axis exceeds 50, increment axis by 10s, if exeeds 200, increment by 50 
 	//lighten the dotted lines (maybe make transparent)
+	//incorporate start/stop button 
 	// IDEAL WORLD: flip x and y axis
 
 	ipcRenderer.on('PERFORMANCE', (event, args) => {
@@ -50,10 +52,10 @@
 		}
 	}
 
-	const padding = { top: 20, right: 15, bottom: 40, left: 30 };
+	const padding = { top: 20, right: 15, bottom: 45, left: 25 };
 
-	let width = 800;
-	let height = 600;
+	let width = 500;
+	let height = 300;
 
 	function formatMobile(tick) {
 		return "'" + tick.toString().slice(-2);
@@ -79,9 +81,9 @@
 		<!-- y axis -->
 		<g class="axis y-axis">
 			{#each yTicks as tick}
-				<g class="tick tick-{tick}" transform="translate(0, {yScale(tick)})">
+				<g class="tick tick-{tick}" transform="translate(0, {yScale(tick)})" transition="all 1s" >
 					<line x2="100%"></line>
-					<text y="-4">{tick}</text>
+					<text y="-4" transition="all 1s">{tick}</text>
 				</g>
 			{/each}
 		</g>
@@ -89,12 +91,10 @@
 		<!-- x axis -->
 		<g class="axis x-axis">
 			{#each componentRerenderCountArr as point, i}
-				<g class="tick" transform="translate({xScale(i)},{height})">
+				<g class="tick" transform="translate({xScale(i)},{height})" justify-content="center">
 					<text 
 					x="{barWidth/2}" 
 					y="-4"
-					text-anchor="end"
-	 				transform="rotate(-65)"
 					>
 					{width > 380 ? point.component : formatMobile(point.component)}
 				</text>
@@ -109,6 +109,7 @@
 					y="{yScale(point.count)}"
 					width="{barWidth - 4}"
 					height="{yScale(0) - yScale(point.count)}"
+					out:slide="{{duration: 1000}}"
 				></rect>
 			{/each}
 		</g>
@@ -134,7 +135,7 @@
 	svg {
 		position: relative;
 		width: 100%;
-		height: 200px;
+		height: 300px;
 	}
 
 	.tick {
@@ -144,28 +145,30 @@
 	}
 
 	.tick line {
-		stroke: #e2e2e2;
-		stroke-dasharray: 2;
+		stroke: #e2e2e261; 		
+		stroke-dasharray: 3;
 	}
 
 	.tick text {
-		fill: #ccc;
+		fill: #ccc; 
 		text-anchor: start;
 	}
 
 	.tick.tick-0 line {
 		stroke-dasharray: 0;
+		stroke: #ffffff7d;
 	}
 
 	.x-axis .tick text {
-		text-anchor: middle;
+		transform: translate(0, -20px) rotate(-30deg);
+		text-anchor: end;
 	}
 
 	.bars rect {
 		fill: #8031a7;
-        border: 10px solid; 
-        border-color: #070608;
 		stroke: none;
 		opacity: 0.65;
+		transition: all 1s;
 	}
+
 </style>
