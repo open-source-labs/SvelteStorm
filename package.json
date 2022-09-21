@@ -27,6 +27,7 @@
     "svelte-build": "rollup -c",
     "svelte-dev": "rollup -c -w",
     "svelte-start": "sirv public",
+    "testPlay": "npx playwright test",
     "test": "jest",
     "type": "module"
   },
