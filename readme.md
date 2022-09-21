@@ -80,8 +80,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
       - Node.js development
       - Desktop development with C++
 
-4. Install **Node Version Manager** (nvm) for Windows
-    - [Walkthru Available on GeeksforGeeks](https://www.geeksforgeeks.org/how-to-install-and-use-nvm-on-windows/)
+4. Install **Node Version Manager** (nvm) for Windows ([a walkthru is available on GeeksforGeeks](https://www.geeksforgeeks.org/how-to-install-and-use-nvm-on-windows/)
     - Using `nvm` enter the following commands to install Nodejs version 16.16.0
       - `nvm install 16.16.0`
       - `nvm use 16.16.0`
@@ -96,9 +95,9 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
  
 10. Install the following VS Code Extensions:
     -  [Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
-      - Remote WSL
-      - Remote SSH
-      - Remote Containers
+        - Remote WSL
+        - Remote SSH
+        - Remote Containers
     -  [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
     -  [C/C++ Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack)
 11. Clone this **SvelteStorm 5.0** repo to your code editor of choice (VS Code works best)
