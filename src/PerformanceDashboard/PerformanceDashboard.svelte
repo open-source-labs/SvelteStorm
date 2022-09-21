@@ -8,23 +8,23 @@
   const {ipcRenderer} = require('electron');
 
 
-const path = appBeingDebugedPath; 
+// const path = appBeingDebugedPath; 
 
-const startSession = (err, data, stderr) => {
-  console.log('Start session has been clicked!')
-  try {
-    // Change the directory
-    process.chdir(path);
-    ipcRenderer.send('terminal-into', `cd ${path}\r`);
+// const startSession = (err, data, stderr) => {
+//   console.log('Start session has been clicked!')
+//   try {
+//     // Change the directory
+//     process.chdir(path);
+//     ipcRenderer.send('terminal-into', `cd ${path}\r`);
 
-  } catch (err) {
-    // Printing error if occurs
-    console.error('error while changing directory in PeformanceDashboard: ', {err});
-  }
+//   } catch (err) {
+//     // Printing error if occurs
+//     console.error('error while changing directory in PeformanceDashboard: ', {err});
+//   }
   
-  cmd.run(`npm run performanceSS`, (err) => console.log('An error occurred while starting Perf Monitoring: ', {err})); 
+//   cmd.run(`npm run performanceSS`, (err) => console.log('An error occurred while starting Perf Monitoring: ', {err})); 
 
-}
+// }
 
 // const endSession = (err, data, stderr) => {
 //   console.log('Peformance endSession has been clicked!');
@@ -39,10 +39,10 @@ const startSession = (err, data, stderr) => {
         <div class="h5Container">
           <h4 class="title">PERFORMANCE DASHBOARD</h4>
         </div>
-        <div>
+        <!-- <div>
           <button>Start</button>
           <button>End</button>
-        </div>
+        </div> -->
         <div class="component-holder">
           <RerenderChart />
         </div>
