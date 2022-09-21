@@ -40,7 +40,7 @@ SvelteStorm is an open-source integrated developer environment (IDE) specificall
     - Interact with the application - the dashboard will update automatically. Some of the web vitals will populate once the app is closed. 
     - Click 'back' at the bottom of the window to exit the dashboard. 
 6. To enable Split View, click the 'Split View' button on the top right of the application. Click 'back' at the bottom of the window to exit the dashboard.
-7. To use the Time Travel Debugging feature, 
+7. To use the Time Travel Debugging feature:
     - Run the command 'npm run sdebug' and a browser window will open with the project. 
       Additionally, the Time Travel Debugging window will generate an initial snapshot of the project as well as a d3.js component hierarchy tree of the application. Any action on the browser window that creates a state change in your application will generate a new snapshot and update the d3.js tree. 
     - To view previous snapshots, click on any Snapshot button and cards containing each component's state at the time of the snapshot will appear. 
@@ -69,18 +69,18 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 ### Windows
 #### Do Not attempt to use anything related to WSL.
 1. Install all of the latest Windows Updates (including the optional ones)
-2. Install the latest PowerShell (version 7.2.5 as of this writing)
+2. Install the latest PowerShell (version 7.2.5 as of this writing) **double check this**
    -  [Link to PowerShell Installation](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2)
 3. Install Microsoft Visual Studio
     - Note: This **IS NOT** Visual Studio Code … Just plain Visual Studio
-    - As of this writing 17.2.6
+    - As of this writing 17.2.6 **double check this**
     - [Link to Visual Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false)
     - When prompted for modules to include, select the following:
       - Python development
       - Node.js development
       - Desktop development with C++
 
-4. Install **Node Version Manager** (nvm) for Windows ([a walkthru is available on GeeksforGeeks](https://www.geeksforgeeks.org/how-to-install-and-use-nvm-on-windows/)
+4. Install **Node Version Manager** (nvm) for Windows ([a walkthru is available on GeeksforGeeks])(https://www.geeksforgeeks.org/how-to-install-and-use-nvm-on-windows/)
     - Using `nvm` enter the following commands to install Nodejs version 16.16.0
       - `nvm install 16.16.0`
       - `nvm use 16.16.0`
