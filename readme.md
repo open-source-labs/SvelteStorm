@@ -9,8 +9,8 @@ SvelteStorm 5.0
  - [New Features and Improvements](#new-features-and-improvements)
  - [How To Use SvelteStorm](#how-to-use-sveltestorm)
  - [Installing SvelteStorm 5 for the Purpose of Enhancing SvelteStorm as an IDE](#installing-sveltestorm-5-for-the-purpose-of-enhancing-sveltestorm-as-an-ide)
-   - [macOS](#macos-1)
-   - [Windows (using WSL 2)](#windows-using-wsl-2)
+   - [macOS](#macos)
+   - [Windows (using WSL 2)](#windows)
  - [Key Features](#key-features)
  - [Authors](#authors)
  - [Previous Authors](#previous-authors)
@@ -100,10 +100,10 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
  
  
 ## Key Features
-1. Performance Dashboard - gain insights into your Svelte application such as the number of times different components are rendered and web vitals. (NEW!)
-2. File Search - search through open files in the code editor. (NEW!)
-3. Split View - view two files at once. (NEW!)
-4. Javascript and HTML Linting - quickly find and fix syntax errors and warnings. (NEW!)
+1. (NEW!) Performance Dashboard - gain insights into your Svelte application such as the number of times different components are rendered and web vitals.
+2. (NEW!) File Search - search through open files in the code editor.
+3. (NEW!) Split View - view two files at once.
+4. (NEW!) Javascript and HTML Linting - quickly find and fix syntax errors and warnings.
 5. Time Travel Debugging Dev Tool
 6. Real Time d3.js Component Hierarchy Visualization
 7. Upgraded Browser Window
@@ -112,7 +112,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 10. Access to Svelte Documentation with a Single Click
 11. Responsive Window Resizing
 12. Tab Management Functionality Added
-13. A Clean & Bold Theme Style (NEW!)
+13. A Clean & Bold Theme Style
 14. A code editor utilizing the “Dracula” dark-mode theme with syntax highlighting and bracket pair identification. Built using Code Mirror.
 15. A fully functional terminal environment to navigate file systems and run code
 16. A browser window for developers to see what their projects look like on the client end
