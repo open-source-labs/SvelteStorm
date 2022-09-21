@@ -8,7 +8,7 @@ SvelteStorm 5.0
 ## Table of Contents
  - [New Features and Improvements](#new-features-and-improvements)
  - [How To Use SvelteStorm](#how-to-use-sveltestorm)
- - [Installing SvelteStorm 5 for the Purpose of Enhancing SvelteStorm as an IDE](#installing-sveltestorm-4-for-the-purpose-of-enhancing-sveltestorm-as-an-ide)
+ - [Installing SvelteStorm 5 for the Purpose of Enhancing SvelteStorm as an IDE](#installing-sveltestorm-5-for-the-purpose-of-enhancing-sveltestorm-as-an-ide)
    - [macOS](#macos-1)
    - [Windows (using WSL 2)](#windows-using-wsl-2)
  - [Key Features](#key-features)
@@ -19,23 +19,26 @@ SvelteStorm 5.0
    
 ## SvelteStorm
 A Svelte IDE like no other. Embrace the storm.
-SvelteStorm is a new and improved open-source integrated developer environment (IDE). SvelteStorm is specifically tailored to provide all of the essential tools a Svelte developer needs to build a Svelte application. The IDE contains a code editor, a terminal environment, a file directory, a browser view, developer tools, and a component state viewer. SvelteStorm was built using Svelte and Electron and is downloadable for Windows and Mac operating systems. With the new and improved SvelteStorm, developers can now observe state changes in their applications using the Time Travel Debugger tool. From its modernized and clean UI, to its quick loading time and component state window, SvelteStorm is a rising star for the Svelte community.
+SvelteStorm is an open-source integrated developer environment (IDE) specifically tailored to provide essential tools a Svelte developer needs to build a Svelte application. With the new and improved SvelteStorm 5.0, we've improved the developer experience with performance metrics, split view, search, and linting, in addition to the existing code editor, terminal environment, file directory, browser view, developer tools, and component state viewer. SvelteStorm is built using Svelte and Electron and is downloadable for Windows and Mac operating systems.
  
 ## New Features and Improvements
  
-1. Time Travel Debugger tool
-2. Real-time D3 Component Visualization
-3. Updated Browser window and Terminal
-4. Quality of Life changes
-5. A Cleaner & Bold Theme Style
+1. App Performance Metrics
+2. Split View
+3. Search
+4. Linting
+5. Quality of Life changes
 
 ## How To Use SvelteStorm
 1. Click on the 'File' menu button in the top-left corner, then open a file or folder to begin editing. (You can also use CTRL+F to open a folder with a shortcut)
 2. When a Svelte project is opened, you will notice the File Directory populates showing all files in the directory. From here you can open, edit, and save files.
 3. To use the browser window, simply run any command to start your project and a new browser window will open to the localhost port your project is running on.
-4. To use the Time Travel Debugging feature, run the command npm run sdebug and a browser window will open with your project. Additionally, the Time Travel Debugging window will generate an initial snapshot of your project and a d3.js component hierarchy tree of your application. Any action on the browser window that creates a state change in your application will generate a new snapshot and update the d3.js tree. To view previous snapshots, click on the Snapshot button of your choice and you will see cards for each component that contain the component’s state at the time of the snapshot. As you navigate between Snapshots, you will notice your application state changes are reflected on your browser window. This will allow you to see how your applications state changes based on different events, happy debugging!
-5. Developer Tools are accessible via the 'Help' button in the top menu, or by using CTRL+D
-6. For more information, click on SvelteStorm's Website via the 'Help' button
+4. To search through your open files, CMD+F while in the editor window.
+5. To gather App Performance metrics, start the application with the command 'npm run performanceSS' and click on the 'Performance Dash' button on the top right of the application to view the dashboard, then interact with the application - the dashboard will update automatically. Some of the web vitals will populate once the app is closed. Click 'back' at the bottom of the window to exit the dashboard. 
+6. To enable Split View, click the 'Split View' button on the top right of the application. Click 'back' at the bottom of the window to exit the dashboard.
+7. To use the Time Travel Debugging feature, run the command 'npm run sdebug' and a browser window will open with your project. Additionally, the Time Travel Debugging window will generate an initial snapshot of your project and a d3.js component hierarchy tree of your application. Any action on the browser window that creates a state change in your application will generate a new snapshot and update the d3.js tree. To view previous snapshots, click on the Snapshot button of your choice and you will see cards for each component that contain the component’s state at the time of the snapshot. As you navigate between Snapshots, you will notice your application state changes are reflected on your browser window. This will allow you to see how your applications state changes based on different events, happy debugging!
+8. Developer Tools are accessible via the 'Help' button in the top menu, or by using CTRL+D
+9. For more information, click on SvelteStorm's Website via the 'Help' button
 for VSCode users the link below can provide insight to potential installation issues:
 https://github.com/open-source-labs/SvelteStorm/issues/57
 
@@ -79,7 +82,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 7. Run npm start and SvelteStorm will open up and be ready for use!
 8. Install the latest version of git
    - [Git Installation Link](https://git-scm.com/download/win)
-9. Now Install Video Studio Code
+9. Now Install Visual Studio Code
   - [VS Code Installation Link](https://code.visualstudio.com/)
  
  
@@ -97,19 +100,23 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
  
  
 ## Key Features
-1. Time Travel Debugging Dev Tool (NEW!)
-2. Real Time d3.js Component Hierarchy Visualization (NEW!)
-3. Upgraded Browser Window (NEW!)
-4. Updated Terminal. Built using XTerm (NEW!)
-5. Tooltips Bar on Mouse Hover
-6. Access to Svelte Documentation with a Single Click
-7. Responsive Window Resizing
-8. Tab Management Functionality Added
-9. A Clean & Bold Theme Style (NEW!)
-10. A code editor utilizing the “Dracula” dark-mode theme with syntax highlighting and bracket pair identification. Built using Code Mirror.
-11. A fully functional terminal environment to navigate file systems and run code
-12. A browser window for developers to see what their projects look like on the client end
-13. A functioning file directory where users can open files and navigate folders to edit within the code editor
+1. Performance Dashboard - gain insights into your Svelte application such as the number of times different components are rendered and web vitals. (NEW!)
+2. File Search - search through open files in the code editor. (NEW!)
+3. Split View - view two files at once. (NEW!)
+4. Javascript and HTML Linting - quickly find and fix syntax errors and warnings. (NEW!)
+5. Time Travel Debugging Dev Tool
+6. Real Time d3.js Component Hierarchy Visualization
+7. Upgraded Browser Window
+8. Updated Terminal. Built using XTerm
+9. Tooltips Bar on Mouse Hover
+10. Access to Svelte Documentation with a Single Click
+11. Responsive Window Resizing
+12. Tab Management Functionality Added
+13. A Clean & Bold Theme Style (NEW!)
+14. A code editor utilizing the “Dracula” dark-mode theme with syntax highlighting and bracket pair identification. Built using Code Mirror.
+15. A fully functional terminal environment to navigate file systems and run code
+16. A browser window for developers to see what their projects look like on the client end
+17. A functioning file directory where users can open files and navigate folders to edit within the code editor
 ## Authors
 [Mahmoud Albadawi](https://github.com/CodeMahmoud) | [Kiran Banger](https://github.com/kiranbanger) | [Leilani Hernandez](https://github.com/lherna05) |
 [Javi Orozco](https://github.com/jorozco94)  | 
