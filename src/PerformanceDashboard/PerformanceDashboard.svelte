@@ -8,6 +8,12 @@
   const {ipcRenderer} = require('electron');
 
 
+/* **NOTE: The commented out code below was intended to run the 'npm run performanceSS' script in SvelteStorm. This 
+would help direct the User's flow (since the Dashboard needs to be open before the script runs to capture all the data).
+The idea was that on click of the start button, the script would run and on click of the End button, ctl C would run to
+end the session. More time is needed to ensure the commands are running for the application running in SvelteStorm 
+and not SvelteStorm itself.
+*/
 // const path = appBeingDebugedPath; 
 
 // const startSession = (err, data, stderr) => {
@@ -21,9 +27,7 @@
 //     // Printing error if occurs
 //     console.error('error while changing directory in PeformanceDashboard: ', {err});
 //   }
-  
-//   cmd.run(`npm run performanceSS`, (err) => console.log('An error occurred while starting Perf Monitoring: ', {err})); 
-
+//   cmd.run(`npm run performanceSS`, (err) => console.log('An error occurred while starting Perf Monitoring: ', {err}));
 // }
 
 // const endSession = (err, data, stderr) => {
@@ -84,6 +88,6 @@
   }
 
   .component-holder {
-    padding: 10px; 
+    padding: 5px; 
   }
 </style>
