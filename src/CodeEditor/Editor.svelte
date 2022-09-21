@@ -26,6 +26,7 @@
 
   // creates a new tab when a new file is opened
   function addTab(newFile: NewFile): void {
+    console.log('newfile bein opened')
     let duplicate: boolean = false;
     let focusTabId: number = newFile.tabId;
     $openTabs.map((tab) => {

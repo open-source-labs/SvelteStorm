@@ -115,7 +115,7 @@
     fill: #ccc; 
   }
 
-
+  /* CODE BELOW IS FOR CSS TOOLTIP ON RERENDER CHART TITLE */
   .graph-title::before,
   .graph-title::after {
     --scale: 0;

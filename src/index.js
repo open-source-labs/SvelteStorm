@@ -329,7 +329,6 @@ ipcMain.handle('decreaseFontSize', decreaseFontSize);
 ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
 ipcMain.on('openDebugAppWindow', (event, localhostToUse)=> {
-  console.log('openDebug');
   if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
 });
 

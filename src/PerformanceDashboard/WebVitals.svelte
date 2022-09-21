@@ -2,11 +2,9 @@
   import { vitals } from "../DataStore/SvelteStormDataStore"; 
   const { ipcRenderer } = require('electron');
 
-  console.log('Web Vitals Exists', vitals);
   ipcRenderer.on('web-vitals', (event, args) => {
     vitals.update((currVal) => {
     currVal[args.name] = args.value;
-    // console.log('vitals', currVal);
     return currVal;
     });
   });  

@@ -156,7 +156,6 @@
     cm.operation(() => {
       const state = getSearchState(cm);
       let cursor = getSearchCursor(cm, state.query, reverse ? state.posFrom : state.posTo);
-      // console.log(cursor);
       if (!cursor.find(reverse)) {
         cursor = getSearchCursor(cm, state.query, reverse ? CodeMirror.Pos(cm.lastLine()) : CodeMirror.Pos(cm.firstLine(), 0));
         if (!cursor.find(reverse)) return;
