@@ -39,7 +39,10 @@ const startSession = (err, data, stderr) => {
         <div class="h5Container">
           <h4 class="title">PERFORMANCE DASHBOARD</h4>
         </div>
-
+        <div>
+          <button>Start</button>
+          <button>End</button>
+        </div>
         <div class="component-holder">
           <RerenderChart />
         </div>
