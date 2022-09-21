@@ -1,10 +1,11 @@
 <script>
   import { vitals } from "../DataStore/SvelteStormDataStore"; 
+    import FileDir from "../Directory/FileDir.svelte";
   const { ipcRenderer } = require('electron');
 
   ipcRenderer.on('web-vitals', (event, args) => {
     vitals.update((currVal) => {
-    currVal[args.name] = args.value;
+    currVal[args.name] = args;
     return currVal;
     });
   });  
@@ -20,29 +21,65 @@
       <div class='vitals-left'>
         <div class='individual-vital'>
           <h5>Largest Contentful Paint</h5>
-          <p>{$vitals.LCP === undefined ? "TBD" : ($vitals.LCP).toFixed(3)}</p>
+          <p>{$vitals.LCP === undefined ? "TBD" : ($vitals.LCP.value).toFixed(3) + 's'}</p>
+          {#if $vitals.LCP}
+            <p>Rating: 
+              <span class={$vitals.LCP.rating[0]}>{$vitals.LCP.rating.toUpperCase()}
+              </span>
+            </p>
+          {/if}
         </div>
         <div class='individual-vital'>
           <h5>First Input Delay</h5>
-          <p>{$vitals.FID === undefined ? "TBD" : ($vitals.FID).toFixed(3)}</p>
+          <p>{$vitals.FID === undefined ? "TBD" : ($vitals.FID.value).toFixed(3) + 'ms'}</p>
+          {#if $vitals.FID}
+            <p>Rating: 
+              <span class={$vitals.FID.rating[0]}>{$vitals.FID.rating.toUpperCase()}
+              </span>
+            </p>
+          {/if}
         </div>
         <div class='individual-vital'>
           <h5>Cumulative Layout Shift</h5>
-          <p>{$vitals.CLS === undefined ? "TBD" : ($vitals.CLS).toFixed(3)}</p>
+          <p>{$vitals.CLS === undefined ? "TBD" : ($vitals.CLS.value).toFixed(3)}</p>
+          {#if $vitals.CLS}
+            <p>Rating: 
+              <span class={$vitals.CLS.rating[0]}>{$vitals.CLS.rating.toUpperCase()}
+              </span>
+            </p>
+          {/if}
         </div>
       </div>
       <div class='vitals-right'>
         <div class='individual-vital'>
           <h5>First Contentful Paint</h5>
-          <p>{$vitals.FCP === undefined ? "TBD" : ($vitals.FCP).toFixed(3)}</p>
+          <p>{$vitals.FCP === undefined ? "TBD" : ($vitals.FCP.value).toFixed(3) + 's'}</p>
+          {#if $vitals.FCP}
+            <p>Rating: 
+              <span class={$vitals.FCP.rating[0]}>{$vitals.FCP.rating.toUpperCase()}
+              </span>
+            </p>
+          {/if}
         </div>
         <div class='individual-vital'>
           <h5>Time To First Byte</h5>
-          <p>{$vitals.TTFB === undefined ? "TBD" : ($vitals.TTFB).toFixed(3)}</p>
+          <p>{$vitals.TTFB === undefined ? "TBD" : ($vitals.TTFB.value).toFixed(3) + 'ms'}</p>
+          {#if $vitals.TTFB}
+            <p>Rating: 
+              <span class={$vitals.TTFB.rating[0]}>{$vitals.TTFB.rating.toUpperCase()}
+              </span>
+            </p>
+          {/if}
         </div>
         <div class='individual-vital'>
           <h5>Interaction to Next Paint</h5>
-          <p>{$vitals.INP === undefined ? "TBD" : ($vitals.INP).toFixed(3)}</p>
+          <p>{$vitals.INP === undefined ? "TBD" : ($vitals.INP.value).toFixed(3) + 'ms'}</p>
+          {#if $vitals.INP}
+            <p>Rating: 
+              <span class={$vitals.INP.rating[0]}>{$vitals.INP.rating.toUpperCase()}
+              </span>
+            </p>
+          {/if}
         </div>
       </div>
     </div> 
@@ -51,6 +88,23 @@
 </main>
   
 <style>
+/* Below code applies only to web vitals rating color */
+  .g, .n, .p {
+    font-weight: bold;
+  }
+
+  .g {
+    color: rgb(0, 154, 0);
+  }
+
+  .n {
+    color: rgb(243, 197, 80);
+  }
+
+  .p {
+    color: rgb(240, 38, 38);
+  }
+/* Above code applies only to web vitals rating color */
 
   .web-vitals-parent-container {
     display: flex;
