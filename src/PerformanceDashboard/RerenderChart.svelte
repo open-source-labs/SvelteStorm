@@ -42,7 +42,7 @@
   </script> 
   
   <main>
-    <h5 class="graph-title">Component Rerender Tracker</h5>
+    <h5 class="graph-title" data-tooltip='Dynamically track re-render counts of Svelte app components.'>Component Rerender Tracker</h5>
       <svg {width} {height} class="chart">
           <g transform={`translate(${margin.left},${margin.top})`}>
             {#each xScale.ticks() as tickValue}
@@ -82,6 +82,7 @@
     margin-top: 0;
     padding-top: 50px;
     font-size: 12px;
+    position: relative;
   }
 
   .chart {
@@ -114,4 +115,46 @@
     fill: #ccc; 
   }
 
+  /* CODE BELOW IS FOR CSS TOOLTIP ON RERENDER CHART TITLE */
+  .graph-title::before,
+  .graph-title::after {
+    --scale: 0;
+    --arrow-size: 10px;
+    --tooltip-color: #F3EFEE;
+
+    position: absolute;
+    bottom: -.10rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+    transition: 150ms transform;
+    transform-origin: top center;
+  }
+
+  .graph-title::before {
+    --translate-y: calc(100% + var(--arrow-size));
+
+    content: attr(data-tooltip);
+    font-size: .9rem;
+    color: rgb(20, 20, 20);
+    padding: .5rem;
+    border-radius: .3rem;
+    text-align: center;
+    width: max-content;
+    max-width: 300%;
+    background: var(--tooltip-color);
+  }
+
+  .graph-title:hover::before,
+  .graph-title:hover::after {
+    --scale: .8;
+  }
+
+  .graph-title::after {
+    --translate-y: calc(1 * var(--arrow-size));
+
+    content: '';
+    border: var(--arrow-size) solid transparent;
+    border-bottom-color: var(--tooltip-color);
+    transform-origin: bottom center;
+  }
   </style>

@@ -2,11 +2,9 @@
   import { vitals } from "../DataStore/SvelteStormDataStore"; 
   const { ipcRenderer } = require('electron');
 
-  console.log('Web Vitals Exists', vitals);
   ipcRenderer.on('web-vitals', (event, args) => {
     vitals.update((currVal) => {
     currVal[args.name] = args.value;
-    // console.log('vitals', currVal);
     return currVal;
     });
   });  
@@ -17,7 +15,7 @@
 <main>
   
   <div class='web-vitals-parent-container'>
-    <h5 class='web-vitals-title'>Web Vitals</h5>
+    <h5 class='web-vitals-title' data-Tooltip="Web Vitals are graded on a 'Good', 'Needs Improvement', and 'Poor' scale.">Web Vitals</h5>
     <div class='web-vitals-columns-container'>
       <div class='vitals-left'>
         <div class='individual-vital'>
@@ -75,5 +73,50 @@
     padding: 1em;
     text-align: center;
   }
+  /* CODE BELOW CREATES TOOLTIP UNDER WEB VITALS TITLE*/
+  .web-vitals-title {
+    position: relative;
+  }
 
+  .web-vitals-title::before,
+  .web-vitals-title::after {
+    --scale: 0;
+    --arrow-size: 10px;
+    --tooltip-color: #F3EFEE;
+
+    position: absolute;
+    bottom: -.10rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+    transition: 150ms transform;
+    transform-origin: top center;
+  }
+
+  .web-vitals-title::before {
+    --translate-y: calc(100% + var(--arrow-size));
+
+    content: attr(data-tooltip);
+    font-size: .9rem;
+    color: rgb(20, 20, 20);
+    padding: .5rem;
+    border-radius: .3rem;
+    text-align: center;
+    width: max-content;
+    max-width: 300%;
+    background: var(--tooltip-color);
+  }
+
+  .web-vitals-title:hover::before,
+  .web-vitals-title:hover::after {
+    --scale: .8;
+  }
+
+  .web-vitals-title::after {
+    --translate-y: calc(1 * var(--arrow-size));
+
+    content: '';
+    border: var(--arrow-size) solid transparent;
+    border-bottom-color: var(--tooltip-color);
+    transform-origin: bottom center;
+  }
 </style>
