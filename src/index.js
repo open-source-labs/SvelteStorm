@@ -72,7 +72,7 @@ const decreaseFontSize = (exports.decreaseFontSize = () => {
   fontSize--;
 });
 
-//still in development mode
+// env still in development mode
 const createWindow = (exports.createWindow = () => {
   process.env.NODE_ENV = 'development';
 
@@ -88,7 +88,7 @@ const createWindow = (exports.createWindow = () => {
 
   // But if you want to keep the abilities of using Node.js and Electron APIs,
   // you have to rename the symbols in the page before including other libraries:
-  //window.nodeRequire = require; in html file
+  // window.nodeRequire = require; in html file
 
   /*
    * =================== SS4 ==========================
@@ -126,7 +126,7 @@ const createWindow = (exports.createWindow = () => {
    *   Load the initial HTML file into the window.
    * ==================================================
    */
-  //loading index.html into the app
+  // loading index.html into the app
   // newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
   newWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
@@ -161,50 +161,6 @@ const createWindow = (exports.createWindow = () => {
     windows.delete(newWindow);
     createApplicationMenu();
     newWindow = null;
-  });
-
-  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
-
-  // this spawns the terminal window space
-  var ptyProcess = pty.spawn(shell, [], {
-    name: 'xterm-color',
-    cols: 80,
-    rows: 24,
-    cwd: process.env.HOME,
-    // cwd: cwdFilePath,
-    env: process.env,
-  });
-
-  //2022-ST-AJ sends to renderer cwd for it to display on prompt
-  // ipcMain.on('cwd', (event, data) => {
-  //   event.reply('cwdreply', process.env.PWD);
-  // });
-
-  // add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
-  ipcMain.on('openFolder', (event, data) => {
-    ptyProcess.cwd = cwdFilePath[0];
-  });
-
-  //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
-  ptyProcess.onData((data) => {
-    newWindow.webContents.send('terminal-incData', data);
-  });
-
-  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell
-  ipcMain.on('terminal-into', (event, data) => {
-    ptyProcess.write(data);
-  });
-
-  //2022-ST-AJ ipcMain listens to resizing event from renderer and calls resize on node-pty to align size between node-pty and xterm. They need to align otherwise there are wierd bugs everywhere.
-  ipcMain.on('terminal-resize', (event, size) => {
-    const cols = size.cols;
-    const rows = size.rows;
-    ptyProcess.resize(cols, rows);
-  });
-
-  require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
-    awaitWriteFinish: true,
   });
 
   windows.add(newWindow);
