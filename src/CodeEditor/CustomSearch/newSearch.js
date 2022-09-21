@@ -103,6 +103,7 @@
   }
 
   function parseQuery(query) {
+    if (query === null) return;
     const isRE = query.match(/^\/(.*)\/([a-z]*)$/);
     if (isRE) {
       try { query = new RegExp(isRE[1], isRE[2].indexOf("i") == -1 ? "" : "i"); }
@@ -116,6 +117,7 @@
   }
 
   function startSearch(cm, state, query) {
+    if (query === null) return;
     state.queryText = query;
     state.query = parseQuery(query);
     cm.removeOverlay(state.overlay, queryCaseInsensitive(state.query));

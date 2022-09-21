@@ -98,7 +98,6 @@ const createWindow = (exports.createWindow = () => {
    *   SvelteStorm
    * ==================================================
    */
-  console.log('new win beinc created')
   newWindow = new BrowserWindow({
     width: 1400,
     height: 1300,
