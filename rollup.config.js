@@ -18,14 +18,9 @@ export default {
 		dir: 'public',
 		inlineDynamicImports : true
 	},
-	onwarn: function(warning) {
-		// Skip certain warnings
-	
-		// should intercept ... but doesn't in some rollup versions
-		if ( warning.code === 'THIS_IS_UNDEFINED' ) { return; }
-	
-		// console.warn everything else
-		console.warn( warning.message );
+	onwarn: function(warning, warn) {
+		if ( warning.code === 'THIS_IS_UNDEFINED' || warning.code === 'CIRCULAR_DEPENDENCY' || warning.code === 'PLUGIN_WARNING' ) { return; }
+		warn(warning); 
 	},
 	plugins: [
 		svelte({

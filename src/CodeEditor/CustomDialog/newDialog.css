@@ -18,6 +18,7 @@
   top: 0px;
   z-index: 10;
   font-size: .8em;
+  font-weight: bold;
 }
 
 .CodeMirror-advanced-dialog input {
@@ -31,6 +32,7 @@
 
 .CodeMirror-advanced-dialog button {
   font-size: 70%;
+  font-weight: bold;
 }
 
 .CodeMirror-advanced-dialog .row {
@@ -56,8 +58,4 @@
   margin: 0 5px;
   background-color: inherit;
   color: inherit;
-}
-
-.CodeMirror-find-label .CodeMirror-search-count {
-  text-shadow: white 0 0 0.2em;
 }

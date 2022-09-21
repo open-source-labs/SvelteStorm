@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 
-import type { NewFile, EditorCacheType, EditorObj, State, componentStateObj, VitalObject, ComponentCount } from '../types';
+import type { NewFile, EditorCacheType, EditorObj, State, componentStateObj, VitalObject } from '../types';
 
 const DirectoryData: Writable<State> = writable<State>({
   mainDir: '',
