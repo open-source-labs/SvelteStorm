@@ -19,7 +19,6 @@ let nextId = 1;
 let first = true; 
 let isFirstAfterUpdate = true;
 const compCounts = {};
-const compInstance = {}; 
 
 // sends SNAPSHOT message to ipcMain, with all data needed for debugging visualization
 const sendMessages = (componentStates) => {
@@ -35,8 +34,7 @@ const sendMessages = (componentStates) => {
 const sendCounts = (compObj) => {
   ipcRenderer.send('PERFORMANCE', {
     body: {
-      compCounts, 
-      compInstance,
+      compCounts,
     },
   });
 };
@@ -54,36 +52,27 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
     compCTX.push(JSON.stringify(strippedCTX));
   }
 
-   //peformance dashboard render tracker 
-  // console.log('trackComponentRenders has fired')
+   /*PERFORMANCE DASHBOARD - RERENDER COUNT TRACKER: The code below 
+   created 2 $$props that are used to create unique IDs for each components
+   and count the number of rerenders using the compCounts obj.*/
 
   const { component, tagName } = e.detail;
   
   component.$$['tag_name'] = tagName;
   component.$$['id'] = tagName + nextId;
-  component.$$['renderCount'] = 0; 
   nextId += 1; 
   const curId = component.$$.id;
-  compCounts[curId] = 1;
+  compCounts[curId] = 0;
  
-  // capturing all instance of components
-  if(!compInstance[tagName]){
-    compInstance[tagName] = 1;
-  } else {
-    compInstance[tagName] += 1;
-  }
 
   if (first) {
     component.$$.on_mount.push(() => {
       const curId = component.$$.id;
-      compCounts[curId] = 1;
-      component.$$.renderCount +=1; 
+      compCounts[curId] += 1;
     })
   }
 
   component.$$.on_destroy.push(() => {
-    compInstance[tagName] -= 1;
-    component.$$.renderCount = 0; 
     delete compCounts[curId];
   });
 
@@ -91,7 +80,6 @@ window.document.addEventListener('SvelteRegisterComponent', (e) => {
     const curId = component.$$.id;
     if (isFirstAfterUpdate) { return isFirstAfterUpdate = false;}
     compCounts[curId] += 1;
-    component.$$.renderCount += 1
   });
 
 });
@@ -141,7 +129,9 @@ function saveAndDispatchState(e) {
     lastIndex = cacheState.length - 1;
   }
 
-    sendCounts({compCounts, compInstance}); 
+  /* The sendCounts function is what sends the data for the
+  number of times a component has rerendered. */
+    sendCounts({compCounts}); 
 
 }
 
