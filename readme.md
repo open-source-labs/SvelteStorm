@@ -30,13 +30,21 @@ SvelteStorm is an open-source integrated developer environment (IDE) specificall
 5. Quality of Life changes
 
 ## How To Use SvelteStorm
-1. Click on the 'File' menu button in the top-left corner, then open a file or folder to begin editing. (You can also use CTRL+F to open a folder with a shortcut)
-2. When a Svelte project is opened, you will notice the File Directory populates showing all files in the directory. From here you can open, edit, and save files.
-3. To use the browser window, simply run any command to start your project and a new browser window will open to the localhost port your project is running on.
-4. To search through your open files, CMD+F while in the editor window.
-5. To gather App Performance metrics, start the application with the command 'npm run performanceSS' and click on the 'Performance Dash' button on the top right of the application to view the dashboard, then interact with the application - the dashboard will update automatically. Some of the web vitals will populate once the app is closed. Click 'back' at the bottom of the window to exit the dashboard. 
+1. Click on the 'File' menu button (CTRL+F or CMD+F will also work) in the top-left corner, then open a file or folder to begin editing. 
+2. When a Svelte project is opened, the File Directory populates with all of the files in that directory. From here, files can be opened, edited, and saved.
+3. To use the browser window, start your project (i.e run 'npm start') and a new browser window will open up to the local port the project is running on.
+4. To search through open files, CMD+F while in the editor window.
+5. To gather App Performance metrics: 
+  - Start the application with the command 'npm run performanceSS'. 
+  - Click on the 'Performance Dash' button on the top right of the application to view the dashboard, 
+  - Interact with the application - the dashboard will update automatically. Some of the web vitals will populate once the app is closed. 
+  - Click 'back' at the bottom of the window to exit the dashboard. 
 6. To enable Split View, click the 'Split View' button on the top right of the application. Click 'back' at the bottom of the window to exit the dashboard.
-7. To use the Time Travel Debugging feature, run the command 'npm run sdebug' and a browser window will open with your project. Additionally, the Time Travel Debugging window will generate an initial snapshot of your project and a d3.js component hierarchy tree of your application. Any action on the browser window that creates a state change in your application will generate a new snapshot and update the d3.js tree. To view previous snapshots, click on the Snapshot button of your choice and you will see cards for each component that contain the component’s state at the time of the snapshot. As you navigate between Snapshots, you will notice your application state changes are reflected on your browser window. This will allow you to see how your applications state changes based on different events, happy debugging!
+7. To use the Time Travel Debugging feature, 
+  - Run the command 'npm run sdebug' and a browser window will open with the project. 
+    Additionally, the Time Travel Debugging window will generate an initial snapshot of the project as well as a d3.js component hierarchy tree of the application. Any action on the browser window that creates a state change in your application will generate a new snapshot and update the d3.js tree. 
+  - To view previous snapshots, click on any Snapshot button and cards containing each component's state at the time of the snapshot will appear. 
+  Application state changes are reflected in the browser window as you navigate between Snapshots - this allows for viewinng of state changes based on different events.
 8. Developer Tools are accessible via the 'Help' button in the top menu, or by using CTRL+D
 9. For more information, click on SvelteStorm's Website via the 'Help' button
 for VSCode users the link below can provide insight to potential installation issues:
@@ -58,8 +66,8 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 4. Run `npm start` and SvelteStorm will open up and be ready for use!
  
 
-### Windows (**DO NOT USE WSL**)
-#### Do Not attempt to use anything related to WSL!!
+### Windows
+#### Do Not attempt to use anything related to WSL.
 1. Install all of the latest Windows Updates (including the optional ones)
 2. Install the latest PowerShell (version 7.2.5 as of this writing)
    -  [Link to PowerShell Installation](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2)
