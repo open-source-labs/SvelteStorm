@@ -92,8 +92,8 @@ const createWindow = (exports.createWindow = () => {
 
   /*
    * =================== SS4 ==========================
-   *   Create a new Browser Window for display in 
-   *   Electron, but don't show it yet. This function 
+   *   Create a new Browser Window for display in
+   *   Electron, but don't show it yet. This function
    *   created the window the contains all of
    *   SvelteStorm
    * ==================================================
@@ -114,6 +114,8 @@ const createWindow = (exports.createWindow = () => {
       nodeIntegrationInWorker: true,
       enableRemoteModule: true,
     },
+    //add electron app icon
+    icon: path.join(__dirname, '../public/img/icon.ico'),
   });
 
   //theme for the menu bar on top
@@ -160,12 +162,57 @@ const createWindow = (exports.createWindow = () => {
     createApplicationMenu();
     newWindow = null;
   });
+
+  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
+
+  // this spawns the terminal window space
+  var ptyProcess = pty.spawn(shell, [], {
+    name: 'xterm-color',
+    cols: 80,
+    rows: 24,
+    cwd: process.env.HOME,
+    // cwd: cwdFilePath,
+    env: process.env,
+  });
+
+  //2022-ST-AJ sends to renderer cwd for it to display on prompt
+  // ipcMain.on('cwd', (event, data) => {
+  //   event.reply('cwdreply', process.env.PWD);
+  // });
+
+  // add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
+  ipcMain.on('openFolder', (event, data) => {
+    ptyProcess.cwd = cwdFilePath[0];
+  });
+
+  //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
+  ptyProcess.onData((data) => {
+    newWindow.webContents.send('terminal-incData', data);
+  });
+
+  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell
+  ipcMain.on('terminal-into', (event, data) => {
+    ptyProcess.write(data);
+  });
+
+  //2022-ST-AJ ipcMain listens to resizing event from renderer and calls resize on node-pty to align size between node-pty and xterm. They need to align otherwise there are wierd bugs everywhere.
+  ipcMain.on('terminal-resize', (event, size) => {
+    const cols = size.cols;
+    const rows = size.rows;
+    ptyProcess.resize(cols, rows);
+  });
+
+  require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
+    awaitWriteFinish: true,
+  });
+
   windows.add(newWindow);
 
 });
 
-/* 
-  * Below code (shell and ptyProcess) was previously inside createWindow fxn but 
+/*
+  * Below code (shell and ptyProcess) was previously inside createWindow fxn but
   * was causing issues w/ re-activation. Moving it outside of the fxn below
   * allows re-activation app but still not perfect implementation
 */
@@ -255,7 +302,7 @@ const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
 });
 
 const openFile = (exports.openFile = (targetWindow, file) => {
-  try { 
+  try {
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file);
   targetWindow.webContents.send('file-opened', file, content);
@@ -345,7 +392,7 @@ ipcMain.on('SNAPSHOT', (event, data) => {
 /*
    * ==================================================
    *   The injected app health monitoring script uses the ipcRenderer in the browser window to emit a signal with web-vitals data.
-   *   That data is then sent to ipcMain (received below) and is then fowarded to the WebVitals component where an 
+   *   That data is then sent to ipcMain (received below) and is then fowarded to the WebVitals component where an
    *   ipcRenderer listens for the "web-vitals" signal to take in the web-vitals data.
    * ==================================================
 */
@@ -419,5 +466,5 @@ async function mainAsynchronousData() {
 }
 
 ipcMain.on('main-asynchronous-data', async (event, arg) => {
-  return await mainAsynchronousData() 
+  return await mainAsynchronousData()
 })

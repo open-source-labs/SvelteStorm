@@ -415,7 +415,7 @@
     width: 100%;
     height: 100%;
     opacity: 0.3;
-    background-image: url('../public/img/bg4.webp');
+    background-image: url('../public/img/dark-purple.png');
     box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
     background-repeat: no-repeat;
     background-position: 50% 0;
@@ -520,7 +520,7 @@
     .backdrop::before {
       box-shadow: 15px 15px 50px 0 rgb(0, 0, 0) inset, -15px -15px 50px 0 rgb(0, 0, 0) inset;
       content: "";
-      background: url('../public/img/CodeEditor01.jpeg');
+      background: url('../public/img/NewBackground.png');
       size: cover;
       opacity: 0.3;
       top: 0;
