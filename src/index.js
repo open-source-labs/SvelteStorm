@@ -353,7 +353,6 @@ ipcMain.on('SNAPSHOT', (event, data) => {
    * ==================================================
 */
 ipcMain.on('web-vitals', (event, args) => {
-  // console.log(args);
   newWindow.webContents.send('web-vitals', args)
 });
 
