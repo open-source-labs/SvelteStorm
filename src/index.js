@@ -162,7 +162,6 @@ const createWindow = (exports.createWindow = () => {
     createApplicationMenu();
     newWindow = null;
   });
-<<<<<<< HEAD
 
   var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
 
@@ -208,14 +207,12 @@ const createWindow = (exports.createWindow = () => {
     awaitWriteFinish: true,
   });
 
-=======
->>>>>>> dev
   windows.add(newWindow);
 
 });
 
-/* 
-  * Below code (shell and ptyProcess) was previously inside createWindow fxn but 
+/*
+  * Below code (shell and ptyProcess) was previously inside createWindow fxn but
   * was causing issues w/ re-activation. Moving it outside of the fxn below
   * allows re-activation app but still not perfect implementation
 */
