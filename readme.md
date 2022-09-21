@@ -3,7 +3,7 @@
 SvelteStorm 5.0
 </h1>
 
-![SvelteStorm Homepage](./public/img/SvelteStormDemoPics/SS4.png)
+![SvelteStorm Homepage](./public/img/SvelteStorm5/SvelteStorms5.png)
 
 ## Table of Contents
  - [New Features and Improvements](#new-features-and-improvements)
