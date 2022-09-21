@@ -27,6 +27,7 @@
     "svelte-build": "rollup -c",
     "svelte-dev": "rollup -c -w",
     "svelte-start": "sirv public",
+    "testPlay": "npx playwright test",
     "test": "jest",
     "test-mocha": "mocha test/main.js --timeout 10000",
     "testPlay": "npx playwright test",
