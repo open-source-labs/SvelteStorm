@@ -69,11 +69,11 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 ### Windows
 #### Do Not attempt to use anything related to WSL.
 1. Install all of the latest Windows Updates (including the optional ones)
-2. Install the latest PowerShell (version 7.2.5 as of this writing) **double check this**
+2. Install the latest PowerShell (version 7.2.6 as of this writing)
    -  [Link to PowerShell Installation](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2)
 3. Install Microsoft Visual Studio
     - Note: This **IS NOT** Visual Studio Code … Just plain Visual Studio
-    - As of this writing 17.2.6 **double check this**
+    - As of this writing 17.3.4 
     - [Link to Visual Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false)
     - When prompted for modules to include, select the following:
       - Python development
