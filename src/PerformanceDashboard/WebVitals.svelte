@@ -88,10 +88,7 @@
 </main>
   
 <style>
-  .invisible {
-    display: none;
-  }
-
+/* Below code applies only to web vitals rating color */
   .g, .n, .p {
     font-weight: bold;
   }
@@ -107,6 +104,7 @@
   .p {
     color: rgb(240, 38, 38);
   }
+/* Above code applies only to web vitals rating color */
 
   .web-vitals-parent-container {
     display: flex;
