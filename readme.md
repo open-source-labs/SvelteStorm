@@ -72,35 +72,35 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 2. Install the latest PowerShell (version 7.2.5 as of this writing)
    -  [Link to PowerShell Installation](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2)
 3. Install Microsoft Visual Studio
-  - Note: This **IS NOT** Visual Studio Code … Just plain Visual Studio
-  - As of this writing 17.2.6
-  - [Link to Visual Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false)
-  - When prompted for modules to include, select the following:
-    - Python development
-    - Node.js development
-    - Desktop development with C++
+    - Note: This **IS NOT** Visual Studio Code … Just plain Visual Studio
+    - As of this writing 17.2.6
+    - [Link to Visual Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&cid=2030&passive=false)
+    - When prompted for modules to include, select the following:
+      - Python development
+      - Node.js development
+      - Desktop development with C++
 
 4. Install **Node Version Manager** (nvm) for Windows
-  - [Walkthru Available on GeeksforGeeks](https://www.geeksforgeeks.org/how-to-install-and-use-nvm-on-windows/)
-  - Using `nvm` enter the following commands to install Nodejs version 16.16.0
-     - `nvm install 16.16.0`
-     - `nvm use 16.16.0`
+    - [Walkthru Available on GeeksforGeeks](https://www.geeksforgeeks.org/how-to-install-and-use-nvm-on-windows/)
+    - Using `nvm` enter the following commands to install Nodejs version 16.16.0
+      - `nvm install 16.16.0`
+      - `nvm use 16.16.0`
 5. Clone this repo to your code editor of choice (VS Code works best)
 6. Run npm install to install dependencies
 7. Run npm start and SvelteStorm will open up and be ready for use!
 8. Install the latest version of git
-   - [Git Installation Link](https://git-scm.com/download/win)
+    - [Git Installation Link](https://git-scm.com/download/win)
 9. Now Install Visual Studio Code
-  - [VS Code Installation Link](https://code.visualstudio.com/)
+    - [VS Code Installation Link](https://code.visualstudio.com/)
  
  
 10. Install the following VS Code Extensions:
-    1.  [Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
-           - Remote WSL
-           - Remote SSH
-           - Remote Containers
-      1.  [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
-      2.  [C/C++ Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack)
+    -  [Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
+      - Remote WSL
+      - Remote SSH
+      - Remote Containers
+    -  [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools)
+    -  [C/C++ Extension Pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack)
 11. Clone this **SvelteStorm 5.0** repo to your code editor of choice (VS Code works best)
 12. Run `npm install` to install dependencies
 13. Run `npm start` and SvelteStorm will open up and be ready for use!
@@ -108,7 +108,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
  
  
 ## Key Features
-1. (NEW!) Performance Dashboard - gain insights into your Svelte application such as the number of times different components are rendered and web vitals.
+1. (NEW!) App Performance Dashboard - gain insights into your Svelte application such as the number of times different components are rendered and web vitals.
 2. (NEW!) File Search - search through open files in the code editor.
 3. (NEW!) Split View - view two files at once.
 4. (NEW!) Javascript and HTML Linting - quickly find and fix syntax errors and warnings.
