@@ -170,8 +170,8 @@ setTimeout(() => setupListeners(window.document));
 */
 
 // sendMetrics helper function for web-vitals functions
-function sendMetrics({ name, value }) {
-  ipcRenderer.send('web-vitals', { name, value });
+function sendMetrics({ name, value, rating }) {
+  ipcRenderer.send('web-vitals', { name, value, rating });
 };
 
 // JO 9/3 attempt to call the web vitals - we'll need to store these if we can get them
