@@ -29,6 +29,7 @@
     "svelte-start": "sirv public",
     "testPlay": "npx playwright test",
     "test": "jest",
+    "test-mocha": "mocha test/main.js --timeout 10000",
     "type": "module"
   },
   "config": {
@@ -137,7 +138,6 @@
     "rollup": "^2.77.2",
     "rollup-plugin-import-css": "^3.0.3",
     "rollup-plugin-livereload": "^2.0.5",
-    "rollup-plugin-polyfill-node": "^0.10.2",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",

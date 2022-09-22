@@ -3,6 +3,8 @@
     import { slide } from 'svelte/transition';
     const { ipcRenderer } = require('electron');
 
+    /*After the application in SvelteStorm is launched, this function receives data related to 
+    the # of renders for each component. */
     ipcRenderer.on('PERFORMANCE', (event, args) => {
 		countObj = args.body.compCounts;
         console.log({countObj})
@@ -12,6 +14,8 @@
     let componentRerenderCountArr = []; 
     let countObj;
 
+        /*Whenever data is received, this function sorts through and populates the componentRerenderCountArr
+        with {component: [name], count: [num]} objects for the D3 visualization */
     const populateRerenderCountArr = (obj) => {
 		const tempRenderCountArr = []; 
 		for (const key in obj) {
@@ -24,6 +28,8 @@
         console.log({componentRerenderCountArr});
 	}
   
+
+  /*Below is the setup for the bar chart using the data from componentRerenerCountArr. */
     let width = 600;
     let height = 400;
   
@@ -132,7 +138,6 @@
 
   .graph-title::before {
     --translate-y: calc(100% + var(--arrow-size));
-
     content: attr(data-tooltip);
     font-size: .9rem;
     color: rgb(20, 20, 20);
