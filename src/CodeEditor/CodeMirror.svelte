@@ -1,11 +1,11 @@
 <script lang="ts">
   import { afterUpdate, onMount } from "svelte";
-  import CodeMirror from "codemirror";
+  import * as CodeMirror from "codemirror";
   import { scale } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import "codemirror/lib/codemirror.css";
   import "codemirror/theme/dracula.css";
-  import "codemirror/mode/javascript/javascript.js";
+  import "codemirror/mode/javascript/javascript";
   import "codemirror/mode/handlebars/handlebars.js";
   import "codemirror/mode/css/css.js";
   import "codemirror/mode/htmlmixed/htmlmixed.js";
@@ -16,9 +16,31 @@
   import "codemirror/addon/hint/html-hint.js";
   import "codemirror/addon/hint/show-hint.css";
   import "codemirror/addon/edit/matchbrackets.js";
-  import "codemirror/addon/edit/closebrackets.js";
+  import "codemirror/addon/edit/closebrackets.js"; 
   import "codemirror/addon/edit/matchtags.js";
   import "codemirror/addon/edit/closetag.js";
+  // SS 5.0 SEARCH ATTEMPTS - JAVI
+  // import "codemirror/addon/search/search.js";
+  import "codemirror/addon/search/searchcursor.js";
+  import "codemirror/addon/search/jump-to-line.js";
+  import "codemirror/addon/display/panel.js";
+  import "./CustomDialog/newDialog.js";
+  import "./CustomDialog/newDialog.css";
+  import "./CustomSearch/newSearch.js";
+  
+  
+  // add linters
+  import "codemirror/addon/lint/lint";
+  import "codemirror/addon/lint/lint.css";
+  import "codemirror/addon/lint/javascript-lint";
+  import "codemirror/addon/lint/css-lint";
+  import "codemirror/addon/lint/html-lint";
+
+  const JSHINT = require('jshint').JSHINT;
+  (window as any).JSHINT = JSHINT;  
+  const HTMLHINT = require('htmlhint');
+  (window as any).HTMLHint = HTMLHINT;
+
   import searchDoc from "../SearchProgram.js";
 
   const { ipcRenderer } = require("electron");
@@ -127,9 +149,11 @@
       extraKeys: {
         "Ctrl-Space": "autocomplete",
       },
+      lineWrapping: true,
       autoCloseBrackets: true,
       matchTags: true,
       autoCloseTags: true,
+      lint: true,
     });
 
     $codeMirrorEditor.setSize("100%", "100%");
@@ -204,7 +228,7 @@
       `${src}`,
       "_blank",
       "top=900,left=200,frame=true,nodeIntegration=no"
-    );
+    ); 
   }
   function onType(): void {
     hoverCounter += 13;

@@ -45,8 +45,7 @@ let browser;
 //app.on is a start of the main process that controls the lifecycle events
 //Fires once when app is ready..
 app.on('ready', () => {
-  createApplicationMenu();
-  newWindow = createWindow();
+  createWindow();
 });
 
 //testing to see if on mac, don't close all the windows
@@ -73,7 +72,7 @@ const decreaseFontSize = (exports.decreaseFontSize = () => {
   fontSize--;
 });
 
-//still in development mode
+// env still in development mode
 const createWindow = (exports.createWindow = () => {
   process.env.NODE_ENV = 'development';
 
@@ -89,17 +88,17 @@ const createWindow = (exports.createWindow = () => {
 
   // But if you want to keep the abilities of using Node.js and Electron APIs,
   // you have to rename the symbols in the page before including other libraries:
-  //window.nodeRequire = require; in html file
+  // window.nodeRequire = require; in html file
 
   /*
    * =================== SS4 ==========================
-   *   Create a new Browers Window for display in 
-   *   Electron, but don't show it yet. This function 
+   *   Create a new Browser Window for display in
+   *   Electron, but don't show it yet. This function
    *   created the window the contains all of
    *   SvelteStorm
    * ==================================================
    */
-  let newWindow = new BrowserWindow({
+  newWindow = new BrowserWindow({
     width: 1400,
     height: 1300,
     x: 20,
@@ -115,6 +114,8 @@ const createWindow = (exports.createWindow = () => {
       nodeIntegrationInWorker: true,
       enableRemoteModule: true,
     },
+    //add electron app icon
+    icon: path.join(__dirname, '../public/img/icon.ico'),
   });
 
   //theme for the menu bar on top
@@ -125,7 +126,7 @@ const createWindow = (exports.createWindow = () => {
    *   Load the initial HTML file into the window.
    * ==================================================
    */
-  //loading index.html into the app
+  // loading index.html into the app
   // newWindow.loadURL(`file://${path.join(__dirname, '../public/index.html')}`);
   newWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
@@ -133,14 +134,12 @@ const createWindow = (exports.createWindow = () => {
   // let watcher;
 
   //show window by calling the listener once
-  newWindow.once('ready-to-show', () => {
+  newWindow.on('ready-to-show', () => {
     newWindow.show();
   });
-
   newWindow.on('focus', createApplicationMenu);
 
   //save changes dialog modal message
-
   newWindow.on('close', (event) => {
     if (newWindow.isDocumentEdited()) {
       event.preventDefault();
@@ -164,52 +163,56 @@ const createWindow = (exports.createWindow = () => {
     newWindow = null;
   });
 
-  var shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
-
-  // this spawns the terminal window space
-  var ptyProcess = pty.spawn(shell, [], {
-    name: 'xterm-color',
-    cols: 80,
-    rows: 24,
-    cwd: process.env.HOME,
-    // cwd: cwdFilePath,
-    env: process.env,
-  });
-
-  //2022-ST-AJ sends to renderer cwd for it to display on prompt
-  // ipcMain.on('cwd', (event, data) => {
-  //   event.reply('cwdreply', process.env.PWD);
-  // });
-
-  // add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
-  ipcMain.on('openFolder', (event, data) => {
-    ptyProcess.cwd = cwdFilePath[0];
-  });
-
-  //2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
-  ptyProcess.onData((data) => {
-    newWindow.webContents.send('terminal-incData', data);
-  });
-
-  //2022-ST-AJ ipcMain listens on data passed from xterm to write to shell
-  ipcMain.on('terminal-into', (event, data) => {
-    ptyProcess.write(data);
-  });
-
-  //2022-ST-AJ ipcMain listens to resizing event from renderer and calls resize on node-pty to align size between node-pty and xterm. They need to align otherwise there are wierd bugs everywhere.
-  ipcMain.on('terminal-resize', (event, size) => {
-    const cols = size.cols;
-    const rows = size.rows;
-    ptyProcess.resize(cols, rows);
-  });
-
-  require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
-    awaitWriteFinish: true,
-  });
-
   windows.add(newWindow);
-  return newWindow;
+
+});
+
+/*
+  * Below code (shell and ptyProcess) was previously inside createWindow fxn but
+  * was causing issues w/ re-activation. Moving it outside of the fxn below
+  * allows re-activation app but still not perfect implementation
+*/
+const shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
+// this spawns the terminal window space
+const ptyProcess = pty.spawn(shell, [], {
+  name: 'xterm-color',
+  cols: 80,
+  rows: 24,
+  cwd: process.env.HOME,
+  // cwd: cwdFilePath,
+  env: process.env,
+});
+
+//2022-ST-AJ sends to renderer cwd for it to display on prompt
+// ipcMain.on('cwd', (event, data) => {
+//   event.reply('cwdreply', process.env.PWD);
+// });
+
+// add ipc listen for open folder and reassign ptyProcess.cwd to actual cwd
+ipcMain.on('openFolder', (event, data) => {
+  ptyProcess.cwd = cwdFilePath[0];
+});
+
+//2022-ST-AJ node-pty listens to data and send whatever it receives back to xterm to render
+ptyProcess.onData((data) => {
+  newWindow.webContents.send('terminal-incData', data);
+});
+
+//2022-ST-AJ ipcMain listens on data passed from xterm to write to shell
+ipcMain.on('terminal-into', (event, data) => {
+  ptyProcess.write(data);
+});
+
+//2022-ST-AJ ipcMain listens to resizing event from renderer and calls resize on node-pty to align size between node-pty and xterm. They need to align otherwise there are wierd bugs everywhere.
+ipcMain.on('terminal-resize', (event, size) => {
+  const cols = size.cols;
+  const rows = size.rows;
+  ptyProcess.resize(cols, rows);
+});
+
+require('electron-reload')(__dirname, {
+  electron: path.join(__dirname, '../node_modules', '.bin', 'electron'),
+  awaitWriteFinish: true,
 });
 
  /*
@@ -255,10 +258,14 @@ const getFileFromUser = (exports.getFileFromUser = async (targetWindow) => {
 });
 
 const openFile = (exports.openFile = (targetWindow, file) => {
+  try {
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file);
   targetWindow.webContents.send('file-opened', file, content);
   createApplicationMenu();
+  } catch (err) {
+    console.log('Error occured while opening the file: ', {err})
+  }
 });
 
 let cwdFilePath;
@@ -323,10 +330,9 @@ ipcMain.handle('decreaseFontSize', decreaseFontSize);
 
 ipcMain.handle('createProjectFromUser', createProjectFromUser);
 
-ipcMain.on('openDebugAppWindow', (event, localhostToUse) => {
+ipcMain.on('openDebugAppWindow', (event, localhostToUse)=> {
   if(localhostToUse.length === 4 || localhostToUse.length === 5) openBrowserWindow(localhostToUse);
 });
-
 
 /*
    * ==================================================
@@ -337,6 +343,21 @@ ipcMain.on('openDebugAppWindow', (event, localhostToUse) => {
 
 ipcMain.on('SNAPSHOT', (event, data) => {
   newWindow.webContents.send('SNAPSHOT', data);
+});
+
+/*
+   * ==================================================
+   *   The injected app health monitoring script uses the ipcRenderer in the browser window to emit a signal with web-vitals data.
+   *   That data is then sent to ipcMain (received below) and is then fowarded to the WebVitals component where an
+   *   ipcRenderer listens for the "web-vitals" signal to take in the web-vitals data.
+   * ==================================================
+*/
+ipcMain.on('web-vitals', (event, args) => {
+  newWindow.webContents.send('web-vitals', args)
+});
+
+ipcMain.on('PERFORMANCE', (event, args) => {
+  newWindow.webContents.send('PERFORMANCE', args);
 });
 
 // close app when quiting
@@ -400,5 +421,5 @@ async function mainAsynchronousData() {
 }
 
 ipcMain.on('main-asynchronous-data', async (event, arg) => {
-  return await mainAsynchronousData() 
+  return await mainAsynchronousData()
 })

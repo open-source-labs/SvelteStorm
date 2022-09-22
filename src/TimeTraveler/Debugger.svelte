@@ -120,7 +120,7 @@
   /*
    * ==================================================
    *   End write and save snapshots feature
-   * ==================================================
+   * ==================================================calend
    */
 
 
@@ -194,13 +194,15 @@
     // appends a 'group' element to '#D3Tree'
     // moves the 'group' element to the top left margin
 
+    // SS5.0 JO - Added viewbox attr and removed w/h as this seemed to be contributing to resize bug when tree was populated
     var svg = d3
         .select(el)
         .append('svg')
         .attr('id', 'D3Tree')
+        .attr('viewBox', `0 0 ${treeParent.clientWidth} ${treeParent.clientHeight}`),
         // var svg = d3.select("body").append("svg")
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom),
+        // .attr('width', width + margin.left + margin.right)
+        // .attr('height', height + margin.top + margin.bottom),
       g = svg
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
