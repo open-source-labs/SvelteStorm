@@ -1,0 +1,61 @@
+/* SS 5.0 Edits from base code (Note: Code adapted from Marijn Haverbeke's https://github.com/Maloric/CodeMirror-AdvancedDialog with some edits for SS Customization")
+1. Changed transparency of search bar
+2. Added text-shadow around "Find" label text and "Matches found" text so it more easily stands out when scrolling 
+3. Adjusted font size of contents
+4. Adjusted flex re-sizing of some items
+*/
+.CodeMirror-advanced-dialog {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background: inherit;
+  padding: 10px;
+  overflow: hidden;
+  color: inherit;
+  border: 1px solid #eee;
+  box-shadow: #000 0 0 40px;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  font-size: .8em;
+  font-weight: bold;
+}
+
+.CodeMirror-advanced-dialog input {
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.85);
+  width: 20em;
+  color: black;
+  font-family: inherit;
+}
+
+.CodeMirror-advanced-dialog button {
+  font-size: 70%;
+  font-weight: bold;
+}
+
+.CodeMirror-advanced-dialog .row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.CodeMirror-advanced-dialog input[type="text"] {
+  display: inline-block;
+  border: 1px solid #eee;
+  margin: 10px;
+  flex: 1 1 auto;
+}
+
+.CodeMirror-search-hint {
+  display: block;
+  font-style: italic;
+  flex: 0 0 50%;
+}
+
+.buttons button {
+  margin: 0 5px;
+  background-color: inherit;
+  color: inherit;
+}

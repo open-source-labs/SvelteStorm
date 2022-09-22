@@ -24,17 +24,34 @@ export function updatePackageJson(path) {
     console.error('error while changing directory');
   }
   var content: string = fs.readFileSync(`package.json`).toString();
+
+    if (!content.match(/performanceSS/gm)) {
+    try {
+      npmAddScript({
+        key: 'performanceSS',
+        value: 'rollup --config rollup.config.new.js -w',
+        force: true,
+      }, 
+      );
+    } catch (err) {
+      console.error(`${err}error while adding performanceSS script to package.json`);
+    }
+  }
+  
   if (!content.match(/sdebug/gm)) {
     try {
       npmAddScript({
         key: 'sdebug',
         value: 'rollup --config rollup.config.new.js -w',
         force: true,
-      });
+      }, 
+      );
     } catch (err) {
       console.error(`${err}error while adding sdebug script to package.json`);
     }
   }
+
+
   process.chdir(currentDir);
 }
 

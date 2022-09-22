@@ -48,7 +48,7 @@ const createApplicationMenu = () => {
         },
         {
           label: 'Open File',
-          accelerator: 'CommandOrControl+O',
+          accelerator: 'CommandOrControl+Shift+O',
           click(item, focusedWindow) {
             
             if (focusedWindow) {
@@ -64,7 +64,7 @@ const createApplicationMenu = () => {
         },
         {
             label: 'Open Folder',
-            accelerator: 'CommandOrControl+F',
+            accelerator: 'CommandOrControl+Shift+F',
             click: (item, focusedWindow) => {
               
               if (focusedWindow) {
@@ -226,9 +226,9 @@ const createApplicationMenu = () => {
                 openAboutWindow({
                     icon_path: path.resolve(__dirname,'../public/img/SvelteStorm4Logos/SvelteStorm4Logo10x64.png'),
                     use_version_info: [
-                        ['Version Number', '4.0.0'],
+                        ['Version Number', '5.0.0'],
                     ],
-                    description: 'World\'s First Dedicated Svelte IDE.\nVersion 4.0.0 now includes a Time Travel Debugging tool.\n\nThis applicationuses Open Source components. You can find the source code oftheir open source projects along with license informationbelow. We acknowledge and are grateful to these developersfor their contributions to open source.\n\nProject: Delorean https://github.com/oslabs-beta/DeLorean\nCopyright (c) 2022 OSLabs Beta\n\nLicense (MIT) https://github.com/oslabs-betaDeLorean/blob/main/LICENSE'
+                    description: 'World\'s First Dedicated Svelte IDE.\nVersion 5.0.0 now includes a Time Travel Debugging tool.\n\nThis applicationuses Open Source components. You can find the source code oftheir open source projects along with license informationbelow. We acknowledge and are grateful to these developersfor their contributions to open source.\n\nProject: Delorean https://github.com/oslabs-beta/DeLorean\nCopyright (c) 2022 OSLabs Beta\n\nLicense (MIT) https://github.com/oslabs-betaDeLorean/blob/main/LICENSE'
                 })
         },
         {
@@ -240,7 +240,7 @@ const createApplicationMenu = () => {
 
 
   if (process.platform === 'darwin') {
-    const name = 'SvelteStorm 4.0';
+    const name = 'SvelteStorm 5.0';
     template.unshift({
       label: name,
       submenu: [

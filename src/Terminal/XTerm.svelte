@@ -25,7 +25,7 @@
       }
 
       // The result can be accessed through the `m`-variable.
-      if(!$saveToFileName){
+      // if(!$saveToFileName){
       m.forEach((match, groupIndex) => {
 
           localhostToUse = match;
@@ -40,7 +40,7 @@
           $saveToFileName = path.resolve(__dirname, `./CapturedSnaps/${filename}`);
           ipcRenderer.send('openDebugAppWindow', localhostToUse);
         });
-      }
+      // }
     }
   }
 
@@ -73,7 +73,7 @@
       ipcRenderer.send('terminal-into', '\r');
     };
 
-    term.writeln('Welcome to SvelteStorm 4.0');
+    term.writeln('Welcome to SvelteStorm 5.0');
     // ipcRenderer.send("terminal-into", "ls -ila\r");
 
     term.prompt();
@@ -97,4 +97,6 @@
   window.addEventListener('resize', fitOnTheGo);
 </script>
 
-<div id="xterm" />
+<main>
+  <div id="xterm" />
+</main>
