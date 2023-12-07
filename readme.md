@@ -134,7 +134,7 @@ https://github.com/open-source-labs/SvelteStorm/issues/57
 [Zachary Radford](https://www.github.com/zachradf) | [Arron Nestor](https://github.com/NesTar6) | [Aye Moe](https://github.com/ayemmoe) |
 [Frank Stepanski](https://github.com/frankstepanski) | [Kevin Sarchi](https://github.com/Svrchi) |
 [Sam Filip](https://github.com/samfilip) | [Cayla Co](https://github.com/caycodes) | [Swetha Kunda](http://github.com/swethakunda) |
-[Miller Johnston](https://github.com/MillerJ20) | [Sina Kahrobaei](https://github.com/Skaybee)
+[Miller Johnston](https://github.com/MillerJ20) | [Sina Kahrobaei](https://github.com/skahrobaei)
 ## Contributing
 There are many ways in which you can participate in this project, for example:
 - Check for known issues that you may be able to provide input on
